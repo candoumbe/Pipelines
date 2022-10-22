@@ -11,11 +11,20 @@ using System.Linq;
 using static Nuke.Common.Tools.Codecov.CodecovTasks;
 using static Nuke.Common.Tools.ReportGenerator.ReportGeneratorTasks;
 
+/// <summary>
+/// Marks a pipeline that can report unit tests code coverage
+/// </summary>
 public interface IReportCoverage : IUnitTest
 {
+    /// <summary>
+    /// The API key used to push code coverage to CodeCov
+    /// </summary>
     [Parameter]
     public string CodecovToken { get; }
 
+    /// <summary>
+    /// Pushes code coverage to CodeCov
+    /// </summary>
     public Target ReportCoverage => _ => _
        .DependsOn(UnitTests)
        .OnlyWhenDynamic(() => IsServerBuild || CodecovToken != null)

@@ -13,14 +13,16 @@ using Nuke.Common.Tools.DotNet;
 using System.Collections.Generic;
 
 [GitHubActions("integration",
-    GitHubActionsImage.UbuntuLatest,
+    GitHubActionsImage.WindowsLatest,
+    AutoGenerate = true,
     OnPushBranchesIgnore = new[] { IGitFlow.MainBranchName },
     FetchDepth = 0,
     InvokedTargets = new[] { nameof(ICompile.Compile), nameof(IPack.Pack) },
     ImportSecrets = new[]
     {
         nameof(ICreateGithubRelease.GitHubToken),
-    })]
+    },
+    PublishArtifacts = true)]
 [DotNetVerbosityMapping]
 [HandleVisualStudioDebugging]
 [ShutdownDotNetAfterServerBuild]
@@ -33,8 +35,18 @@ public class Pipeline : NukeBuild,
     IPack,
     IHaveGitVersion,
     IHaveGitRepository,
+    IHaveArtifacts,
     IGitFlow
 {
+    ///<inheritdoc/>
+    IEnumerable<AbsolutePath> IClean.DirectoriesToDelete => SourceDirectory.GlobDirectories("**/bin", "**/obj");
+
+    ///<inheritdoc/>
+    IEnumerable<AbsolutePath> IClean.DirectoriesToEnsureExistance => new[]
+    {
+        From<IHaveArtifacts>().OutputDirectory,
+        From<IHaveArtifacts>().ArtifactsDirectory,
+    };
 
     [CI]
     public GitHubActions GitHubActions;

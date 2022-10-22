@@ -11,6 +11,9 @@ namespace Candoumbe.Pipelines.Components;
 /// </summary>
 public interface IRestore : INukeBuild, IHaveSolution
 {
+    /// <summary>
+    /// Runs "dotnet restore"
+    /// </summary>
     public Target Restore => _ => _
         .TryDependsOn<IClean>(x => x.Clean)
         .Executes(() =>
@@ -23,7 +26,7 @@ public interface IRestore : INukeBuild, IHaveSolution
             DotNetToolRestore();
         });
 
-    public sealed Configure<DotNetRestoreSettings> RestoreSettingsBase => _ => _
+    internal sealed Configure<DotNetRestoreSettings> RestoreSettingsBase => _ => _
             .SetProjectFile(Solution)
             .SetIgnoreFailedSources(IgnoreFailedSources);
 
@@ -32,6 +35,9 @@ public interface IRestore : INukeBuild, IHaveSolution
     /// </summary>
     Configure<DotNetRestoreSettings> RestoreSettings => _ => _;
 
+    /// <summary>
+    /// Defines when set to <see langword="true"/> if unreacheable sources should make the "restore" process fail.
+    /// </summary>
     [Parameter("Ignore unreachable sources during " + nameof(Restore))]
     public bool IgnoreFailedSources => TryGetValue<bool?>(() => IgnoreFailedSources) ?? false;
 }
