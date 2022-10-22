@@ -20,9 +20,10 @@ using System.Collections.Generic;
     FetchDepth = 0,
     InvokedTargets = new[] { nameof(ICompile.Compile), nameof(IPack.Pack) },
     CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" },
+    EnableGitHubToken = true,
     ImportSecrets = new[]
     {
-        nameof(ICreateGithubRelease.GitHubToken),
+        nameof(NugetApiKey)
     },
     PublishArtifacts = true,
     OnPushExcludePaths = new[]
@@ -39,9 +40,10 @@ using System.Collections.Generic;
     FetchDepth = 0,
     InvokedTargets = new[] { nameof(ICompile.Compile), nameof(IPack.Pack), nameof(IPublish.Publish) },
     CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" },
+    EnableGitHubToken = true,
     ImportSecrets = new[]
     {
-        nameof(ICreateGithubRelease.GitHubToken),
+        nameof(NugetApiKey)
     },
     PublishArtifacts = true,
     OnPushExcludePaths = new[]
@@ -69,7 +71,7 @@ public class Pipeline : NukeBuild,
     IGitFlow
 {
     ///<inheritdoc/>
-    IEnumerable<AbsolutePath> IClean.DirectoriesToDelete => RootDirectory.GlobDirectories("**/bin", "**/obj");
+    IEnumerable<AbsolutePath> IClean.DirectoriesToDelete => SourceDirectory.GlobDirectories("**/bin", "**/obj");
 
     ///<inheritdoc/>
     IEnumerable<AbsolutePath> IClean.DirectoriesToEnsureExistance => new[]
