@@ -15,7 +15,7 @@ public interface IClean : INukeBuild
 {
 
     /// <summary>
-    /// Collection of directories to delete
+    /// Collection of directories that <see cref="Clean"/> target will delete
     /// </summary>
     public IEnumerable<AbsolutePath> DirectoriesToDelete => Enumerable.Empty<AbsolutePath>();
 
@@ -25,7 +25,7 @@ public interface IClean : INukeBuild
     IEnumerable<AbsolutePath> DirectoriesToClean => Enumerable.Empty<AbsolutePath>();
 
     /// <summary>
-    /// Collection of directories for which to ensure they exist in the filesystem.
+    /// Collection of directories that <see cref="Clean"/> target will make sure exist.
     /// </summary>
     IEnumerable<AbsolutePath> DirectoriesToEnsureExistance => Enumerable.Empty<AbsolutePath>();
 

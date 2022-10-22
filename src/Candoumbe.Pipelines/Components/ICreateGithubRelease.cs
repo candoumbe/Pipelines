@@ -25,8 +25,11 @@ public interface ICreateGithubRelease : IHaveGitRepository, IHaveChangeLog, IHav
     string GitHubToken => TryGetValue(() => GitHubToken) ?? GitHubActions.Instance.Token;
 
     /// <summary>
-    /// Collection of assets to add to the release.
+    /// Collection of assets to add to the published release.
     /// </summary>
+    /// <remarks>
+    /// Files will be zipped and added to the release
+    /// </remarks>
     public IEnumerable<AbsolutePath> Assets => Enumerable.Empty<AbsolutePath>();
 
     /// <summary>
