@@ -18,6 +18,11 @@
           "type": "boolean",
           "description": "Indicates to continue a previously failed build attempt"
         },
+        "GitHubToken": {
+          "type": "string",
+          "description": "Token used to create a new release in GitHub",
+          "default": "Secrets must be entered via 'nuke :secrets [profile]'"
+        },
         "Help": {
           "type": "boolean",
           "description": "Shows the help text for this build assembly"
@@ -59,6 +64,11 @@
           "type": "boolean",
           "description": "Disables displaying the NUKE logo"
         },
+        "NugetApiKey": {
+          "type": "string",
+          "description": "Token used to interact with Nuget API",
+          "default": "Secrets must be entered via 'nuke :secrets [profile]'"
+        },
         "Partition": {
           "type": "string",
           "description": "Partition to use on CI"
@@ -84,6 +94,7 @@
           "items": {
             "type": "string",
             "enum": [
+              "AddGithubRelease",
               "Changelog",
               "Clean",
               "Coldfix",
@@ -91,6 +102,7 @@
               "Feature",
               "Hotfix",
               "Pack",
+              "Publish",
               "Release",
               "Restore"
             ]
@@ -106,6 +118,7 @@
           "items": {
             "type": "string",
             "enum": [
+              "AddGithubRelease",
               "Changelog",
               "Clean",
               "Coldfix",
@@ -113,6 +126,7 @@
               "Feature",
               "Hotfix",
               "Pack",
+              "Publish",
               "Release",
               "Restore"
             ]

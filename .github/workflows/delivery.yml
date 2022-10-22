@@ -9,17 +9,18 @@
 #
 #     - To trigger manual generation invoke:
 #
-#         nuke --generate-configuration GitHubActions_integration --host GitHubActions
+#         nuke --generate-configuration GitHubActions_delivery --host GitHubActions
 #
 # </auto-generated>
 # ------------------------------------------------------------------------------
 
-name: integration
+name: delivery
 
 on:
   push:
-    branches-ignore:
+    branches:
       - main
+      - 'release/*'
     paths:
       - '!docs/*'
       - '!README.md'
@@ -41,8 +42,8 @@ jobs:
             .nuke/temp
             ~/.nuget/packages
           key: ${{ runner.os }}-${{ hashFiles('global.json', 'src/**/*.csproj') }}
-      - name: Run './build.cmd Compile Pack'
-        run: ./build.cmd Compile Pack
+      - name: Run './build.cmd Compile Pack Publish'
+        run: ./build.cmd Compile Pack Publish
         env:
           GitHubToken: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/upload-artifact@v1
