@@ -56,7 +56,7 @@ public interface IPack : IHaveArtifacts, ICompile
     /// </summary>
     public Configure<DotNetPackSettings> PackSettings => _ => _;
 
-    public sealed Configure<DotNetPackSettings> PackSettingsBase => _ => _
+    internal sealed Configure<DotNetPackSettings> PackSettingsBase => _ => _
         .EnableIncludeSource()
         .EnableIncludeSymbols()
         .SetOutputDirectory(PackagesDirectory)

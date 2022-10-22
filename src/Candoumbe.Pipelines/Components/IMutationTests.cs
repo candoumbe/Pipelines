@@ -10,6 +10,9 @@ using static Serilog.Log;
 
 namespace Candoumbe.Pipelines.Components;
 
+/// <summary>
+/// Marks a pipeline that can perform mutation tests
+/// </summary>
 public interface IMutationTests : IUnitTest
 {
     /// <summary>

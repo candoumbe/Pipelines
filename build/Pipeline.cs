@@ -33,8 +33,18 @@ public class Pipeline : NukeBuild,
     IPack,
     IHaveGitVersion,
     IHaveGitRepository,
+    IHaveArtifacts,
     IGitFlow
 {
+    ///<inheritdoc/>
+    IEnumerable<AbsolutePath> IClean.DirectoriesToDelete => SourceDirectory.GlobDirectories("**/bin", "**/obj");
+
+    ///<inheritdoc/>
+    IEnumerable<AbsolutePath> IClean.DirectoriesToEnsureExistance => new[]
+    {
+        From<IHaveArtifacts>().OutputDirectory,
+        From<IHaveArtifacts>().ArtifactsDirectory,
+    };
 
     [CI]
     public GitHubActions GitHubActions;

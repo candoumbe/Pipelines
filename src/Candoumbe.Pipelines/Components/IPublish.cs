@@ -12,12 +12,21 @@ using static Nuke.Common.Tools.Git.GitTasks;
 
 namespace Candoumbe.Pipelines.Components;
 
+/// <summary>
+/// Marks a pipeline that can specify a folder for source files
+/// </summary>
 public interface IPublish : IPack, IUnitTest
 {
+    /// <summary>
+    /// The API Key to use when pushing packages to nuget
+    /// </summary>
     [Parameter]
     [Secret]
     string NugetApiKey => TryGetValue(() => NugetApiKey);
 
+    /// <summary>
+    /// The 
+    /// </summary>
     string PackageSource => TryGetValue(() => PackageSource) ?? "https://api.nuget.org/v3/index.json";
 
     /// <summary>
@@ -51,7 +60,7 @@ public interface IPublish : IPack, IUnitTest
                                                 degreeOfParallelism: PushDegreeOfParallelism);
         });
 
-    public Configure<DotNetNuGetPushSettings> PushSettingsBase => _ => _
+    internal Configure<DotNetNuGetPushSettings> PushSettingsBase => _ => _
                 .SetApiKey(NugetApiKey)
                 .SetSource(PackageSource)
                 .EnableSkipDuplicate()

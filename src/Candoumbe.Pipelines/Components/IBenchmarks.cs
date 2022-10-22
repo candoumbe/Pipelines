@@ -25,6 +25,9 @@ public interface IBenchmarks : ICompile, IHaveOutputDirectory
     /// </summary>
     public IEnumerable<Project> BenchmarkProjects { get; }
 
+    /// <summary>
+    /// Runs performance tests using <see href="https://benchmarkdotnet.org">BenchmarkDotNet</see>
+    /// </summary>
     public Target Benchmarks => _ => _
         .Description("Run all performance tests.")
         .DependsOn(Compile)
@@ -45,6 +48,10 @@ public interface IBenchmarks : ICompile, IHaveOutputDirectory
             });
         });
 
+
+    /// <summary>
+    /// Configures the way performance tests are run.
+    /// </summary>
     public sealed Configure<DotNetRunSettings> BenchmarksSettingsBase => _ => _
             .SetConfiguration(Configuration.Release)
             .SetProcessArgumentConfigurator(args => args.Add("-- --filter {0}", "*", customValue: true)

@@ -5,6 +5,9 @@ using static Nuke.Common.ChangeLog.ChangelogTasks;
 
 namespace Candoumbe.Pipelines.Components;
 
+/// <summary>
+/// Marks a pipeline that has a changelog file.
+/// </summary>
 public interface IHaveChangeLog : INukeBuild
 {
     /// <summary>
