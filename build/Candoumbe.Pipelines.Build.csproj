@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <Compile Include="..\src\Candoumbe.Pipelines\Components\Configuration.cs" Link="Components\Configuration.cs" />
+    <Compile Include="..\src\Candoumbe.Pipelines\Components\GitHubPublishConfiguration.cs" Link="Components\GitHubPublishConfiguration.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\IBenchmarks.cs" Link="Components\IBenchmarks.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\IClean.cs" Link="Components\IClean.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\ICompile.cs" Link="Components\ICompile.cs" />
@@ -34,6 +35,8 @@
     <Compile Include="..\src\Candoumbe.Pipelines\Components\IReportCoverage.cs" Link="Components\IReportCoverage.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\IRestore.cs" Link="Components\IRestore.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\IUnitTest.cs" Link="Components\IUnitTest.cs" />
+    <Compile Include="..\src\Candoumbe.Pipelines\Components\NugetPublishConfiguration.cs" Link="Components\NugetPublishConfiguration.cs" />
+    <Compile Include="..\src\Candoumbe.Pipelines\Components\PublishConfiguration.cs" Link="Components\PublishConfiguration.cs" />
   </ItemGroup>
 
   <ItemGroup>
