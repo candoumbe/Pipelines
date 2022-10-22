@@ -5,6 +5,9 @@ using Nuke.Common.ProjectModel;
 
 namespace Candoumbe.Pipelines.Components;
 
+/// <summary>
+/// Marks a pipeline that handle a Solution
+/// </summary>
 [PublicAPI]
 public interface IHaveSolution : INukeBuild
 {

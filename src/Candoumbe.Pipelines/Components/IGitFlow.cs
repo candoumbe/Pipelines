@@ -257,7 +257,7 @@ public interface IGitFlow : IHaveGitRepository, IHaveChangeLog, IHaveGitVersion
 
         if (!hasCleanWorkingCopy && AutoStash)
         {
-            Git("stash apply");
+            Git("stash pop");
         }
     }
 

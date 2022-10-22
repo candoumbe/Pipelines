@@ -13,7 +13,7 @@ using static Serilog.Log;
 namespace Candoumbe.Pipelines.Components;
 
 /// <summary>
-/// Compiles the project
+/// Marks a pipeline that can compile a <see cref="IHaveSolution.Solution"/>
 /// </summary>
 public interface ICompile : IRestore, IHaveConfiguration
 {

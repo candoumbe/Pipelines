@@ -6,66 +6,89 @@ using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Utilities;
 
 using System.Collections.Generic;
+using System.Linq;
 
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 using static Nuke.Common.Tools.Git.GitTasks;
+using static Serilog.Log;
 
 namespace Candoumbe.Pipelines.Components;
 
-public interface IPublish : IPack, IUnitTest
+/// <summary>
+/// Marks a pipeline that can specify a folder for source files
+/// </summary>
+public interface IPublish : IPack
 {
-    [Parameter]
-    [Secret]
-    string NugetApiKey => TryGetValue(() => NugetApiKey);
-
-    string PackageSource => TryGetValue(() => PackageSource) ?? "https://api.nuget.org/v3/index.json";
-
     /// <summary>
     /// Defines which files should be pushed when calling <see cref="Publish"/> target
     /// </summary>
-    IEnumerable<AbsolutePath> PushPackageFiles => PackagesDirectory.GlobFiles("*.nupkg", "*.snupkg");
+    IEnumerable<AbsolutePath> PublishPackageFiles => PackagesDirectory.GlobFiles("*.nupkg", "*.snupkg");
 
     /// <summary>
-    /// Publish all <see cref="PushPackageFiles"/> to <see cref="PackageSource"/> after authenticating using
-    /// <see cref="NugetApiKey"/>.
+    /// Publish all <see cref="PublishPackageFiles"/> to <see cref="PublishConfigurations"/>.
     /// </summary>
     public Target Publish => _ => _
-        .Description($"Published packages (*.nupkg and *.snupkg) to the destination server set with {nameof(PackageSource)} settings ")
-        .DependsOn(UnitTests, Pack)
+        .Description($"Published packages (*.nupkg and *.snupkg) to the destination server set using {nameof(PublishConfigurations)} settings ")
         .Consumes(Pack, ArtifactsDirectory / "*.nupkg", ArtifactsDirectory / "*.snupkg")
-        .OnlyWhenDynamic(() => !NugetApiKey.IsNullOrEmpty())
-        .Requires(() => GitHasCleanWorkingCopy())
-        .When(this is IHaveGitRepository,
-              _ => _.OnlyWhenDynamic(() => ((IHaveGitRepository)this).GitRepository.IsOnMainBranch()
-                        || ((IHaveGitRepository)this).GitRepository.IsOnReleaseBranch()
-                        || ((IHaveGitRepository)this).GitRepository.IsOnDevelopBranch()))
+        .DependsOn(Pack)
+        .OnlyWhenDynamic(() => PublishConfigurations.AtLeastOnce(config => config.CanBeUsed()))
+        .When(this is IHaveGitRepository repository,
+              _ => _.Requires(() => GitHasCleanWorkingCopy())
+                   .OnlyWhenDynamic(() => ((IHaveGitRepository)this).GitRepository.IsOnMainBranch()
+                                           || ((IHaveGitRepository)this).GitRepository.IsOnReleaseBranch()
+                                           || ((IHaveGitRepository)this).GitRepository.IsOnDevelopBranch()))
         .Requires(() => Configuration.Equals(Configuration.Release))
         .Executes(() =>
         {
-            DotNetNuGetPush(s => s.Apply(PushSettingsBase)
-                                  .Apply(PushSettingsBase)
-                                  .CombineWith(PushPackageFiles,
+
+            int numberOfPackages = PublishPackageFiles.TryGetNonEnumeratedCount(out numberOfPackages)
+                ? numberOfPackages
+                : PublishPackageFiles.Count();
+
+            PublishConfigurations.ForEach(config =>
+            {
+                if (config.CanBeUsed())
+                {
+                    Information("{PackageCount} package(s) will be published to {SourceName}", numberOfPackages);
+                }
+                else
+                {
+                    Warning("{PackageCount} package(s) will not be published to {SourceName}", numberOfPackages);
+                }
+            });
+
+            DotNetNuGetPush(s => s.Apply(PublishSettingsBase)
+                                  .Apply(PublishSettings)
+                                  .CombineWith(PublishPackageFiles,
                                                (_, file) => _.SetTargetPath(file))
-                                                             .Apply(PackagePushSettings),
-                                                completeOnFailure: PushCompleteOnFailure,
-                                                degreeOfParallelism: PushDegreeOfParallelism);
+                                                             .Apply(PackagePublishSettings)
+                                                             .CombineWith(PublishConfigurations,
+                                                                          (setting, config) => setting.When(config.CanBeUsed(),
+                                                                                                              _ => _.SetApiKey(config.Key))
+                                                                  ),
+                                                  completeOnFailure: PushCompleteOnFailure,
+                                                  degreeOfParallelism: PushDegreeOfParallelism);
+
+
+            ReportSummary(summary =>
+            {
+                summary.Add("Packages published", numberOfPackages.ToString());
+                return summary;
+            });
         });
 
-    public Configure<DotNetNuGetPushSettings> PushSettingsBase => _ => _
-                .SetApiKey(NugetApiKey)
-                .SetSource(PackageSource)
-                .EnableSkipDuplicate()
-                .EnableNoSymbols();
+    internal Configure<DotNetNuGetPushSettings> PublishSettingsBase => _ => _
+                .EnableSkipDuplicate();
 
     /// <summary>
     /// Defines the settings that will be used to push packages to Nuget
     /// </summary>
-    Configure<DotNetNuGetPushSettings> PushSettings => _ => _;
+    Configure<DotNetNuGetPushSettings> PublishSettings => _ => _;
 
     /// <summary>
     /// Defines the settings that will be used to push each package
     /// </summary>
-    Configure<DotNetNuGetPushSettings> PackagePushSettings => _ => _;
+    Configure<DotNetNuGetPushSettings> PackagePublishSettings => _ => _;
 
     /// <summary>
     /// Should the <see cref="Publish"/> target complete on failure ?
@@ -76,4 +99,9 @@ public interface IPublish : IPack, IUnitTest
     /// Indicates the degree
     /// </summary>
     int PushDegreeOfParallelism => 1;
+
+    /// <summary>
+    /// Determines where <see cref="Publish"/> will push packages
+    /// </summary>
+    IEnumerable<PublishConfiguration> PublishConfigurations => Enumerable.Empty<PublishConfiguration>();
 }

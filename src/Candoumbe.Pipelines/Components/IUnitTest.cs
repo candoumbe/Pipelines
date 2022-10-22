@@ -16,7 +16,7 @@ using static Serilog.Log;
 namespace Candoumbe.Pipelines.Components;
 
 /// <summary>
-/// Defines target to perform unit tests
+/// Marks a pipeline that can run unit tests
 /// </summary>
 public interface IUnitTest : ICompile, IHaveTests, IHaveCoverage
 {
@@ -60,7 +60,7 @@ public interface IUnitTest : ICompile, IHaveTests, IHaveCoverage
                                                                                              reportDirectory: CoverageReportDirectory));
         });
 
-    public sealed Configure<DotNetTestSettings> UnitTestSettingsBase => _ => _
+    internal sealed Configure<DotNetTestSettings> UnitTestSettingsBase => _ => _
         .SetConfiguration(Configuration)
                 .ResetVerbosity()
                 .EnableCollectCoverage()

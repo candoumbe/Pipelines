@@ -1,39 +1,46 @@
 ﻿using Nuke.Common;
 using Nuke.Common.IO;
-using Nuke.Common.Utilities.Collections;
+
+using System.Collections.Generic;
+using System.Linq;
 
 using static Nuke.Common.IO.FileSystemTasks;
 
 namespace Candoumbe.Pipelines.Components;
 
+/// <summary>
+/// Marks a pipeline that supports cleaning workflow.
+/// </summary>
 public interface IClean : INukeBuild
 {
+
     /// <summary>
-    /// Cleans 
+    /// Collection of directories that <see cref="Clean"/> target will delete
+    /// </summary>
+    public IEnumerable<AbsolutePath> DirectoriesToDelete => Enumerable.Empty<AbsolutePath>();
+
+    /// <summary>
+    /// Collection of directories to clean
+    /// </summary>
+    IEnumerable<AbsolutePath> DirectoriesToClean => Enumerable.Empty<AbsolutePath>();
+
+    /// <summary>
+    /// Collection of directories that <see cref="Clean"/> target will make sure exist.
+    /// </summary>
+    IEnumerable<AbsolutePath> DirectoriesToEnsureExistance => Enumerable.Empty<AbsolutePath>();
+
+    /// <summary>
+    /// Performs the clean up
     /// </summary>
     public Target Clean => _ => _
-       .TryBefore<ICompile>(x => x.Compile)
+       .TryBefore<IRestore>(x => x.Restore)
+       .OnlyWhenDynamic(() => DirectoriesToClean.AtLeastOnce()
+                              || DirectoriesToDelete.AtLeastOnce()
+                              || DirectoriesToEnsureExistance.AtLeastOnce())
        .Executes(() =>
        {
-           if (this is IHaveSourceDirectory sources)
-           {
-               sources.SourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
-           }
-
-           if (this is IHaveTestDirectory tests)
-           {
-               tests.TestDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
-           }
-
-           if (this is IHaveArtifacts artifacts)
-           {
-               EnsureCleanDirectory(artifacts.ArtifactsDirectory);
-           }
-
-           if (this is IHaveCoverage coverage)
-           {
-               EnsureCleanDirectory(coverage.CoverageReportDirectory);
-               EnsureExistingDirectory(coverage.CoverageReportHistoryDirectory);
-           }
+           DirectoriesToDelete.ForEach(DeleteDirectory);
+           DirectoriesToClean.ForEach(EnsureCleanDirectory);
+           DirectoriesToEnsureExistance.ForEach(EnsureExistingDirectory);
        });
 }
