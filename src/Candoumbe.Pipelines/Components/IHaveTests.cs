@@ -5,10 +5,10 @@ namespace Candoumbe.Pipelines.Components;
 /// <summary>
 /// Defines a directory to output various tests results
 /// </summary>
-public interface IHaveTests : IHaveOutputDirectory
+public interface IHaveTests : IHaveArtifacts
 {
     /// <summary>
     /// Directory where to publish all test results
     /// </summary>
-    public AbsolutePath TestResultDirectory => OutputDirectory / "tests-results";
+    public AbsolutePath TestResultDirectory => ArtifactsDirectory / "tests-results";
 }

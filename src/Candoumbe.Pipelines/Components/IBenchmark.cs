@@ -13,12 +13,12 @@ namespace Candoumbe.Pipelines.Components;
 /// <summary>
 /// Defines a directory to store benchmarks result
 /// </summary>
-public interface IBenchmarks : ICompile, IHaveOutputDirectory
+public interface IBenchmark : ICompile, IHaveArtifacts
 {
     /// <summary>
     /// Directory where to publish benchmark results.
     /// </summary>
-    public AbsolutePath BenchmarkDirectory => OutputDirectory / "benchmarks";
+    public AbsolutePath BenchmarkResultDirectory => ArtifactsDirectory / "benchmarks";
 
     /// <summary>
     /// Projects that contains benchmarks
@@ -32,19 +32,17 @@ public interface IBenchmarks : ICompile, IHaveOutputDirectory
         .Description("Run all performance tests.")
         .DependsOn(Compile)
         //.OnlyWhenDynamic(() => IsServerBuild)
-        .Produces(BenchmarkDirectory / "*")
+        .Produces(BenchmarkResultDirectory / "*")
         .Executes(() =>
         {
             BenchmarkProjects.ForEach(csproj =>
             {
-                DotNetRun(s =>
-                {
-                    IReadOnlyCollection<string> frameworks = csproj.GetTargetFrameworks();
-                    return s.SetConfiguration(Configuration.Release)
-                            .SetProjectFile(csproj)
-                            .CombineWith(frameworks, (setting, framework) => setting.SetFramework(framework))
-                            .Apply(BenchmarksSettingsBase);
-                });
+                DotNetRun(s => s.SetConfiguration(Configuration.Release)
+                                .SetProjectFile(csproj)
+                                .CombineWith(csproj.GetTargetFrameworks(),
+                                             (setting, framework) => setting.SetFramework(framework))
+                                                                            .Apply(BenchmarksSettingsBase)
+                                                                            .Apply(BenchmarksSettings));
             });
         });
 
@@ -55,7 +53,7 @@ public interface IBenchmarks : ICompile, IHaveOutputDirectory
     public sealed Configure<DotNetRunSettings> BenchmarksSettingsBase => _ => _
             .SetConfiguration(Configuration.Release)
             .SetProcessArgumentConfigurator(args => args.Add("-- --filter {0}", "*", customValue: true)
-                                                        .Add("--artifacts {0}", BenchmarkDirectory)
+                                                        .Add("--artifacts {0}", BenchmarkResultDirectory)
                                                         .Add("--join"));
 
     /// <summary>
