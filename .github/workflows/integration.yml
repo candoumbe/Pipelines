@@ -18,8 +18,8 @@ name: integration
 
 on:
   push:
-    branches-ignore:
-      - main
+    branches:
+      - develop
     paths:
       - '!docs/*'
       - '!README.md'
