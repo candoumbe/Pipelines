@@ -18,7 +18,7 @@ using System.Collections.Generic;
     AutoGenerate = true,
     OnPushBranchesIgnore = new[] { IGitFlow.MainBranchName },
     FetchDepth = 0,
-    InvokedTargets = new[] { nameof(ICompile.Compile), nameof(IPack.Pack) },
+    InvokedTargets = new[] { nameof(ICompile.Compile), nameof(IPack.Pack), nameof(IPublish.Publish) },
     CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" },
     EnableGitHubToken = true,
     ImportSecrets = new[]
