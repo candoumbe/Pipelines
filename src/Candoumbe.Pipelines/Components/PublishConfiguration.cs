@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Candoumbe.Pipelines.Components;
+namespace Candoumbe.Pipelines;
 
 /// <summary>
 /// Wraps configuration used to publish packages

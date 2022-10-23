@@ -32,11 +32,11 @@ public interface IPublish : IPack
         .Consumes(Pack, ArtifactsDirectory / "*.nupkg", ArtifactsDirectory / "*.snupkg")
         .DependsOn(Pack)
         .OnlyWhenDynamic(() => PublishConfigurations.AtLeastOnce(config => config.CanBeUsed()))
-        .When(this is IHaveGitRepository repository,
-              _ => _.Requires(() => GitHasCleanWorkingCopy())
-                   .OnlyWhenDynamic(() => ((IHaveGitRepository)this).GitRepository.IsOnMainBranch()
-                                           || ((IHaveGitRepository)this).GitRepository.IsOnReleaseBranch()
-                                           || ((IHaveGitRepository)this).GitRepository.IsOnDevelopBranch()))
+        .WhenNotNull(this as IHaveGitRepository,
+                     (_, repository) => _.Requires(() => GitHasCleanWorkingCopy())
+                                         .OnlyWhenDynamic(() => repository.GitRepository.IsOnMainBranch()
+                                                                || repository.GitRepository.IsOnReleaseBranch()
+                                                                || repository.GitRepository.IsOnDevelopBranch()))
         .Requires(() => Configuration.Equals(Configuration.Release))
         .Executes(() =>
         {
@@ -68,7 +68,6 @@ public interface IPublish : IPack
                                                                   ),
                                                   completeOnFailure: PushCompleteOnFailure,
                                                   degreeOfParallelism: PushDegreeOfParallelism);
-
 
             ReportSummary(summary =>
             {

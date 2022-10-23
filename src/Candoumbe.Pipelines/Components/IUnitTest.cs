@@ -26,13 +26,18 @@ public interface IUnitTest : ICompile, IHaveTests, IHaveCoverage
     IEnumerable<Project> UnitTestsProjects { get; }
 
     /// <summary>
+    /// Directory where to publish unit test results
+    /// </summary>
+    AbsolutePath UnitTestResultsDirectory => TestResultDirectory / "unit-tests";
+
+    /// <summary>
     /// Runs unit tests
     /// </summary>
     public Target UnitTests => _ => _
         .DependsOn(Compile)
         .Description("Run unit tests and collect code coverage")
-        .Produces(TestResultDirectory / "*.trx")
-        .Produces(TestResultDirectory / "*.xml")
+        .Produces(UnitTestResultsDirectory / "*.trx")
+        .Produces(UnitTestResultsDirectory / "*.xml")
         .TryTriggers<IReportCoverage>()
         .Executes(() =>
         {
@@ -66,7 +71,7 @@ public interface IUnitTest : ICompile, IHaveTests, IHaveCoverage
                 .EnableCollectCoverage()
                 .EnableUseSourceLink()
                 .SetNoBuild(SucceededTargets.Contains(Compile))
-                .SetResultsDirectory(TestResultDirectory)
+                .SetResultsDirectory(UnitTestResultsDirectory)
                 .SetCoverletOutputFormat(CoverletOutputFormat.lcov)
                 .AddProperty("ExcludeByAttribute", "Obsolete");
 

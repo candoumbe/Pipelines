@@ -1,9 +1,9 @@
 ﻿using Nuke.Common;
+using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
 
 using System.Collections.Generic;
-using System.Linq;
 
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 using static Serilog.Log;
@@ -11,12 +11,20 @@ using static Serilog.Log;
 namespace Candoumbe.Pipelines.Components;
 
 /// <summary>
-/// Marks a pipeline that can perform mutation tests
+/// Marks a pipeline that can perform mutation tests using <see href="https://stryker-mutator.io/">Stryker</see>.
 /// </summary>
-public interface IMutationTests : IUnitTest
+/// <remarks>
+/// <see cref="MutationTests"/> target required <see href="https://www.nuget.org/packages/dotnet-stryker">Stryker dotnet tool</see> to be referenced in order to run.
+/// </remarks>
+public interface IMutationTest : IUnitTest
 {
     /// <summary>
-    /// Api Key
+    /// Directory where mutattion test results should be published
+    /// </summary>
+    AbsolutePath MutationTestResultDirectory => TestResultDirectory / "mutation-tests";
+
+    /// <summary>
+    /// Api Key us
     /// </summary>
     [Parameter]
     public string StrykerDashboardApiKey => TryGetValue(() => StrykerDashboardApiKey);
@@ -36,19 +44,25 @@ public interface IMutationTests : IUnitTest
         .Description("Runs mutation tests using Stryker tool")
         .TryDependsOn<IClean>(x => x.Clean)
         .DependsOn(Compile)
-        .Produces(TestResultDirectory / "*.html")
+        .Produces(MutationTestResultDirectory / "*")
         .Executes(() =>
         {
-            Verbose("Running mutation tests for {ProjectCount} project(s)", MutationTestsProjects.TryGetNonEnumeratedCount(out int count) ? count : MutationTestsProjects.Count());
+            int count = 0;
 
             Arguments args = new();
             args.Add("--open-report:html", IsLocalBuild);
             args.Add($"--dashboard-api-key {StrykerDashboardApiKey}", IsServerBuild || StrykerDashboardApiKey is not null);
+            args.Add("--reporter markdown");
+            args.Add("--reporter html");
+            args.Add("--reporter progress", IsLocalBuild);
 
             MutationTestsProjects.ForEach(csproj =>
             {
-                Information("Running tests for '{ProjectName}' (directory : '{Directory}') ", csproj.Name, csproj.Path.Parent);
-                DotNet($"stryker {args.RenderForExecution()}", workingDirectory: csproj.Path.Parent);
+                count++;
+                args.Add($"--test-project {csproj.Name}");
             });
+
+            Verbose("Running mutation tests for {ProjectCount} project(s)", count);
+            DotNet($"stryker {args.RenderForExecution()}", workingDirectory: MutationTestResultDirectory);
         });
 }
