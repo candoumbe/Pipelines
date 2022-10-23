@@ -16,7 +16,7 @@ using System.Collections.Generic;
 [GitHubActions("integration",
     GitHubActionsImage.WindowsLatest,
     AutoGenerate = true,
-    OnPushBranches = new[] { IGitFlow.DevelopBranch },
+    OnPushBranchesIgnore = new[] { IGitFlow.MainBranchName, IGitFlow.ReleaseBranch + "/*" },
     FetchDepth = 0,
     InvokedTargets = new[] { nameof(ICompile.Compile), nameof(IPack.Pack), nameof(IPublish.Publish) },
     CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" },
