@@ -59,10 +59,10 @@ public interface IMutationTest : IUnitTest
             MutationTestsProjects.ForEach(csproj =>
             {
                 count++;
-                args.Add($"--test-project {csproj.Name}");
+                DotNet($"stryker {args.RenderForExecution()}", workingDirectory: csproj.Path.Parent);
             });
 
             Verbose("Running mutation tests for {ProjectCount} project(s)", count);
-            DotNet($"stryker {args.RenderForExecution()}", workingDirectory: MutationTestResultDirectory);
+
         });
 }
