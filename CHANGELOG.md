@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixes
 
+- Fixed directory path used by `IUnitTest` target to output unit tests results.
 
 ## [0.1.0] / 2022-10-23
 - Initial release

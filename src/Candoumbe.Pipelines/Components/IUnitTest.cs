@@ -26,7 +26,7 @@ public interface IUnitTest : ICompile, IHaveTests, IHaveCoverage
     IEnumerable<Project> UnitTestsProjects { get; }
 
     /// <summary>
-    /// Directory where to publish unit test results
+    /// Directory where to unit test results will be published.
     /// </summary>
     AbsolutePath UnitTestResultsDirectory => TestResultDirectory / "unit-tests";
 
@@ -49,7 +49,7 @@ public interface IUnitTest : ICompile, IHaveTests, IHaveCoverage
                 .CombineWith(UnitTestsProjects, (cs, project) => cs.SetProjectFile(project)
                                                                .CombineWith(project.GetTargetFrameworks(), (setting, framework) => setting.SetFramework(framework)
                                                                                                                                           .AddLoggers($"trx;LogFileName={project.Name}.trx")
-                                                                                                                                          .SetCoverletOutput(TestResultDirectory / $"{project.Name}.{framework}.xml"))),
+                                                                                                                                          .SetCoverletOutput(UnitTestResultsDirectory / $"{project.Name}.xml"))),
                                                                                                                                           completeOnFailure: true
                 );
 
