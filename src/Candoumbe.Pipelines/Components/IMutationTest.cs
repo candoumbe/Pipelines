@@ -52,9 +52,9 @@ public interface IMutationTest : IUnitTest
             Arguments args = new();
             args.Add("--open-report:html", IsLocalBuild);
             args.Add($"--dashboard-api-key {StrykerDashboardApiKey}", IsServerBuild || StrykerDashboardApiKey is not null);
-            args.Add("--reporter markdown");
-            args.Add("--reporter html");
-            args.Add("--reporter progress", IsLocalBuild);
+            args.Add(@"--reporter ""markdown""");
+            args.Add(@"--reporter ""html""");
+            args.Add(@"--reporter ""progress""", IsLocalBuild);
 
             MutationTestsProjects.ForEach(csproj =>
             {
