@@ -71,7 +71,7 @@ public interface IReportCoverage : IUnitTest
     internal sealed Configure<ReportGeneratorSettings> ReportGeneratorSettingsBase => _ => _
         .SetFramework("net5.0")
         .SetReports(UnitTestResultsDirectory / "*.xml")
-        .SetReportTypes(ReportTypes.Badges, ReportTypes.HtmlChart, ReportTypes.HtmlInline_AzurePipelines_Dark)
+        .SetReportTypes(ReportTypes.Badges, ReportTypes.HtmlChart, ReportTypes.HtmlInline)
         .SetTargetDirectory(CoverageReportDirectory)
         .SetHistoryDirectory(CoverageReportHistoryDirectory)
         .WhenNotNull(this as IHaveGitRepository, (_, repository) => _.SetTag(repository.GitRepository.Commit));
