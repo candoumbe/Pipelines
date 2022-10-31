@@ -50,11 +50,9 @@ public interface IMutationTest : IUnitTest
             int count = 0;
 
             Arguments args = new();
-            args.Add("--open-report:html", IsLocalBuild);
-            args.Add($"--dashboard-api-key {StrykerDashboardApiKey}", IsServerBuild || StrykerDashboardApiKey is not null);
-            args.Add(@"--reporter ""markdown""");
-            args.Add(@"--reporter ""html""");
-            args.Add(@"--reporter ""progress""", IsLocalBuild);
+
+            args.Apply(StrykerArgumentsSettingsBase)
+                .Apply(StrykerArgumentsSettings);
 
             MutationTestsProjects.ForEach(csproj =>
             {
@@ -65,4 +63,17 @@ public interface IMutationTest : IUnitTest
             Verbose("Running mutation tests for {ProjectCount} project(s)", count);
 
         });
+
+    internal Configure<Arguments> StrykerArgumentsSettingsBase => _ => _
+           .Add("--open-report:html", IsLocalBuild)
+           .Add($"--dashboard-api-key {StrykerDashboardApiKey}", IsServerBuild || StrykerDashboardApiKey is not null)
+           .Add(@"--reporter ""markdown""")
+           .Add(@"--reporter ""html""")
+           .Add(@"--reporter ""progress""", IsLocalBuild);
+
+    /// <summary>
+    /// Configures arguments that will be used by when running Stryker tool
+    /// </summary>
+    Configure<Arguments> StrykerArgumentsSettings => _ => _;
+
 }
