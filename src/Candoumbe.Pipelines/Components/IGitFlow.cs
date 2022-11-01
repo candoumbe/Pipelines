@@ -7,6 +7,7 @@ using Nuke.Common.Tools.GitVersion;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 using static Nuke.Common.ChangeLog.ChangelogTasks;
 using static Nuke.Common.Tools.Git.GitTasks;
@@ -108,7 +109,7 @@ public interface IGitFlow : IHaveGitRepository, IHaveChangeLog, IHaveGitVersion
        .Description($"Starts a new feature development by creating the associated branch {FeatureBranchPrefix}/{{feature-name}} from {DevelopBranch}")
        .Requires(() => IsLocalBuild)
        .Requires(() => !GitRepository.IsOnFeatureBranch() || GitHasCleanWorkingCopy())
-       .Executes(() =>
+       .Executes(async () =>
        {
            if (!GitRepository.IsOnFeatureBranch())
            {
@@ -118,7 +119,7 @@ public interface IGitFlow : IHaveGitRepository, IHaveChangeLog, IHaveGitVersion
            }
            else
            {
-               FinishFeature();
+               await FinishFeature();
            }
        });
 
@@ -178,8 +179,9 @@ public interface IGitFlow : IHaveGitRepository, IHaveChangeLog, IHaveGitVersion
     public Target Release => _ => _
         .DependsOn(Changelog)
         .Description($"Starts a new {ReleaseBranchPrefix}/{{version}} from {DevelopBranch}")
+        .Requires(() => IsLocalBuild)
         .Requires(() => !GitRepository.IsOnReleaseBranch() || GitHasCleanWorkingCopy())
-        .Executes(() =>
+        .Executes(async () =>
         {
             if (!GitRepository.IsOnReleaseBranch())
             {
@@ -187,7 +189,7 @@ public interface IGitFlow : IHaveGitRepository, IHaveChangeLog, IHaveGitVersion
             }
             else
             {
-                FinishReleaseOrHotfix();
+                await FinishReleaseOrHotfix();
             }
         });
 
@@ -200,8 +202,9 @@ public interface IGitFlow : IHaveGitRepository, IHaveChangeLog, IHaveGitVersion
     public Target Hotfix => _ => _
         .DependsOn(Changelog)
         .Description($"Starts a new hotfix branch '{HotfixBranchPrefix}/*' from {MainBranchName}")
+        .Requires(() => IsLocalBuild)
         .Requires(() => !GitRepository.IsOnHotfixBranch() || GitHasCleanWorkingCopy())
-        .Executes(() =>
+        .Executes(async () =>
         {
             (GitVersion mainBranchVersion, IReadOnlyCollection<Output> _) = GitVersion(s => s
                 .SetFramework("net5.0")
@@ -215,7 +218,7 @@ public interface IGitFlow : IHaveGitRepository, IHaveChangeLog, IHaveGitVersion
             }
             else
             {
-                FinishReleaseOrHotfix();
+                await FinishReleaseOrHotfix();
             }
         });
 
@@ -226,7 +229,7 @@ public interface IGitFlow : IHaveGitRepository, IHaveChangeLog, IHaveGitVersion
         .Description($"Starts a new coldfix development by creating the associated '{ColdfixBranchPrefix}/{{name}}' from {DevelopBranch}")
         .Requires(() => IsLocalBuild)
         .Requires(() => !GitRepository.Branch.Like($"{ColdfixBranchPrefix}/*", true) || GitHasCleanWorkingCopy())
-        .Executes(() =>
+        .Executes(async () =>
         {
             if (!GitRepository.Branch.Like($"{ColdfixBranchPrefix}/*"))
             {
@@ -236,14 +239,14 @@ public interface IGitFlow : IHaveGitRepository, IHaveChangeLog, IHaveGitVersion
             }
             else
             {
-                FinishColdfix();
+                await FinishColdfix();
             }
         });
 
     /// <summary>
-    /// Merge a coldfix/* branch back to the develop branch
+    /// Merges a <see cref="ColdfixBranchPrefix"/> branch back to <see cref="DevelopBranch"/> branch
     /// </summary>
-    private void FinishColdfix() => FinishFeature();
+    async virtual ValueTask FinishColdfix() => await FinishFeature();
 
     private void Checkout(string branch, string start)
     {
@@ -261,7 +264,10 @@ public interface IGitFlow : IHaveGitRepository, IHaveChangeLog, IHaveGitVersion
         }
     }
 
-    private void FinishReleaseOrHotfix()
+    /// <summary>
+    /// Merges the current <see cref="ReleaseBranch"/> or <see cref="HotfixBranchPrefix"/> branch back to <see cref="MainBranchName"/>.
+    /// </summary>
+    virtual ValueTask FinishReleaseOrHotfix()
     {
         Git($"checkout {MainBranchName}");
         Git("pull");
@@ -275,9 +281,14 @@ public interface IGitFlow : IHaveGitRepository, IHaveChangeLog, IHaveGitVersion
         Git($"branch -D {GitRepository.Branch}");
 
         Git($"push origin --follow-tags {MainBranchName} {DevelopBranch} {MajorMinorPatchVersion}");
+
+        return ValueTask.CompletedTask;
     }
 
-    private void FinishFeature()
+    /// <summary>
+    /// Merges the current feature branch back to <see cref="DevelopBranch"/>.
+    /// </summary>
+    virtual ValueTask FinishFeature()
     {
         Git($"rebase {DevelopBranch}");
         Git($"checkout {DevelopBranch}");
@@ -286,5 +297,7 @@ public interface IGitFlow : IHaveGitRepository, IHaveChangeLog, IHaveGitVersion
 
         Git($"branch -D {GitRepository.Branch}");
         Git($"push origin {DevelopBranch}");
+
+        return ValueTask.CompletedTask;
     }
 }

@@ -39,6 +39,7 @@
     <Compile Include="..\src\Candoumbe.Pipelines\Components\NugetPublishConfiguration.cs" Link="Components\NugetPublishConfiguration.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\PublishConfiguration.cs" Link="Components\PublishConfiguration.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\Extensions.cs" Link="Components\Extensions.cs" />
+    <Compile Include="..\src\Candoumbe.Pipelines\Components\GitHub\IPullRequest.cs" Link="Components\GitHub\IPullRequest.cs" />
   </ItemGroup>
 
   <ItemGroup>

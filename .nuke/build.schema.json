@@ -18,6 +18,10 @@
           "type": "boolean",
           "description": "Indicates to continue a previously failed build attempt"
         },
+        "Description": {
+          "type": "string",
+          "description": "Description of the pull request"
+        },
         "GitHubToken": {
           "type": "string",
           "description": "Token used to create a new release in GitHub",
@@ -131,6 +135,10 @@
               "Restore"
             ]
           }
+        },
+        "Title": {
+          "type": "string",
+          "description": "Title that will be used when creating a PR"
         },
         "Verbosity": {
           "type": "string",

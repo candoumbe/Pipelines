@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Nuke.Common;
+
+using System;
 
 namespace Candoumbe.Pipelines.Components;
 
@@ -21,4 +23,8 @@ public static class Extensions
     /// </returns>
     public static T WhenNotNull<T, TObject>(this T settings, TObject obj, Func<T, TObject, T> configurator)
         => obj is not null ? configurator.Invoke(settings, obj) : settings;
+
+
+    public static T Get<T>(this INukeBuild nukeBuild) where T : INukeBuild
+        => (T)(object)nukeBuild;
 }

@@ -1,6 +1,7 @@
 namespace Candoumbe.Pipelines.Build;
 
 using Components;
+using Components.GitHub;
 
 using Nuke.Common;
 using Nuke.Common.CI;
@@ -15,7 +16,7 @@ using System.Collections.Generic;
 
 [GitHubActions("integration",
     GitHubActionsImage.WindowsLatest,
-    AutoGenerate = true,
+    AutoGenerate = false,
     OnPushBranchesIgnore = new[] { IGitFlow.MainBranchName, IGitFlow.ReleaseBranch + "/*" },
     FetchDepth = 0,
     InvokedTargets = new[] { nameof(ICompile.Compile), nameof(IPack.Pack), nameof(IPublish.Publish) },
@@ -35,7 +36,7 @@ using System.Collections.Generic;
         })]
 [GitHubActions("delivery",
     GitHubActionsImage.WindowsLatest,
-    AutoGenerate = true,
+    AutoGenerate = false,
     OnPushBranches = new[] { IGitFlow.MainBranchName, IGitFlow.ReleaseBranch + "/*" },
     FetchDepth = 0,
     InvokedTargets = new[] { nameof(ICompile.Compile), nameof(IPack.Pack), nameof(IPublish.Publish) },
@@ -68,7 +69,7 @@ public class Pipeline : NukeBuild,
     IHaveArtifacts,
     IPublish,
     ICreateGithubRelease,
-    IGitFlow
+    IPullRequest
 {
     ///<inheritdoc/>
     IEnumerable<AbsolutePath> IClean.DirectoriesToDelete => SourceDirectory.GlobDirectories("**/bin", "**/obj");
@@ -76,8 +77,8 @@ public class Pipeline : NukeBuild,
     ///<inheritdoc/>
     IEnumerable<AbsolutePath> IClean.DirectoriesToEnsureExistance => new[]
     {
-        From<IHaveArtifacts>().OutputDirectory,
-        From<IHaveArtifacts>().ArtifactsDirectory,
+        this.Get<IHaveArtifacts>().OutputDirectory,
+        this.Get<IHaveArtifacts>().ArtifactsDirectory,
     };
 
     [CI]
@@ -92,7 +93,6 @@ public class Pipeline : NukeBuild,
 
     ///<inheritdoc/>
     public AbsolutePath SourceDirectory => RootDirectory / "src";
-
 
     /// <summary>
     /// Token used to interact with GitHub API
@@ -121,12 +121,9 @@ public class Pipeline : NukeBuild,
             canBeUsed: () => NugetApiKey is not null
         ),
         new GitHubPublishConfiguration(
-            githubToken: From<ICreateGithubRelease>()?.GitHubToken,
+            githubToken: this.Get<ICreateGithubRelease>()?.GitHubToken,
             source: new Uri($"https://nuget.pkg.github.com/{GitHubActions?.RepositoryOwner}/index.json"),
             canBeUsed: () => this is ICreateGithubRelease createRelease && createRelease.GitHubToken is not null
         ),
     };
-
-    private T From<T>() where T : INukeBuild
-        => (T)(object)this;
 }
