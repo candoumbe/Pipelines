@@ -47,10 +47,12 @@ namespace Candoumbe.Pipelines.Components.GitHub
         ///<inheritdoc/>
         async ValueTask IGitFlow.FinishFeature()
         {
-            // Push to the remote branch
-            Git("push");
             string repositoryName = GitRepository.GetGitHubName();
             string branchName = GitRepository.Branch;
+
+            // Push to the remote branch
+            GitPushToRemote();
+
             Information("Creating a pull request for {Repository}", repositoryName);
 
             Information("Title of the pull request :");
@@ -71,6 +73,11 @@ namespace Candoumbe.Pipelines.Components.GitHub
             DeleteLocalBranchIf(DeleteLocalBranchAfterPullRequest, branchName, switchToBranchName: DevelopBranch);
         }
 
+        private void GitPushToRemote()
+        {
+            Git($"push origin --set-upstream {GitCurrentBranch()}");
+        }
+
         private void DeleteLocalBranchIf(bool condition, string branchName, string switchToBranchName)
         {
             if (condition)
@@ -87,7 +94,7 @@ namespace Candoumbe.Pipelines.Components.GitHub
         ///<inheritdoc/>
         async ValueTask IGitFlow.FinishReleaseOrHotfix()
         {
-            Git("push");
+            GitPushToRemote();
 
             string repositoryName = GitRepository.GetGitHubName();
             Information("Creating a pull request for {Repository}", repositoryName);
