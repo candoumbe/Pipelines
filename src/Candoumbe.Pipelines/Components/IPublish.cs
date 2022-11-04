@@ -15,7 +15,7 @@ using static Serilog.Log;
 namespace Candoumbe.Pipelines.Components;
 
 /// <summary>
-/// Marks a pipeline that can specify a folder for source files
+/// Marks a pipeline that can publish packages
 /// </summary>
 public interface IPublish : IPack
 {

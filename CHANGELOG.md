@@ -9,14 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Breaking changes
 - Renamed `IBenchmarks` to `IBenchmark`
 - Renamed `IMutationTests` to `IMutationTest`
+- Made `IGitFlow.FinishFeature` async
+- Made `IGitFlow.FinishReleaseOrHotfix` async
+- Made `IGitFlow.FinishColdfix` async
+- Moved `GitHubPublishConfiguration` to `Candoumbe.Pipelines.Components.GitHub` namespace
+- Moved `ICreateGitHubRelease` to `Candoumbe.Pipelines.Components.GitHub` namespace
 
 ### New features
 
 - Added execution of `IPublish.Publish` target on `integration` workflow
-- Added `IHaveReport` interface that can be used by pipelines that output reports of any kind (code coverage, performance tests, ...)
+- Added `IHaveReport` component that can be used by pipelines that output reports of any kind (code coverage, performance tests, ...)
 - Added `IUnitTest.UnitTestsResultsDirectory` which defines where to output unit test result files
 - Added `IMutationTest.MutationTestResultsDirectory` which defines where to output mutation test result files
 - Added `IBenchmark.BenchmarkTestResultsDirectory` which defines where to output benchmarks test result files
+- Added `IPullRequest` component which extends `IGitFlow` and create pull requests instead or merging back to `develop` (respectiveley `main`) when finishing a feature / coldfix (resp. release / hotfix) branch.
+- Added `IHaveGitHubRepository` which extends `IHaveGitRepository` and specific properties related to GitHub repositories.
 
 ### Fixes
 

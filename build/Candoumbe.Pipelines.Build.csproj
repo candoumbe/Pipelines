@@ -12,17 +12,15 @@
 
   <ItemGroup>
     <Compile Include="..\src\Candoumbe.Pipelines\Components\Configuration.cs" Link="Components\Configuration.cs" />
-    <Compile Include="..\src\Candoumbe.Pipelines\Components\GitHubPublishConfiguration.cs" Link="Components\GitHubPublishConfiguration.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\IBenchmark.cs" Link="Components\IBenchmarks.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\IClean.cs" Link="Components\IClean.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\ICompile.cs" Link="Components\ICompile.cs" />
-    <Compile Include="..\src\Candoumbe.Pipelines\Components\ICreateGithubRelease.cs" Link="Components\ICreateGithubRelease.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\IGitFlow.cs" Link="Components\IGitFlow.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\IHaveArtifacts.cs" Link="Components\IHaveArtifacts.cs" />
+    <Compile Include="..\src\Candoumbe.Pipelines\Components\IHaveGitRepository.cs" Link="Components\IHaveGitRepository.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\IHaveChangeLog.cs" Link="Components\IHaveChangeLog.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\IHaveConfiguration.cs" Link="Components\IHaveConfiguration.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\IHaveCoverage.cs" Link="Components\IHaveCoverage.cs" />
-    <Compile Include="..\src\Candoumbe.Pipelines\Components\IHaveGitRepository.cs" Link="Components\IHaveGitRepository.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\IHaveGitVersion.cs" Link="Components\IHaveGitVersion.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\IHaveOutput.cs" Link="Components\IHaveOutput.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\IHaveReport.cs" Link="Components\IHaveReport.cs" />
@@ -39,6 +37,11 @@
     <Compile Include="..\src\Candoumbe.Pipelines\Components\NugetPublishConfiguration.cs" Link="Components\NugetPublishConfiguration.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\PublishConfiguration.cs" Link="Components\PublishConfiguration.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\Extensions.cs" Link="Components\Extensions.cs" />
+    <Compile Include="..\src\Candoumbe.Pipelines\Components\GitHub\IPullRequest.cs" Link="Components\GitHub\IPullRequest.cs" />
+    <Compile Include="..\src\Candoumbe.Pipelines\Components\GitHub\GitHubPublishConfiguration.cs" Link="Components\GitHub\GitHubPublishConfiguration.cs" />
+    <Compile Include="..\src\Candoumbe.Pipelines\Components\GitHub\IHaveGitHubRepository.cs" Link="Components\GitHub\IHaveGitHubRepository.cs" />
+    <Compile Include="..\src\Candoumbe.Pipelines\Components\GitHub\ICreateGithubRelease.cs" Link="Components\GitHub\ICreateGithubRelease.cs" />
+    <Compile Include="..\src\Candoumbe.Pipelines\Components\IHaveSecret.cs" Link="Components\IHaveSecret.cs" />
   </ItemGroup>
 
   <ItemGroup>
