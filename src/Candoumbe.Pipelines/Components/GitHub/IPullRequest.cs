@@ -8,6 +8,8 @@ using System;
 using System.Threading.Tasks;
 
 using static Nuke.Common.Tools.Git.GitTasks;
+using static Nuke.Common.Tools.GitHub.GitHubTasks;
+using static Nuke.Common.Utilities.ConsoleUtility;
 using static Serilog.Log;
 
 namespace Candoumbe.Pipelines.Components.GitHub
@@ -47,48 +49,58 @@ namespace Candoumbe.Pipelines.Components.GitHub
         ///<inheritdoc/>
         async ValueTask IGitFlow.FinishFeature()
         {
-            string repositoryName = GitRepository.GetGitHubName();
-            string branchName = GitRepository.Branch;
-
             // Push to the remote branch
             GitPushToRemote();
 
+            string repositoryName = GitRepository.GetGitHubName();
+            string branchName = GitRepository.Branch;
+            string owner = GitRepository.GetGitHubOwner();
+
             Information("Creating a pull request for {Repository}", repositoryName);
 
-            Information("Title of the pull request :");
-            string title = Console.ReadLine() ?? Title;
+            string title = PromptForInput("Title of the pull request :", Title);
+
             Information("Creating {PullRequestName} for {Repository}", title, repositoryName);
+            string username = PromptForInput("Username", owner);
+            string password = PromptForInput("Password", string.Empty);
 
-            GitHubClient gitHubClient = new(new ProductHeaderValue(repositoryName));
+            GitHubClient gitHubClient = new(new ProductHeaderValue(repositoryName))
+            {
+                Credentials = new Credentials(username, password, AuthenticationType.Basic)
+            };
 
-            NewPullRequest pullRequest = new(title, branchName, DevelopBranch)
+            NewPullRequest newPullRequest = new(title, branchName, DevelopBranch)
             {
                 Draft = Draft,
                 Body = Description
             };
 
-            await gitHubClient.PullRequest.Create(GitRepository.GetGitHubOwner(), repositoryName, pullRequest);
+            PullRequest pullRequest = await gitHubClient.PullRequest.Create(owner, repositoryName, newPullRequest);
 
-            Information("{PullRequestName} created successfully", title, repositoryName);
+            Information("PR {PullRequestId} created successfully", pullRequest.Number);
             DeleteLocalBranchIf(DeleteLocalBranchAfterPullRequest, branchName, switchToBranchName: DevelopBranch);
         }
 
-        private void GitPushToRemote()
+        private static void GitPushToRemote()
         {
             Git($"push origin --set-upstream {GitCurrentBranch()}");
         }
-
-        private void DeleteLocalBranchIf(bool condition, string branchName, string switchToBranchName)
+        private static void DeleteLocalBranchIf(in bool condition, in string branchName, in string switchToBranchName)
         {
             if (condition)
             {
-                Information("Delete branch {BranchName} ?  (Y/N)", branchName);
-                if (Console.ReadKey().Key == ConsoleKey.Y)
+                if (PromptForChoice("Delete branch {BranchName} ?  (Y/N)", BuildChoices()) == ConsoleKey.Y)
                 {
                     Git($"switch {switchToBranchName}");
                     Git($"branch -D {branchName}");
                 }
             }
+
+            static (ConsoleKey key, string description)[] BuildChoices() => new[]
+            {
+                (key: ConsoleKey.Y, "Delete the local branch"),
+                (key: ConsoleKey.N, "Keep the local branch"),
+            };
         }
 
         ///<inheritdoc/>

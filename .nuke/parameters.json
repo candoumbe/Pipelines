@@ -1,4 +1,5 @@
 {
   "$schema": "./build.schema.json",
-  "Solution": "Candoumbe.Pipelines.sln"
+  "Solution": "Candoumbe.Pipelines.sln",
+  "NoLogo": true
 }
