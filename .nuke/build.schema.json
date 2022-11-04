@@ -142,6 +142,11 @@
           "type": "string",
           "description": "Title that will be used when creating a PR"
         },
+        "Token": {
+          "type": "string",
+          "description": "Token used to create a pull request",
+          "default": "Secrets must be entered via 'nuke :secrets [profile]'"
+        },
         "Verbosity": {
           "type": "string",
           "description": "Logging verbosity during build execution. Default is 'Normal'",
