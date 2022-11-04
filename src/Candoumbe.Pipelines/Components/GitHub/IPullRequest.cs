@@ -44,14 +44,21 @@ namespace Candoumbe.Pipelines.Components.GitHub
         string Description => TryGetValue(() => Description) ?? this.Get<IHaveChangeLog>()?.ReleaseNotes;
 
         /// <summary>
-        /// Should the pipeline delete the branch after pull request ?
+        /// Should the local branch be deleted after the pull request was created successfully ?
         /// </summary>
-        public bool DeleteLocalBranchAfterPullRequest => false;
+        public bool DeleteLocalOnSuccess => false;
 
         /// <summary>
         /// Defines, when set to <see langword="true"/>, to open the pull request as draft.
         /// </summary>
-        public bool Draft => true;
+        [Parameter("Indicates to open the pull request as 'draft'")]
+        public bool Draft => false;
+
+        /// <summary>
+        /// The issue ID for witch pull request will be created.
+        /// </summary>
+        [Parameter("The issue ID for witch pull request will be created.")]
+        uint? Issue => null;
 
         ///<inheritdoc/>
         async ValueTask IGitFlow.FinishFeature()
@@ -69,28 +76,32 @@ namespace Candoumbe.Pipelines.Components.GitHub
             Information("Creating {PullRequestName} for {Repository}", title, repositoryName);
             string token = Token ?? PromptForInput("Token (leave empty to exit)", string.Empty);
 
-            Information("{SourceBranch} ==> {TargetBranch} on the behalf of {UserName}", branchName, DevelopBranch, token);
-            GitHubClient gitHubClient = new(new ProductHeaderValue(repositoryName))
+            if (!string.IsNullOrWhiteSpace(token))
             {
-                Credentials = new Credentials(token)
-            };
+                Information("{SourceBranch} ==> {TargetBranch} on the behalf of {UserName}", branchName, DevelopBranch, token);
+                GitHubClient gitHubClient = new(new ProductHeaderValue(repositoryName))
+                {
+                    Credentials = new Credentials(token)
+                };
 
-            NewPullRequest newPullRequest = new(title, branchName, DevelopBranch)
-            {
-                Draft = Draft,
-                Body = Description
-            };
+                NewPullRequest newPullRequest = new(title, branchName, DevelopBranch)
+                {
+                    Draft = Draft,
+                    Body = Description
+                };
 
-            PullRequest pullRequest = await gitHubClient.PullRequest.Create(owner, repositoryName, newPullRequest);
+                PullRequest pullRequest = await gitHubClient.PullRequest.Create(owner, repositoryName, newPullRequest);
 
-            Information("PR {PullRequestId} created successfully", pullRequest.Number);
-            DeleteLocalBranchIf(DeleteLocalBranchAfterPullRequest, branchName, switchToBranchName: DevelopBranch);
+                Information("PR {PullRequestUrl} created successfully", pullRequest.HtmlUrl);
+                DeleteLocalBranchIf(DeleteLocalOnSuccess, branchName, switchToBranchName: DevelopBranch);
+            }
         }
 
         private static void GitPushToRemote()
         {
             Git($"push origin --set-upstream {GitCurrentBranch()}");
         }
+
         private static void DeleteLocalBranchIf(in bool condition, in string branchName, in string switchToBranchName)
         {
             if (condition)
@@ -115,16 +126,27 @@ namespace Candoumbe.Pipelines.Components.GitHub
             GitPushToRemote();
 
             string repositoryName = GitRepository.GetGitHubName();
+            string branchName = GitCurrentBranch();
+
             Information("Creating a pull request for {Repository}", repositoryName);
+            string title = PromptForInput("Title of the pull request :", Title);
 
-            Information("Creating {PullRequestName} for {Repository}", Title, repositoryName);
+            Information("Creating {PullRequestName} for {Repository}", title, repositoryName);
+            string token = Token ?? PromptForInput("Token (leave empty to exit)", string.Empty);
+            if (!string.IsNullOrWhiteSpace(token))
+            {
+                Verbose("{SourceBranch} ==> {TargetBranch}", branchName, DevelopBranch, token);
+                GitHubClient gitHubClient = new(new ProductHeaderValue(repositoryName))
+                {
+                    Credentials = new Credentials(token)
+                };
+                NewPullRequest newPullRequest = new(Title, GitRepository.Branch, MainBranchName);
 
-            NewPullRequest pullRequest = new(Title, GitRepository.Branch, MainBranchName);
+                PullRequest pullRequest = await gitHubClient.PullRequest.Create(GitRepository.GetGitHubOwner(), repositoryName, newPullRequest);
 
-            GitHubClient gitHubClient = new(new ProductHeaderValue(repositoryName));
-            await gitHubClient.PullRequest.Create(GitRepository.GetGitHubOwner(), repositoryName, pullRequest);
-
-            DeleteLocalBranchIf(DeleteLocalBranchAfterPullRequest, GitCurrentBranch(), switchToBranchName: DevelopBranch);
+                Information("PR {PullRequestUrl} created successfully", pullRequest.HtmlUrl);
+                DeleteLocalBranchIf(DeleteLocalOnSuccess, GitCurrentBranch(), switchToBranchName: DevelopBranch);
+            }
         }
     }
 }
