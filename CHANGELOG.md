@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `IHaveGitHubRepository` which extends `IHaveGitRepository` and specific properties related to GitHub repositories.
 - Promoted `IPullRequest.DeleteLocalOnSuccess` as parameter
 - Promoted `IPullRequest.Draft` as parameter
+- Newly created pull request open in the default browser after creation ([#10](https://github.com/candoumbe/pipelines/issues/10))
 
 ### Fixes
 
