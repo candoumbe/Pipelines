@@ -5,6 +5,9 @@ using Nuke.Common.Tools.GitHub;
 using Octokit;
 
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 
 using static Nuke.Common.Tools.Git.GitTasks;
@@ -46,7 +49,8 @@ namespace Candoumbe.Pipelines.Components.GitHub
         /// <summary>
         /// Should the local branch be deleted after the pull request was created successfully ?
         /// </summary>
-        public bool DeleteLocalOnSuccess => false;
+        [Parameter("Should the local branch be deleted after the pull request was created successfully ?")]
+        bool DeleteLocalOnSuccess => false;
 
         /// <summary>
         /// Defines, when set to <see langword="true"/>, to open the pull request as draft.
@@ -57,12 +61,16 @@ namespace Candoumbe.Pipelines.Components.GitHub
         /// <summary>
         /// The issue ID for witch pull request will be created.
         /// </summary>
-        [Parameter("The issue ID for witch pull request will be created.")]
-        uint? Issue => null;
+        [Parameter("Issues that will be closed once the pull request is merged.")]
+        uint[] Issues => Array.Empty<uint>();
 
         ///<inheritdoc/>
         async ValueTask IGitFlow.FinishFeature()
         {
+            string linkToIssueKeyWord = Issues.AtLeastOnce()
+                ? string.Join(',', Issues.Select(issueNumber => $"Resolves #{issueNumber}").ToArray())
+                : null;
+
             // Push to the remote branch
             GitPushToRemote();
 
@@ -87,13 +95,17 @@ namespace Candoumbe.Pipelines.Components.GitHub
                 NewPullRequest newPullRequest = new(title, branchName, DevelopBranch)
                 {
                     Draft = Draft,
-                    Body = Description
+                    Body = linkToIssueKeyWord is not null
+                        ? $"{Description}{Environment.NewLine}{Environment.NewLine}{linkToIssueKeyWord}"
+                        : Description
                 };
 
                 PullRequest pullRequest = await gitHubClient.PullRequest.Create(owner, repositoryName, newPullRequest);
 
-                Information("PR {PullRequestUrl} created successfully", pullRequest.HtmlUrl);
                 DeleteLocalBranchIf(DeleteLocalOnSuccess, branchName, switchToBranchName: DevelopBranch);
+                Information("PR {PullRequestUrl} created successfully", pullRequest.HtmlUrl);
+
+                Process.Start(pullRequest.HtmlUrl);
             }
         }
 
@@ -140,8 +152,15 @@ namespace Candoumbe.Pipelines.Components.GitHub
                 {
                     Credentials = new Credentials(token)
                 };
-                NewPullRequest newPullRequest = new(Title, GitRepository.Branch, MainBranchName);
-
+                NewPullRequest newPullRequest = new(Title, GitRepository.Branch, MainBranchName)
+                {
+                    Draft = Draft,
+                    Body = Issues.AtLeastOnce() switch
+                    {
+                        true => $"{Description}{Environment.NewLine}{Environment.NewLine}",
+                        _ => Description
+                    }
+                };
                 PullRequest pullRequest = await gitHubClient.PullRequest.Create(GitRepository.GetGitHubOwner(), repositoryName, newPullRequest);
 
                 Information("PR {PullRequestUrl} created successfully", pullRequest.HtmlUrl);
