@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 using static Nuke.Common.Tools.Git.GitTasks;
@@ -26,10 +27,11 @@ namespace Candoumbe.Pipelines.Components.GitHub
         /// The title of the PR that will be created
         /// </summary>
         [Parameter("Title that will be used when creating a PR")]
-        string Title => TryGetValue(() => Title) ?? ((GitRepository.IsOnFeatureBranch(), GitRepository.IsOnReleaseBranch(), GitRepository.IsOnHotfixBranch()) switch
+        string Title => TryGetValue(() => Title) ?? ((GitRepository.IsOnFeatureBranch(), GitRepository.IsOnReleaseBranch(), GitRepository.IsOnHotfixBranch(), GitRepository.Branch.Like($"{ColdfixBranchPrefix}/*")) switch
         {
-            (true, _, _) => $"[FEATURE] {GitRepository.Branch.ToTitleCase()}",
-            (_, _, true) => $"[HOTFIX] {GitRepository.Branch.ToTitleCase()}",
+            (true, _, _, _) => $"[FEATURE] {GitRepository.Branch.Replace($"{FeatureBranchPrefix}/", string.Empty).ToTitleCase()}",
+            (_, _, true, _) => $"[HOTFIX] {GitRepository.Branch.Replace($"{HotfixBranchPrefix}/", string.Empty).ToTitleCase()}",
+            (_, _, _, true) => $"[COLDFIX] {GitRepository.Branch.Replace($"{ColdfixBranchPrefix}/", string.Empty).ToTitleCase()}",
             _ => GitRepository.Branch.ToTitleCase()
         }).Replace('-', ' ');
 
@@ -62,7 +64,7 @@ namespace Candoumbe.Pipelines.Components.GitHub
         /// The issue ID for witch pull request will be created.
         /// </summary>
         [Parameter("Issues that will be closed once the pull request is merged.")]
-        uint[] Issues => Array.Empty<uint>();
+        uint[] Issues => TryGetValue(() => Issues) ?? Array.Empty<uint>();
 
         ///<inheritdoc/>
         async ValueTask IGitFlow.FinishFeature()
@@ -105,7 +107,7 @@ namespace Candoumbe.Pipelines.Components.GitHub
                 DeleteLocalBranchIf(DeleteLocalOnSuccess, branchName, switchToBranchName: DevelopBranch);
                 Information("PR {PullRequestUrl} created successfully", pullRequest.HtmlUrl);
 
-                Process.Start(pullRequest.HtmlUrl);
+                OpenUrl(pullRequest.HtmlUrl);
             }
         }
 
@@ -165,6 +167,37 @@ namespace Candoumbe.Pipelines.Components.GitHub
 
                 Information("PR {PullRequestUrl} created successfully", pullRequest.HtmlUrl);
                 DeleteLocalBranchIf(DeleteLocalOnSuccess, GitCurrentBranch(), switchToBranchName: DevelopBranch);
+
+                OpenUrl(pullRequest.HtmlUrl);
+            }
+        }
+
+        private static void OpenUrl(string url)
+        {
+            try
+            {
+                Process.Start(url);
+            }
+            catch
+            {
+                // hack because of this: https://github.com/dotnet/corefx/issues/10361
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    url = url.Replace("&", "^&");
+                    Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    Process.Start("xdg-open", url);
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    Process.Start("open", url);
+                }
+                else
+                {
+                    throw;
+                }
             }
         }
     }
