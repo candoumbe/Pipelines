@@ -18,9 +18,17 @@
           "type": "boolean",
           "description": "Indicates to continue a previously failed build attempt"
         },
+        "DeleteLocalOnSuccess": {
+          "type": "boolean",
+          "description": "Should the local branch be deleted after the pull request was created successfully ?"
+        },
         "Description": {
           "type": "string",
           "description": "Description of the pull request"
+        },
+        "Draft": {
+          "type": "boolean",
+          "description": "Indicates to open the pull request as 'draft'"
         },
         "GitHubToken": {
           "type": "string",
@@ -55,6 +63,13 @@
         "IgnoreFailedSources": {
           "type": "boolean",
           "description": "Ignore unreachable sources during Restore"
+        },
+        "Issues": {
+          "type": "array",
+          "description": "Issues that will be closed once the pull request is merged",
+          "items": {
+            "type": "string"
+          }
         },
         "Major": {
           "type": "boolean",

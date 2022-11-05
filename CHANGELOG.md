@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved `ICreateGitHubRelease` to `Candoumbe.Pipelines.Components.GitHub` namespace
 
 ### New features
-
+- Added `IPullRequest.Issues` parameter which allows to specify issues a pull request fixes ([#9](https://github.com/candoumbe/pipelines/issues/9))
 - Added execution of `IPublish.Publish` target on `integration` workflow
 - Added `IHaveReport` component that can be used by pipelines that output reports of any kind (code coverage, performance tests, ...)
 - Added `IUnitTest.UnitTestsResultsDirectory` which defines where to output unit test result files
@@ -24,6 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `IBenchmark.BenchmarkTestResultsDirectory` which defines where to output benchmarks test result files
 - Added `IPullRequest` component which extends `IGitFlow` and create pull requests instead or merging back to `develop` (respectiveley `main`) when finishing a feature / coldfix (resp. release / hotfix) branch.
 - Added `IHaveGitHubRepository` which extends `IHaveGitRepository` and specific properties related to GitHub repositories.
+- Promoted `IPullRequest.DeleteLocalOnSuccess` as parameter
+- Promoted `IPullRequest.Draft` as parameter
 
 ### Fixes
 
