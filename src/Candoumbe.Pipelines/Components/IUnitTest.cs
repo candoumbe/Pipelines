@@ -49,7 +49,7 @@ public interface IUnitTest : ICompile, IHaveTests, IHaveCoverage
                 .CombineWith(UnitTestsProjects, (cs, project) => cs.SetProjectFile(project)
                                                                .CombineWith(project.GetTargetFrameworks(), (setting, framework) => setting.SetFramework(framework)
                                                                                                                                           .AddLoggers($"trx;LogFileName={project.Name}.trx")
-                                                                                                                                          .SetCoverletOutput(UnitTestResultsDirectory / $"{project.Name}.xml"))),
+                                                                                                                                          .SetCoverletOutput(UnitTestResultsDirectory / $"{project.Name}.{framework}.xml"))),
                                                                                                                                           completeOnFailure: true
                 );
 
