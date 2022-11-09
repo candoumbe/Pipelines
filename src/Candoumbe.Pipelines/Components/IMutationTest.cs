@@ -61,7 +61,6 @@ public interface IMutationTest : IUnitTest
             });
 
             Verbose("Running mutation tests for {ProjectCount} project(s)", count);
-
         });
 
     internal Configure<Arguments> StrykerArgumentsSettingsBase => _ => _
@@ -75,5 +74,4 @@ public interface IMutationTest : IUnitTest
     /// Configures arguments that will be used by when running Stryker tool
     /// </summary>
     Configure<Arguments> StrykerArgumentsSettings => _ => _;
-
 }

@@ -46,7 +46,6 @@ public interface IBenchmark : ICompile, IHaveArtifacts
             });
         });
 
-
     /// <summary>
     /// Configures the way performance tests are run.
     /// </summary>

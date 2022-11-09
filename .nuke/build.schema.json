@@ -10,6 +10,10 @@
           "type": "boolean",
           "description": "Indicates if any changes should be stashed automatically prior to switching branch (Default : true)"
         },
+        "Candoumbe.Pipelines.Components.GitHub.IPullRequest.Title": {
+          "type": "string",
+          "description": "Title that will be used when creating a PR"
+        },
         "Configuration": {
           "type": "string",
           "enum": []
@@ -66,7 +70,7 @@
         },
         "Issues": {
           "type": "array",
-          "description": "Issues that will be closed once the pull request is merged",
+          "description": "Issues that will be closed once the pull request is completed",
           "items": {
             "type": "string"
           }
