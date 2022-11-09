@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Breaking changes
 - Renamed `IBenchmarks` to `IBenchmark`
 - Renamed `IMutationTests` to `IMutationTest`
+- Moved `IGitFlow` to `Candoumbe.Pipelines.Components.Workflows` namespace
 - Made `IGitFlow.FinishFeature` async
 - Made `IGitFlow.FinishReleaseOrHotfix` async
 - Made `IGitFlow.FinishColdfix` async
@@ -16,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved `ICreateGitHubRelease` to `Candoumbe.Pipelines.Components.GitHub` namespace
 
 ### New features
+- Added `IGithubFlowWithPullRequest`
+- Added `IGitFlowWithPullRequest`
+- Added `IPullRequest` component which extends `IWorkflow` and create pull requests instead or merging back to `develop` (respectiveley `main`) when finishing a feature / coldfix (resp. release / hotfix) branch.
+- Added `IGitHubFlow` ([#15](https://github.com/candoumbe/pipelines/issues/15))
 - Added `IPullRequest.Issues` parameter which allows to specify issues a pull request fixes ([#9](https://github.com/candoumbe/pipelines/issues/9))
 - Added execution of `IPublish.Publish` target on `integration` workflow
 - Added `IHaveReport` component that can be used by pipelines that output reports of any kind (code coverage, performance tests, ...)
@@ -23,7 +28,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `IUnitTest.ProjectUnitTestSettings` to customize/override the unit tests settings.
 - Added `IMutationTest.MutationTestResultsDirectory` which defines where to output mutation test result files
 - Added `IBenchmark.BenchmarkTestResultsDirectory` which defines where to output benchmarks test result files
-- Added `IPullRequest` component which extends `IGitFlow` and create pull requests instead or merging back to `develop` (respectiveley `main`) when finishing a feature / coldfix (resp. release / hotfix) branch.
 - Added `IHaveGitHubRepository` which extends `IHaveGitRepository` and specific properties related to GitHub repositories.
 - Promoted `IPullRequest.DeleteLocalOnSuccess` as parameter
 - Promoted `IPullRequest.Draft` as parameter

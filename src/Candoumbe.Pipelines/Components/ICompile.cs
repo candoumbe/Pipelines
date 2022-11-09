@@ -58,5 +58,4 @@ public interface ICompile : IRestore, IHaveConfiguration
     /// Configures the compilation settings
     /// </summary>
     public Configure<DotNetBuildSettings> CompileSettings => _ => _;
-
 }

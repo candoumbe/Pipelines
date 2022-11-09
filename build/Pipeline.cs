@@ -69,11 +69,11 @@ public class Pipeline : NukeBuild,
     IHaveArtifacts,
     IPublish,
     ICreateGithubRelease,
-    IPullRequest,
+    IGitFlowWithPullRequest,
     IHaveSecret
 {
     ///<inheritdoc/>
-    IEnumerable<AbsolutePath> IClean.DirectoriesToDelete => SourceDirectory.GlobDirectories("**/bin", "**/obj");
+    IEnumerable<AbsolutePath> IClean.DirectoriesToDelete => RootDirectory.GlobDirectories("**/bin", "**/obj");
 
     ///<inheritdoc/>
     IEnumerable<AbsolutePath> IClean.DirectoriesToEnsureExistance => new[]
@@ -112,6 +112,7 @@ public class Pipeline : NukeBuild,
 
     ///<inheritdoc/>
     public IEnumerable<AbsolutePath> PackableProjects => SourceDirectory.GlobFiles("**/*.csproj");
+
 
     ///<inheritdoc/>
     public IEnumerable<PublishConfiguration> PublishConfigurations => new PublishConfiguration[]

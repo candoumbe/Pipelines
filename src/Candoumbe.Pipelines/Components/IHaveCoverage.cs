@@ -16,5 +16,4 @@ public interface IHaveCoverage : IHaveReport
     /// Directory where to publish code coverage history report
     /// </summary>
     public AbsolutePath CoverageReportHistoryDirectory => ReportDirectory / "coverage-history";
-
 }

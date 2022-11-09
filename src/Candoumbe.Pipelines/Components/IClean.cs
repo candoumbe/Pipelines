@@ -13,7 +13,6 @@ namespace Candoumbe.Pipelines.Components;
 /// </summary>
 public interface IClean : INukeBuild
 {
-
     /// <summary>
     /// Collection of directories that <see cref="Clean"/> target will delete
     /// </summary>

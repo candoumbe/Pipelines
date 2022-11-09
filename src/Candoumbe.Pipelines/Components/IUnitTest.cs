@@ -53,8 +53,8 @@ public interface IUnitTest : ICompile, IHaveTests, IHaveCoverage
                     )));
 
             TestResultDirectory.GlobFiles("*.trx")
-                               .ForEach(testFileResult => AzurePipelines.Instance?.PublishTestResults(type: AzurePipelinesTestResultsType.VSTest,
-                                                                                                      title: $"{Path.GetFileNameWithoutExtension(testFileResult)} ({AzurePipelines.Instance.StageDisplayName})",
+                               .ForEach(testFileResult => AzurePipelines.Instance?.PublishTestResults(title: $"{Path.GetFileNameWithoutExtension(testFileResult)} ({AzurePipelines.Instance.StageDisplayName})",
+type: AzurePipelinesTestResultsType.VSTest,
                                                                                                       files: new string[] { testFileResult })
                     );
 
@@ -79,7 +79,6 @@ public interface IUnitTest : ICompile, IHaveTests, IHaveCoverage
     /// </summary>
     public Configure<DotNetTestSettings> UnitTestSettings => _ => _;
 
-
     internal Configure<DotNetTestSettings, (Project project, string framework)> ProjectUnitTestSettingsBase => (settings, tuple) => settings.SetFramework(tuple.framework)
                                                                                                                                     .AddLoggers($"trx;LogFileName={tuple.project.Name}.{tuple.framework}.trx")
                                                                                                                                     .SetCoverletOutput(UnitTestResultsDirectory / $"{tuple.project.Name}.{tuple.framework}.xml");
@@ -87,6 +86,5 @@ public interface IUnitTest : ICompile, IHaveTests, IHaveCoverage
     /// <summary>
     /// Configure / override unit test settings at project level
     /// </summary>
-    Configure<DotNetTestSettings, (Project project, string framework)> ProjectUnitTestSettings => (settings, tuple) => settings;
-
+    Configure<DotNetTestSettings, (Project project, string framework)> ProjectUnitTestSettings => (settings, _) => settings;
 }

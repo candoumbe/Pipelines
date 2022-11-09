@@ -24,7 +24,11 @@ public static class Extensions
     public static T WhenNotNull<T, TObject>(this T settings, TObject obj, Func<T, TObject, T> configurator)
         => obj is not null ? configurator.Invoke(settings, obj) : settings;
 
-
+    /// <summary>
+    /// Gives access to <typeparamref name="T"/> properties and methods
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="nukeBuild"></param>
     public static T Get<T>(this INukeBuild nukeBuild) where T : INukeBuild
         => (T)(object)nukeBuild;
 }

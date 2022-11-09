@@ -40,7 +40,6 @@ public interface IPublish : IPack
         .Requires(() => Configuration.Equals(Configuration.Release))
         .Executes(() =>
         {
-
             int numberOfPackages = PublishPackageFiles.TryGetNonEnumeratedCount(out numberOfPackages)
                 ? numberOfPackages
                 : PublishPackageFiles.Count();
@@ -66,8 +65,8 @@ public interface IPublish : IPack
                                                                           (setting, config) => setting.When(config.CanBeUsed(),
                                                                                                               _ => _.SetApiKey(config.Key))
                                                                   ),
-                                                  completeOnFailure: PushCompleteOnFailure,
-                                                  degreeOfParallelism: PushDegreeOfParallelism);
+                                                  degreeOfParallelism: PushDegreeOfParallelism,
+                                                  completeOnFailure: PushCompleteOnFailure);
 
             ReportSummary(summary =>
             {
