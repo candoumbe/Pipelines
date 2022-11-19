@@ -88,7 +88,7 @@ namespace Candoumbe.Pipelines.Components.GitHub
 
             if (!string.IsNullOrWhiteSpace(token))
             {
-                Information("{SourceBranch} ==> {TargetBranch} on the behalf of {UserName}", branchName, DevelopBranch, token);
+                Information("{SourceBranch} ==> {TargetBranch} on the behalf of {UserName}", branchName, DevelopBranch);
                 GitHubClient gitHubClient = new(new ProductHeaderValue(repositoryName))
                 {
                     Credentials = new Credentials(token)
