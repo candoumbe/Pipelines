@@ -10,10 +10,6 @@
           "type": "boolean",
           "description": "Indicates if any changes should be stashed automatically prior to switching branch (Default : true)"
         },
-        "Candoumbe.Pipelines.Components.GitHub.IPullRequest.Title": {
-          "type": "string",
-          "description": "Title that will be used when creating a PR"
-        },
         "Configuration": {
           "type": "string",
           "enum": []
