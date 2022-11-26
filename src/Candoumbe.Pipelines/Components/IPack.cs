@@ -32,7 +32,6 @@ public interface IPack : IHaveArtifacts, ICompile
     /// </summary>
     public Target Pack => _ => _
         .TryDependsOn<IUnitTest>(x => x.UnitTests)
-        .TryDependsOn<IMutationTest>(x => x.MutationTests)
         .DependsOn(Compile)
         .Consumes(Compile)
         .Produces(PackagesDirectory / "*.nupkg")
