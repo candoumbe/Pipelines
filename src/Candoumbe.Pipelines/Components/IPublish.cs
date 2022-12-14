@@ -101,5 +101,5 @@ public interface IPublish : IPack
     /// <summary>
     /// Determines where <see cref="Publish"/> will push packages
     /// </summary>
-    IEnumerable<PublishConfiguration> PublishConfigurations => Enumerable.Empty<PublishConfiguration>();
+    IEnumerable<PublishConfiguration> PublishConfigurations { get; }
 }

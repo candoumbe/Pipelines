@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Made `IGitFlow.FinishColdfix` async
 - Moved `GitHubPublishConfiguration` to `Candoumbe.Pipelines.Components.GitHub` namespace
 - Moved `ICreateGitHubRelease` to `Candoumbe.Pipelines.Components.GitHub` namespace
+- Made `IPublish.PublishConfigurations` mandatory
 
 ### New features
 - Added `IGithubFlowWithPullRequest`
