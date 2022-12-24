@@ -1,14 +1,4 @@
-﻿using Nuke.Common;
-using Nuke.Common.IO;
-using Nuke.Common.ProjectModel;
-using Nuke.Common.Tooling;
-using Nuke.Common.Tools.DotNet;
-
-using System.Collections.Generic;
-
-using static Nuke.Common.Tools.DotNet.DotNetTasks;
-
-namespace Candoumbe.Pipelines.Components;
+﻿namespace Candoumbe.Pipelines.Components;
 
 /// <summary>
 /// Defines a directory to store benchmarks result
@@ -50,7 +40,7 @@ public interface IBenchmark : ICompile, IHaveArtifacts
     /// Configures the way performance tests are run.
     /// </summary>
     public sealed Configure<DotNetRunSettings> BenchmarksSettingsBase => _ => _
-            .SetConfiguration(nameof(Configuration.Release))
+            .SetConfiguration(Configuration)
             .SetProcessArgumentConfigurator(args => args.Add("-- --filter {0}", "*", customValue: true)
                                                         .Add("--artifacts {0}", BenchmarkResultDirectory)
                                                         .Add("--join"));

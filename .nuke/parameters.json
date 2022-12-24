@@ -1,5 +1,6 @@
 {
   "$schema": "./build.schema.json",
   "Solution": "Candoumbe.Pipelines.sln",
-  "NoLogo": true
+  "NoLogo": true,
+  "DeleteLocalOnSuccess": true
 }
