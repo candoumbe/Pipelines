@@ -39,7 +39,7 @@ namespace Candoumbe.Pipelines.Components.GitHub
         /// Defines, when set to <see langword="true"/>, to open the pull request as draft.
         /// </summary>
         [Parameter("Indicates to open the pull request as 'draft'")]
-        public bool Draft => false;
+        bool Draft => false;
 
         /// <summary>
         /// The issue ID for witch pull request will be created.

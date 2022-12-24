@@ -3,16 +3,20 @@
     /// <summary>
     /// Configuration that can be used to compile an application
     /// </summary>
-    public enum Configuration
+    [TypeConverter(typeof(TypeConverter<Configuration>))]
+    public class Configuration : Enumeration
     {
         /// <summary>
         /// Debug mode
         /// </summary>
-        Debug,
+        public static readonly Configuration Debug = new() { Value = nameof(Debug) };
 
         /// <summary>
         /// Release mode
         /// </summary>
-        Release
+        public static readonly Configuration Release = new() { Value = nameof(Release) };
+
+        ///<inheritdoc/>
+        public static implicit operator string(Configuration configuration) => configuration.Value;
     }
 }
