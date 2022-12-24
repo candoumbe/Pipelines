@@ -14,6 +14,5 @@ public interface IHaveConfiguration : INukeBuild
     /// Configuration currently supported by the pipeline
     /// </summary>
     [Parameter]
-    public Configuration Configuration => TryGetValue(() => Configuration) ??
-                                                   (IsLocalBuild ? Configuration.Debug : Configuration.Release);
+    public Configuration Configuration => IsLocalBuild ? Configuration.Debug : Configuration.Release;
 }

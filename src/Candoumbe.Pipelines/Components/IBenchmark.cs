@@ -37,7 +37,7 @@ public interface IBenchmark : ICompile, IHaveArtifacts
         {
             BenchmarkProjects.ForEach(csproj =>
             {
-                DotNetRun(s => s.SetConfiguration(Configuration.Release)
+                DotNetRun(s => s.SetConfiguration(nameof(Configuration.Release))
                                 .SetProjectFile(csproj)
                                 .CombineWith(csproj.GetTargetFrameworks(),
                                              (setting, framework) => setting.SetFramework(framework))
@@ -50,7 +50,7 @@ public interface IBenchmark : ICompile, IHaveArtifacts
     /// Configures the way performance tests are run.
     /// </summary>
     public sealed Configure<DotNetRunSettings> BenchmarksSettingsBase => _ => _
-            .SetConfiguration(Configuration.Release)
+            .SetConfiguration(nameof(Configuration.Release))
             .SetProcessArgumentConfigurator(args => args.Add("-- --filter {0}", "*", customValue: true)
                                                         .Add("--artifacts {0}", BenchmarkResultDirectory)
                                                         .Add("--join"));

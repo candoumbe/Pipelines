@@ -42,7 +42,7 @@ public interface ICompile : IRestore, IHaveConfiguration
     public sealed Configure<DotNetBuildSettings> CompileSettingsBase => _ => _
                 .SetNoRestore(SucceededTargets.Contains(Restore) || SkippedTargets.Contains(Restore))
                 .SetProjectFile(Solution)
-                .SetConfiguration(Configuration)
+                .SetConfiguration(Configuration.ToString())
                 .SetContinuousIntegrationBuild(IsServerBuild)
                 .WhenNotNull(this as IHaveGitVersion,
                              (settings, gitVersion) => settings.SetAssemblyVersion(gitVersion.GitVersion.AssemblySemVer)
