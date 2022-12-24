@@ -65,7 +65,7 @@ type: AzurePipelinesTestResultsType.VSTest,
         });
 
     internal sealed Configure<DotNetTestSettings> UnitTestSettingsBase => _ => _
-        .SetConfiguration(Configuration)
+        .SetConfiguration(Configuration.ToString())
                 .ResetVerbosity()
                 .EnableCollectCoverage()
                 .EnableUseSourceLink()

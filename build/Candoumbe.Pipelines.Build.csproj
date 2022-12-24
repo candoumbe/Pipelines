@@ -60,37 +60,4 @@
     <PackageReference Include="Candoumbe.Miscutilities" Version="0.10.0" />
     <PackageDownload Include="GitVersion.Tool" Version="[5.10.3]" />
   </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="..\.nuke\temp\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="..\.nuke\temp\build.log" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="..\.nuke\temp\build.2022-10-22_17-17-40.log" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="..\.nuke\temp\build.2022-10-22_17-02-27.log" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="..\.nuke\temp\build.2022-10-22_16-48-01.log" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="..\.nuke\temp\build.2022-10-22_15-18-51.log" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="..\.nuke\temp\build.2022-10-22_15-07-14.log" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="..\.nuke\temp\build.2022-10-22_14-59-01.log" />
-  </ItemGroup>
-
 </Project>

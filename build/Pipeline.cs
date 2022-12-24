@@ -73,7 +73,7 @@ public class Pipeline : NukeBuild,
     IHaveSecret
 {
     ///<inheritdoc/>
-    IEnumerable<AbsolutePath> IClean.DirectoriesToDelete => RootDirectory.GlobDirectories("**/bin", "**/obj");
+    IEnumerable<AbsolutePath> IClean.DirectoriesToDelete => this.Get<IHaveSourceDirectory>().SourceDirectory.GlobDirectories("**/bin", "**/obj");
 
     ///<inheritdoc/>
     IEnumerable<AbsolutePath> IClean.DirectoriesToEnsureExistance => new[]

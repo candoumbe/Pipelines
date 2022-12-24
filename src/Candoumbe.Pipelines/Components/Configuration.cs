@@ -1,29 +1,18 @@
-﻿using JetBrains.Annotations;
-
-using Nuke.Common.Tooling;
-
-using System.ComponentModel;
-
-namespace Candoumbe.Pipelines.Components
+﻿namespace Candoumbe.Pipelines.Components
 {
     /// <summary>
-    /// Configuration that can be used throughout CI/CD pipelines
+    /// Configuration that can be used to compile an application
     /// </summary>
-    [PublicAPI]
-    [TypeConverter(typeof(TypeConverter<Configuration>))]
-    public class Configuration : Enumeration
+    public enum Configuration
     {
         /// <summary>
-        /// The "Debug" mode
+        /// Debug mode
         /// </summary>
-        public static Configuration Debug => new() { Value = nameof(Debug) };
+        Debug,
 
         /// <summary>
-        /// The "release" mode
+        /// Release mode
         /// </summary>
-        public static Configuration Release => new() { Value = nameof(Release) };
-
-        ///<inheritdoc/>
-        public static implicit operator string(Configuration configuration) => configuration.Value;
+        Release
     }
 }

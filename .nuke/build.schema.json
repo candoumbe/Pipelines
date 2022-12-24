@@ -12,7 +12,10 @@
         },
         "Configuration": {
           "type": "string",
-          "enum": []
+          "enum": [
+            "Debug",
+            "Release"
+          ]
         },
         "Continue": {
           "type": "boolean",
