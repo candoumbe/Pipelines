@@ -1,4 +1,8 @@
-﻿namespace Candoumbe.Pipelines.Components
+﻿using Nuke.Common.Tooling;
+
+using System.ComponentModel;
+
+namespace Candoumbe.Pipelines.Components
 {
     /// <summary>
     /// Configuration that can be used to compile an application

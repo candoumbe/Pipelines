@@ -1,4 +1,6 @@
-﻿namespace Candoumbe.Pipelines.Components;
+﻿using Nuke.Common;
+
+namespace Candoumbe.Pipelines.Components;
 
 /// <summary>
 /// Marks a pipeline that offers configuration support.
