@@ -2,6 +2,7 @@
 
 using Nuke.Common;
 using Nuke.Common.IO;
+using Nuke.Common.Tooling;
 using Nuke.Common.Tools.Codecov;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.ReportGenerator;
@@ -19,44 +20,64 @@ public interface IReportCoverage : IUnitTest
     /// <summary>
     /// The API key used to push code coverage to CodeCov
     /// </summary>
-    [Parameter]
-    public string CodecovToken { get; }
+    [Parameter("The API key used to push code coverage to CodeCov")]
+    [Secret]
+    public string CodecovToken => TryGetValue(() => CodecovToken);
+
+    /// <summary>
+    /// Defines if <see cref="ReportCoverage"/> should publish results to <see href="codecov.io">Code Cov</see>.
+    /// </summary>
+    bool ReportToCodeCov { get; }
 
     /// <summary>
     /// Pushes code coverage to CodeCov
     /// </summary>
     public Target ReportCoverage => _ => _
        .DependsOn(UnitTests)
-       .OnlyWhenDynamic(() => IsServerBuild || CodecovToken != null)
-       .Consumes(UnitTests, TestResultDirectory / "*.xml")
+       .Requires(() => !ReportToCodeCov || CodecovToken != null)
+       .Consumes(UnitTests, UnitTestResultsDirectory / "*.xml")
        .Produces(CoverageReportDirectory / "*.xml")
        .Produces(CoverageReportHistoryDirectory / "*.xml")
        .Executes(() =>
        {
-           ReportGeneratorSettings reportSettings = new ReportGeneratorSettings()
-                   .SetFramework("net5.0")
-                   .SetReports(TestResultDirectory / "*.xml")
-                   .SetReportTypes(ReportTypes.Badges, ReportTypes.HtmlChart, ReportTypes.HtmlInline_AzurePipelines_Dark)
-                   .SetTargetDirectory(CoverageReportDirectory)
-                   .SetHistoryDirectory(CoverageReportHistoryDirectory);
+           ReportGenerator(s => s.Apply(ReportGeneratorSettingsBase)
+                                 .Apply(ReportGeneratorSettings));
 
-           CodecovSettings codeCovSettings = new CodecovSettings().SetFiles(TestResultDirectory.GlobFiles("*.xml").Select(x => x.ToString()))
-                                                                  .SetToken(CodecovToken)
-                                                                  .SetFramework("netcoreapp3.0");
-
-           if (this is IHaveGitRepository git)
+           if (ReportToCodeCov)
            {
-               reportSettings = reportSettings.SetTag(git.GitRepository.Commit);
-               codeCovSettings = codeCovSettings.SetBranch(git.GitRepository.Branch)
-                                                .SetSha(git.GitRepository.Commit);
+               Codecov(s => s.Apply(CodeCovSettingsBase)
+                             .Apply(CodecovSettings));
            }
-
-           if (this is IHaveGitVersion gitVersion)
-           {
-               codeCovSettings = codeCovSettings.SetBuild(gitVersion.GitVersion.FullSemVer);
-           }
-
-           ReportGenerator(reportSettings);
-           Codecov(codeCovSettings);
        });
+
+    internal sealed Configure<CodecovSettings> CodeCovSettingsBase => _ => _
+        .SetFiles(UnitTestResultsDirectory.GlobFiles("*.xml").Select(x => x.ToString()))
+        .SetToken(CodecovToken)
+        .SetFramework("netcoreapp3.0")
+        .WhenNotNull(this as IHaveGitVersion,
+                     (_, version) => _.SetBuild(version.GitVersion.FullSemVer))
+        .WhenNotNull(this as IHaveGitRepository,
+                     (_, repository) => _.SetBranch(repository.GitRepository.Branch)
+                                         .SetSha(repository.GitRepository.Commit));
+
+    /// <summary>
+    /// Defines settings used by <see cref="ReportCoverage"/> target
+    /// </summary>
+    /// <remarks>
+    /// These settings are only used when <see cref="ReportToCodeCov"/> is <see langword="true"/>.
+    /// </remarks>
+    Configure<CodecovSettings> CodecovSettings => _ => _;
+
+    internal sealed Configure<ReportGeneratorSettings> ReportGeneratorSettingsBase => _ => _
+        .SetFramework("net5.0")
+        .SetReports(UnitTestResultsDirectory / "*.xml")
+        .SetReportTypes(ReportTypes.Badges, ReportTypes.HtmlChart, ReportTypes.HtmlInline)
+        .SetTargetDirectory(CoverageReportDirectory)
+        .SetHistoryDirectory(CoverageReportHistoryDirectory)
+        .WhenNotNull(this as IHaveGitRepository, (_, repository) => _.SetTag(repository.GitRepository.Commit));
+
+    /// <summary>
+    /// Defines settings used by <see cref="ReportCoverage"/> target
+    /// </summary>
+    Configure<ReportGeneratorSettings> ReportGeneratorSettings => _ => _;
 }

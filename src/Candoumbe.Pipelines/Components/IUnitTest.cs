@@ -6,6 +6,7 @@ using Nuke.Common.Tooling;
 using Nuke.Common.Tools.Coverlet;
 using Nuke.Common.Tools.DotNet;
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -26,13 +27,18 @@ public interface IUnitTest : ICompile, IHaveTests, IHaveCoverage
     IEnumerable<Project> UnitTestsProjects { get; }
 
     /// <summary>
+    /// Directory where to unit test results will be published.
+    /// </summary>
+    AbsolutePath UnitTestResultsDirectory => TestResultDirectory / "unit-tests";
+
+    /// <summary>
     /// Runs unit tests
     /// </summary>
     public Target UnitTests => _ => _
         .DependsOn(Compile)
         .Description("Run unit tests and collect code coverage")
-        .Produces(TestResultDirectory / "*.trx")
-        .Produces(TestResultDirectory / "*.xml")
+        .Produces(UnitTestResultsDirectory / "*.trx")
+        .Produces(UnitTestResultsDirectory / "*.xml")
         .TryTriggers<IReportCoverage>()
         .Executes(() =>
         {
@@ -42,15 +48,13 @@ public interface IUnitTest : ICompile, IHaveTests, IHaveCoverage
                 .Apply(UnitTestSettingsBase)
                 .Apply(UnitTestSettings)
                 .CombineWith(UnitTestsProjects, (cs, project) => cs.SetProjectFile(project)
-                                                               .CombineWith(project.GetTargetFrameworks(), (setting, framework) => setting.SetFramework(framework)
-                                                                                                                                          .AddLoggers($"trx;LogFileName={project.Name}.trx")
-                                                                                                                                          .SetCoverletOutput(TestResultDirectory / $"{project.Name}.{framework}.xml"))),
-                                                                                                                                          completeOnFailure: true
-                );
+                                                               .CombineWith(project.GetTargetFrameworks(), (setting, framework) => setting.Apply<DotNetTestSettings, (Project, string)>(ProjectUnitTestSettingsBase, (project, framework))
+                                                                                                                                          .Apply<DotNetTestSettings, (Project, string)>(ProjectUnitTestSettings, (project, framework))
+                    )));
 
             TestResultDirectory.GlobFiles("*.trx")
-                               .ForEach(testFileResult => AzurePipelines.Instance?.PublishTestResults(type: AzurePipelinesTestResultsType.VSTest,
-                                                                                                      title: $"{Path.GetFileNameWithoutExtension(testFileResult)} ({AzurePipelines.Instance.StageDisplayName})",
+                               .ForEach(testFileResult => AzurePipelines.Instance?.PublishTestResults(title: $"{Path.GetFileNameWithoutExtension(testFileResult)} ({AzurePipelines.Instance.StageDisplayName})",
+type: AzurePipelinesTestResultsType.VSTest,
                                                                                                       files: new string[] { testFileResult })
                     );
 
@@ -61,12 +65,12 @@ public interface IUnitTest : ICompile, IHaveTests, IHaveCoverage
         });
 
     internal sealed Configure<DotNetTestSettings> UnitTestSettingsBase => _ => _
-        .SetConfiguration(Configuration)
+        .SetConfiguration(Configuration.ToString())
                 .ResetVerbosity()
                 .EnableCollectCoverage()
                 .EnableUseSourceLink()
                 .SetNoBuild(SucceededTargets.Contains(Compile))
-                .SetResultsDirectory(TestResultDirectory)
+                .SetResultsDirectory(UnitTestResultsDirectory)
                 .SetCoverletOutputFormat(CoverletOutputFormat.lcov)
                 .AddProperty("ExcludeByAttribute", "Obsolete");
 
@@ -74,4 +78,13 @@ public interface IUnitTest : ICompile, IHaveTests, IHaveCoverage
     /// Configures the Unit test target
     /// </summary>
     public Configure<DotNetTestSettings> UnitTestSettings => _ => _;
+
+    internal Configure<DotNetTestSettings, (Project project, string framework)> ProjectUnitTestSettingsBase => (settings, tuple) => settings.SetFramework(tuple.framework)
+                                                                                                                                    .AddLoggers($"trx;LogFileName={tuple.project.Name}.{tuple.framework}.trx")
+                                                                                                                                    .SetCoverletOutput(UnitTestResultsDirectory / $"{tuple.project.Name}.{tuple.framework}.xml");
+
+    /// <summary>
+    /// Configure / override unit test settings at project level
+    /// </summary>
+    Configure<DotNetTestSettings, (Project project, string framework)> ProjectUnitTestSettings => (settings, _) => settings;
 }

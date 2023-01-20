@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Candoumbe.Pipelines.Components;
+namespace Candoumbe.Pipelines.Components.GitHub;
 
 /// <summary>
 /// Wraps configuration used to publish packages to nuget.org feed.

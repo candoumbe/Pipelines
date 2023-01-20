@@ -27,7 +27,8 @@ public interface ICompile : IRestore, IHaveConfiguration
         {
             Information("Compiling {Solution}", Solution);
 
-            ReportSummary(_ => _.When(this is IHaveGitVersion, _ => _.AddPair("Version", ((IHaveGitVersion)this).GitVersion.FullSemVer)));
+            ReportSummary(_ => _.WhenNotNull(this as IHaveGitVersion,
+                                             (_, version) => _.AddPair("Version", version.GitVersion.FullSemVer)));
 
             DotNetBuild(s => s
                 .Apply(CompileSettingsBase)
@@ -41,20 +42,20 @@ public interface ICompile : IRestore, IHaveConfiguration
     public sealed Configure<DotNetBuildSettings> CompileSettingsBase => _ => _
                 .SetNoRestore(SucceededTargets.Contains(Restore) || SkippedTargets.Contains(Restore))
                 .SetProjectFile(Solution)
-                .SetConfiguration(Configuration)
+                .SetConfiguration(Configuration.ToString())
                 .SetContinuousIntegrationBuild(IsServerBuild)
-                .When(this is IHaveGitVersion, settings => settings
-                    .SetAssemblyVersion(((IHaveGitVersion)this).GitVersion.AssemblySemVer)
-                    .SetFileVersion(((IHaveGitVersion)this).GitVersion.AssemblySemFileVer)
-                    .SetInformationalVersion(((IHaveGitVersion)this).GitVersion.InformationalVersion)
-                    .SetVersion(((IHaveGitVersion)this).GitVersion.NuGetVersion)
-                    .SetSymbolPackageFormat(DotNetSymbolPackageFormat.snupkg)
-                    .When(this is IHaveChangeLog, setting => setting.SetPackageReleaseNotes(((IHaveChangeLog)this).ReleaseNotes))
+                .WhenNotNull(this as IHaveGitVersion,
+                             (settings, gitVersion) => settings.SetAssemblyVersion(gitVersion.GitVersion.AssemblySemVer)
+                                                               .SetFileVersion(gitVersion.GitVersion.AssemblySemFileVer)
+                                                               .SetInformationalVersion(gitVersion.GitVersion.InformationalVersion)
+                                                               .SetVersion(gitVersion.GitVersion.NuGetVersion)
+                                                               .SetSymbolPackageFormat(DotNetSymbolPackageFormat.snupkg)
+                                                               .WhenNotNull(this as IHaveChangeLog,
+                                                                            (setting, changelog) => setting.SetPackageReleaseNotes(changelog.ReleaseNotes))
                 );
 
     /// <summary>
     /// Configures the compilation settings
     /// </summary>
     public Configure<DotNetBuildSettings> CompileSettings => _ => _;
-
 }

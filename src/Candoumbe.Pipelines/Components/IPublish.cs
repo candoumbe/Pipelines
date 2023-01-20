@@ -15,7 +15,7 @@ using static Serilog.Log;
 namespace Candoumbe.Pipelines.Components;
 
 /// <summary>
-/// Marks a pipeline that can specify a folder for source files
+/// Marks a pipeline that can publish packages
 /// </summary>
 public interface IPublish : IPack
 {
@@ -32,15 +32,14 @@ public interface IPublish : IPack
         .Consumes(Pack, ArtifactsDirectory / "*.nupkg", ArtifactsDirectory / "*.snupkg")
         .DependsOn(Pack)
         .OnlyWhenDynamic(() => PublishConfigurations.AtLeastOnce(config => config.CanBeUsed()))
-        .When(this is IHaveGitRepository repository,
-              _ => _.Requires(() => GitHasCleanWorkingCopy())
-                   .OnlyWhenDynamic(() => ((IHaveGitRepository)this).GitRepository.IsOnMainBranch()
-                                           || ((IHaveGitRepository)this).GitRepository.IsOnReleaseBranch()
-                                           || ((IHaveGitRepository)this).GitRepository.IsOnDevelopBranch()))
+        .WhenNotNull(this as IHaveGitRepository,
+                     (_, repository) => _.Requires(() => GitHasCleanWorkingCopy())
+                                         .OnlyWhenDynamic(() => repository.GitRepository.IsOnMainBranch()
+                                                                || repository.GitRepository.IsOnReleaseBranch()
+                                                                || repository.GitRepository.IsOnDevelopBranch()))
         .Requires(() => Configuration.Equals(Configuration.Release))
         .Executes(() =>
         {
-
             int numberOfPackages = PublishPackageFiles.TryGetNonEnumeratedCount(out numberOfPackages)
                 ? numberOfPackages
                 : PublishPackageFiles.Count();
@@ -66,9 +65,8 @@ public interface IPublish : IPack
                                                                           (setting, config) => setting.When(config.CanBeUsed(),
                                                                                                               _ => _.SetApiKey(config.Key))
                                                                   ),
-                                                  completeOnFailure: PushCompleteOnFailure,
-                                                  degreeOfParallelism: PushDegreeOfParallelism);
-
+                                                  degreeOfParallelism: PushDegreeOfParallelism,
+                                                  completeOnFailure: PushCompleteOnFailure);
 
             ReportSummary(summary =>
             {
@@ -103,5 +101,5 @@ public interface IPublish : IPack
     /// <summary>
     /// Determines where <see cref="Publish"/> will push packages
     /// </summary>
-    IEnumerable<PublishConfiguration> PublishConfigurations => Enumerable.Empty<PublishConfiguration>();
+    IEnumerable<PublishConfiguration> PublishConfigurations { get; }
 }

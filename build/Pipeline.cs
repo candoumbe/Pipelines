@@ -1,6 +1,9 @@
 namespace Candoumbe.Pipelines.Build;
 
+using Candoumbe.Pipelines.Components.Workflows;
+
 using Components;
+using Components.GitHub;
 
 using Nuke.Common;
 using Nuke.Common.CI;
@@ -12,17 +15,21 @@ using Nuke.Common.Tools.DotNet;
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+
+using static Nuke.Common.Tools.Git.GitTasks;
 
 [GitHubActions("integration",
     GitHubActionsImage.WindowsLatest,
-    AutoGenerate = true,
-    OnPushBranchesIgnore = new[] { IGitFlow.MainBranchName },
+    AutoGenerate = false,
+    OnPushBranchesIgnore = new[] { IGitFlow.MainBranchName, IGitFlow.ReleaseBranch + "/*" },
     FetchDepth = 0,
-    InvokedTargets = new[] { nameof(ICompile.Compile), nameof(IPack.Pack) },
+    InvokedTargets = new[] { nameof(ICompile.Compile), nameof(IPack.Pack), nameof(IPublish.Publish) },
     CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" },
+    EnableGitHubToken = true,
     ImportSecrets = new[]
     {
-        nameof(ICreateGithubRelease.GitHubToken),
+        nameof(NugetApiKey)
     },
     PublishArtifacts = true,
     OnPushExcludePaths = new[]
@@ -34,14 +41,15 @@ using System.Collections.Generic;
         })]
 [GitHubActions("delivery",
     GitHubActionsImage.WindowsLatest,
-    AutoGenerate = true,
+    AutoGenerate = false,
     OnPushBranches = new[] { IGitFlow.MainBranchName, IGitFlow.ReleaseBranch + "/*" },
     FetchDepth = 0,
     InvokedTargets = new[] { nameof(ICompile.Compile), nameof(IPack.Pack), nameof(IPublish.Publish) },
     CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" },
+    EnableGitHubToken = true,
     ImportSecrets = new[]
     {
-        nameof(ICreateGithubRelease.GitHubToken),
+        nameof(NugetApiKey)
     },
     PublishArtifacts = true,
     OnPushExcludePaths = new[]
@@ -62,20 +70,21 @@ public class Pipeline : NukeBuild,
     ICompile,
     IPack,
     IHaveGitVersion,
-    IHaveGitRepository,
+    IHaveGitHubRepository,
     IHaveArtifacts,
     IPublish,
     ICreateGithubRelease,
-    IGitFlow
+    IGitFlowWithPullRequest,
+    IHaveSecret
 {
     ///<inheritdoc/>
-    IEnumerable<AbsolutePath> IClean.DirectoriesToDelete => RootDirectory.GlobDirectories("**/bin", "**/obj");
+    IEnumerable<AbsolutePath> IClean.DirectoriesToDelete => this.Get<IHaveSourceDirectory>().SourceDirectory.GlobDirectories("**/bin", "**/obj");
 
     ///<inheritdoc/>
     IEnumerable<AbsolutePath> IClean.DirectoriesToEnsureExistance => new[]
     {
-        From<IHaveArtifacts>().OutputDirectory,
-        From<IHaveArtifacts>().ArtifactsDirectory,
+        this.Get<IHaveArtifacts>().OutputDirectory,
+        this.Get<IHaveArtifacts>().ArtifactsDirectory,
     };
 
     [CI]
@@ -90,7 +99,6 @@ public class Pipeline : NukeBuild,
 
     ///<inheritdoc/>
     public AbsolutePath SourceDirectory => RootDirectory / "src";
-
 
     /// <summary>
     /// Token used to interact with GitHub API
@@ -110,6 +118,7 @@ public class Pipeline : NukeBuild,
     ///<inheritdoc/>
     public IEnumerable<AbsolutePath> PackableProjects => SourceDirectory.GlobFiles("**/*.csproj");
 
+
     ///<inheritdoc/>
     public IEnumerable<PublishConfiguration> PublishConfigurations => new PublishConfiguration[]
     {
@@ -119,12 +128,30 @@ public class Pipeline : NukeBuild,
             canBeUsed: () => NugetApiKey is not null
         ),
         new GitHubPublishConfiguration(
-            githubToken: From<ICreateGithubRelease>()?.GitHubToken,
+            githubToken: this.Get<ICreateGithubRelease>()?.GitHubToken,
             source: new Uri($"https://nuget.pkg.github.com/{GitHubActions?.RepositoryOwner}/index.json"),
             canBeUsed: () => this is ICreateGithubRelease createRelease && createRelease.GitHubToken is not null
         ),
     };
 
-    private T From<T>() where T : INukeBuild
-        => (T)(object)this;
+    ///<inheritdoc/>
+    ValueTask IGitFlow.FinishRelease()
+    {
+        Git($"checkout {IHaveMainBranch.MainBranchName}");
+        Git("pull");
+        Git($"merge --no-ff --no-edit {this.Get<IHaveGitRepository>().GitRepository.Branch}");
+        string majorMinorPatchVersion = this.Get<IHaveGitVersion>().MajorMinorPatchVersion;
+        Git($"tag {majorMinorPatchVersion}");
+
+        Git($"checkout {IHaveDevelopBranch.DevelopBranchName}");
+        Git("pull");
+        Git($"merge --no-ff --no-edit {this.Get<IHaveGitRepository>().GitRepository.Branch}");
+
+        Git($"branch -D {this.Get<IHaveGitRepository>().GitRepository.Branch}");
+
+        Git($"push origin --follow-tags {IHaveMainBranch.MainBranchName} {IHaveDevelopBranch.DevelopBranchName} {majorMinorPatchVersion}");
+
+        return ValueTask.CompletedTask;
+    }
+
 }

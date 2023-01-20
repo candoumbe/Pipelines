@@ -3,13 +3,13 @@
   "isRoot": true,
   "tools": {
     "nuke.globaltool": {
-      "version": "6.2.1",
+      "version": "6.3.0",
       "commands": [
         "nuke"
       ]
     },
     "gitversion.tool": {
-      "version": "5.10.3",
+      "version": "5.11.1",
       "commands": [
         "dotnet-gitversion"
       ]

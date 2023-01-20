@@ -5,4 +5,11 @@
 [![GitHub raw issues](https://img.shields.io/github/issues-raw/candoumbe/pipelines)](https://github.com/candoumbe/pipelines/issues)
 [![Nuget](https://img.shields.io/nuget/vpre/candoumbe.pipelines)](https://nuget.org/packages/candoumbe.pipelines)
 
-Stater development kit to script your CI/CD using [Nuke](https://nuke.build).
+A Stater development kit to script your CI/CD using [Nuke].
+
+
+## Credits
+
+- [Nuke] as the engine behind the scene
+
+[Nuke]: https//nuke.build

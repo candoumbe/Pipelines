@@ -32,7 +32,6 @@ public interface IPack : IHaveArtifacts, ICompile
     /// </summary>
     public Target Pack => _ => _
         .TryDependsOn<IUnitTest>(x => x.UnitTests)
-        .TryDependsOn<IMutationTests>(x => x.MutationTests)
         .DependsOn(Compile)
         .Consumes(Compile)
         .Produces(PackagesDirectory / "*.nupkg")
@@ -60,16 +59,16 @@ public interface IPack : IHaveArtifacts, ICompile
         .EnableIncludeSource()
         .EnableIncludeSymbols()
         .SetOutputDirectory(PackagesDirectory)
-        .SetNoBuild(SucceededTargets.Contains(Compile))
+        .SetNoBuild(SucceededTargets.Contains(Compile) || SkippedTargets.Contains(Compile))
         .SetNoRestore(SucceededTargets.Contains(Restore) || SucceededTargets.Contains(Compile))
-        .SetConfiguration(Configuration)
-        .When(this is IHaveGitVersion, _ => _
-            .SetAssemblyVersion(((IHaveGitVersion)this).GitVersion.AssemblySemVer)
-            .SetFileVersion(((IHaveGitVersion)this).GitVersion.AssemblySemFileVer)
-            .SetInformationalVersion(((IHaveGitVersion)this).GitVersion.InformationalVersion)
-            .SetVersion(((IHaveGitVersion)this).GitVersion.NuGetVersion))
+        .SetConfiguration(Configuration.ToString())
         .SetSymbolPackageFormat(DotNetSymbolPackageFormat.snupkg)
-        .When(this is IHaveChangeLog, _ => _.SetPackageReleaseNotes(((IHaveChangeLog)this).ReleaseNotes))
-        .When(this is IHaveGitRepository, _ => _.SetRepositoryType("git")
-                                                .SetRepositoryUrl(((IHaveGitRepository)this).GitRepository.HttpsUrl));
+        .WhenNotNull(this as IHaveGitVersion,
+                     (_, versioning) => _.SetAssemblyVersion(versioning.GitVersion.AssemblySemVer)
+                                        .SetFileVersion(versioning.GitVersion.AssemblySemFileVer)
+                                        .SetInformationalVersion(versioning.GitVersion.InformationalVersion)
+                                        .SetVersion(versioning.GitVersion.NuGetVersion))
+        .WhenNotNull(this as IHaveChangeLog, (_, changelog) => _.SetPackageReleaseNotes(changelog.ReleaseNotes))
+        .WhenNotNull(this as IHaveGitRepository, (_, repository) => _.SetRepositoryType("git")
+                                                                     .SetRepositoryUrl(repository.GitRepository.HttpsUrl));
 }

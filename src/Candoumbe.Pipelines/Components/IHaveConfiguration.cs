@@ -13,7 +13,6 @@ public interface IHaveConfiguration : INukeBuild
     /// <summary>
     /// Configuration currently supported by the pipeline
     /// </summary>
-    [Parameter]
-    public Configuration Configuration => TryGetValue(() => Configuration) ??
-                                                   (IsLocalBuild ? Configuration.Debug : Configuration.Release);
+    [Parameter("Defines the configuratoin to use when building the application")]
+    Configuration Configuration => TryGetValue(() => Configuration) ?? (IsLocalBuild ? Configuration.Debug : Configuration.Release);
 }
