@@ -1,5 +1,7 @@
 namespace Candoumbe.Pipelines.Build;
 
+using Candoumbe.Pipelines.Components.Workflows;
+
 using Components;
 using Components.GitHub;
 
@@ -13,6 +15,9 @@ using Nuke.Common.Tools.DotNet;
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+
+using static Nuke.Common.Tools.Git.GitTasks;
 
 [GitHubActions("integration",
     GitHubActionsImage.WindowsLatest,
@@ -129,5 +134,24 @@ public class Pipeline : NukeBuild,
         ),
     };
 
+    ///<inheritdoc/>
+    ValueTask IGitFlow.FinishRelease()
+    {
+        Git($"checkout {IHaveMainBranch.MainBranchName}");
+        Git("pull");
+        Git($"merge --no-ff --no-edit {this.Get<IHaveGitRepository>().GitRepository.Branch}");
+        string majorMinorPatchVersion = this.Get<IHaveGitVersion>().MajorMinorPatchVersion;
+        Git($"tag {majorMinorPatchVersion}");
+
+        Git($"checkout {IHaveDevelopBranch.DevelopBranchName}");
+        Git("pull");
+        Git($"merge --no-ff --no-edit {this.Get<IHaveGitRepository>().GitRepository.Branch}");
+
+        Git($"branch -D {this.Get<IHaveGitRepository>().GitRepository.Branch}");
+
+        Git($"push origin --follow-tags {IHaveMainBranch.MainBranchName} {IHaveDevelopBranch.DevelopBranchName} {majorMinorPatchVersion}");
+
+        return ValueTask.CompletedTask;
+    }
 
 }
