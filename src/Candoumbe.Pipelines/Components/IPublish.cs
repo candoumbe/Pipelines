@@ -48,11 +48,11 @@ public interface IPublish : IPack
             {
                 if (config.CanBeUsed())
                 {
-                    Information("{PackageCount} package(s) will be published to {SourceName}", numberOfPackages);
+                    Information("{PackageCount} package(s) will be published to {SourceName}", numberOfPackages, config.Name);
                 }
                 else
                 {
-                    Warning("{PackageCount} package(s) will not be published to {SourceName}", numberOfPackages);
+                    Warning("{PackageCount} package(s) will not be published to {SourceName}", numberOfPackages, config.Name);
                 }
             });
 

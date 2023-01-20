@@ -33,11 +33,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Promoted `IPullRequest.DeleteLocalOnSuccess` as parameter
 - Promoted `IPullRequest.Draft` as parameter
 - Newly created pull request open in the default browser after creation ([#10](https://github.com/candoumbe/pipelines/issues/10))
+- Changed `IWorkflow.Changelog` target to autocommit changes when running on a build server ([#39](https://github.com/candoumbe/pipelines/issues/39))
 
 ### Fixes
-
 - Fixed directory path used by `IUnitTest` target to output unit tests results.
 - Fixed argument format used to define reporters used when running mutation tests.
+- Fixed `SourceName` not displayed when running `IPublish.Publish` target
 
 ## [0.1.0] / 2022-10-23
 - Initial release
