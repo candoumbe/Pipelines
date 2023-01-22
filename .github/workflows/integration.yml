@@ -21,6 +21,7 @@ on:
     branches-ignore:
       - main
       - 'release/*'
+  pull_request:
     paths:
       - '!docs/*'
       - '!README.md'

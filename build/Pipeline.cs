@@ -21,8 +21,8 @@ using static Nuke.Common.Tools.Git.GitTasks;
 
 [GitHubActions("integration",
     GitHubActionsImage.WindowsLatest,
-    AutoGenerate = false,
-    OnPushBranchesIgnore = new[] { Components.Workflows.IHaveMainBranch.MainBranchName, IGitFlow.ReleaseBranch + "/*" },
+    AutoGenerate = true,
+    OnPushBranchesIgnore = new[] { IHaveMainBranch.MainBranchName, IGitFlow.ReleaseBranch + "/*" },
     FetchDepth = 0,
     InvokedTargets = new[] { nameof(ICompile.Compile), nameof(IPack.Pack), nameof(IPublish.Publish) },
     CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" },
@@ -32,7 +32,7 @@ using static Nuke.Common.Tools.Git.GitTasks;
         nameof(NugetApiKey)
     },
     PublishArtifacts = true,
-    OnPushExcludePaths = new[]
+    OnPullRequestExcludePaths = new[]
         {
             "docs/*",
             "README.md",
@@ -41,8 +41,8 @@ using static Nuke.Common.Tools.Git.GitTasks;
         })]
 [GitHubActions("delivery",
     GitHubActionsImage.WindowsLatest,
-    AutoGenerate = false,
-    OnPushBranches = new[] { Components.Workflows.IHaveMainBranch.MainBranchName, IGitFlow.ReleaseBranch + "/*" },
+    AutoGenerate = true,
+    OnPushBranches = new[] { IHaveMainBranch.MainBranchName, IGitFlow.ReleaseBranch + "/*" },
     FetchDepth = 0,
     InvokedTargets = new[] { nameof(ICompile.Compile), nameof(IPack.Pack), nameof(IPublish.Publish) },
     CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" },
@@ -52,7 +52,7 @@ using static Nuke.Common.Tools.Git.GitTasks;
         nameof(NugetApiKey)
     },
     PublishArtifacts = true,
-    OnPushExcludePaths = new[]
+    OnPullRequestExcludePaths = new[]
         {
             "docs/*",
             "README.md",
