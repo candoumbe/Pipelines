@@ -63,7 +63,8 @@ public interface IPublish : IPack
                                                              .Apply(PackagePublishSettings)
                                                              .CombineWith(PublishConfigurations,
                                                                           (setting, config) => setting.When(config.CanBeUsed(),
-                                                                                                              _ => _.SetApiKey(config.Key))
+                                                                                                              _ => _.SetApiKey(config.Key)
+                                                                                                                    .SetSource(config.Source.ToString()))
                                                                   ),
                                                   degreeOfParallelism: PushDegreeOfParallelism,
                                                   completeOnFailure: PushCompleteOnFailure);
