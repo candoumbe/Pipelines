@@ -111,94 +111,56 @@ namespace Candoumbe.Pipelines.Components.GitHub
 
                 OpenUrl(pullRequest.HtmlUrl);
             }
-        }
 
-        private static void GitPushToRemote()
-        {
-            Git($"push origin --set-upstream {GitCurrentBranch()}");
-        }
-
-        private static void DeleteLocalBranchIf(in bool condition, in string branchName, in string switchToBranchName)
-        {
-            if (condition)
+            static void DeleteLocalBranchIf(in bool condition, in string branchName, in string switchToBranchName)
             {
-                if (PromptForChoice("Delete branch {BranchName} ?  (Y/N)", BuildChoices()) == ConsoleKey.Y)
+                if (condition)
                 {
-                    Git($"switch {switchToBranchName}");
-                    Git($"branch -D {branchName}");
+                    if (PromptForChoice("Delete branch {BranchName} ?  (Y/N)", BuildChoices()) == ConsoleKey.Y)
+                    {
+                        Git($"switch {switchToBranchName}");
+                        Git($"branch -D {branchName}");
+                    }
                 }
-            }
 
-            static (ConsoleKey key, string description)[] BuildChoices() => new[]
-            {
+                static (ConsoleKey key, string description)[] BuildChoices() => new[]
+                {
                 (key: ConsoleKey.Y, "Delete the local branch"),
                 (key: ConsoleKey.N, "Keep the local branch"),
             };
-        }
+            }
 
-        ///<inheritdoc/>
-        async ValueTask IWorkflow.FinishHotfix()
-        {
-            GitPushToRemote();
-
-            string repositoryName = GitRepository.GetGitHubName();
-            string branchName = GitCurrentBranch();
-
-            Information("Creating a pull request for {Repository}", repositoryName);
-            string title = PromptForInput("Title of the pull request :", Title);
-
-            Information("Creating {PullRequestName} for {Repository}", title, repositoryName);
-            string token = Token ?? PromptForInput("Token (leave empty to exit)", string.Empty);
-            if (!string.IsNullOrWhiteSpace(token))
+            static void GitPushToRemote()
             {
-                Verbose("{SourceBranch} ==> {TargetBranch}", branchName, HotfixBranchSourceName, token);
-                GitHubClient gitHubClient = new(new ProductHeaderValue(repositoryName))
+                Git($"push origin --set-upstream {GitCurrentBranch()}");
+            }
+
+            static void OpenUrl(string url)
+            {
+                try
                 {
-                    Credentials = new Credentials(token)
-                };
-                NewPullRequest newPullRequest = new(Title, GitRepository.Branch, HotfixBranchSourceName)
+                    Process.Start(url);
+                }
+                catch
                 {
-                    Draft = Draft,
-                    Body = Issues.AtLeastOnce() switch
+                    // hack because of this: https://github.com/dotnet/corefx/issues/10361
+                    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                     {
-                        true => $"{Description}{Environment.NewLine}{Environment.NewLine}",
-                        _ => Description
+                        url = url.Replace("&", "^&");
+                        Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
                     }
-                };
-                PullRequest pullRequest = await gitHubClient.PullRequest.Create(GitRepository.GetGitHubOwner(), repositoryName, newPullRequest);
-
-                Information("PR {PullRequestUrl} created successfully", pullRequest.HtmlUrl);
-                DeleteLocalBranchIf(DeleteLocalOnSuccess, GitCurrentBranch(), switchToBranchName: HotfixBranchSourceName);
-
-                ControlFlow.SuppressErrors(() => OpenUrl(pullRequest.HtmlUrl));
-            }
-        }
-
-        private static void OpenUrl(string url)
-        {
-            try
-            {
-                Process.Start(url);
-            }
-            catch
-            {
-                // hack because of this: https://github.com/dotnet/corefx/issues/10361
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                {
-                    url = url.Replace("&", "^&");
-                    Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
-                }
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                {
-                    Process.Start("xdg-open", url);
-                }
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                {
-                    Process.Start("open", url);
-                }
-                else
-                {
-                    throw;
+                    else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                    {
+                        Process.Start("xdg-open", url);
+                    }
+                    else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                    {
+                        Process.Start("open", url);
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
             }
         }

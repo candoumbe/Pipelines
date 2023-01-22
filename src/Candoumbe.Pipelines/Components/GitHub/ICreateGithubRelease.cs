@@ -1,5 +1,4 @@
 ﻿using Nuke.Common;
-using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.Git;
 using Nuke.Common.IO;
 using Nuke.Common.Tools.GitHub;
@@ -30,10 +29,10 @@ public interface ICreateGithubRelease : IHaveGitHubRepository, IHaveChangeLog, I
     /// </summary>
     public Target AddGithubRelease => _ => _
         .Unlisted()
-        .OnlyWhenStatic(() => GitHubActions.Instance != null)
+        .OnlyWhenStatic(() => !string.IsNullOrWhiteSpace(GitHubToken))
         .TriggeredBy<IPublish>(x => x.Publish)
         .Description("Creates a new GitHub release after *.nupkgs/*.snupkg were successfully published.")
-        .OnlyWhenDynamic(() => IsServerBuild && GitRepository.IsOnMainBranch())
+        .OnlyWhenDynamic(() => GitRepository.IsOnMainBranch())
         .Executes(async () =>
         {
             string repositoryName = GitRepository.GetGitHubName();
