@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixes
 - No more pull request for finishing a hotfix/release branch when using IGitFlowPullRequest or IGithubFlowPullRequest.
 
+### Fixes
+- Missing `Source` parameter when running `IPublish.Publish` target ([#46](https://github.com/candoumbe/Pipelines))
+
 ## [0.2.0] / 2023-01-20
 ### Breaking changes
 - Renamed `IBenchmarks` to `IBenchmark`
