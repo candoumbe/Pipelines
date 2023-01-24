@@ -34,8 +34,8 @@ public interface IPack : IHaveArtifacts, ICompile
         .TryDependsOn<IUnitTest>(x => x.UnitTests)
         .DependsOn(Compile)
         .Consumes(Compile)
-        .Produces(PackagesDirectory / "*.nupkg")
-        .Produces(PackagesDirectory / "*.snupkg")
+        .Produces(PackagesDirectory / "*.nupkg",
+                  PackagesDirectory / "*.snupkg")
         .Executes(() =>
         {
             int packageCount = PackableProjects.TryGetNonEnumeratedCount(out int count)

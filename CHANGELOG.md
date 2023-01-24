@@ -6,11 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-### Fixes
-- No more pull request for finishing a hotfix/release branch when using IGitFlowPullRequest or IGithubFlowPullRequest.
 
 ### Fixes
-- Missing `Source` parameter when running `IPublish.Publish` target ([#46](https://github.com/candoumbe/Pipelines))
+- Added `EnableNoSymbols` switch on `IPublish.Publish` target
+- No more pull request for finishing a hotfix/release branch when using IGitFlowPullRequest or IGithubFlowPullRequest.
+- Missing `Source` parameter when running `IPublish.Publish` target ([#46](https://github.com/candoumbe/Pipelines)).
 
 ## [0.2.0] / 2023-01-20
 ### Breaking changes

@@ -116,11 +116,11 @@ public class Pipeline : NukeBuild,
     public static int Main() => Execute<Pipeline>(x => ((ICompile)x).Compile);
 
     ///<inheritdoc/>
-    public IEnumerable<AbsolutePath> PackableProjects => SourceDirectory.GlobFiles("**/*.csproj");
+    IEnumerable<AbsolutePath> IPack.PackableProjects => SourceDirectory.GlobFiles("**/*.csproj");
 
 
     ///<inheritdoc/>
-    public IEnumerable<PublishConfiguration> PublishConfigurations => new PublishConfiguration[]
+    IEnumerable<PublishConfiguration> IPublish.PublishConfigurations => new PublishConfiguration[]
     {
         new NugetPublishConfiguration(
             apiKey: NugetApiKey,
@@ -140,7 +140,9 @@ public class Pipeline : NukeBuild,
         Git($"checkout {IHaveMainBranch.MainBranchName}");
         Git("pull");
         Git($"merge --no-ff --no-edit {this.Get<IHaveGitRepository>().GitRepository.Branch}");
+
         string majorMinorPatchVersion = this.Get<IHaveGitVersion>().MajorMinorPatchVersion;
+
         Git($"tag {majorMinorPatchVersion}");
 
         Git($"checkout {IHaveDevelopBranch.DevelopBranchName}");
