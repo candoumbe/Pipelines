@@ -1,9 +1,8 @@
 namespace Candoumbe.Pipelines.Build;
 
+using Candoumbe.Pipelines.Components;
+using Candoumbe.Pipelines.Components.GitHub;
 using Candoumbe.Pipelines.Components.Workflows;
-
-using Components;
-using Components.GitHub;
 
 using Nuke.Common;
 using Nuke.Common.CI;
