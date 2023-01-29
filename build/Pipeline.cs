@@ -7,7 +7,6 @@ using Candoumbe.Pipelines.Components.Workflows;
 using Nuke.Common;
 using Nuke.Common.CI;
 using Nuke.Common.CI.GitHubActions;
-using Nuke.Common.Execution;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tools.DotNet;
@@ -59,7 +58,6 @@ using static Nuke.Common.Tools.Git.GitTasks;
             "LICENSE"
         })]
 [DotNetVerbosityMapping]
-[HandleVisualStudioDebugging]
 [ShutdownDotNetAfterServerBuild]
 public class Pipeline : NukeBuild,
     IHaveSourceDirectory,
