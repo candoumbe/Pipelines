@@ -38,14 +38,14 @@
     <Compile Include="..\src\Candoumbe.Pipelines\Components\NugetPublishConfiguration.cs" Link="Components\NugetPublishConfiguration.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\PublishConfiguration.cs" Link="Components\PublishConfiguration.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\Extensions.cs" Link="Components\Extensions.cs" />
-    
+
     <Compile Include="..\src\Candoumbe.Pipelines\Components\GitHub\IPullRequest.cs" Link="Components\GitHub\IPullRequest.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\GitHub\GitHubPublishConfiguration.cs" Link="Components\GitHub\GitHubPublishConfiguration.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\GitHub\IHaveGitHubRepository.cs" Link="Components\GitHub\IHaveGitHubRepository.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\GitHub\ICreateGithubRelease.cs" Link="Components\GitHub\ICreateGithubRelease.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\GitHub\IGitFlowWithPullRequest.cs" Link="Components\Workflows\IGitFlowWithPullRequest.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\GitHub\IGitHubFlowWithPullRequest.cs" Link="Components\Workflows\IGitHubFlowWithPullRequest.cs" />
-    
+
     <Compile Include="..\src\Candoumbe.Pipelines\Components\Workflows\IGitFlow.cs" Link="Components\Workflows\IGitFlow.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\Workflows\IGitHubFlow.cs" Link="Components\Workflows\IGitHubFlow.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\Workflows\IWorkflow.cs" Link="Components\Workflows\IWorkflow.cs" />
@@ -53,12 +53,10 @@
     <Compile Include="..\src\Candoumbe.Pipelines\Components\Workflows\IHaveDevelopBranch.cs" Link="Components\Workflows\IHaveDevelopBranch.cs" />
   </ItemGroup>
 
+  
   <ItemGroup>
     <PackageReference Include="Nuke.Common" Version="6.3.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Candoumbe.Miscutilities" Version="0.10.0" />
+    <PackageReference Include="Candoumbe.MiscUtilities" Version="0.10.0" />
     <PackageDownload Include="GitVersion.Tool" Version="[5.10.3]" />
   </ItemGroup>
 </Project>

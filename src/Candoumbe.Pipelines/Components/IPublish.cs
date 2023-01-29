@@ -3,13 +3,13 @@ using Nuke.Common.Git;
 using Nuke.Common.IO;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
-using Nuke.Common.Utilities;
 
 using System.Collections.Generic;
 using System.Linq;
 
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 using static Nuke.Common.Tools.Git.GitTasks;
+
 using static Serilog.Log;
 
 namespace Candoumbe.Pipelines.Components;
@@ -63,9 +63,8 @@ public interface IPublish : IPack
                                                              .Apply(PackagePublishSettings)
                                                              .CombineWith(PublishConfigurations,
                                                                           (setting, config) => setting.When(config.CanBeUsed(),
-                                                                                                              _ => _.SetApiKey(config.Key)
-                                                                                                                    .SetSource(config.Source.ToString()))
-                                                                  ),
+                                                                                                            _ => _.SetApiKey(config.Key)
+                                                                                                                  .SetSource(config.Source.ToString()))),
                                                   degreeOfParallelism: PushDegreeOfParallelism,
                                                   completeOnFailure: PushCompleteOnFailure);
 
@@ -77,7 +76,8 @@ public interface IPublish : IPack
         });
 
     internal Configure<DotNetNuGetPushSettings> PublishSettingsBase => _ => _
-                .EnableSkipDuplicate();
+                .EnableSkipDuplicate()
+                .EnableNoSymbols();
 
     /// <summary>
     /// Defines the settings that will be used to push packages to Nuget

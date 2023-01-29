@@ -1,14 +1,12 @@
 namespace Candoumbe.Pipelines.Build;
 
+using Candoumbe.Pipelines.Components;
+using Candoumbe.Pipelines.Components.GitHub;
 using Candoumbe.Pipelines.Components.Workflows;
-
-using Components;
-using Components.GitHub;
 
 using Nuke.Common;
 using Nuke.Common.CI;
 using Nuke.Common.CI.GitHubActions;
-using Nuke.Common.Execution;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tools.DotNet;
@@ -20,7 +18,7 @@ using System.Threading.Tasks;
 using static Nuke.Common.Tools.Git.GitTasks;
 
 [GitHubActions("integration",
-    GitHubActionsImage.WindowsLatest,
+    GitHubActionsImage.UbuntuLatest,
     AutoGenerate = true,
     OnPushBranchesIgnore = new[] { IHaveMainBranch.MainBranchName, IGitFlow.ReleaseBranch + "/*" },
     FetchDepth = 0,
@@ -40,7 +38,7 @@ using static Nuke.Common.Tools.Git.GitTasks;
             "LICENSE"
         })]
 [GitHubActions("delivery",
-    GitHubActionsImage.WindowsLatest,
+    GitHubActionsImage.UbuntuLatest,
     AutoGenerate = true,
     OnPushBranches = new[] { IHaveMainBranch.MainBranchName, IGitFlow.ReleaseBranch + "/*" },
     FetchDepth = 0,
@@ -60,13 +58,13 @@ using static Nuke.Common.Tools.Git.GitTasks;
             "LICENSE"
         })]
 [DotNetVerbosityMapping]
-[HandleVisualStudioDebugging]
 [ShutdownDotNetAfterServerBuild]
 public class Pipeline : NukeBuild,
     IHaveSourceDirectory,
     IHaveSolution,
     IHaveChangeLog,
     IClean,
+    IRestore,
     ICompile,
     IPack,
     IHaveGitVersion,
@@ -78,7 +76,7 @@ public class Pipeline : NukeBuild,
     IHaveSecret
 {
     ///<inheritdoc/>
-    IEnumerable<AbsolutePath> IClean.DirectoriesToDelete => this.Get<IHaveSourceDirectory>().SourceDirectory.GlobDirectories("**/bin", "**/obj");
+    IEnumerable<AbsolutePath> IClean.DirectoriesToDelete => this.Get<IHaveSourceDirectory>().SourceDirectory.GlobDirectories("**/*/bin", "**/*/obj");
 
     ///<inheritdoc/>
     IEnumerable<AbsolutePath> IClean.DirectoriesToEnsureExistance => new[]
@@ -116,11 +114,11 @@ public class Pipeline : NukeBuild,
     public static int Main() => Execute<Pipeline>(x => ((ICompile)x).Compile);
 
     ///<inheritdoc/>
-    public IEnumerable<AbsolutePath> PackableProjects => SourceDirectory.GlobFiles("**/*.csproj");
+    IEnumerable<AbsolutePath> IPack.PackableProjects => SourceDirectory.GlobFiles("**/*.csproj");
 
 
     ///<inheritdoc/>
-    public IEnumerable<PublishConfiguration> PublishConfigurations => new PublishConfiguration[]
+    IEnumerable<PublishConfiguration> IPublish.PublishConfigurations => new PublishConfiguration[]
     {
         new NugetPublishConfiguration(
             apiKey: NugetApiKey,
@@ -140,7 +138,9 @@ public class Pipeline : NukeBuild,
         Git($"checkout {IHaveMainBranch.MainBranchName}");
         Git("pull");
         Git($"merge --no-ff --no-edit {this.Get<IHaveGitRepository>().GitRepository.Branch}");
+
         string majorMinorPatchVersion = this.Get<IHaveGitVersion>().MajorMinorPatchVersion;
+
         Git($"tag {majorMinorPatchVersion}");
 
         Git($"checkout {IHaveDevelopBranch.DevelopBranchName}");
@@ -153,5 +153,4 @@ public class Pipeline : NukeBuild,
 
         return ValueTask.CompletedTask;
     }
-
 }
