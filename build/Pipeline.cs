@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 using static Nuke.Common.Tools.Git.GitTasks;
 
 [GitHubActions("integration",
-    GitHubActionsImage.WindowsLatest,
+    GitHubActionsImage.UbuntuLatest,
     AutoGenerate = true,
     OnPushBranchesIgnore = new[] { IHaveMainBranch.MainBranchName, IGitFlow.ReleaseBranch + "/*" },
     FetchDepth = 0,
@@ -39,7 +39,7 @@ using static Nuke.Common.Tools.Git.GitTasks;
             "LICENSE"
         })]
 [GitHubActions("delivery",
-    GitHubActionsImage.WindowsLatest,
+    GitHubActionsImage.UbuntuLatest,
     AutoGenerate = true,
     OnPushBranches = new[] { IHaveMainBranch.MainBranchName, IGitFlow.ReleaseBranch + "/*" },
     FetchDepth = 0,
@@ -66,6 +66,7 @@ public class Pipeline : NukeBuild,
     IHaveSolution,
     IHaveChangeLog,
     IClean,
+    IRestore,
     ICompile,
     IPack,
     IHaveGitVersion,
@@ -85,8 +86,6 @@ public class Pipeline : NukeBuild,
         this.Get<IHaveArtifacts>().OutputDirectory,
         this.Get<IHaveArtifacts>().ArtifactsDirectory,
     };
-
-
 
     [CI]
     public GitHubActions GitHubActions;
@@ -156,5 +155,4 @@ public class Pipeline : NukeBuild,
 
         return ValueTask.CompletedTask;
     }
-
 }
