@@ -58,7 +58,6 @@ using static Nuke.Common.Tools.Git.GitTasks;
             "LICENSE"
         })]
 [DotNetVerbosityMapping]
-[ShutdownDotNetAfterServerBuild]
 public class Pipeline : NukeBuild,
     IHaveSourceDirectory,
     IHaveSolution,
