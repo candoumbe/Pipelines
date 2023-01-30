@@ -35,8 +35,7 @@ public interface IPublish : IPack
         .WhenNotNull(this as IHaveGitRepository,
                      (_, repository) => _.Requires(() => GitHasCleanWorkingCopy())
                                          .OnlyWhenDynamic(() => repository.GitRepository.IsOnMainBranch()
-                                                                || repository.GitRepository.IsOnReleaseBranch()
-                                                                || repository.GitRepository.IsOnDevelopBranch()))
+                                                                || repository.GitRepository.IsOnReleaseBranch()))
         .Requires(() => Configuration.Equals(Configuration.Release))
         .Executes(() =>
         {
