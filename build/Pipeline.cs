@@ -9,7 +9,6 @@ using Nuke.Common.CI;
 using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
-using Nuke.Common.Tools.DotNet;
 
 using System;
 using System.Collections.Generic;
@@ -57,7 +56,6 @@ using static Nuke.Common.Tools.Git.GitTasks;
             "CHANGELOG.md",
             "LICENSE"
         })]
-[DotNetVerbosityMapping]
 public class Pipeline : NukeBuild,
     IHaveSourceDirectory,
     IHaveSolution,
