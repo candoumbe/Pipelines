@@ -7,24 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixes
+### 🔧 Fixes
 - Added `EnableNoSymbols` switch on `IPublish.Publish` target
 - No more pull request for finishing a hotfix/release branch when using IGitFlowPullRequest or IGithubFlowPullRequest.
 - Missing `Source` parameter when running `IPublish.Publish` target ([#46](https://github.com/candoumbe/Pipelines)).
 
 ## [0.2.0] / 2023-01-20
-### Breaking changes
-- Renamed `IBenchmarks` to `IBenchmark`
-- Renamed `IMutationTests` to `IMutationTest`
-- Moved `IGitFlow` to `Candoumbe.Pipelines.Components.Workflows` namespace
-- Made `IGitFlow.FinishFeature` async
-- Made `IGitFlow.FinishReleaseOrHotfix` async
-- Made `IGitFlow.FinishColdfix` async
-- Moved `GitHubPublishConfiguration` to `Candoumbe.Pipelines.Components.GitHub` namespace
-- Moved `ICreateGitHubRelease` to `Candoumbe.Pipelines.Components.GitHub` namespace
-- Made `IPublish.PublishConfigurations` mandatory
-
-### New features
+### 🚀 New features
 - Added `IGithubFlowWithPullRequest`
 - Added `IGitFlowWithPullRequest`
 - Added `IPullRequest` component which extends `IWorkflow` and create pull requests instead or merging back to `develop` (respectiveley `main`) when finishing a feature / coldfix (resp. release / hotfix) branch.
@@ -42,7 +31,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Newly created pull request open in the default browser after creation ([#10](https://github.com/candoumbe/pipelines/issues/10))
 - Changed `IWorkflow.Changelog` target to autocommit changes when running on a build server ([#39](https://github.com/candoumbe/pipelines/issues/39))
 
-### Fixes
+### ⚠️ Breaking changes
+- Renamed `IBenchmarks` to `IBenchmark`
+- Renamed `IMutationTests` to `IMutationTest`
+- Moved `IGitFlow` to `Candoumbe.Pipelines.Components.Workflows` namespace
+- Made `IGitFlow.FinishFeature` async
+- Made `IGitFlow.FinishReleaseOrHotfix` async
+- Made `IGitFlow.FinishColdfix` async
+- Moved `GitHubPublishConfiguration` to `Candoumbe.Pipelines.Components.GitHub` namespace
+- Moved `ICreateGitHubRelease` to `Candoumbe.Pipelines.Components.GitHub` namespace
+- Made `IPublish.PublishConfigurations` mandatory
+
+### 🔧 Fixes
 - Fixed directory path used by `IUnitTest` target to output unit tests results.
 - Fixed argument format used to define reporters used when running mutation tests.
 - Fixed `SourceName` not displayed when running `IPublish.Publish` target
