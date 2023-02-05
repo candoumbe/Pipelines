@@ -34,8 +34,8 @@ public interface IPack : IHaveArtifacts, ICompile
         .TryDependsOn<IUnitTest>(x => x.UnitTests)
         .DependsOn(Compile)
         .Consumes(Compile)
-        .Produces(PackagesDirectory / "*.nupkg")
-        .Produces(PackagesDirectory / "*.snupkg")
+        .Produces(PackagesDirectory / "*.nupkg",
+                  PackagesDirectory / "*.snupkg")
         .Executes(() =>
         {
             int packageCount = PackableProjects.TryGetNonEnumeratedCount(out int count)
@@ -61,7 +61,7 @@ public interface IPack : IHaveArtifacts, ICompile
         .SetOutputDirectory(PackagesDirectory)
         .SetNoBuild(SucceededTargets.Contains(Compile) || SkippedTargets.Contains(Compile))
         .SetNoRestore(SucceededTargets.Contains(Restore) || SucceededTargets.Contains(Compile))
-        .SetConfiguration(Configuration.ToString())
+        .SetConfiguration(Configuration)
         .SetSymbolPackageFormat(DotNetSymbolPackageFormat.snupkg)
         .WhenNotNull(this as IHaveGitVersion,
                      (_, versioning) => _.SetAssemblyVersion(versioning.GitVersion.AssemblySemVer)

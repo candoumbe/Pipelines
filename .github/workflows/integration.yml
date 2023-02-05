@@ -21,6 +21,7 @@ on:
     branches-ignore:
       - main
       - 'release/*'
+  pull_request:
     paths:
       - '!docs/*'
       - '!README.md'
@@ -28,9 +29,9 @@ on:
       - '!LICENSE'
 
 jobs:
-  windows-latest:
-    name: windows-latest
-    runs-on: windows-latest
+  ubuntu-latest:
+    name: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         with:

@@ -1,5 +1,6 @@
 ﻿using Nuke.Common;
 using Nuke.Common.Git;
+using Nuke.Common.IO;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.GitVersion;
 
@@ -86,19 +87,34 @@ public interface IWorkflow : IHaveGitRepository, IHaveMainBranch, IHaveGitVersio
     /// Finalizes the change log so that its up to date for the release.
     /// </summary>
     public Target Changelog => _ => _
-        .Requires(() => IsLocalBuild)
         .OnlyWhenStatic(() => GitRepository.IsOnReleaseBranch() || GitRepository.IsOnHotfixBranch())
         .Description("Finalizes the change log so that its up to date for the release.")
         .Executes(() =>
         {
             FinalizeChangelog(ChangeLogFile, GitVersion.MajorMinorPatch, GitRepository);
-            Information("Please review CHANGELOG.md ({ChangeLogFile}) and press 'Y' to validate (any other key will cancel changes)...", ChangeLogFile);
-            ConsoleKeyInfo keyInfo = Console.ReadKey();
 
-            if (keyInfo.Key == ConsoleKey.Y)
+            if (IsLocalBuild)
             {
-                Git($"add {ChangeLogFile}");
-                Git($"commit -m \"Finalize {Path.GetFileName(ChangeLogFile)} for {GitVersion.MajorMinorPatch}\"");
+                Information("Please review CHANGELOG.md ({ChangeLogFile}) and press 'Y' to validate (any other key will cancel changes)...", ChangeLogFile);
+                ConsoleKeyInfo keyInfo = Console.ReadKey();
+
+                if (keyInfo.Key == ConsoleKey.Y)
+                {
+                    Git($"add {ChangeLogFile}");
+                    Git($"commit -m \"Finalize {Path.GetFileName(ChangeLogFile)} for {GitVersion.MajorMinorPatch}\"");
+                }
+            }
+            else
+            {
+                Information("Committing CHANGELOG.md ({ChangeLogFile})", ChangeLogFile);
+                CommitChangelogChanges(ChangeLogFile, GitVersion.MajorMinorPatch);
+                Information("CHANGELOG.md ({ChangeLogFile}) successfully commited", ChangeLogFile);
+            }
+
+            static void CommitChangelogChanges(AbsolutePath changelogFilePath, string version)
+            {
+                Git($"add {changelogFilePath}");
+                Git($"commit -m \"Finalize {Path.GetFileName(changelogFilePath)} for {version}\"");
             }
         });
     /// <summary>

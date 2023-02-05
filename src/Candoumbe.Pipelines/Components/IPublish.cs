@@ -3,13 +3,13 @@ using Nuke.Common.Git;
 using Nuke.Common.IO;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
-using Nuke.Common.Utilities;
 
 using System.Collections.Generic;
 using System.Linq;
 
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 using static Nuke.Common.Tools.Git.GitTasks;
+
 using static Serilog.Log;
 
 namespace Candoumbe.Pipelines.Components;
@@ -35,8 +35,7 @@ public interface IPublish : IPack
         .WhenNotNull(this as IHaveGitRepository,
                      (_, repository) => _.Requires(() => GitHasCleanWorkingCopy())
                                          .OnlyWhenDynamic(() => repository.GitRepository.IsOnMainBranch()
-                                                                || repository.GitRepository.IsOnReleaseBranch()
-                                                                || repository.GitRepository.IsOnDevelopBranch()))
+                                                                || repository.GitRepository.IsOnReleaseBranch()))
         .Requires(() => Configuration.Equals(Configuration.Release))
         .Executes(() =>
         {
@@ -48,11 +47,11 @@ public interface IPublish : IPack
             {
                 if (config.CanBeUsed())
                 {
-                    Information("{PackageCount} package(s) will be published to {SourceName}", numberOfPackages);
+                    Information("{PackageCount} package(s) will be published to {SourceName}", numberOfPackages, config.Name);
                 }
                 else
                 {
-                    Warning("{PackageCount} package(s) will not be published to {SourceName}", numberOfPackages);
+                    Warning("{PackageCount} package(s) will not be published to {SourceName}", numberOfPackages, config.Name);
                 }
             });
 
@@ -63,8 +62,8 @@ public interface IPublish : IPack
                                                              .Apply(PackagePublishSettings)
                                                              .CombineWith(PublishConfigurations,
                                                                           (setting, config) => setting.When(config.CanBeUsed(),
-                                                                                                              _ => _.SetApiKey(config.Key))
-                                                                  ),
+                                                                                                            _ => _.SetApiKey(config.Key)
+                                                                                                                  .SetSource(config.Source.ToString()))),
                                                   degreeOfParallelism: PushDegreeOfParallelism,
                                                   completeOnFailure: PushCompleteOnFailure);
 
@@ -76,7 +75,8 @@ public interface IPublish : IPack
         });
 
     internal Configure<DotNetNuGetPushSettings> PublishSettingsBase => _ => _
-                .EnableSkipDuplicate();
+                .EnableSkipDuplicate()
+                .EnableNoSymbols();
 
     /// <summary>
     /// Defines the settings that will be used to push packages to Nuget
