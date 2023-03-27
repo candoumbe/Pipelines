@@ -12,12 +12,12 @@ using static Nuke.Common.Tools.Git.GitTasks;
 
 using static Serilog.Log;
 
-namespace Candoumbe.Pipelines.Components;
+namespace Candoumbe.Pipelines.Components.NuGet;
 
 /// <summary>
-/// Marks a pipeline that can publish packages
+/// Marks a pipeline that can push NuGet packages to various repositories
 /// </summary>
-public interface IPublish : IPack
+public interface IPushNugetPackages : IPack
 {
     /// <summary>
     /// Defines which files should be pushed when calling <see cref="Publish"/> target
@@ -101,5 +101,5 @@ public interface IPublish : IPack
     /// <summary>
     /// Determines where <see cref="Publish"/> will push packages
     /// </summary>
-    IEnumerable<PublishConfiguration> PublishConfigurations { get; }
+    IEnumerable<PushNugetPackageConfiguration> PublishConfigurations { get; }
 }
