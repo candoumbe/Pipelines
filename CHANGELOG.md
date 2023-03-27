@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### 🚀 New features
+- Added `Docker.IBuildDockerImage` component
+- Added `IPushDockerImage` component
+- Added `PushDockerImageConfiguration`
+
+### ⚠️ Breaking changes
+- Renamed `Candoumbe.Pipelines.IPublish` to `Candoumbe.Pipelines.IPushNugetPackages`
+- Renamed `Candoumbe.Pipelines.GitHub.GitHubPublishConfiguration` to `Candoumbe.Pipelines.NuGet.GitHubPushNugetConfiguration`
+- Renamed `Candoumbe.Pipelines.GitHub.NugetPublishConfiguration` to `Candoumbe.Pipelines.NuGet.GitHubPushNugetConfiguration`
 
 ## [0.3.0] / 2023-02-05
 ### 🔧 Fixes

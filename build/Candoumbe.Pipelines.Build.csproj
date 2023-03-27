@@ -31,21 +31,30 @@
     <Compile Include="..\src\Candoumbe.Pipelines\Components\IHaveTests.cs" Link="Components\IHaveTests.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\IMutationTest.cs" Link="Components\IMutationTests.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\IPack.cs" Link="Components\IPack.cs" />
-    <Compile Include="..\src\Candoumbe.Pipelines\Components\IPublish.cs" Link="Components\IPublish.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\IReportCoverage.cs" Link="Components\IReportCoverage.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\IRestore.cs" Link="Components\IRestore.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\IUnitTest.cs" Link="Components\IUnitTest.cs" />
-    <Compile Include="..\src\Candoumbe.Pipelines\Components\NugetPublishConfiguration.cs" Link="Components\NugetPublishConfiguration.cs" />
-    <Compile Include="..\src\Candoumbe.Pipelines\Components\PublishConfiguration.cs" Link="Components\PublishConfiguration.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\Extensions.cs" Link="Components\Extensions.cs" />
-
+    
+    <!-- Nuget component -->
+    <Compile Include="..\src\Candoumbe.Pipelines\Components\NuGet\PushNugetPackageConfiguration.cs" Link="Components\NuGet\PushNugetPackageConfiguration.cs" />
+    <Compile Include="..\src\Candoumbe.Pipelines\Components\NuGet\NugetPushConfiguration.cs" Link="Components\NuGet\NugetPushConfiguration.cs" />
+    <Compile Include="..\src\Candoumbe.Pipelines\Components\NuGet\IPushNugetPackages.cs" Link="Components\NuGet\IPushNugetPackages.cs" />
+    <Compile Include="..\src\Candoumbe.Pipelines\Components\NuGet\GitHubPushNugetConfiguration.cs" Link="Components\NuGet\GitHubPushNugetConfiguration.cs" />
+    
+    <!-- Docker components -->
+    <Compile Include="..\src\Candoumbe.Pipelines\Components\Docker\IBuildDockerImage.cs" Link="Components\Docker\IBuildDockerImage.cs" />
+    <Compile Include="..\src\Candoumbe.Pipelines\Components\Docker\IPushDockerImage.cs" Link="Components\Docker\IPushDockerImage.cs" />
+    <Compile Include="..\src\Candoumbe.Pipelines\Components\Docker\PushDockerImageConfiguration.cs" Link="Components\Docker\PushDockerImageConfiguration.cs" />
+    
+    <!-- GitHub components -->
     <Compile Include="..\src\Candoumbe.Pipelines\Components\GitHub\IPullRequest.cs" Link="Components\GitHub\IPullRequest.cs" />
-    <Compile Include="..\src\Candoumbe.Pipelines\Components\GitHub\GitHubPublishConfiguration.cs" Link="Components\GitHub\GitHubPublishConfiguration.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\GitHub\IHaveGitHubRepository.cs" Link="Components\GitHub\IHaveGitHubRepository.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\GitHub\ICreateGithubRelease.cs" Link="Components\GitHub\ICreateGithubRelease.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\GitHub\IGitFlowWithPullRequest.cs" Link="Components\Workflows\IGitFlowWithPullRequest.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\GitHub\IGitHubFlowWithPullRequest.cs" Link="Components\Workflows\IGitHubFlowWithPullRequest.cs" />
 
+    <!-- Workflows components -->
     <Compile Include="..\src\Candoumbe.Pipelines\Components\Workflows\IGitFlow.cs" Link="Components\Workflows\IGitFlow.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\Workflows\IGitHubFlow.cs" Link="Components\Workflows\IGitHubFlow.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\Workflows\IWorkflow.cs" Link="Components\Workflows\IWorkflow.cs" />
