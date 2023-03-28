@@ -22,7 +22,7 @@ public interface IBuildDockerImage : IHaveConfiguration
     IEnumerable<(AbsolutePath Path, string Name, string Tag)> DockerFiles => Enumerable.Empty<(AbsolutePath, string, string)>();
 
     /// <summary>
-    /// Build 
+    /// Build docker images
     /// </summary>
     public Target Build => _ => _
         .Description("Build docker images")
