@@ -20,7 +20,6 @@ on:
   push:
     branches-ignore:
       - main
-      - 'release/*'
   pull_request:
     paths:
       - '!docs/*'
