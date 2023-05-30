@@ -63,15 +63,15 @@ public interface IMutationTest : IUnitTest
                 {
                     mutationProjectCount++;
                     IReadOnlyCollection<string> frameworkUnderTests = csproj.GetTargetFrameworks();
-
-                    Arguments args = new();
-                    args.Apply(StrykerArgumentsSettingsBase)
-                        .Apply(StrykerArgumentsSettings);
-
+                    Arguments args;
                     if (frameworkUnderTests.AtLeast(2))
                     {
                         frameworkUnderTests.ForEach(framework =>
                         {
+                            args = new();
+                            args.Apply(StrykerArgumentsSettingsBase)
+                                .Apply(StrykerArgumentsSettings);
+
                             args.Add(@"--target-framework ""{0}""", framework)
                                 .Add("--output {0}", this.Get<IMutationTest>().MutationTestResultDirectory / framework);
 
@@ -80,6 +80,7 @@ public interface IMutationTest : IUnitTest
                     }
                     else
                     {
+                        args = new();
                         string framework = frameworkUnderTests.Single();
                         args.Add(@"--target-framework ""{0}""", framework)
                             .Add("--output {0}", this.Get<IMutationTest>().MutationTestResultDirectory / framework);
@@ -115,7 +116,6 @@ public interface IMutationTest : IUnitTest
     internal Configure<Arguments> StrykerArgumentsSettingsBase => _ => _
            .Add("--open-report:html", IsLocalBuild)
            .Add($"--dashboard-api-key {StrykerDashboardApiKey}", IsServerBuild || StrykerDashboardApiKey is not null)
-           .Add("-output-directory")
            .Add(@"--reporter ""markdown""")
            .Add(@"--reporter ""html""")
            .Add(@"--reporter ""progress""", IsLocalBuild);
