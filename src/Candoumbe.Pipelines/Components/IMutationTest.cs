@@ -23,9 +23,9 @@ public interface IMutationTest : IUnitTest
     /// Defines projects onto which mutation tests will be performed
     /// </summary>
     /// <remarks>
-    /// This should be projects that contains unit tests
+    /// The source project has
     /// </remarks>
-    IEnumerable<Project> MutationTestsProjects { get; }
+    IEnumerable<(Project SourceProject, IEnumerable<Project> TestProjects)> MutationTestsProjects { get; }
 
     /// <summary>
     /// Executes mutation tests for the specified <see cref="MutationTestsProjects"/>.
@@ -40,22 +40,30 @@ public interface IMutationTest : IUnitTest
         {
             int mutationProjectCount = 0;
 
-            string[] frameworks = MutationTestsProjects.Select(csproj => csproj.GetTargetFrameworks())
-                                 .SelectMany(x => x)
-                                 .Select(targetFramework => targetFramework.ToLower().Trim())
-                                 .Distinct()
-                                 .ToArray();
+            // List of frameworks that source project are tested against
+            string[] frameworks = MutationTestsProjects.Select(csprojAndTest => csprojAndTest.TestProjects)
+                                                       .SelectMany(projects => projects)
+                                                       .Select(csproj => csproj.GetTargetFrameworks())
+                                                       .SelectMany(x => x)
+                                                       .Select(targetFramework => targetFramework.ToLower().Trim())
+                                                       .AsParallel()
+                                                       .Distinct()
+                                                       .ToArray();
 
             if (frameworks.AtLeast(2))
             {
-                MutationTestsProjects.ForEach(csproj =>
+                MutationTestsProjects.ForEach(tuple =>
                 {
                     mutationProjectCount++;
-                    IReadOnlyCollection<string> frameworkUnderTests = csproj.GetTargetFrameworks();
+                    (Project sourceProject, IEnumerable<Project> testsProjects) = tuple;
+                    IReadOnlyCollection<string> testedFrameworks = testsProjects.Select(csproj => csproj.GetTargetFrameworks())
+                                                                                   .SelectMany(x => x)
+                                                                                   .Distinct()
+                                                                                   .ToArray();
                     Arguments args;
-                    if (frameworkUnderTests.AtLeast(2))
+                    if (testedFrameworks.AtLeast(2))
                     {
-                        frameworkUnderTests.ForEach(framework =>
+                        testedFrameworks.ForEach(framework =>
                         {
                             args = new();
                             args.Apply(StrykerArgumentsSettingsBase)
@@ -64,17 +72,17 @@ public interface IMutationTest : IUnitTest
                             args.Add(@"--target-framework ""{0}""", framework)
                                 .Add("--output {0}", this.Get<IMutationTest>().MutationTestResultDirectory / framework);
 
-                            RunMutationTestsForTheProject(csproj, args);
+                            RunMutationTestsForTheProject(sourceProject, testsProjects, args);
                         });
                     }
                     else
                     {
                         args = new();
-                        string framework = frameworkUnderTests.Single();
+                        string framework = testedFrameworks.Single();
                         args.Add(@"--target-framework ""{0}""", framework)
                             .Add("--output {0}", this.Get<IMutationTest>().MutationTestResultDirectory / framework);
 
-                        RunMutationTestsForTheProject(csproj, args);
+                        RunMutationTestsForTheProject(sourceProject, testsProjects, args);
                     }
                 });
             }
@@ -87,20 +95,26 @@ public interface IMutationTest : IUnitTest
                 args.Add(@"--target-framework ""{0}""", frameworks.Single())
                     .Add("--output {0}", this.Get<IMutationTest>().MutationTestResultDirectory);
 
-                MutationTestsProjects.ForEach(csproj =>
+                MutationTestsProjects.ForEach(tuple =>
                 {
                     mutationProjectCount++;
-                    RunMutationTestsForTheProject(csproj, args);
+                    RunMutationTestsForTheProject(tuple.SourceProject, tuple.TestProjects, args);
                 });
             }
-
-            /// Run mutation tests for the specified project using the specified arguments
-            static void RunMutationTestsForTheProject(Project csproj, Arguments args)
-            {
-                Verbose("{ProjetName} will run mutation tests for the following frameworks : {@Frameworks}", csproj.Name, csproj.GetTargetFrameworks());
-                DotNet($"stryker {args.RenderForExecution()}", workingDirectory: csproj.Path.Parent);
-            }
         });
+
+    /// Run mutation tests for the specified project using the specified arguments
+    private static void RunMutationTestsForTheProject(Project sourceProject, IEnumerable<Project> testsProjects, Arguments args)
+    {
+        Arguments strykerArgs = new();
+        strykerArgs.Concatenate(args);
+
+        testsProjects.ForEach(project => strykerArgs.Add(@"--test-project ""{0}""", project.Path));
+
+        Verbose("{ProjetName} will run mutation tests for the following frameworks : {@Frameworks}", sourceProject.Name);
+        DotNet($"stryker {strykerArgs.RenderForExecution()}", workingDirectory: sourceProject.Path.Parent);
+    }
+
 
     internal Configure<Arguments> StrykerArgumentsSettingsBase => _ => _
            .Add("--open-report:html", IsLocalBuild)
