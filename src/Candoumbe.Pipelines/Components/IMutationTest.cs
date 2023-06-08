@@ -102,8 +102,9 @@ public interface IMutationTest : IUnitTest
                 });
             }
         });
-
+    /// <summary>
     /// Run mutation tests for the specified project using the specified arguments
+    /// </summary>
     private static void RunMutationTestsForTheProject(Project sourceProject, IEnumerable<Project> testsProjects, Arguments args)
     {
         Arguments strykerArgs = new();
@@ -114,7 +115,6 @@ public interface IMutationTest : IUnitTest
         Verbose("{ProjetName} will run mutation tests for the following frameworks : {@Frameworks}", sourceProject.Name);
         DotNet($"stryker {strykerArgs.RenderForExecution()}", workingDirectory: sourceProject.Path.Parent);
     }
-
 
     internal Configure<Arguments> StrykerArgumentsSettingsBase => _ => _
            .Add("--open-report:html", IsLocalBuild)
