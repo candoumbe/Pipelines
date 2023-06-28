@@ -1,4 +1,15 @@
-﻿namespace Candoumbe.Pipelines.Components;
+﻿using Nuke.Common;
+using Nuke.Common.IO;
+using Nuke.Common.ProjectModel;
+using Nuke.Common.Tooling;
+
+using System.Collections.Generic;
+using System.Linq;
+
+using static Nuke.Common.Tools.DotNet.DotNetTasks;
+using static Serilog.Log;
+
+namespace Candoumbe.Pipelines.Components;
 
 /// <summary>
 /// Marks a pipeline that can perform mutation tests using <see href="https://stryker-mutator.io/">Stryker</see>.

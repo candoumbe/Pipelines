@@ -46,6 +46,7 @@
     <Compile Include="..\src\Candoumbe.Pipelines\Components\Docker\IBuildDockerImage.cs" Link="Components\Docker\IBuildDockerImage.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\Docker\IPushDockerImage.cs" Link="Components\Docker\IPushDockerImage.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\Docker\PushDockerImageConfiguration.cs" Link="Components\Docker\PushDockerImageConfiguration.cs" />
+    <Compile Include="..\src\Candoumbe.Pipelines\Components\Docker\DockerFile.cs" Link="Components\Docker\DockerFile.cs" />
     
     <!-- GitHub components -->
     <Compile Include="..\src\Candoumbe.Pipelines\Components\GitHub\ICreateGithubRelease.cs" Link="Components\GitHub\ICreateGithubRelease.cs" />
