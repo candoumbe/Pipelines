@@ -18,6 +18,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Renamed `Candoumbe.Pipelines.GitHub.NugetPublishConfiguration` to `Candoumbe.Pipelines.NuGet.GitHubPushNugetConfiguration`
 - `IMutationTest.MutationTests` target can now output to separate folder when unit tests targets at least 2 distinct frameworks.
 
+### 🧹 Housekeeping
+- Dropped explicit `net7.0` framework support
+
 ## [0.3.0] / 2023-02-05
 ### 🔧 Fixes
 - Added `EnableNoSymbols` switch on `IPublish.Publish` target
