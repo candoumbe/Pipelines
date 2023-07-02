@@ -29,6 +29,7 @@ public interface IPushDockerImages : IBuildDockerImage
     public Target PushImages => _ => _
         .Description("Push docker images")
         .OnlyWhenDynamic(() => Images.AtLeastOnce() && Registries.AtLeastOnce())
+        .DependsOn<IBuildDockerImage>(x => x.BuildDockerImages)
         .Executes(() =>
         {
             Registries.ForEach(registry =>
@@ -42,7 +43,7 @@ public interface IPushDockerImages : IBuildDockerImage
                     .Apply(PushSettingsBase)
                     .Apply(PushSettings)
                     .CombineWith(Images,
-                                 (settings, image) => settings.SetName($"{registry.Registry.ToString().TrimEnd('/')}/{image}")));
+                                 (settings, image) => settings.SetName(image)));
             });
         });
 
