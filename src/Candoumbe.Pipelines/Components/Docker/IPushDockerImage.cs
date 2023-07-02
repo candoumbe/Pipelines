@@ -24,10 +24,11 @@ public interface IPushDockerImages : IBuildDockerImage
     IEnumerable<PushDockerImageConfiguration> Registries { get; }
 
     /// <summary>
-    /// Build 
+    /// Pushes images to the registry defined 
     /// </summary>
-    public Target Push => _ => _
+    public Target PushImages => _ => _
         .Description("Push docker images")
+        .OnlyWhenDynamic(() => Images.AtLeastOnce() && Registries.AtLeastOnce())
         .Executes(() =>
         {
             Registries.ForEach(registry =>
@@ -41,7 +42,7 @@ public interface IPushDockerImages : IBuildDockerImage
                     .Apply(PushSettingsBase)
                     .Apply(PushSettings)
                     .CombineWith(Images,
-                                 (settings, image) => settings.SetName(image)));
+                                 (settings, image) => settings.SetName($"{registry.Registry.ToString().TrimEnd('/')}/{image}")));
             });
         });
 
