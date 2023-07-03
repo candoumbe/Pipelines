@@ -34,7 +34,7 @@ public interface ICreateGithubRelease : IHaveGitHubRepository, IHaveChangeLog, I
         .Unlisted()
         .OnlyWhenStatic(() => !string.IsNullOrWhiteSpace(GitHubToken))
         .TryTriggeredBy<IPushNugetPackages>(x => x.Publish)
-        .TryTriggeredBy<IPushDockerImages>(x => x.Push)
+        .TryTriggeredBy<IPushDockerImages>(x => x.PushImages)
         .Description("Creates a new GitHub release after artifacts were successfully published.")
         .OnlyWhenDynamic(() => GitRepository.IsOnMainBranch())
         .Executes(async () =>

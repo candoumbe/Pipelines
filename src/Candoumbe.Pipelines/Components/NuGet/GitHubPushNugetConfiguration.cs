@@ -13,7 +13,7 @@ public record GitHubPushNugetConfiguration : PushNugetPackageConfiguration
     /// <param name="githubToken">API Key used to interact with <see href="gihub.com"/> API</param>
     /// <param name="source">Nuget API endpoint</param>
     /// <param name="canBeUsed">Lazily indicates if the configuration can be used.</param>
-    public GitHubPushNugetConfiguration(string githubToken, Uri source, Func<bool> canBeUsed = null) : base("GitHub", githubToken, source, canBeUsed ?? new Func<bool>(() => true))
+    public GitHubPushNugetConfiguration(string githubToken, Uri source, Func<bool> canBeUsed = null) : base("GitHub", githubToken, source.ToString(), canBeUsed ?? new Func<bool>(() => true))
     {
     }
 }

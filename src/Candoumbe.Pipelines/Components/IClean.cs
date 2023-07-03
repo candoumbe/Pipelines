@@ -4,8 +4,6 @@ using Nuke.Common.IO;
 using System.Collections.Generic;
 using System.Linq;
 
-using static Nuke.Common.IO.FileSystemTasks;
-
 namespace Candoumbe.Pipelines.Components;
 
 /// <summary>
@@ -38,8 +36,8 @@ public interface IClean : INukeBuild
                               || DirectoriesToEnsureExistance.AtLeastOnce())
        .Executes(() =>
        {
-           DirectoriesToDelete.ForEach(DeleteDirectory);
-           DirectoriesToClean.ForEach(EnsureCleanDirectory);
-           DirectoriesToEnsureExistance.ForEach(EnsureExistingDirectory);
+           DirectoriesToDelete.ForEach(directory => directory.DeleteDirectory());
+           DirectoriesToClean.ForEach(directory => directory.CreateOrCleanDirectory());
+           DirectoriesToEnsureExistance.ForEach(directory => directory.CreateDirectory());
        });
 }

@@ -47,11 +47,11 @@ public interface IPushNugetPackages : IPack
             {
                 if (config.CanBeUsed())
                 {
-                    Information("{PackageCount} package(s) will be published to {SourceName}", numberOfPackages, config.Name);
+                    Information("{PackageCount} package(s) will be published to {SourceName}({SourceUrl})", numberOfPackages, config.Name, config.Source);
                 }
                 else
                 {
-                    Warning("{PackageCount} package(s) will not be published to {SourceName}", numberOfPackages, config.Name);
+                    Warning("{PackageCount} package(s) will not be published to {SourceName}({SourceUrl})", numberOfPackages, config.Name, config.Source);
                 }
             });
 

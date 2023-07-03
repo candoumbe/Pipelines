@@ -72,9 +72,18 @@ public interface IReportCoverage : IUnitTest
         .SetFramework("net5.0")
         .SetReports(UnitTestResultsDirectory / "*.xml")
         .SetReportTypes(ReportTypes.Badges, ReportTypes.HtmlChart, ReportTypes.HtmlInline)
-        .SetTargetDirectory(CoverageReportDirectory)
-        .SetHistoryDirectory(CoverageReportHistoryDirectory)
-        .WhenNotNull(this as IHaveGitRepository, (_, repository) => _.SetTag(repository.GitRepository.Commit));
+        .WhenNotNull((this as IHaveGitRepository)?.GitRepository,
+                     (_, repository) => !string.IsNullOrWhiteSpace(repository.Branch)
+                                        ? _.SetTargetDirectory(CoverageReportDirectory / repository.Branch)
+                                          .SetHistoryDirectory(CoverageReportHistoryDirectory / repository.Branch)
+                                          .SetTag(repository.Commit)
+                        : _.SetTargetDirectory(CoverageReportDirectory)
+                           .SetHistoryDirectory(CoverageReportHistoryDirectory)
+                           .SetTag(repository.Commit)
+                     )
+        .When(this.Get<IHaveGitRepository>() is null,
+              _ => _.SetTargetDirectory(CoverageReportDirectory)
+                    .SetHistoryDirectory(CoverageReportHistoryDirectory));
 
     /// <summary>
     /// Defines settings used by <see cref="ReportCoverage"/> target

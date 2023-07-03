@@ -24,10 +24,12 @@ public interface IPushDockerImages : IBuildDockerImage
     IEnumerable<PushDockerImageConfiguration> Registries { get; }
 
     /// <summary>
-    /// Build 
+    /// Pushes images to the registry defined 
     /// </summary>
-    public Target Push => _ => _
+    public Target PushImages => _ => _
         .Description("Push docker images")
+        .OnlyWhenDynamic(() => Images.AtLeastOnce() && Registries.AtLeastOnce())
+        .DependsOn<IBuildDockerImage>(x => x.BuildDockerImages)
         .Executes(() =>
         {
             Registries.ForEach(registry =>

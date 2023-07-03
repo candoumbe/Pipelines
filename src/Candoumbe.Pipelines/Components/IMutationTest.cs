@@ -4,6 +4,7 @@ using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
 
 using System.Collections.Generic;
+using System.Linq;
 
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 using static Serilog.Log;
@@ -33,13 +34,14 @@ public interface IMutationTest : IUnitTest
     /// Defines projects onto which mutation tests will be performed
     /// </summary>
     /// <remarks>
-    /// This should be projects that contains unit tests
+    /// The source project has
     /// </remarks>
-    IEnumerable<Project> MutationTestsProjects { get; }
+    IEnumerable<(Project SourceProject, IEnumerable<Project> TestProjects)> MutationTestsProjects { get; }
 
     /// <summary>
     /// Executes mutation tests for the specified <see cref="MutationTestsProjects"/>.
     /// </summary>
+    /// <remarks></remarks>
     public Target MutationTests => _ => _
         .Description("Runs mutation tests using Stryker tool")
         .TryDependsOn<IClean>(x => x.Clean)
@@ -47,21 +49,83 @@ public interface IMutationTest : IUnitTest
         .Produces(MutationTestResultDirectory / "*")
         .Executes(() =>
         {
-            int count = 0;
+            int mutationProjectCount = 0;
 
-            Arguments args = new();
+            // List of frameworks that source project are tested against
+            string[] frameworks = MutationTestsProjects.Select(csprojAndTest => csprojAndTest.TestProjects)
+                                                       .SelectMany(projects => projects)
+                                                       .Select(csproj => csproj.GetTargetFrameworks())
+                                                       .SelectMany(x => x)
+                                                       .Select(targetFramework => targetFramework.ToLower().Trim())
+                                                       .AsParallel()
+                                                       .Distinct()
+                                                       .ToArray();
 
-            args.Apply(StrykerArgumentsSettingsBase)
-                .Apply(StrykerArgumentsSettings);
-
-            MutationTestsProjects.ForEach(csproj =>
+            if (frameworks.AtLeast(2))
             {
-                count++;
-                DotNet($"stryker {args.RenderForExecution()}", workingDirectory: csproj.Path.Parent);
-            });
+                MutationTestsProjects.ForEach(tuple =>
+                {
+                    mutationProjectCount++;
+                    (Project sourceProject, IEnumerable<Project> testsProjects) = tuple;
+                    IReadOnlyCollection<string> testedFrameworks = testsProjects.Select(csproj => csproj.GetTargetFrameworks())
+                                                                                   .SelectMany(x => x)
+                                                                                   .Distinct()
+                                                                                   .ToArray();
+                    Arguments args;
+                    if (testedFrameworks.AtLeast(2))
+                    {
+                        testedFrameworks.ForEach(framework =>
+                        {
+                            args = new();
+                            args.Apply(StrykerArgumentsSettingsBase)
+                                .Apply(StrykerArgumentsSettings);
 
-            Verbose("Running mutation tests for {ProjectCount} project(s)", count);
+                            args.Add(@"--target-framework ""{0}""", framework)
+                                .Add("--output {0}", this.Get<IMutationTest>().MutationTestResultDirectory / framework);
+
+                            RunMutationTestsForTheProject(sourceProject, testsProjects, args);
+                        });
+                    }
+                    else
+                    {
+                        args = new();
+                        string framework = testedFrameworks.Single();
+                        args.Add(@"--target-framework ""{0}""", framework)
+                            .Add("--output {0}", this.Get<IMutationTest>().MutationTestResultDirectory / framework);
+
+                        RunMutationTestsForTheProject(sourceProject, testsProjects, args);
+                    }
+                });
+            }
+            else
+            {
+                Arguments args = new();
+                args.Apply(StrykerArgumentsSettingsBase)
+                    .Apply(StrykerArgumentsSettings);
+
+                args.Add(@"--target-framework ""{0}""", frameworks.Single())
+                    .Add("--output {0}", this.Get<IMutationTest>().MutationTestResultDirectory);
+
+                MutationTestsProjects.ForEach(tuple =>
+                {
+                    mutationProjectCount++;
+                    RunMutationTestsForTheProject(tuple.SourceProject, tuple.TestProjects, args);
+                });
+            }
         });
+    /// <summary>
+    /// Run mutation tests for the specified project using the specified arguments
+    /// </summary>
+    private static void RunMutationTestsForTheProject(Project sourceProject, IEnumerable<Project> testsProjects, Arguments args)
+    {
+        Arguments strykerArgs = new();
+        strykerArgs.Concatenate(args);
+
+        testsProjects.ForEach(project => strykerArgs.Add(@"--test-project ""{0}""", project.Path));
+
+        Verbose("{ProjetName} will run mutation tests for the following frameworks : {@Frameworks}", sourceProject.Name);
+        DotNet($"stryker {strykerArgs.RenderForExecution()}", workingDirectory: sourceProject.Path.Parent);
+    }
 
     internal Configure<Arguments> StrykerArgumentsSettingsBase => _ => _
            .Add("--open-report:html", IsLocalBuild)
