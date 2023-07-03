@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] / 2023-07-03
+### 🚀 New features
+- Added `Docker.IBuildDockerImage` component
+- Added `IPushDockerImage` component
+- Added `PushDockerImageConfiguration`
+- Added `DockerFile` class
+
+### ⚠️ Breaking changes
+- Renamed `Candoumbe.Pipelines.IPublish` to `Candoumbe.Pipelines.IPushNugetPackages`
+- Renamed `Candoumbe.Pipelines.GitHub.GitHubPublishConfiguration` to `Candoumbe.Pipelines.NuGet.GitHubPushNugetConfiguration`
+- Renamed `Candoumbe.Pipelines.GitHub.NugetPublishConfiguration` to `Candoumbe.Pipelines.NuGet.GitHubPushNugetConfiguration`
+- `IMutationTest.MutationTests` target can now output to separate folder when unit tests targets at least 2 distinct frameworks.
+- Changed `PushNugetConfiguration.Source` type from `Uri` to `string`
+
+### 🧹 Housekeeping
+- Dropped explicit `net7.0` framework support
+
 ## [0.3.0] / 2023-02-05
 ### 🔧 Fixes
 - Added `EnableNoSymbols` switch on `IPublish.Publish` target
@@ -60,3 +77,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.2.0]: https://github.com/candoumbe/Pipelines/compare/0.1.0...0.2.0
 [0.1.0]: https://github.com/candoumbe/Pipelines/tree/0.1.0
 
+
+[Unreleased]: https://github.com/candoumbe/Pipelines/compare/0.4.0...HEAD
+[0.4.0]: https://github.com/candoumbe/Pipelines/compare/0.3.0...0.4.0
+[0.3.0]: https://github.com/candoumbe/Pipelines/compare/0.2.0...0.3.0
+[0.2.0]: https://github.com/candoumbe/Pipelines/compare/0.1.0...0.2.0
+[0.1.0]: https://github.com/candoumbe/Pipelines/tree/0.1.0

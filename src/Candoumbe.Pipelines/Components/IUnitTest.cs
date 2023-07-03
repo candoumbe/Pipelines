@@ -70,7 +70,12 @@ type: AzurePipelinesTestResultsType.VSTest,
                 .EnableCollectCoverage()
                 .EnableUseSourceLink()
                 .SetNoBuild(SucceededTargets.Contains(Compile))
-                .SetResultsDirectory(UnitTestResultsDirectory)
+                .SetResultsDirectory(this.Get<IHaveGitRepository>()?.GitRepository?.Branch switch
+                {
+                    null => UnitTestResultsDirectory,
+                    string branchName when !string.IsNullOrWhiteSpace(branchName) => UnitTestResultsDirectory / branchName,
+                    _ => UnitTestResultsDirectory
+                })
                 .SetCoverletOutputFormat(CoverletOutputFormat.lcov)
                 .AddProperty("ExcludeByAttribute", "Obsolete");
 

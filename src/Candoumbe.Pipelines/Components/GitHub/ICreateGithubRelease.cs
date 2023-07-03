@@ -1,4 +1,7 @@
-﻿using Nuke.Common;
+﻿using Candoumbe.Pipelines.Components.Docker;
+using Candoumbe.Pipelines.Components.NuGet;
+
+using Nuke.Common;
 using Nuke.Common.Git;
 using Nuke.Common.IO;
 using Nuke.Common.Tools.GitHub;
@@ -30,8 +33,9 @@ public interface ICreateGithubRelease : IHaveGitHubRepository, IHaveChangeLog, I
     public Target AddGithubRelease => _ => _
         .Unlisted()
         .OnlyWhenStatic(() => !string.IsNullOrWhiteSpace(GitHubToken))
-        .TriggeredBy<IPublish>(x => x.Publish)
-        .Description("Creates a new GitHub release after *.nupkgs/*.snupkg were successfully published.")
+        .TryTriggeredBy<IPushNugetPackages>(x => x.Publish)
+        .TryTriggeredBy<IPushDockerImages>(x => x.PushImages)
+        .Description("Creates a new GitHub release after artifacts were successfully published.")
         .OnlyWhenDynamic(() => GitRepository.IsOnMainBranch())
         .Executes(async () =>
         {
