@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### 🚀 New features
+- Default implementation of `IPushNugetPackages.Publish` publishes nuget packages when on a `hotfix/*` branch
+
+### 🔧 Fixes
+- `IUnitTest.UnitTests` and `IMutationTest.MutationTests` target publish test results to a folder named after the current branch in the artifacts
+
 ## [0.4.0] / 2023-07-03
 ### 🚀 New features
 - Added `Docker.IBuildDockerImage` component
