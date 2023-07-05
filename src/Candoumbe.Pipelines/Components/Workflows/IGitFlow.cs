@@ -44,17 +44,19 @@ public interface IGitFlow : IWorkflow, IHaveDevelopBranch
     /// </remarks>
     public Target Release => _ => _
         .DependsOn(Changelog)
-        .Description($"Starts a new {ReleaseBranchPrefix}/{{version}} from {DevelopBranchName}")
+        .Description($"Starts a new {ReleaseBranchPrefix}/{{version}} from {DevelopBranchName} if not currently on {ReleaseBranchPrefix}/{{version}}.\n" +
+                     $"When already on {ReleaseBranchPrefix}/{{version}}, merges back either to {MainBranchName} or {DevelopBranchName} ")
         .Requires(() => IsLocalBuild)
         .Requires(() => !GitRepository.IsOnReleaseBranch() || GitHasCleanWorkingCopy())
         .Executes(async () =>
         {
-            string majorMinorPatchVersion = Major
-                ? $"{GitVersion.Major + 1}.0.0"
-                : GitVersion.MajorMinorPatch;
 
             if (!GitRepository.IsOnReleaseBranch())
             {
+                string majorMinorPatchVersion = Major
+                    ? $"{GitVersion.Major + 1}.0.0"
+                    : GitVersion.MajorMinorPatch;
+
                 Checkout($"{ReleaseBranchPrefix}/{majorMinorPatchVersion}", start: DevelopBranchName);
             }
             else

@@ -1,17 +1,13 @@
 ﻿using Nuke.Common;
 using Nuke.Common.Git;
 using Nuke.Common.IO;
-using Nuke.Common.Tooling;
-using Nuke.Common.Tools.GitVersion;
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
 using static Nuke.Common.ChangeLog.ChangelogTasks;
 using static Nuke.Common.Tools.Git.GitTasks;
-using static Nuke.Common.Tools.GitVersion.GitVersionTasks;
 using static Serilog.Log;
 
 namespace Candoumbe.Pipelines.Components.Workflows;
@@ -63,19 +59,15 @@ public interface IWorkflow : IHaveGitRepository, IHaveMainBranch, IHaveGitVersio
     /// </summary>
     public Target Hotfix => _ => _
         .Description($"Starts a new hotfix branch '{HotfixBranchPrefix}/*' from {HotfixBranchSourceName}")
+        .DependsOn(Changelog)
         .Requires(() => IsLocalBuild)
         .Requires(() => !GitRepository.IsOnHotfixBranch() || GitHasCleanWorkingCopy())
         .Executes(async () =>
         {
-            (GitVersion mainBranchVersion, IReadOnlyCollection<Output> _) = GitVersion(s => s
-                .SetFramework("net5.0")
-                .SetUrl(RootDirectory)
-                .SetBranch(MainBranchName)
-                .DisableProcessLogOutput());
 
             if (!GitRepository.IsOnHotfixBranch())
             {
-                Checkout($"{HotfixBranchPrefix}/{mainBranchVersion.Major}.{mainBranchVersion.Minor}.{mainBranchVersion.Patch + 1}", start: MainBranchName);
+                Checkout($"{HotfixBranchPrefix}/{GitVersion.Major}.{GitVersion.Minor}.{GitVersion.Patch + 1}", start: MainBranchName);
             }
             else
             {

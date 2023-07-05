@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.2] / 2023-07-05
+### 🔧 Fixes
+- Default implementation of `IWorkflow.Hotfix` does not always compute the version number of the hotfix branch accurately.
+
+
+## [0.4.1] / 2023-07-05
 ### 🚀 New features
 - Default implementation of `IPushNugetPackages.Publish` publishes nuget packages when on a `hotfix/*` branch
 
@@ -78,13 +84,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] / 2022-10-23
 - Initial release
 
-[Unreleased]: https://github.com/candoumbe/Pipelines/compare/0.3.0...HEAD
+[Unreleased]: https://github.com/candoumbe/Pipelines/compare/0.4.1...HEAD
+[0.4.1]: https://github.com/candoumbe/Pipelines/compare/0.4.0...0.4.1
+[0.4.0]: https://github.com/candoumbe/Pipelines/compare/0.3.0...0.4.0
 [0.3.0]: https://github.com/candoumbe/Pipelines/compare/0.2.0...0.3.0
 [0.2.0]: https://github.com/candoumbe/Pipelines/compare/0.1.0...0.2.0
 [0.1.0]: https://github.com/candoumbe/Pipelines/tree/0.1.0
 
-
-[Unreleased]: https://github.com/candoumbe/Pipelines/compare/0.4.0...HEAD
+[Unreleased]: https://github.com/candoumbe/Pipelines/compare/0.4.2...HEAD
+[0.4.2]: https://github.com/candoumbe/Pipelines/compare/0.4.1...0.4.2
+[0.4.1]: https://github.com/candoumbe/Pipelines/compare/0.4.0...0.4.1
 [0.4.0]: https://github.com/candoumbe/Pipelines/compare/0.3.0...0.4.0
 [0.3.0]: https://github.com/candoumbe/Pipelines/compare/0.2.0...0.3.0
 [0.2.0]: https://github.com/candoumbe/Pipelines/compare/0.1.0...0.2.0
