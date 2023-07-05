@@ -1,7 +1,6 @@
 ﻿using Nuke.Common;
 using Nuke.Common.Git;
 using Nuke.Common.IO;
-using Nuke.Common.Tools.GitVersion;
 
 using System;
 using System.IO;
@@ -60,6 +59,7 @@ public interface IWorkflow : IHaveGitRepository, IHaveMainBranch, IHaveGitVersio
     /// </summary>
     public Target Hotfix => _ => _
         .Description($"Starts a new hotfix branch '{HotfixBranchPrefix}/*' from {HotfixBranchSourceName}")
+        .DependsOn(Changelog)
         .Requires(() => IsLocalBuild)
         .Requires(() => !GitRepository.IsOnHotfixBranch() || GitHasCleanWorkingCopy())
         .Executes(async () =>
