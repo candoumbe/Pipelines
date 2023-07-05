@@ -9,7 +9,12 @@ namespace Candoumbe.Pipelines.Components;
 public interface IHaveOutputDirectory : INukeBuild
 {
     /// <summary>
-    /// Directory where to store all output builds output
+    /// Name of the root directory that contain all output
     /// </summary>
-    public AbsolutePath OutputDirectory => RootDirectory / "output";
+    public string OutputDirectoryName => "output";
+
+    /// <summary>
+    /// Directory where to store all files 
+    /// </summary>
+    public AbsolutePath OutputDirectory => RootDirectory / OutputDirectoryName;
 }
