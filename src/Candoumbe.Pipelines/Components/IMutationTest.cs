@@ -118,12 +118,13 @@ public interface IMutationTest : IUnitTest
     /// </summary>
     private static void RunMutationTestsForTheProject(Project sourceProject, IEnumerable<Project> testsProjects, Arguments args)
     {
+        Verbose("{ProjetName} will run mutation tests for the following frameworks : {@Frameworks}", sourceProject.Name, sourceProject.GetTargetFrameworks());
+
         Arguments strykerArgs = new();
         strykerArgs.Concatenate(args);
 
         testsProjects.ForEach(project => strykerArgs.Add(@"--test-project ""{0}""", project.Path));
 
-        Verbose("{ProjetName} will run mutation tests for the following frameworks : {@Frameworks}", sourceProject.Name, sourceProject.GetTargetFrameworks());
         DotNet($"stryker {strykerArgs.RenderForExecution()}", workingDirectory: sourceProject.Path.Parent);
     }
 
