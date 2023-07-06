@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### 🔧 Fixes
+- Fixed `NullReferenceException` thrown when calling `IMutationTest.MutationTests` target ([#69](https://github.com/candoumbe/Pipelines/issues/69)))
 
 ## [0.4.2] / 2023-07-05
 ### 🔧 Fixes
@@ -40,10 +42,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🔧 Fixes
 - Added `EnableNoSymbols` switch on `IPublish.Publish` target
 - No more pull request for finishing a `hotfix/*` or  `release/*` branches when using IGitFlowPullRequest or IGithubFlowPullRequest.
-- Missing `Source` parameter when running `IPublish.Publish` target ([#46](https://github.com/candoumbe/Pipelines)).
+- Missing `Source` parameter when running `IPublish.Publish` target ([#46](https://github.com/candoumbe/Pipelines/issues/46)).
 - `IPublish.Publish` no longer publishes the `develop` branch
 
-### ⚙️ Technical
+### 🧹 Housekeeping
 - Bumped `Candoumbe.Miscutilities` from `0.10.0` to `0.11.0`
 
 ## [0.2.0] / 2023-01-20

@@ -123,7 +123,7 @@ public interface IMutationTest : IUnitTest
 
         testsProjects.ForEach(project => strykerArgs.Add(@"--test-project ""{0}""", project.Path));
 
-        Verbose("{ProjetName} will run mutation tests for the following frameworks : {@Frameworks}", sourceProject.Name);
+        Verbose("{ProjetName} will run mutation tests for the following frameworks : {@Frameworks}", sourceProject.Name, sourceProject.GetTargetFrameworks());
         DotNet($"stryker {strykerArgs.RenderForExecution()}", workingDirectory: sourceProject.Path.Parent);
     }
 
