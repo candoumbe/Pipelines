@@ -6,7 +6,6 @@ using Nuke.Common.Tooling;
 using System.Collections.Generic;
 using System.Linq;
 
-using static Nuke.Common.Tools.DotNet.DotNetTasks;
 using static Serilog.Log;
 
 namespace Candoumbe.Pipelines.Components;
@@ -15,8 +14,10 @@ namespace Candoumbe.Pipelines.Components;
 /// Marks a pipeline that can perform mutation tests using <see href="https://stryker-mutator.io/">Stryker</see>.
 /// </summary>
 /// <remarks>
-/// <see cref="MutationTests"/> target required <see href="https://www.nuget.org/packages/dotnet-stryker">Stryker dotnet tool</see> to be referenced in order to run.
+/// <see cref="MutationTests"/> target required <see href="https://www.nuget.org/packages/dotnet-stryker">Stryker dotnet tool</see> to be referenced in order to run.<br />
+/// Simply adds <c>&lt;PackageReference Include="dotnet-stryker" &gt;</c>
 /// </remarks>
+[NuGetPackageRequirement("dotnet-stryker")]
 public interface IMutationTest : IUnitTest
 {
     /// <summary>
@@ -24,11 +25,16 @@ public interface IMutationTest : IUnitTest
     /// </summary>
     AbsolutePath MutationTestResultDirectory => TestResultDirectory / "mutation-tests";
 
+    [NuGetPackage(packageId: "dotnet-stryker", packageExecutable: "Stryker.CLI.dll", Version = "3.9.2", Framework = "6.0")]
+    public Tool Stryker { get; }
+
     /// <summary>
     /// Api Key us
     /// </summary>
     [Parameter]
     public string StrykerDashboardApiKey => TryGetValue(() => StrykerDashboardApiKey);
+
+
 
     /// <summary>
     /// Defines projects onto which mutation tests will be performed
@@ -116,7 +122,7 @@ public interface IMutationTest : IUnitTest
     /// <summary>
     /// Run mutation tests for the specified project using the specified arguments
     /// </summary>
-    private static void RunMutationTestsForTheProject(Project sourceProject, IEnumerable<Project> testsProjects, Arguments args)
+    private void RunMutationTestsForTheProject(Project sourceProject, IEnumerable<Project> testsProjects, Arguments args)
     {
         Verbose("{ProjetName} will run mutation tests for the following frameworks : {@Frameworks}", sourceProject.Name, sourceProject.GetTargetFrameworks());
 
@@ -125,7 +131,7 @@ public interface IMutationTest : IUnitTest
 
         testsProjects.ForEach(project => strykerArgs.Add(@"--test-project ""{0}""", project.Path));
 
-        DotNet($"stryker {strykerArgs.RenderForOutput()}", workingDirectory: sourceProject.Path.Parent);
+        Stryker?.Invoke(strykerArgs.RenderForOutput(), workingDirectory: sourceProject.Path.Parent);
     }
 
     internal Configure<Arguments> StrykerArgumentsSettingsBase => _ => _
