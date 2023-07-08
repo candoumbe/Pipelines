@@ -125,7 +125,7 @@ public interface IMutationTest : IUnitTest
 
         testsProjects.ForEach(project => strykerArgs.Add(@"--test-project ""{0}""", project.Path));
 
-        DotNet($"stryker {strykerArgs.RenderForExecution()}", workingDirectory: sourceProject.Path.Parent);
+        DotNet($"stryker {strykerArgs.RenderForOutput()}", workingDirectory: sourceProject.Path.Parent);
     }
 
     internal Configure<Arguments> StrykerArgumentsSettingsBase => _ => _
