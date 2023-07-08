@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
+using static Serilog.Log;
 
 namespace Candoumbe.Pipelines.Components;
 
@@ -117,6 +118,8 @@ public interface IMutationTest : IUnitTest
     /// </summary>
     private static void RunMutationTestsForTheProject(Project sourceProject, IEnumerable<Project> testsProjects, Arguments args)
     {
+        Verbose("{ProjetName} will run mutation tests for the following frameworks : {@Frameworks}", sourceProject.Name, sourceProject.GetTargetFrameworks());
+
         Arguments strykerArgs = new();
         strykerArgs.Concatenate(args);
 
@@ -127,7 +130,7 @@ public interface IMutationTest : IUnitTest
 
     internal Configure<Arguments> StrykerArgumentsSettingsBase => _ => _
            .Add("--open-report:html", IsLocalBuild)
-           .Add($"--dashboard-api-key {StrykerDashboardApiKey}", StrykerDashboardApiKey is not null)
+           .Add($"--dashboard-api-key {StrykerDashboardApiKey}", IsServerBuild || StrykerDashboardApiKey is not null)
            .Add(@"--reporter ""markdown""")
            .Add(@"--reporter ""html""")
            .Add(@"--reporter ""progress""", IsLocalBuild);
