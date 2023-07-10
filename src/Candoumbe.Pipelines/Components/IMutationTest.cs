@@ -84,8 +84,8 @@ public interface IMutationTest : IUnitTest
                             args.Apply(StrykerArgumentsSettingsBase)
                                 .Apply(StrykerArgumentsSettings);
 
-                            args.Add(@"--target-framework {0}", framework)
-                                .Add("--output {0}", this.Get<IMutationTest>().MutationTestResultDirectory / framework);
+                            args.Add("--target-framework {value}", framework)
+                                .Add("--output {value}", this.Get<IMutationTest>().MutationTestResultDirectory / framework);
 
                             RunMutationTestsForTheProject(sourceProject, testsProjects, args);
                         });
@@ -94,8 +94,8 @@ public interface IMutationTest : IUnitTest
                     {
                         args = new();
                         string framework = testedFrameworks.Single();
-                        args.Add(@"--target-framework {0}", framework)
-                            .Add("--output {0}", this.Get<IMutationTest>().MutationTestResultDirectory / framework);
+                        args.Add("--target-framework {value}", framework)
+                            .Add("--output {value}", this.Get<IMutationTest>().MutationTestResultDirectory / framework);
 
                         RunMutationTestsForTheProject(sourceProject, testsProjects, args);
                     }
@@ -107,8 +107,8 @@ public interface IMutationTest : IUnitTest
                 args.Apply(StrykerArgumentsSettingsBase)
                     .Apply(StrykerArgumentsSettings);
 
-                args.Add(@"--target-framework {0}", frameworks.Single())
-                    .Add("--output {0}", this.Get<IMutationTest>().MutationTestResultDirectory);
+                args.Add("--target-framework {value}", frameworks.Single())
+                    .Add("--output {value}", this.Get<IMutationTest>().MutationTestResultDirectory);
 
                 MutationTestsProjects.ForEach(tuple =>
                 {
@@ -125,19 +125,20 @@ public interface IMutationTest : IUnitTest
         Verbose("{ProjetName} will run mutation tests for the following frameworks : {@Frameworks}", sourceProject.Name, sourceProject.GetTargetFrameworks());
 
         Arguments strykerArgs = new();
+        strykerArgs.Add("stryker");
         strykerArgs.Concatenate(args);
 
-        testsProjects.ForEach(project => strykerArgs.Add(@"--test-project {0}", project.Path));
+        testsProjects.ForEach(project => strykerArgs.Add(@"--test-project {value}", project.Path));
 
-        DotNet($"stryker {strykerArgs.RenderForOutput()}", workingDirectory: sourceProject.Path.Parent);
+        DotNet(strykerArgs.RenderForExecution(), workingDirectory: sourceProject.Path.Parent);
     }
 
     internal Configure<Arguments> StrykerArgumentsSettingsBase => _ => _
            .Add("--open-report:html", IsLocalBuild)
            .Add($"--dashboard-api-key {StrykerDashboardApiKey}", IsServerBuild || StrykerDashboardApiKey is not null)
-           .Add(@"--reporter markdown")
-           .Add(@"--reporter html")
-           .Add(@"--reporter progress", IsLocalBuild);
+           .Add("--reporter markdown")
+           .Add("--reporter html")
+           .Add("--reporter progress", IsLocalBuild);
 
     /// <summary>
     /// Configures arguments that will be used by when running Stryker tool
