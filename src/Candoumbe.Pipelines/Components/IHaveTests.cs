@@ -7,6 +7,9 @@ namespace Candoumbe.Pipelines.Components;
 /// </summary>
 public interface IHaveTests : IHaveArtifacts
 {
+    /// <summary>
+    /// Name of the directory where all test results will be published.
+    /// </summary>
     public const string TestResultDirectoryName = "tests-results";
 
     /// <summary>

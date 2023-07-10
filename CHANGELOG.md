@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.3] / 2023-07-10
+### 🔧 Fixes
+- Fixed `NullReferenceException` thrown when calling `IMutationTest.MutationTests` target ([#69](https://github.com/candoumbe/Pipelines/issues/69))
+
 ## [0.4.2] / 2023-07-05
 ### 🔧 Fixes
 - Default implementation of `IWorkflow.Hotfix` does not always compute the version number of the hotfix branch accurately.
@@ -40,10 +44,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🔧 Fixes
 - Added `EnableNoSymbols` switch on `IPublish.Publish` target
 - No more pull request for finishing a `hotfix/*` or  `release/*` branches when using IGitFlowPullRequest or IGithubFlowPullRequest.
-- Missing `Source` parameter when running `IPublish.Publish` target ([#46](https://github.com/candoumbe/Pipelines)).
+- Missing `Source` parameter when running `IPublish.Publish` target ([#46](https://github.com/candoumbe/Pipelines/issues/46)).
 - `IPublish.Publish` no longer publishes the `develop` branch
 
-### ⚙️ Technical
+### 🧹 Housekeeping
 - Bumped `Candoumbe.Miscutilities` from `0.10.0` to `0.11.0`
 
 ## [0.2.0] / 2023-01-20
@@ -92,6 +96,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.1.0]: https://github.com/candoumbe/Pipelines/tree/0.1.0
 
 [Unreleased]: https://github.com/candoumbe/Pipelines/compare/0.4.2...HEAD
+[0.4.2]: https://github.com/candoumbe/Pipelines/compare/0.4.1...0.4.2
+[0.4.1]: https://github.com/candoumbe/Pipelines/compare/0.4.0...0.4.1
+[0.4.0]: https://github.com/candoumbe/Pipelines/compare/0.3.0...0.4.0
+[0.3.0]: https://github.com/candoumbe/Pipelines/compare/0.2.0...0.3.0
+[0.2.0]: https://github.com/candoumbe/Pipelines/compare/0.1.0...0.2.0
+[0.1.0]: https://github.com/candoumbe/Pipelines/tree/0.1.0
+
+[Unreleased]: https://github.com/candoumbe/Pipelines/compare/0.4.3...HEAD
+[0.4.3]: https://github.com/candoumbe/Pipelines/compare/0.4.2...0.4.3
 [0.4.2]: https://github.com/candoumbe/Pipelines/compare/0.4.1...0.4.2
 [0.4.1]: https://github.com/candoumbe/Pipelines/compare/0.4.0...0.4.1
 [0.4.0]: https://github.com/candoumbe/Pipelines/compare/0.3.0...0.4.0
