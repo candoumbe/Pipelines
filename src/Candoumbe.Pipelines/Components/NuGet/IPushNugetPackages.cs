@@ -17,6 +17,10 @@ namespace Candoumbe.Pipelines.Components.NuGet;
 /// <summary>
 /// Marks a pipeline that can push NuGet packages to various repositories
 /// </summary>
+/// <remarks>
+/// By default, this component publishes nuget packages specified by <see cref="PublishPackageFiles"/> to repositories defined by <see cref="PublishConfigurations"/>.
+/// This behavior can be overriden by explicitely specifying the <see cref="ConfigName"/>.
+/// </remarks>
 public interface IPushNugetPackages : IPack
 {
     /// <summary>
@@ -25,13 +29,20 @@ public interface IPushNugetPackages : IPack
     IEnumerable<AbsolutePath> PublishPackageFiles => PackagesDirectory.GlobFiles("*.nupkg", "*.snupkg");
 
     /// <summary>
+    /// Explicitely
+    /// </summary>
+    [Parameter("Which specific configuration to publish packages to.")]
+    public string ConfigName => TryGetValue(() => ConfigName)?.Trim();
+
+    /// <summary>
     /// Publish all <see cref="PublishPackageFiles"/> to <see cref="PublishConfigurations"/>.
     /// </summary>
     public Target Publish => _ => _
-        .Description($"Published packages (*.nupkg and *.snupkg) to the destination server set using {nameof(PublishConfigurations)} settings ")
+        .Description($"Published packages (*.nupkg and *.snupkg) to the destination server set using either {nameof(PublishConfigurations)} settings or {ConfigName} configuration ")
         .Consumes(Pack, ArtifactsDirectory / "*.nupkg", ArtifactsDirectory / "*.snupkg")
         .DependsOn(Pack)
-        .OnlyWhenDynamic(() => PublishConfigurations.AtLeastOnce(config => config.CanBeUsed()))
+        .OnlyWhenDynamic(() => (!string.IsNullOrWhiteSpace(ConfigName) && PublishConfigurations.Once(config => config.Name == ConfigName))
+                                || PublishConfigurations.AtLeastOnce(config => config.CanBeUsed()))
         .WhenNotNull(this as IHaveGitRepository,
                      (_, repository) => _.Requires(() => GitHasCleanWorkingCopy())
                                          .OnlyWhenDynamic(() => repository.GitRepository.IsOnMainOrMasterBranch()
@@ -43,30 +54,50 @@ public interface IPushNugetPackages : IPack
             int numberOfPackages = PublishPackageFiles.TryGetNonEnumeratedCount(out numberOfPackages)
                 ? numberOfPackages
                 : PublishPackageFiles.Count();
+            DotNetNuGetPushSettings pushSettings = new();
+            pushSettings.Apply(PublishSettingsBase)
+                        .Apply(PublishSettings);
 
-            PublishConfigurations.ForEach(config =>
+            if (string.IsNullOrWhiteSpace(ConfigName))
             {
-                if (config.CanBeUsed())
+                PublishConfigurations.ForEach(config =>
                 {
-                    Information("{PackageCount} package(s) will be published to {SourceName}({SourceUrl})", numberOfPackages, config.Name, config.Source);
-                }
-                else
-                {
-                    Warning("{PackageCount} package(s) will not be published to {SourceName}({SourceUrl})", numberOfPackages, config.Name, config.Source);
-                }
-            });
+                    if (config.CanBeUsed())
+                    {
+                        Information("{PackageCount} package(s) will be published to {SourceName}({SourceUrl})", numberOfPackages, config.Name, config.Source);
+                    }
+                    else
+                    {
+                        Warning("{PackageCount} package(s) will not be published to {SourceName}({SourceUrl})", numberOfPackages, config.Name, config.Source);
+                    }
+                });
 
-            DotNetNuGetPush(s => s.Apply(PublishSettingsBase)
-                                  .Apply(PublishSettings)
-                                  .CombineWith(PublishPackageFiles,
-                                               (_, file) => _.SetTargetPath(file))
-                                                             .Apply(PackagePublishSettings)
-                                                             .CombineWith(PublishConfigurations,
-                                                                          (setting, config) => setting.When(config.CanBeUsed(),
-                                                                                                            _ => _.SetApiKey(config.Key)
-                                                                                                                  .SetSource(config.Source.ToString()))),
-                                                  degreeOfParallelism: PushDegreeOfParallelism,
-                                                  completeOnFailure: PushCompleteOnFailure);
+                DotNetNuGetPush(s => s.Apply(PublishSettingsBase)
+                                      .Apply(PublishSettings)
+                                      .CombineWith(PublishPackageFiles,
+                                                   (_, file) => _.SetTargetPath(file))
+                                                                 .Apply(PackagePublishSettings)
+                                                                 .CombineWith(PublishConfigurations,
+                                                                              (setting, config) => setting.When(config.CanBeUsed(),
+                                                                                                                _ => _.SetApiKey(config.Key)
+                                                                                                                      .SetSource(config.Source))),
+                                                      degreeOfParallelism: PushDegreeOfParallelism,
+                                                      completeOnFailure: PushCompleteOnFailure);
+            }
+            else
+            {
+                PushNugetPackageConfiguration publishConfiguration = PublishConfigurations.Single(config => config.Name == ConfigName);
+                DotNetNuGetPush(s => s.Apply(PublishSettingsBase)
+                                      .Apply(PublishSettings)
+                                      .When(publishConfiguration.CanBeUsed(),
+                                            _ => _.SetApiKey(publishConfiguration.Key)
+                                                  .SetSource(publishConfiguration.Source))
+                                      .CombineWith(PublishPackageFiles,
+                                                   (_, file) => _.SetTargetPath(file))
+                                                                 .Apply(PackagePublishSettings),
+                                degreeOfParallelism: PushDegreeOfParallelism,
+                                completeOnFailure: PushCompleteOnFailure);
+            }
 
             ReportSummary(summary =>
             {
