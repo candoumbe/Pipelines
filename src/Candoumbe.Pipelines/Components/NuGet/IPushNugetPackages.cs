@@ -31,14 +31,14 @@ public interface IPushNugetPackages : IPack
     /// <summary>
     /// Explicitely
     /// </summary>
-    [Parameter("Which specific configuration to publish packages to.")]
+    [Parameter("Defines the name of the configuration to use to publish packages.")]
     public string ConfigName => TryGetValue(() => ConfigName)?.Trim();
 
     /// <summary>
     /// Publish all <see cref="PublishPackageFiles"/> to <see cref="PublishConfigurations"/>.
     /// </summary>
     public Target Publish => _ => _
-        .Description($"Published packages (*.nupkg and *.snupkg) to the destination server set using either {nameof(PublishConfigurations)} settings or {ConfigName} configuration ")
+        .Description($"Published packages (*.nupkg and *.snupkg) to the destination server set using either {nameof(PublishConfigurations)} settings or the configuration {nameof(ConfigName)} configuration ")
         .Consumes(Pack, ArtifactsDirectory / "*.nupkg", ArtifactsDirectory / "*.snupkg")
         .DependsOn(Pack)
         .OnlyWhenDynamic(() => (!string.IsNullOrWhiteSpace(ConfigName) && PublishConfigurations.Once(config => config.Name == ConfigName))

@@ -12,7 +12,7 @@
         },
         "ConfigName": {
           "type": "string",
-          "description": "Which specific configuration to publish packages to"
+          "description": "Defines the name of the configuration to use to publish packages"
         },
         "Configuration": {
           "type": "string",
