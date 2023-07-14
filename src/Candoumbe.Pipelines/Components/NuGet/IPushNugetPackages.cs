@@ -87,7 +87,7 @@ public interface IPushNugetPackages : IPack
             }
             else
             {
-                PushNugetPackageConfiguration publishConfiguration = PublishConfigurations.Single(config => config.Name == ConfigName);
+                PushNugetPackageConfiguration publishConfiguration = PublishConfigurations.Single(config => string.Equals(config.Name, ConfigName, System.StringComparison.OrdinalIgnoreCase));
                 DotNetNuGetPush(s => s.Apply(PublishSettingsBase)
                                       .Apply(PublishSettings)
                                       .When(publishConfiguration.CanBeUsed(),
