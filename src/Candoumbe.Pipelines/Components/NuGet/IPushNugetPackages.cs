@@ -45,7 +45,8 @@ public interface IPushNugetPackages : IPack
                                 || PublishConfigurations.AtLeastOnce(config => config.CanBeUsed()))
         .WhenNotNull(this as IHaveGitRepository,
                      (_, repository) => _.Requires(() => GitHasCleanWorkingCopy())
-                                         .OnlyWhenDynamic(() => repository.GitRepository.IsOnMainOrMasterBranch()
+                                         .OnlyWhenDynamic(() => IsLocalBuild
+                                                                || repository.GitRepository.IsOnMainOrMasterBranch()
                                                                 || repository.GitRepository.IsOnReleaseBranch()
                                                                 || repository.GitRepository.IsOnHotfixBranch()))
         .Requires(() => Configuration.Equals(Configuration.Release))
