@@ -83,7 +83,13 @@ namespace Candoumbe.Pipelines.Components.GitHub
             string owner = GitRepository.GetGitHubOwner();
 
             Information("Creating a pull request for {Repository}", repositoryName);
-            string title = PromptForInput("Title of the pull request :", Title);
+            Information(@"Title of the pull request (or ""{PullRequestName}"" if empty)", Title);
+
+            string title = (Console.ReadLine()) switch
+            {
+                string value when !string.IsNullOrWhiteSpace(value) => value.Trim(),
+                _ => Title
+            };
 
             Information("Creating {PullRequestName} for {Repository}", title, repositoryName);
             string token = Token ?? PromptForInput("Token (leave empty to exit)", string.Empty);
