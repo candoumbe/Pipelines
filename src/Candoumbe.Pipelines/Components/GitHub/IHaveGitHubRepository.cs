@@ -13,5 +13,5 @@ public interface IHaveGitHubRepository : IHaveGitRepository, IHaveSecret
     /// </summary>
     [Parameter("Token used to create a new release in GitHub")]
     [Secret]
-    string GitHubToken => TryGetValue(() => GitHubToken) ?? GitHubActions.Instance.Token;
+    string GitHubToken => TryGetValue(() => GitHubToken) ?? GitHubActions.Instance?.Token;
 }

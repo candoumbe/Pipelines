@@ -32,11 +32,11 @@ public interface ICreateGithubRelease : IHaveGitHubRepository, IHaveChangeLog, I
     /// </summary>
     public Target AddGithubRelease => _ => _
         .Unlisted()
-        .OnlyWhenStatic(() => !string.IsNullOrWhiteSpace(GitHubToken))
+        .OnlyWhenDynamic(() => !string.IsNullOrWhiteSpace(GitHubToken))
+        .OnlyWhenDynamic(() => GitRepository.IsOnMainBranch())
         .TryTriggeredBy<IPushNugetPackages>(x => x.Publish)
         .TryTriggeredBy<IPushDockerImages>(x => x.PushImages)
         .Description("Creates a new GitHub release after artifacts were successfully published.")
-        .OnlyWhenDynamic(() => GitRepository.IsOnMainBranch())
         .Executes(async () =>
         {
             string repositoryName = GitRepository.GetGitHubName();
