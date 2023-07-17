@@ -30,6 +30,14 @@ public interface IGitFlow : IWorkflow, IHaveDevelopBranch
     /// </summary>
     public string ReleaseBranchPrefix => "release";
 
+    /// <summary>
+    /// Defines the name of the branch where a "coldfix/*" branch should be merged back to (once finished).
+    /// </summary>
+    /// <remarks>
+    /// This property should never return <see langword="null"/>.
+    /// </remarks>
+    string ColdfixBranchSourceName => FeatureBranchSourceName;
+
     ///<inheritdoc/>
     string IWorkflow.FeatureBranchSourceName => DevelopBranchName;
 
