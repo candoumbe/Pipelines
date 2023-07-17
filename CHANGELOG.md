@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.5] / 2023-07-17
+### 🔧 Fixes
+- Reverted changes made to output tests result in a folder that is named after the current branch (if any).
+
+
 ## [0.4.4] / 2023-07-15
 ### 🔧 Fixes
 - Fixed prompt to set the title of the PR to accept spaces ([#74](https://github.com/candoumbe/Pipelines/issues/74))
@@ -117,6 +122,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.1.0]: https://github.com/candoumbe/Pipelines/tree/0.1.0
 
 [Unreleased]: https://github.com/candoumbe/Pipelines/compare/0.4.4...HEAD
+[0.4.4]: https://github.com/candoumbe/Pipelines/compare/0.4.3...0.4.4
+[0.4.3]: https://github.com/candoumbe/Pipelines/compare/0.4.2...0.4.3
+[0.4.2]: https://github.com/candoumbe/Pipelines/compare/0.4.1...0.4.2
+[0.4.1]: https://github.com/candoumbe/Pipelines/compare/0.4.0...0.4.1
+[0.4.0]: https://github.com/candoumbe/Pipelines/compare/0.3.0...0.4.0
+[0.3.0]: https://github.com/candoumbe/Pipelines/compare/0.2.0...0.3.0
+[0.2.0]: https://github.com/candoumbe/Pipelines/compare/0.1.0...0.2.0
+[0.1.0]: https://github.com/candoumbe/Pipelines/tree/0.1.0
+
+[Unreleased]: https://github.com/candoumbe/Pipelines/compare/0.4.5...HEAD
+[0.4.5]: https://github.com/candoumbe/Pipelines/compare/0.4.4...0.4.5
 [0.4.4]: https://github.com/candoumbe/Pipelines/compare/0.4.3...0.4.4
 [0.4.3]: https://github.com/candoumbe/Pipelines/compare/0.4.2...0.4.3
 [0.4.2]: https://github.com/candoumbe/Pipelines/compare/0.4.1...0.4.2
