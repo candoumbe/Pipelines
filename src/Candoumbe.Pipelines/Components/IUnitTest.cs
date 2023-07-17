@@ -48,13 +48,14 @@ public interface IUnitTest : ICompile, IHaveTests, IHaveCoverage
                 .Apply(UnitTestSettingsBase)
                 .Apply(UnitTestSettings)
                 .CombineWith(UnitTestsProjects, (cs, project) => cs.SetProjectFile(project)
-                                                               .CombineWith(project.GetTargetFrameworks(), (setting, framework) => setting.Apply<DotNetTestSettings, (Project, string)>(ProjectUnitTestSettingsBase, (project, framework))
-                                                                                                                                          .Apply<DotNetTestSettings, (Project, string)>(ProjectUnitTestSettings, (project, framework))
+                                                               .CombineWith(project.GetTargetFrameworks(),
+                                                                            (setting, framework) => setting.Apply<DotNetTestSettings, (Project, string)>(ProjectUnitTestSettingsBase, (project, framework))
+                                                                                                           .Apply<DotNetTestSettings, (Project, string)>(ProjectUnitTestSettings, (project, framework))
                     )));
 
             TestResultDirectory.GlobFiles("*.trx")
                                .ForEach(testFileResult => AzurePipelines.Instance?.PublishTestResults(title: $"{Path.GetFileNameWithoutExtension(testFileResult)} ({AzurePipelines.Instance.StageDisplayName})",
-type: AzurePipelinesTestResultsType.VSTest,
+                                                                                                      type: AzurePipelinesTestResultsType.VSTest,
                                                                                                       files: new string[] { testFileResult })
                     );
 
