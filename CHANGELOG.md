@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `ConfigName` parameter to specify the name of the configuration to use when pushing nuget packages ([#37](https://github.com/candoumbe/Pipelines/issues/37)).
 - Changed requirements of `IPushNugetPackages.Publish` target to make it runnable locally
 
+### 🔧 Fixes
+- Fixed missing `version` parameter when calling `MutationTests`.
+
 ### 🧹 Housekeeping
 - Added [`--with-baseline`](https://stryker-mutator.io/docs/stryker-net/configuration/#baseline) an and [`--version`](https://stryker-mutator.io/docs/stryker-net/configuration/#project-infoversion-committish) arguments to run mutation tests with Stryker faster
 - Updated `Candoumbe.MiscUtilities` to `0.11.1`.

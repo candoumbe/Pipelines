@@ -143,15 +143,16 @@ public interface IMutationTest : IUnitTest
            .Add("--reporter markdown")
            .Add("--reporter html")
            .When(IsLocalBuild, args => args.Add("--reporter progress"))
-           .WhenNotNull(this.As<IGitFlow>()?.GitRepository?.Branch,
-                        (args, branch) => args.Add("--with-baseline:{0}", branch.ToLowerInvariant() switch
+           .WhenNotNull(this.As<IGitFlow>()?.GitRepository,
+                        (args, repository) => args.Add("--with-baseline:{0}", repository.Branch.ToLowerInvariant() switch
                         {
                             string branchName when branchName == IGitFlow.MainBranchName || branchName == IGitFlow.DevelopBranchName => branchName,
                             string branchName when branchName.Like($"{this.As<IGitFlow>()?.FeatureBranchPrefix}/*", true) => this.As<IWorkflow>().FeatureBranchSourceName,
                             string branchName when branchName.Like($"{this.As<IGitFlow>()?.HotfixBranchPrefix}/*", true) => this.As<IWorkflow>().HotfixBranchSourceName,
                             string branchName when branchName.Like($"{this.As<IGitFlow>()?.ColdfixBranchPrefix}/*", true) => this.As<IGitFlow>().ColdfixBranchSourceName,
                             _ => IGitFlow.MainBranchName
-                        }))
+                        })
+                        .Add("--version:{0}", repository.Commit ?? repository.Branch))
            .WhenNotNull(this.As<IGitHubFlow>(), (args, flow) => args.Add("--with-baseline:{0}", IGitHubFlow.MainBranchName)
                                                                   .Add("--version:{0}", flow.GitRepository?.Commit ?? flow.GitRepository?.Branch));
 
