@@ -1,5 +1,20 @@
 mode: ContinuousDeployment
-branches: {}
+branches: {
+  feature: {
+    regex: "^feature(s)?[/-]",
+  },
+  coldfix: {
+    regex: "^coldfix(es)?[/-]",
+    source-branches: ["develop"]
+  },
+  release: {
+    regex: "^release(s)?[/-]",
+    tag: "rc"
+  },
+  develop: {
+    tag: "alpha"
+  }
+}
 ignore:
   sha: []
 merge-message-formats: {}

@@ -29,6 +29,7 @@ public static class Extensions
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="nukeBuild"></param>
+    /// <exception cref="InvalidCastException">if <paramref name="nukeBuild"/> is not convertible to <typeparamref name="T"/>.</exception>
     public static T Get<T>(this INukeBuild nukeBuild) where T : INukeBuild
         => (T)(object)nukeBuild;
 }

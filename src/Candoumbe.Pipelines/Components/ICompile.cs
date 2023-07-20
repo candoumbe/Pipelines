@@ -27,7 +27,7 @@ public interface ICompile : IRestore, IHaveConfiguration
         {
             Information("Compiling {Solution}", Solution);
 
-            ReportSummary(_ => _.WhenNotNull(this as IHaveGitVersion,
+            ReportSummary(_ => _.WhenNotNull(this.As<IHaveGitVersion>(),
                                              (_, version) => _.AddPair("Version", version.GitVersion.FullSemVer)));
 
             DotNetBuild(s => s
@@ -44,7 +44,7 @@ public interface ICompile : IRestore, IHaveConfiguration
                 .SetProjectFile(Solution)
                 .SetConfiguration(Configuration)
                 .SetContinuousIntegrationBuild(IsServerBuild)
-                .WhenNotNull(this as IHaveGitVersion,
+                .WhenNotNull(this.As<IHaveGitVersion>(),
                              (settings, gitVersion) => settings.SetAssemblyVersion(gitVersion.GitVersion.AssemblySemVer)
                                                                .SetFileVersion(gitVersion.GitVersion.AssemblySemFileVer)
                                                                .SetInformationalVersion(gitVersion.GitVersion.InformationalVersion)

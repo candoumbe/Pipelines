@@ -4,6 +4,7 @@ using Nuke.Common.IO;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -43,7 +44,7 @@ public interface IPushNugetPackages : IPack
         .DependsOn(Pack)
         .OnlyWhenDynamic(() => (!string.IsNullOrWhiteSpace(ConfigName) && PublishConfigurations.Once(config => config.Name == ConfigName))
                                 || PublishConfigurations.AtLeastOnce(config => config.CanBeUsed()))
-        .WhenNotNull(this as IHaveGitRepository,
+        .WhenNotNull(this.As<IHaveGitRepository>(),
                      (_, repository) => _.Requires(() => GitHasCleanWorkingCopy())
                                          .OnlyWhenDynamic(() => IsLocalBuild
                                                                 || repository.GitRepository.IsOnMainOrMasterBranch()
