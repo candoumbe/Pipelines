@@ -143,16 +143,16 @@ public interface IMutationTest : IUnitTest
            .Add("--reporter markdown")
            .Add("--reporter html")
            .When(IsLocalBuild, args => args.Add("--reporter progress"))
-           .WhenNotNull(this.Get<IGitFlow>()?.GitRepository?.Branch,
+           .WhenNotNull(this.As<IGitFlow>()?.GitRepository?.Branch,
                         (args, branch) => args.Add("--with-baseline:{0}", branch.ToLowerInvariant() switch
                         {
                             string branchName when branchName == IGitFlow.MainBranchName || branchName == IGitFlow.DevelopBranchName => branchName,
-                            string branchName when branchName.Like($"{this.Get<IGitFlow>().FeatureBranchPrefix}/*", true) => this.Get<IWorkflow>().FeatureBranchSourceName,
-                            string branchName when branchName.Like($"{this.Get<IGitFlow>().HotfixBranchPrefix}/*", true) => this.Get<IWorkflow>().HotfixBranchSourceName,
-                            string branchName when branchName.Like($"{this.Get<IGitFlow>().ColdfixBranchPrefix}/*", true) => this.Get<IGitFlow>().ColdfixBranchSourceName,
+                            string branchName when branchName.Like($"{this.As<IGitFlow>()?.FeatureBranchPrefix}/*", true) => this.As<IWorkflow>().FeatureBranchSourceName,
+                            string branchName when branchName.Like($"{this.As<IGitFlow>()?.HotfixBranchPrefix}/*", true) => this.As<IWorkflow>().HotfixBranchSourceName,
+                            string branchName when branchName.Like($"{this.As<IGitFlow>()?.ColdfixBranchPrefix}/*", true) => this.As<IGitFlow>().ColdfixBranchSourceName,
                             _ => IGitFlow.MainBranchName
                         }))
-           .WhenNotNull(this.Get<IGitHubFlow>(), (args, flow) => args.Add("--with-baseline:{0}", IGitHubFlow.MainBranchName)
+           .WhenNotNull(this.As<IGitHubFlow>(), (args, flow) => args.Add("--with-baseline:{0}", IGitHubFlow.MainBranchName)
                                                                   .Add("--version:{0}", flow.GitRepository?.Commit ?? flow.GitRepository?.Branch));
 
     /// <summary>
