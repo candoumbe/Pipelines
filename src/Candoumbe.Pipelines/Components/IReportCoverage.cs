@@ -14,8 +14,12 @@ using static Nuke.Common.Tools.Codecov.CodecovTasks;
 using static Nuke.Common.Tools.ReportGenerator.ReportGeneratorTasks;
 
 /// <summary>
-/// Marks a pipeline that can report unit tests code coverage
+/// Build component that can report unit tests code coverage
 /// </summary>
+/// <remarks>
+/// This component requires <see href="https://nuget.org/packages/reportgenerator">ReportGenerator tool</see>
+/// </remarks>
+[NuGetPackageRequirement("ReportGenerator")]
 public interface IReportCoverage : IUnitTest
 {
     /// <summary>
