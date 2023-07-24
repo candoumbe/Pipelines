@@ -8,14 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### 🚀 New features
 - Added `ConfigName` parameter to specify the name of the configuration to use when pushing nuget packages ([#37](https://github.com/candoumbe/Pipelines/issues/37)).
-- Changed requirements of `IPushNugetPackages.Publish` target to make it runnable locally
+- Added [`--with-baseline`](https://stryker-mutator.io/docs/stryker-net/configuration/#baseline) and [`--version`](https://stryker-mutator.io/docs/stryker-net/configuration/#project-infoversion-committish) arguments to run mutation tests with Stryker faster
+- Added `--reporter dashboard` option to the CLI generated when running `IMutationTests.MutationTests` with `StrykerDashboardApiKey` is not null.
 
 ### 🔧 Fixes
-- Fixed missing `version` parameter when calling `MutationTests`.
+- Changed requirements of `IPushNugetPackages.Publish` target to make it runnable locally
 
 ### 🧹 Housekeeping
-- Added [`--with-baseline`](https://stryker-mutator.io/docs/stryker-net/configuration/#baseline) an and [`--version`](https://stryker-mutator.io/docs/stryker-net/configuration/#project-infoversion-committish) arguments to run mutation tests with Stryker faster
 - Updated `Candoumbe.MiscUtilities` to `0.11.1`.
+- Added configuration file for better computation of artifact semver
 
 ## [0.4.5] / 2023-07-17
 ### 🔧 Fixes

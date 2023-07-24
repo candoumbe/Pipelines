@@ -139,7 +139,9 @@ public interface IMutationTest : IUnitTest
     internal Configure<Arguments> StrykerArgumentsSettingsBase => _
         => _
            .When(IsLocalBuild, args => args.Add("--open-report:{0}", "html"))
-           .When(StrykerDashboardApiKey is not null, args => args.Add("--dashboard-api-key {value}", StrykerDashboardApiKey, secret: true))
+           .WhenNotNull(StrykerDashboardApiKey,
+                        (args, apiKey) => args.Add("--dashboard-api-key {value}", apiKey, secret: true)
+                                              .Add("--reporter dashboard"))
            .Add("--reporter markdown")
            .Add("--reporter html")
            .When(IsLocalBuild, args => args.Add("--reporter progress"))
