@@ -25,6 +25,11 @@ namespace Candoumbe.Pipelines.Components;
 public interface IMutationTest : IUnitTest
 {
     /// <summary>
+    /// Name of the property set when <see href="SourceLink">SourceLink</see> is enabled on a projet.
+    /// </summary>
+    private const string ContinuousIntegrationBuild = nameof(ContinuousIntegrationBuild);
+
+    /// <summary>
     /// Directory where mutattion test results should be published
     /// </summary>
     AbsolutePath MutationTestResultDirectory => TestResultDirectory / "mutation-tests";
@@ -52,6 +57,7 @@ public interface IMutationTest : IUnitTest
     public Target MutationTests => _ => _
         .Description("Runs mutation tests using Stryker tool")
         .TryDependsOn<IClean>(x => x.Clean)
+        .TryBefore<IPack>()
         .DependsOn(Compile)
         .Produces(MutationTestResultDirectory / "*")
         .Executes(() =>
@@ -131,7 +137,23 @@ public interface IMutationTest : IUnitTest
         strykerArgs.Add("stryker");
         strykerArgs.Concatenate(args);
 
-        testsProjects.ForEach(project => strykerArgs.Add(@"--test-project {value}", project.Path));
+        if (!sourceProject.IsSourceLinkEnabled() && StrykerDashboardApiKey is not null)
+        {
+            strykerArgs.Add("--dashboard.module {0}", sourceProject.Name);
+            if (this is IHaveGitVersion gitVersion)
+            {
+                strykerArgs.Add("--dashboard.version {0}", gitVersion.MajorMinorPatchVersion);
+            }
+            else if (this is IHaveGitRepository gitRepository && gitRepository.GitRepository.Branch is { } branch)
+            {
+                strykerArgs.Add("--dashboard.version {0}", branch);
+            }
+        }
+
+        testsProjects.ForEach(project =>
+        {
+            strykerArgs = strykerArgs.Add(@"--test-project {value}", project.Path);
+        });
 
         DotNet(strykerArgs.RenderForExecution(), workingDirectory: sourceProject.Path.Parent);
     }

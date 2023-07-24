@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixes
+- Added CLI options to push mutation reports to stryker dashboard when possible.
+- Made `IMutationTest.MutationTests` target to run before `IPack.Pack`.
+
 
 ## [0.5.0] / 2023-07-24
 ### 🚀 New features
