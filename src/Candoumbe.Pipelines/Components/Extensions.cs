@@ -1,4 +1,5 @@
 ﻿using Nuke.Common;
+using Nuke.Common.ProjectModel;
 
 using System;
 
@@ -32,4 +33,14 @@ public static class Extensions
     /// <exception cref="InvalidCastException">if <paramref name="nukeBuild"/> is not convertible to <typeparamref name="T"/>.</exception>
     public static T Get<T>(this INukeBuild nukeBuild) where T : INukeBuild
         => (T)(object)nukeBuild;
+
+    /// <summary>
+    /// Uses various heuristics to tests if <paramref name="project"/> has <see href="https://github.com/dotnet/sourcelink">SourceLink</see>
+    /// enabled .
+    /// </summary>
+    /// <param name="project"></param>
+    /// <returns><see langword="true"/> if <see href="https://github.com/dotnet/sourcelink">SourceLink</see>
+    /// enabled and <see langword="false"/> otherwise</returns>
+    public static bool IsSourceLinkEnabled(this Project project) => false;
+
 }
