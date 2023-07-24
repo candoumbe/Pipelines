@@ -3,6 +3,7 @@ using Nuke.Common.Tooling;
 using Nuke.Common.Tools.Docker;
 using Nuke.Common.Utilities.Collections;
 
+using System;
 using System.Collections.Generic;
 
 using static Nuke.Common.Tools.Docker.DockerTasks;
@@ -27,7 +28,7 @@ public interface IBuildDockerImage : IHaveConfiguration
         .OnlyWhenStatic(() => DockerFiles.AtLeastOnce())
         .Executes(() =>
         {
-            ReportSummary(_ => _.WhenNotNull(this as IHaveGitVersion,
+            ReportSummary(_ => _.WhenNotNull(this.As<IHaveGitVersion>(),
                                              (_, version) => _.AddPair("Version", version.GitVersion.FullSemVer)));
 
             DockerBuild(s => s

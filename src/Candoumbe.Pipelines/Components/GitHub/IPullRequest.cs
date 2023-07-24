@@ -27,7 +27,7 @@ namespace Candoumbe.Pipelines.Components.GitHub
         /// Description of the pull request
         /// </summary>
         [Parameter("Description of the pull request")]
-        string Description => TryGetValue(() => Description) ?? this.Get<IHaveChangeLog>()?.ReleaseNotes;
+        string Description => TryGetValue(() => Description) ?? this.As<IHaveChangeLog>()?.ReleaseNotes;
 
         /// <summary>
         /// Should the local branch be deleted after the pull request was created successfully ?

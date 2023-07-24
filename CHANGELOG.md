@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] / 2023-07-24
+### 🚀 New features
+- Added `ConfigName` parameter to specify the name of the configuration to use when pushing nuget packages ([#37](https://github.com/candoumbe/Pipelines/issues/37)).
+- Added [`--with-baseline`](https://stryker-mutator.io/docs/stryker-net/configuration/#baseline) and [`--version`](https://stryker-mutator.io/docs/stryker-net/configuration/#project-infoversion-committish) arguments to run mutation tests with Stryker faster
+- Added `--reporter dashboard` option to the CLI generated when running `IMutationTests.MutationTests` with `StrykerDashboardApiKey` is not null.
+- Added nuget package requirement for `IHaveGitVersion` component ([#77](https://github.com/candoumbe/pipelines/issues/77))
+- Added nuget package requirement for `IReportCoverage` component
+
+### 🔧 Fixes
+- Changed requirements of `IPushNugetPackages.Publish` target to make it runnable locally
+
+### 🧹 Housekeeping
+- Updated `Candoumbe.MiscUtilities` to `0.11.1`.
+- Added configuration file for better computation of artifact semver
+
 ## [0.4.5] / 2023-07-17
 ### 🔧 Fixes
 - Reverted changes made to output tests result in a folder that is named after the current branch (if any).
@@ -132,6 +147,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.1.0]: https://github.com/candoumbe/Pipelines/tree/0.1.0
 
 [Unreleased]: https://github.com/candoumbe/Pipelines/compare/0.4.5...HEAD
+[0.4.5]: https://github.com/candoumbe/Pipelines/compare/0.4.4...0.4.5
+[0.4.4]: https://github.com/candoumbe/Pipelines/compare/0.4.3...0.4.4
+[0.4.3]: https://github.com/candoumbe/Pipelines/compare/0.4.2...0.4.3
+[0.4.2]: https://github.com/candoumbe/Pipelines/compare/0.4.1...0.4.2
+[0.4.1]: https://github.com/candoumbe/Pipelines/compare/0.4.0...0.4.1
+[0.4.0]: https://github.com/candoumbe/Pipelines/compare/0.3.0...0.4.0
+[0.3.0]: https://github.com/candoumbe/Pipelines/compare/0.2.0...0.3.0
+[0.2.0]: https://github.com/candoumbe/Pipelines/compare/0.1.0...0.2.0
+[0.1.0]: https://github.com/candoumbe/Pipelines/tree/0.1.0
+
+[Unreleased]: https://github.com/candoumbe/Pipelines/compare/0.5.0...HEAD
+[0.5.0]: https://github.com/candoumbe/Pipelines/compare/0.4.5...0.5.0
 [0.4.5]: https://github.com/candoumbe/Pipelines/compare/0.4.4...0.4.5
 [0.4.4]: https://github.com/candoumbe/Pipelines/compare/0.4.3...0.4.4
 [0.4.3]: https://github.com/candoumbe/Pipelines/compare/0.4.2...0.4.3

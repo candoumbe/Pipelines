@@ -1,6 +1,5 @@
-﻿using JetBrains.Annotations;
-
-using Nuke.Common;
+﻿using Nuke.Common;
+using Nuke.Common.Tooling;
 using Nuke.Common.Tools.GitVersion;
 
 using Octokit;
@@ -10,7 +9,7 @@ namespace Candoumbe.Pipelines.Components;
 /// <summary>
 /// Marks a pipeline that manages a Solution that follow GitVersion
 /// </summary>
-[PublicAPI]
+[NuGetPackageRequirement("gitversion.tool")]
 public interface IHaveGitVersion : INukeBuild
 {
     /// <summary>

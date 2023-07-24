@@ -35,11 +35,17 @@ public interface IWorkflow : IHaveGitRepository, IHaveMainBranch, IHaveGitVersio
     /// <summary>
     /// Name of the branch to use when starting a new feature
     /// </summary>
+    /// <remarks>
+    /// This property should never return <see langword="null"/>
+    /// </remarks>
     string FeatureBranchSourceName { get; }
 
     /// <summary>
     /// Name of the branch to use when starting a new hotfix branch
     /// </summary>
+    /// <remarks>
+    /// This property should never return <see langword="null"/>.
+    /// </remarks>
     string HotfixBranchSourceName { get; }
 
     /// <summary>

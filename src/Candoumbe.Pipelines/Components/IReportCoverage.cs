@@ -7,14 +7,19 @@ using Nuke.Common.Tools.Codecov;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.ReportGenerator;
 
+using System;
 using System.Linq;
 
 using static Nuke.Common.Tools.Codecov.CodecovTasks;
 using static Nuke.Common.Tools.ReportGenerator.ReportGeneratorTasks;
 
 /// <summary>
-/// Marks a pipeline that can report unit tests code coverage
+/// Build component that can report unit tests code coverage
 /// </summary>
+/// <remarks>
+/// This component requires <see href="https://nuget.org/packages/reportgenerator">ReportGenerator tool</see>
+/// </remarks>
+[NuGetPackageRequirement("ReportGenerator")]
 public interface IReportCoverage : IUnitTest
 {
     /// <summary>
@@ -54,9 +59,9 @@ public interface IReportCoverage : IUnitTest
         .SetFiles(UnitTestResultsDirectory.GlobFiles("*.xml").Select(x => x.ToString()))
         .SetToken(CodecovToken)
         .SetFramework("netcoreapp3.0")
-        .WhenNotNull(this as IHaveGitVersion,
+        .WhenNotNull(this.As<IHaveGitVersion>(),
                      (_, version) => _.SetBuild(version.GitVersion.FullSemVer))
-        .WhenNotNull(this as IHaveGitRepository,
+        .WhenNotNull(this.As<IHaveGitRepository>(),
                      (_, repository) => _.SetBranch(repository.GitRepository.Branch)
                                          .SetSha(repository.GitRepository.Commit));
 
@@ -72,7 +77,7 @@ public interface IReportCoverage : IUnitTest
         .SetFramework("net5.0")
         .SetReports(UnitTestResultsDirectory / "*.xml")
         .SetReportTypes(ReportTypes.Badges, ReportTypes.HtmlChart, ReportTypes.HtmlInline)
-        .WhenNotNull((this as IHaveGitRepository)?.GitRepository,
+        .WhenNotNull(this.As<IHaveGitRepository>()?.GitRepository,
                      (_, repository) => !string.IsNullOrWhiteSpace(repository.Branch)
                                         ? _.SetTargetDirectory(CoverageReportDirectory / repository.Branch)
                                           .SetHistoryDirectory(CoverageReportHistoryDirectory / repository.Branch)
@@ -81,7 +86,7 @@ public interface IReportCoverage : IUnitTest
                            .SetHistoryDirectory(CoverageReportHistoryDirectory)
                            .SetTag(repository.Commit)
                      )
-        .When(this.Get<IHaveGitRepository>() is null,
+        .When(this.As<IHaveGitRepository>() is null,
               _ => _.SetTargetDirectory(CoverageReportDirectory)
                     .SetHistoryDirectory(CoverageReportHistoryDirectory));
 

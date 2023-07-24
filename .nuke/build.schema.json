@@ -10,6 +10,10 @@
           "type": "boolean",
           "description": "Indicates if any changes should be stashed automatically prior to switching branch (Default : true)"
         },
+        "ConfigName": {
+          "type": "string",
+          "description": "Defines the name of the configuration to use to publish packages"
+        },
         "Configuration": {
           "type": "string",
           "description": "Defines the configuratoin to use when building the application",

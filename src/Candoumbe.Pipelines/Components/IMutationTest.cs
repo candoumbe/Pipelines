@@ -1,8 +1,11 @@
-﻿using Nuke.Common;
+﻿using Candoumbe.Pipelines.Components.Workflows;
+
+using Nuke.Common;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -85,7 +88,7 @@ public interface IMutationTest : IUnitTest
                                 .Apply(StrykerArgumentsSettings);
 
                             args.Add("--target-framework {value}", framework)
-                                .Add("--output {value}", this.Get<IMutationTest>().MutationTestResultDirectory / framework);
+                                .Add("--output {value}", MutationTestResultDirectory / framework);
 
                             RunMutationTestsForTheProject(sourceProject, testsProjects, args);
                         });
@@ -95,7 +98,7 @@ public interface IMutationTest : IUnitTest
                         args = new();
                         string framework = testedFrameworks.Single();
                         args.Add("--target-framework {value}", framework)
-                            .Add("--output {value}", this.Get<IMutationTest>().MutationTestResultDirectory / framework);
+                            .Add("--output {value}", MutationTestResultDirectory / framework);
 
                         RunMutationTestsForTheProject(sourceProject, testsProjects, args);
                     }
@@ -108,7 +111,7 @@ public interface IMutationTest : IUnitTest
                     .Apply(StrykerArgumentsSettings);
 
                 args.Add("--target-framework {value}", frameworks.Single())
-                    .Add("--output {value}", this.Get<IMutationTest>().MutationTestResultDirectory);
+                    .Add("--output {value}", MutationTestResultDirectory);
 
                 MutationTestsProjects.ForEach(tuple =>
                 {
@@ -133,12 +136,27 @@ public interface IMutationTest : IUnitTest
         DotNet(strykerArgs.RenderForExecution(), workingDirectory: sourceProject.Path.Parent);
     }
 
-    internal Configure<Arguments> StrykerArgumentsSettingsBase => _ => _
-           .Add("--open-report:html", IsLocalBuild)
-           .Add($"--dashboard-api-key {StrykerDashboardApiKey}", IsServerBuild || StrykerDashboardApiKey is not null)
+    internal Configure<Arguments> StrykerArgumentsSettingsBase => _
+        => _
+           .When(IsLocalBuild, args => args.Add("--open-report:{0}", "html"))
+           .WhenNotNull(StrykerDashboardApiKey,
+                        (args, apiKey) => args.Add("--dashboard-api-key {value}", apiKey, secret: true)
+                                              .Add("--reporter dashboard"))
            .Add("--reporter markdown")
            .Add("--reporter html")
-           .Add("--reporter progress", IsLocalBuild);
+           .When(IsLocalBuild, args => args.Add("--reporter progress"))
+           .WhenNotNull(this.As<IGitFlow>()?.GitRepository,
+                        (args, repository) => args.Add("--with-baseline:{0}", repository.Branch.ToLowerInvariant() switch
+                        {
+                            string branchName when branchName == IGitFlow.MainBranchName || branchName == IGitFlow.DevelopBranchName => branchName,
+                            string branchName when branchName.Like($"{this.As<IGitFlow>()?.FeatureBranchPrefix}/*", true) => this.As<IWorkflow>().FeatureBranchSourceName,
+                            string branchName when branchName.Like($"{this.As<IGitFlow>()?.HotfixBranchPrefix}/*", true) => this.As<IWorkflow>().HotfixBranchSourceName,
+                            string branchName when branchName.Like($"{this.As<IGitFlow>()?.ColdfixBranchPrefix}/*", true) => this.As<IGitFlow>().ColdfixBranchSourceName,
+                            _ => IGitFlow.MainBranchName
+                        })
+                        .Add("--version:{0}", repository.Commit ?? repository.Branch))
+           .WhenNotNull(this.As<IGitHubFlow>(), (args, flow) => args.Add("--with-baseline:{0}", IGitHubFlow.MainBranchName)
+                                                                  .Add("--version:{0}", flow.GitRepository?.Commit ?? flow.GitRepository?.Branch));
 
     /// <summary>
     /// Configures arguments that will be used by when running Stryker tool

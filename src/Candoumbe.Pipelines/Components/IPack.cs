@@ -5,6 +5,7 @@ using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Utilities.Collections;
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -63,12 +64,12 @@ public interface IPack : IHaveArtifacts, ICompile
         .SetNoRestore(SucceededTargets.Contains(Restore) || SucceededTargets.Contains(Compile))
         .SetConfiguration(Configuration)
         .SetSymbolPackageFormat(DotNetSymbolPackageFormat.snupkg)
-        .WhenNotNull(this as IHaveGitVersion,
+        .WhenNotNull(this.As<IHaveGitVersion>(),
                      (_, versioning) => _.SetAssemblyVersion(versioning.GitVersion.AssemblySemVer)
                                         .SetFileVersion(versioning.GitVersion.AssemblySemFileVer)
                                         .SetInformationalVersion(versioning.GitVersion.InformationalVersion)
                                         .SetVersion(versioning.GitVersion.NuGetVersion))
-        .WhenNotNull(this as IHaveChangeLog, (_, changelog) => _.SetPackageReleaseNotes(changelog.ReleaseNotes))
-        .WhenNotNull(this as IHaveGitRepository, (_, repository) => _.SetRepositoryType("git")
+        .WhenNotNull(this.As<IHaveChangeLog>(), (_, changelog) => _.SetPackageReleaseNotes(changelog.ReleaseNotes))
+        .WhenNotNull(this.As<IHaveGitRepository>(), (_, repository) => _.SetRepositoryType("git")
                                                                      .SetRepositoryUrl(repository.GitRepository.HttpsUrl));
 }
