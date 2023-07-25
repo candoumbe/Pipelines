@@ -37,10 +37,8 @@ public interface IMutationTest : IUnitTest
     /// <summary>
     /// Api Key us
     /// </summary>
-    [Parameter]
+    [Parameter("API KEY used to submit mutation report to a stryker dashboard")]
     public string StrykerDashboardApiKey => TryGetValue(() => StrykerDashboardApiKey);
-
-
 
     /// <summary>
     /// Defines projects onto which mutation tests will be performed
@@ -126,6 +124,7 @@ public interface IMutationTest : IUnitTest
                 });
             }
         });
+
     /// <summary>
     /// Run mutation tests for the specified project using the specified arguments
     /// </summary>
@@ -134,26 +133,61 @@ public interface IMutationTest : IUnitTest
         Verbose("{ProjetName} will run mutation tests for the following frameworks : {@Frameworks}", sourceProject.Name, sourceProject.GetTargetFrameworks());
 
         Arguments strykerArgs = new();
-        strykerArgs.Add("stryker");
-        strykerArgs.Concatenate(args);
-
-        if (!sourceProject.IsSourceLinkEnabled() && StrykerDashboardApiKey is not null)
-        {
-            strykerArgs.Add("--dashboard.module {0}", sourceProject.Name);
-            if (this is IHaveGitVersion gitVersion)
-            {
-                strykerArgs.Add("--dashboard.version {0}", gitVersion.MajorMinorPatchVersion);
-            }
-            else if (this is IHaveGitRepository gitRepository && gitRepository.GitRepository.Branch is { } branch)
-            {
-                strykerArgs.Add("--dashboard.version {0}", branch);
-            }
-        }
+        strykerArgs = strykerArgs.Add("stryker");
+        strykerArgs = strykerArgs.Concatenate(args);
 
         testsProjects.ForEach(project =>
         {
             strykerArgs = strykerArgs.Add(@"--test-project {value}", project.Path);
         });
+
+        if (!sourceProject.IsSourceLinkEnabled() && StrykerDashboardApiKey is not null)
+        {
+            strykerArgs = strykerArgs.Add("--dashboard.module {0}", sourceProject.Name);
+            if (this is IHaveGitVersion gitVersion)
+            {
+                strykerArgs = strykerArgs.Add("--dashboard.version {0}", gitVersion.MajorMinorPatchVersion);
+            }
+            else if (this is IHaveGitRepository gitRepository && gitRepository.GitRepository.Branch is { } branch)
+            {
+                strykerArgs = strykerArgs.Add("--dashboard.version {0}", branch);
+            }
+        }
+
+        if (this is IGitFlow gitFlow && gitFlow.GitRepository is { } gitflowRepository)
+        {
+            strykerArgs = strykerArgs.Add("--version:{0}", gitflowRepository.Commit ?? gitflowRepository.Branch);
+            switch (gitflowRepository.Branch)
+            {
+                case string branchName when string.Equals(branchName, IGitFlow.DevelopBranchName, StringComparison.InvariantCultureIgnoreCase):
+                    {
+                        // we are in git flow so comparison we can compare develop against main branch
+                        strykerArgs = strykerArgs.Add("--with-baseline:{0}", IGitFlow.MainBranchName);
+
+                    }
+                    break;
+                case string branchName when branchName.Like($"{gitFlow.FeatureBranchPrefix}/*", true):
+                    {
+                        strykerArgs = strykerArgs.Add("--with-baseline:{0}", gitFlow.FeatureBranchSourceName);
+                    }
+                    break;
+                case string branchName when branchName.Like($"{gitFlow.ColdfixBranchPrefix}/*", true):
+                    {
+                        strykerArgs = strykerArgs.Add("--with-baseline:{0}", gitFlow.ColdfixBranchSourceName);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        else if (this is IGitHubFlow gitHubFlow && gitHubFlow.GitRepository is { } githubFlowRepository)
+        {
+            strykerArgs = strykerArgs.Add("--version:{0}", githubFlowRepository.Commit ?? githubFlowRepository.Branch);
+            if (githubFlowRepository.Branch is { Length: > 0 } branchName && !string.Equals(branchName, IGitHubFlow.MainBranchName, StringComparison.InvariantCultureIgnoreCase))
+            {
+                strykerArgs = strykerArgs.Add("--with-baseline:{0}", IGitHubFlow.MainBranchName);
+            }
+        }
 
         DotNet(strykerArgs.RenderForExecution(), workingDirectory: sourceProject.Path.Parent);
     }
@@ -166,19 +200,7 @@ public interface IMutationTest : IUnitTest
                                               .Add("--reporter dashboard"))
            .Add("--reporter markdown")
            .Add("--reporter html")
-           .When(IsLocalBuild, args => args.Add("--reporter progress"))
-           .WhenNotNull(this.As<IGitFlow>()?.GitRepository,
-                        (args, repository) => args.Add("--with-baseline:{0}", repository.Branch.ToLowerInvariant() switch
-                        {
-                            string branchName when branchName == IGitFlow.MainBranchName || branchName == IGitFlow.DevelopBranchName => branchName,
-                            string branchName when branchName.Like($"{this.As<IGitFlow>()?.FeatureBranchPrefix}/*", true) => this.As<IWorkflow>().FeatureBranchSourceName,
-                            string branchName when branchName.Like($"{this.As<IGitFlow>()?.HotfixBranchPrefix}/*", true) => this.As<IWorkflow>().HotfixBranchSourceName,
-                            string branchName when branchName.Like($"{this.As<IGitFlow>()?.ColdfixBranchPrefix}/*", true) => this.As<IGitFlow>().ColdfixBranchSourceName,
-                            _ => IGitFlow.MainBranchName
-                        })
-                        .Add("--version:{0}", repository.Commit ?? repository.Branch))
-           .WhenNotNull(this.As<IGitHubFlow>(), (args, flow) => args.Add("--with-baseline:{0}", IGitHubFlow.MainBranchName)
-                                                                  .Add("--version:{0}", flow.GitRepository?.Commit ?? flow.GitRepository?.Branch));
+           .When(IsLocalBuild, args => args.Add("--reporter progress"));
 
     /// <summary>
     /// Configures arguments that will be used by when running Stryker tool
