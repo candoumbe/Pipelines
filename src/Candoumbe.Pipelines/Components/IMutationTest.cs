@@ -136,6 +136,8 @@ public interface IMutationTest : IUnitTest
         strykerArgs = strykerArgs.Add("stryker");
         strykerArgs = strykerArgs.Concatenate(args);
 
+        strykerArgs.Add(@"--project {value}", sourceProject.Name);
+
         testsProjects.ForEach(project =>
         {
             strykerArgs = strykerArgs.Add(@"--test-project {value}", project.Path);
