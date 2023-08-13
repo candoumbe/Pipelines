@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reduced the number of CLI options sent when `IUnitTest.UnitTests` target runs and the current build does not need to collect code coverage.
 - Added CLI options to push mutation reports to stryker dashboard when possible.
 - Made `IMutationTest.MutationTests` target to run before `IPack.Pack` does.
+- Added CLI option `--project` to the options output when running mutation tests
+
 
 ## [0.5.0] / 2023-07-24
 ### 🚀 New features
