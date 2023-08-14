@@ -72,12 +72,15 @@ public interface IMutationTest : IUnitTest
                                                        .Distinct()
                                                        .ToArray();
 
+
             if (frameworks.AtLeast(2))
             {
                 MutationTestsProjects.ForEach(tuple =>
                 {
                     mutationProjectCount++;
                     (Project sourceProject, IEnumerable<Project> testsProjects) = tuple;
+                    AbsolutePath mutationTestOutputDirectory = MutationTestResultDirectory / sourceProject.Name;
+
                     IReadOnlyCollection<string> testedFrameworks = testsProjects.Select(csproj => csproj.GetTargetFrameworks())
                                                                                    .SelectMany(x => x)
                                                                                    .Distinct()
@@ -92,7 +95,7 @@ public interface IMutationTest : IUnitTest
                                 .Apply(StrykerArgumentsSettings);
 
                             args.Add("--target-framework {value}", framework)
-                                .Add("--output {value}", MutationTestResultDirectory / framework);
+                                .Add("--output {value}", mutationTestOutputDirectory / framework);
 
                             RunMutationTestsForTheProject(sourceProject, testsProjects, args);
                         });
@@ -102,7 +105,7 @@ public interface IMutationTest : IUnitTest
                         args = new();
                         string framework = testedFrameworks.Single();
                         args.Add("--target-framework {value}", framework)
-                            .Add("--output {value}", MutationTestResultDirectory / framework);
+                            .Add("--output {value}", mutationTestOutputDirectory / framework);
 
                         RunMutationTestsForTheProject(sourceProject, testsProjects, args);
                     }
@@ -114,12 +117,12 @@ public interface IMutationTest : IUnitTest
                 args.Apply(StrykerArgumentsSettingsBase)
                     .Apply(StrykerArgumentsSettings);
 
-                args.Add("--target-framework {value}", frameworks.Single())
-                    .Add("--output {value}", MutationTestResultDirectory);
+                args.Add("--target-framework {value}", frameworks.Single());
 
                 MutationTestsProjects.ForEach(tuple =>
                 {
                     mutationProjectCount++;
+                    args = args.Add("--output {value}", MutationTestResultDirectory / tuple.SourceProject.Name);
                     RunMutationTestsForTheProject(tuple.SourceProject, tuple.TestProjects, args);
                 });
             }
@@ -196,7 +199,7 @@ public interface IMutationTest : IUnitTest
 
     internal Configure<Arguments> StrykerArgumentsSettingsBase => _
         => _
-           .When(IsLocalBuild, args => args.Add("--open-report:{0}", "html"))
+           .When(IsLocalBuild, args => args.Add("--open-report:{value}", "html"))
            .WhenNotNull(StrykerDashboardApiKey,
                         (args, apiKey) => args.Add("--dashboard-api-key {value}", apiKey, secret: true)
                                               .Add("--reporter dashboard"))

@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added CLI options to push mutation reports to stryker dashboard when possible.
 - Made `IMutationTest.MutationTests` target to run before `IPack.Pack` does.
 - Added CLI option `--project` to the options output when running mutation tests
+- Changed output directory for mutation report files to save them into a directory named after the source project that was mutated.
+So now `{MutationTestDirectory}/[{framework}]` is now changed to `{MutationTestDirectory}/{ProjectName}/[{framework}]` ([#88](https://github.com/candoumbe/pipelines/issues/88))
 
 
 ## [0.5.0] / 2023-07-24
