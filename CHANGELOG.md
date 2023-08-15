@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added CLI option `--project` to the options output when running mutation tests
 - Changed output directory for mutation report files to save them into a directory named after the source project that was mutated.
 So now `{MutationTestDirectory}/[{framework}]` is now changed to `{MutationTestDirectory}/{ProjectName}/[{framework}]` ([#88](https://github.com/candoumbe/pipelines/issues/88))
+- Fixed the name of the parameters emitted for the [project version](https://stryker-mutator.io/docs/stryker-net/configuration/#project-infoversion-committish) when using `dashboard` reporter  ([#89](https://github.com/candoumbe/pipelines/issues/89))
+- Removed `--dashboard.module` parameter as it cannot be defined at CLI level with Stryker version 3.10.0 ([#89](https://github.com/candoumbe/pipelines/issues/89))
 
 
 ## [0.5.0] / 2023-07-24

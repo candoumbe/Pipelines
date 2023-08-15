@@ -148,20 +148,19 @@ public interface IMutationTest : IUnitTest
 
         if (!sourceProject.IsSourceLinkEnabled() && StrykerDashboardApiKey is not null)
         {
-            strykerArgs = strykerArgs.Add("--dashboard.module {0}", sourceProject.Name);
             if (this is IHaveGitVersion gitVersion)
             {
-                strykerArgs = strykerArgs.Add("--dashboard.version {0}", gitVersion.MajorMinorPatchVersion);
+                strykerArgs = strykerArgs.Add("--version {0}", gitVersion.MajorMinorPatchVersion);
             }
             else if (this is IHaveGitRepository gitRepository && gitRepository.GitRepository.Branch is { } branch)
             {
-                strykerArgs = strykerArgs.Add("--dashboard.version {0}", branch);
+                strykerArgs = strykerArgs.Add("--version {0}", branch);
             }
         }
 
         if (this is IGitFlow gitFlow && gitFlow.GitRepository is { } gitflowRepository)
         {
-            strykerArgs = strykerArgs.Add("--version:{0}", gitflowRepository.Commit ?? gitflowRepository.Branch);
+            strykerArgs = strykerArgs.Add("--version {0}", gitflowRepository.Commit ?? gitflowRepository.Branch);
             switch (gitflowRepository.Branch)
             {
                 case string branchName when string.Equals(branchName, IGitFlow.DevelopBranchName, StringComparison.InvariantCultureIgnoreCase):
