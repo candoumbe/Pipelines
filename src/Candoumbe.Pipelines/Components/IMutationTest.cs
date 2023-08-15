@@ -72,12 +72,15 @@ public interface IMutationTest : IUnitTest
                                                        .Distinct()
                                                        .ToArray();
 
+
             if (frameworks.AtLeast(2))
             {
                 MutationTestsProjects.ForEach(tuple =>
                 {
                     mutationProjectCount++;
                     (Project sourceProject, IEnumerable<Project> testsProjects) = tuple;
+                    AbsolutePath mutationTestOutputDirectory = MutationTestResultDirectory / sourceProject.Name;
+
                     IReadOnlyCollection<string> testedFrameworks = testsProjects.Select(csproj => csproj.GetTargetFrameworks())
                                                                                    .SelectMany(x => x)
                                                                                    .Distinct()
@@ -92,7 +95,7 @@ public interface IMutationTest : IUnitTest
                                 .Apply(StrykerArgumentsSettings);
 
                             args.Add("--target-framework {value}", framework)
-                                .Add("--output {value}", MutationTestResultDirectory / framework);
+                                .Add("--output {value}", mutationTestOutputDirectory / framework);
 
                             RunMutationTestsForTheProject(sourceProject, testsProjects, args);
                         });
@@ -102,7 +105,7 @@ public interface IMutationTest : IUnitTest
                         args = new();
                         string framework = testedFrameworks.Single();
                         args.Add("--target-framework {value}", framework)
-                            .Add("--output {value}", MutationTestResultDirectory / framework);
+                            .Add("--output {value}", mutationTestOutputDirectory / framework);
 
                         RunMutationTestsForTheProject(sourceProject, testsProjects, args);
                     }
@@ -114,12 +117,12 @@ public interface IMutationTest : IUnitTest
                 args.Apply(StrykerArgumentsSettingsBase)
                     .Apply(StrykerArgumentsSettings);
 
-                args.Add("--target-framework {value}", frameworks.Single())
-                    .Add("--output {value}", MutationTestResultDirectory);
+                args.Add("--target-framework {value}", frameworks.Single());
 
                 MutationTestsProjects.ForEach(tuple =>
                 {
                     mutationProjectCount++;
+                    args = args.Add("--output {value}", MutationTestResultDirectory / tuple.SourceProject.Name);
                     RunMutationTestsForTheProject(tuple.SourceProject, tuple.TestProjects, args);
                 });
             }
@@ -143,39 +146,26 @@ public interface IMutationTest : IUnitTest
             strykerArgs = strykerArgs.Add(@"--test-project {value}", project.Path);
         });
 
-        if (!sourceProject.IsSourceLinkEnabled() && StrykerDashboardApiKey is not null)
-        {
-            strykerArgs = strykerArgs.Add("--dashboard.module {0}", sourceProject.Name);
-            if (this is IHaveGitVersion gitVersion)
-            {
-                strykerArgs = strykerArgs.Add("--dashboard.version {0}", gitVersion.MajorMinorPatchVersion);
-            }
-            else if (this is IHaveGitRepository gitRepository && gitRepository.GitRepository.Branch is { } branch)
-            {
-                strykerArgs = strykerArgs.Add("--dashboard.version {0}", branch);
-            }
-        }
-
         if (this is IGitFlow gitFlow && gitFlow.GitRepository is { } gitflowRepository)
         {
-            strykerArgs = strykerArgs.Add("--version:{0}", gitflowRepository.Commit ?? gitflowRepository.Branch);
+            strykerArgs = strykerArgs.Add("--version {value}", gitflowRepository.Commit ?? gitflowRepository.Branch);
             switch (gitflowRepository.Branch)
             {
                 case string branchName when string.Equals(branchName, IGitFlow.DevelopBranchName, StringComparison.InvariantCultureIgnoreCase):
                     {
                         // we are in git flow so comparison we can compare develop against main branch
-                        strykerArgs = strykerArgs.Add("--with-baseline:{0}", IGitFlow.MainBranchName);
+                        strykerArgs = strykerArgs.Add("--with-baseline:{value}", IGitFlow.MainBranchName);
 
                     }
                     break;
                 case string branchName when branchName.Like($"{gitFlow.FeatureBranchPrefix}/*", true):
                     {
-                        strykerArgs = strykerArgs.Add("--with-baseline:{0}", gitFlow.FeatureBranchSourceName);
+                        strykerArgs = strykerArgs.Add("--with-baseline:{value}", gitFlow.FeatureBranchSourceName);
                     }
                     break;
                 case string branchName when branchName.Like($"{gitFlow.ColdfixBranchPrefix}/*", true):
                     {
-                        strykerArgs = strykerArgs.Add("--with-baseline:{0}", gitFlow.ColdfixBranchSourceName);
+                        strykerArgs = strykerArgs.Add("--with-baseline:{value}", gitFlow.ColdfixBranchSourceName);
                     }
                     break;
                 default:
@@ -184,19 +174,32 @@ public interface IMutationTest : IUnitTest
         }
         else if (this is IGitHubFlow gitHubFlow && gitHubFlow.GitRepository is { } githubFlowRepository)
         {
-            strykerArgs = strykerArgs.Add("--version:{0}", githubFlowRepository.Commit ?? githubFlowRepository.Branch);
+            strykerArgs = strykerArgs.Add("--version {value}", githubFlowRepository.Commit ?? githubFlowRepository.Branch);
             if (githubFlowRepository.Branch is { Length: > 0 } branchName && !string.Equals(branchName, IGitHubFlow.MainBranchName, StringComparison.InvariantCultureIgnoreCase))
             {
                 strykerArgs = strykerArgs.Add("--with-baseline:{0}", IGitHubFlow.MainBranchName);
             }
         }
+        else if (!sourceProject.IsSourceLinkEnabled())
+        {
+            if (this is IHaveGitVersion gitVersion)
+            {
+                strykerArgs = strykerArgs.Add("--version {value}", gitVersion.MajorMinorPatchVersion);
+            }
+            else if (this is IHaveGitRepository gitRepository)
+            {
+                strykerArgs = strykerArgs.Add("--version {value}", gitRepository.GitRepository?.Commit ?? gitRepository?.GitRepository?.Branch);
+            }
+        }
 
         DotNet(strykerArgs.RenderForExecution(), workingDirectory: sourceProject.Path.Parent);
+
+
     }
 
     internal Configure<Arguments> StrykerArgumentsSettingsBase => _
         => _
-           .When(IsLocalBuild, args => args.Add("--open-report:{0}", "html"))
+           .When(IsLocalBuild, args => args.Add("--open-report:{value}", "html"))
            .WhenNotNull(StrykerDashboardApiKey,
                         (args, apiKey) => args.Add("--dashboard-api-key {value}", apiKey, secret: true)
                                               .Add("--reporter dashboard"))
