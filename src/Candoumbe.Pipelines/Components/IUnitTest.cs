@@ -53,26 +53,32 @@ public interface IUnitTest : ICompile, IHaveTests, IHaveCoverage
                                                                                                            .Apply<DotNetTestSettings, (Project, string)>(ProjectUnitTestSettings, (project, framework))
                     )));
 
-            TestResultDirectory.GlobFiles("*.trx")
-                               .ForEach(testFileResult => AzurePipelines.Instance?.PublishTestResults(title: $"{Path.GetFileNameWithoutExtension(testFileResult)} ({AzurePipelines.Instance.StageDisplayName})",
-                                                                                                      type: AzurePipelinesTestResultsType.VSTest,
-                                                                                                      files: new string[] { testFileResult })
-                    );
+            if (AzurePipelines.Instance is not null)
+            {
+                TestResultDirectory.GlobFiles("*.trx")
+                                       .ForEach(testFileResult => AzurePipelines.Instance?.PublishTestResults(title: $"{Path.GetFileNameWithoutExtension(testFileResult)} ({AzurePipelines.Instance.StageDisplayName})",
+                                                                                                              type: AzurePipelinesTestResultsType.VSTest,
+                                                                                                              files: new string[] { testFileResult })
+                            );
 
-            TestResultDirectory.GlobFiles("*.xml")
-                               .ForEach(file => AzurePipelines.Instance?.PublishCodeCoverage(coverageTool: AzurePipelinesCodeCoverageToolType.Cobertura,
-                                                                                             summaryFile: file,
-                                                                                             reportDirectory: CoverageReportDirectory));
+                if (this is IReportCoverage reportCoverage)
+                {
+                    TestResultDirectory.GlobFiles("*.xml")
+                                               .ForEach(file => AzurePipelines.Instance?.PublishCodeCoverage(coverageTool: AzurePipelinesCodeCoverageToolType.Cobertura,
+                                                                                                             summaryFile: file,
+                                                                                                             reportDirectory: reportCoverage.CoverageReportDirectory));
+                }
+            }
         });
 
     internal sealed Configure<DotNetTestSettings> UnitTestSettingsBase => _ => _
         .SetConfiguration(Configuration.ToString())
                 .ResetVerbosity()
-                .EnableCollectCoverage()
                 .EnableUseSourceLink()
                 .SetNoBuild(SucceededTargets.Contains(Compile))
                 .SetResultsDirectory(UnitTestResultsDirectory)
-                .SetCoverletOutputFormat(CoverletOutputFormat.lcov)
+                .WhenNotNull(this.As<IReportCoverage>(), (settings, _) => settings.EnableCollectCoverage()
+                                                                                   .SetCoverletOutputFormat(CoverletOutputFormat.lcov))
                 .AddProperty("ExcludeByAttribute", "Obsolete");
 
     /// <summary>
@@ -82,7 +88,7 @@ public interface IUnitTest : ICompile, IHaveTests, IHaveCoverage
 
     internal Configure<DotNetTestSettings, (Project project, string framework)> ProjectUnitTestSettingsBase => (settings, tuple) => settings.SetFramework(tuple.framework)
                                                                                                                                     .AddLoggers($"trx;LogFileName={tuple.project.Name}.{tuple.framework}.trx")
-                                                                                                                                    .SetCoverletOutput(UnitTestResultsDirectory / $"{tuple.project.Name}.{tuple.framework}.xml");
+                                                                                                                                    .WhenNotNull(this.As<IReportCoverage>(), (settings, _) => settings.SetCoverletOutput(UnitTestResultsDirectory / $"{tuple.project.Name}.{tuple.framework}.xml"));
 
     /// <summary>
     /// Configure / override unit test settings at project level

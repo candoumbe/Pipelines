@@ -25,6 +25,11 @@ namespace Candoumbe.Pipelines.Components;
 public interface IMutationTest : IUnitTest
 {
     /// <summary>
+    /// Name of the property set when <see href="SourceLink">SourceLink</see> is enabled on a projet.
+    /// </summary>
+    private const string ContinuousIntegrationBuild = nameof(ContinuousIntegrationBuild);
+
+    /// <summary>
     /// Directory where mutattion test results should be published
     /// </summary>
     AbsolutePath MutationTestResultDirectory => TestResultDirectory / "mutation-tests";
@@ -32,10 +37,8 @@ public interface IMutationTest : IUnitTest
     /// <summary>
     /// Api Key us
     /// </summary>
-    [Parameter]
+    [Parameter("API KEY used to submit mutation report to a stryker dashboard")]
     public string StrykerDashboardApiKey => TryGetValue(() => StrykerDashboardApiKey);
-
-
 
     /// <summary>
     /// Defines projects onto which mutation tests will be performed
@@ -52,6 +55,7 @@ public interface IMutationTest : IUnitTest
     public Target MutationTests => _ => _
         .Description("Runs mutation tests using Stryker tool")
         .TryDependsOn<IClean>(x => x.Clean)
+        .TryBefore<IPack>()
         .DependsOn(Compile)
         .Produces(MutationTestResultDirectory / "*")
         .Executes(() =>
@@ -68,12 +72,15 @@ public interface IMutationTest : IUnitTest
                                                        .Distinct()
                                                        .ToArray();
 
+
             if (frameworks.AtLeast(2))
             {
                 MutationTestsProjects.ForEach(tuple =>
                 {
                     mutationProjectCount++;
                     (Project sourceProject, IEnumerable<Project> testsProjects) = tuple;
+                    AbsolutePath mutationTestOutputDirectory = MutationTestResultDirectory / sourceProject.Name;
+
                     IReadOnlyCollection<string> testedFrameworks = testsProjects.Select(csproj => csproj.GetTargetFrameworks())
                                                                                    .SelectMany(x => x)
                                                                                    .Distinct()
@@ -88,7 +95,7 @@ public interface IMutationTest : IUnitTest
                                 .Apply(StrykerArgumentsSettings);
 
                             args.Add("--target-framework {value}", framework)
-                                .Add("--output {value}", MutationTestResultDirectory / framework);
+                                .Add("--output {value}", mutationTestOutputDirectory / framework);
 
                             RunMutationTestsForTheProject(sourceProject, testsProjects, args);
                         });
@@ -98,7 +105,7 @@ public interface IMutationTest : IUnitTest
                         args = new();
                         string framework = testedFrameworks.Single();
                         args.Add("--target-framework {value}", framework)
-                            .Add("--output {value}", MutationTestResultDirectory / framework);
+                            .Add("--output {value}", mutationTestOutputDirectory / framework);
 
                         RunMutationTestsForTheProject(sourceProject, testsProjects, args);
                     }
@@ -110,16 +117,17 @@ public interface IMutationTest : IUnitTest
                 args.Apply(StrykerArgumentsSettingsBase)
                     .Apply(StrykerArgumentsSettings);
 
-                args.Add("--target-framework {value}", frameworks.Single())
-                    .Add("--output {value}", MutationTestResultDirectory);
+                args.Add("--target-framework {value}", frameworks.Single());
 
                 MutationTestsProjects.ForEach(tuple =>
                 {
                     mutationProjectCount++;
+                    args = args.Add("--output {value}", MutationTestResultDirectory / tuple.SourceProject.Name);
                     RunMutationTestsForTheProject(tuple.SourceProject, tuple.TestProjects, args);
                 });
             }
         });
+
     /// <summary>
     /// Run mutation tests for the specified project using the specified arguments
     /// </summary>
@@ -128,35 +136,76 @@ public interface IMutationTest : IUnitTest
         Verbose("{ProjetName} will run mutation tests for the following frameworks : {@Frameworks}", sourceProject.Name, sourceProject.GetTargetFrameworks());
 
         Arguments strykerArgs = new();
-        strykerArgs.Add("stryker");
-        strykerArgs.Concatenate(args);
+        strykerArgs = strykerArgs.Add("stryker");
+        strykerArgs = strykerArgs.Concatenate(args);
 
-        testsProjects.ForEach(project => strykerArgs.Add(@"--test-project {value}", project.Path));
+        strykerArgs.Add(@"--project {value}", sourceProject.Name);
+
+        testsProjects.ForEach(project =>
+        {
+            strykerArgs = strykerArgs.Add(@"--test-project {value}", project.Path);
+        });
+
+        if (this is IGitFlow gitFlow && gitFlow.GitRepository is { } gitflowRepository)
+        {
+            strykerArgs = strykerArgs.Add("--version {value}", gitflowRepository.Commit ?? gitflowRepository.Branch);
+            switch (gitflowRepository.Branch)
+            {
+                case string branchName when string.Equals(branchName, IGitFlow.DevelopBranchName, StringComparison.InvariantCultureIgnoreCase):
+                    {
+                        // we are in git flow so comparison we can compare develop against main branch
+                        strykerArgs = strykerArgs.Add("--with-baseline:{value}", IGitFlow.MainBranchName);
+
+                    }
+                    break;
+                case string branchName when branchName.Like($"{gitFlow.FeatureBranchPrefix}/*", true):
+                    {
+                        strykerArgs = strykerArgs.Add("--with-baseline:{value}", gitFlow.FeatureBranchSourceName);
+                    }
+                    break;
+                case string branchName when branchName.Like($"{gitFlow.ColdfixBranchPrefix}/*", true):
+                    {
+                        strykerArgs = strykerArgs.Add("--with-baseline:{value}", gitFlow.ColdfixBranchSourceName);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        else if (this is IGitHubFlow gitHubFlow && gitHubFlow.GitRepository is { } githubFlowRepository)
+        {
+            strykerArgs = strykerArgs.Add("--version {value}", githubFlowRepository.Commit ?? githubFlowRepository.Branch);
+            if (githubFlowRepository.Branch is { Length: > 0 } branchName && !string.Equals(branchName, IGitHubFlow.MainBranchName, StringComparison.InvariantCultureIgnoreCase))
+            {
+                strykerArgs = strykerArgs.Add("--with-baseline:{0}", IGitHubFlow.MainBranchName);
+            }
+        }
+        else if (!sourceProject.IsSourceLinkEnabled())
+        {
+            if (this is IHaveGitVersion gitVersion)
+            {
+                strykerArgs = strykerArgs.Add("--version {value}", gitVersion.MajorMinorPatchVersion);
+            }
+            else if (this is IHaveGitRepository gitRepository)
+            {
+                strykerArgs = strykerArgs.Add("--version {value}", gitRepository.GitRepository?.Commit ?? gitRepository?.GitRepository?.Branch);
+            }
+        }
 
         DotNet(strykerArgs.RenderForExecution(), workingDirectory: sourceProject.Path.Parent);
+
+
     }
 
     internal Configure<Arguments> StrykerArgumentsSettingsBase => _
         => _
-           .When(IsLocalBuild, args => args.Add("--open-report:{0}", "html"))
+           .When(IsLocalBuild, args => args.Add("--open-report:{value}", "html"))
            .WhenNotNull(StrykerDashboardApiKey,
                         (args, apiKey) => args.Add("--dashboard-api-key {value}", apiKey, secret: true)
                                               .Add("--reporter dashboard"))
            .Add("--reporter markdown")
            .Add("--reporter html")
-           .When(IsLocalBuild, args => args.Add("--reporter progress"))
-           .WhenNotNull(this.As<IGitFlow>()?.GitRepository,
-                        (args, repository) => args.Add("--with-baseline:{0}", repository.Branch.ToLowerInvariant() switch
-                        {
-                            string branchName when branchName == IGitFlow.MainBranchName || branchName == IGitFlow.DevelopBranchName => branchName,
-                            string branchName when branchName.Like($"{this.As<IGitFlow>()?.FeatureBranchPrefix}/*", true) => this.As<IWorkflow>().FeatureBranchSourceName,
-                            string branchName when branchName.Like($"{this.As<IGitFlow>()?.HotfixBranchPrefix}/*", true) => this.As<IWorkflow>().HotfixBranchSourceName,
-                            string branchName when branchName.Like($"{this.As<IGitFlow>()?.ColdfixBranchPrefix}/*", true) => this.As<IGitFlow>().ColdfixBranchSourceName,
-                            _ => IGitFlow.MainBranchName
-                        })
-                        .Add("--version:{0}", repository.Commit ?? repository.Branch))
-           .WhenNotNull(this.As<IGitHubFlow>(), (args, flow) => args.Add("--with-baseline:{0}", IGitHubFlow.MainBranchName)
-                                                                  .Add("--version:{0}", flow.GitRepository?.Commit ?? flow.GitRepository?.Branch));
+           .When(IsLocalBuild, args => args.Add("--reporter progress"));
 
     /// <summary>
     /// Configures arguments that will be used by when running Stryker tool
