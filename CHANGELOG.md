@@ -19,6 +19,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Refactored `IWorkflow` component and removed inheritance from `IHaveMainBranch` component
 - Refactored `ICompile` component to no longer extend `IRestore` component
 - Refactored `IPack` component to no longer extend `ICompile` component
+- Refactored `IMutationTest.MutationTestsProjects` type from `(Project SourceProject, IEnumerable<Project> TestsProjects)` to `IEnumerable<MutationTestProjectConfiguration>`:
+this new type allows to specify the path to the configuration file to use during each mutation test run.
+- `IMutationTest` component no longer implements `IUnitTest` but only `IHaveTests`
 
 ### 🛠️ Fixes
 
@@ -26,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### 🧹 Housekeeping
 
+- Refactoring of `IMutationTest` component to improve maintenability : the way CLI options required by Stryker are computed is now centralized.
 - Added `GitHubToken` value in `parameters.local.json` : this value will be consumed directly to interact with the github repository.
 - `IGitflow`, `IGithubflow` components extends `IDoHotfixWorkflow` component
 - `IGitflow`, `IGithubflow` components extends `IDoHotfixWorkflow` component
