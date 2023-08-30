@@ -15,7 +15,7 @@ public interface IHaveGitVersion : INukeBuild
     /// <summary>
     /// The GitVersion tool that can be used to version the project
     /// </summary>
-    [GitVersion(Framework = "net5.0", NoFetch = true)]
+    [GitVersion(Framework = "net5.0")]
     [Required]
     public GitVersion GitVersion => TryGetValue(() => GitVersion);
 

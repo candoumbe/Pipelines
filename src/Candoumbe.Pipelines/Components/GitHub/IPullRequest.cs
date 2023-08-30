@@ -17,13 +17,6 @@ namespace Candoumbe.Pipelines.Components.GitHub
         string Title => TryGetValue(() => Title) ?? GitRepository.Branch;
 
         /// <summary>
-        /// Token that will be used to connect to GitHub
-        /// </summary>
-        [Parameter("Token used to create a pull request")]
-        [Secret]
-        string Token => TryGetValue(() => Token);
-
-        /// <summary>
         /// Description of the pull request
         /// </summary>
         [Parameter("Description of the pull request")]
