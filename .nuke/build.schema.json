@@ -105,11 +105,8 @@
           "description": "Shows the execution plan (HTML)"
         },
         "Profile": {
-          "type": "array",
-          "description": "Defines the profiles to load",
-          "items": {
-            "type": "string"
-          }
+          "type": "string",
+          "description": "Name of the profile where the current set of secrets will be stored"
         },
         "Root": {
           "type": "string",

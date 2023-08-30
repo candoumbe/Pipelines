@@ -1,7 +1,6 @@
 ﻿using Nuke.Common;
-
+using Nuke.Common.Tooling;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
-using static Nuke.Common.Utilities.ConsoleUtility;
 using static Serilog.Log;
 
 namespace Candoumbe.Pipelines.Components;
@@ -15,6 +14,12 @@ namespace Candoumbe.Pipelines.Components;
 public interface IHaveSecret : INukeBuild
 {
     /// <summary>
+    /// Name of the profile used to store secrets
+    /// </summary>
+    [Parameter("Name of the profile where the current set of secrets")]
+    string Profile => TryGetValue(() => Profile);
+
+    /// <summary>
     /// Manage secrets so that pipelines can be runned locally"
     /// </summary>
     public Target ManageSecrets => _ => _
@@ -22,11 +27,18 @@ public interface IHaveSecret : INukeBuild
         .Requires(() => IsLocalBuild)
         .Executes(() =>
         {
-            string profile = PromptForInput("Profile name", string.Empty);
-            if (string.IsNullOrWhiteSpace(profile))
+            Arguments args = new Arguments();
+            args.Add($"tool run nuke :secrets");
+
+            if (string.IsNullOrWhiteSpace(Profile))
             {
                 Information("No profile set. Parameters will be set for the default profile");
             }
-            DotNet($"tool run nuke :secrets{(string.IsNullOrWhiteSpace(profile) ? string.Empty : $" {profile}")}");
+            else
+            {
+                args.Add(Profile);
+            }
+
+            DotNet(args.RenderForExecution());
         });
 }
