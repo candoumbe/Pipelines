@@ -106,7 +106,7 @@
         },
         "Profile": {
           "type": "string",
-          "description": "Name of the profile where the current set of secrets will be stored"
+          "description": "Name of the profile where the current set of secrets"
         },
         "Root": {
           "type": "string",
