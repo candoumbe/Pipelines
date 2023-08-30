@@ -56,7 +56,7 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest
         };
 
         Information("Creating {PullRequestName} for {Repository}", title, repositoryName);
-        string token = Token ?? PromptForInput("Token (leave empty to exit)", string.Empty);
+        string token = GitHubToken ?? PromptForInput("Token (leave empty to exit)", string.Empty);
 
         if (!string.IsNullOrWhiteSpace(token))
         {
