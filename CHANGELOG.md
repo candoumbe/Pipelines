@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add `GitHubToken` value in `parameters.json` : this value will be consumed directly to interact with the github repository.
 
+## [0.6.1] / 2023-08-31
+### 🔧 Fixes
+- Fixed the way arguments sent to nuke CLI are rendered when calling `IHaveSecret.ManageSecrets` target.
+
 ## [0.6.0] / 2023-08-15
 ### 🚀 New features
 - Added CLI options to push mutation reports to stryker dashboard when possible.
@@ -195,6 +199,20 @@ So now `{MutationTestDirectory}/[{framework}]` is now changed to `{MutationTestD
 [0.1.0]: https://github.com/candoumbe/Pipelines/tree/0.1.0
 
 [Unreleased]: https://github.com/candoumbe/Pipelines/compare/0.6.0...HEAD
+[0.6.0]: https://github.com/candoumbe/Pipelines/compare/0.5.0...0.6.0
+[0.5.0]: https://github.com/candoumbe/Pipelines/compare/0.4.5...0.5.0
+[0.4.5]: https://github.com/candoumbe/Pipelines/compare/0.4.4...0.4.5
+[0.4.4]: https://github.com/candoumbe/Pipelines/compare/0.4.3...0.4.4
+[0.4.3]: https://github.com/candoumbe/Pipelines/compare/0.4.2...0.4.3
+[0.4.2]: https://github.com/candoumbe/Pipelines/compare/0.4.1...0.4.2
+[0.4.1]: https://github.com/candoumbe/Pipelines/compare/0.4.0...0.4.1
+[0.4.0]: https://github.com/candoumbe/Pipelines/compare/0.3.0...0.4.0
+[0.3.0]: https://github.com/candoumbe/Pipelines/compare/0.2.0...0.3.0
+[0.2.0]: https://github.com/candoumbe/Pipelines/compare/0.1.0...0.2.0
+[0.1.0]: https://github.com/candoumbe/Pipelines/tree/0.1.0
+
+[Unreleased]: https://github.com/candoumbe/Pipelines/compare/0.6.1...HEAD
+[0.6.1]: https://github.com/candoumbe/Pipelines/compare/0.6.0...0.6.1
 [0.6.0]: https://github.com/candoumbe/Pipelines/compare/0.5.0...0.6.0
 [0.5.0]: https://github.com/candoumbe/Pipelines/compare/0.4.5...0.5.0
 [0.4.5]: https://github.com/candoumbe/Pipelines/compare/0.4.4...0.4.5

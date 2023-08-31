@@ -26,9 +26,9 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest
 {
     string IPullRequest.Title => TryGetValue(() => Title) ?? ((GitRepository.IsOnFeatureBranch(), GitRepository.IsOnReleaseBranch(), GitRepository.IsOnHotfixBranch(), GitRepository.Branch.Like($"{ColdfixBranchPrefix}/*")) switch
     {
-        (true, _, _, _) => $"[FEATURE] {GitRepository.Branch?.Replace($"{FeatureBranchPrefix}/", string.Empty).ToTitleCase()}",
-        (_, _, true, _) => $"[HOTFIX] {GitRepository.Branch?.Replace($"{HotfixBranchPrefix}/", string.Empty).ToTitleCase()}",
-        (_, _, _, true) => $"[COLDFIX] {GitRepository.Branch?.Replace($"{ColdfixBranchPrefix}/", string.Empty).ToTitleCase()}",
+        (true, _, _, _) => $"✨[FEATURE] {GitRepository.Branch?.Replace($"{FeatureBranchPrefix}/", string.Empty).ToTitleCase()}",
+        (_, _, true, _) => $"🛠️[HOTFIX] {GitRepository.Branch?.Replace($"{HotfixBranchPrefix}/", string.Empty).ToTitleCase()}",
+        (_, _, _, true) => $"🧹[COLDFIX] {GitRepository.Branch?.Replace($"{ColdfixBranchPrefix}/", string.Empty).ToTitleCase()}",
         _ => GitRepository.Branch?.ToTitleCase()
     }).Replace('-', ' ');
 
@@ -49,7 +49,7 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest
         Information("Creating a pull request for {Repository}", repositoryName);
         Information(@"Title of the pull request (or ""{PullRequestName}"" if empty)", Title);
 
-        string title = (Console.ReadLine()) switch
+        string title = Console.ReadLine() switch
         {
             string value when !string.IsNullOrWhiteSpace(value) => value.Trim(),
             _ => Title
