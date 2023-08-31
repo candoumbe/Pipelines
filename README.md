@@ -23,19 +23,19 @@ The public **API SHOULD NOT** be considered stable.
 
 Most of the time, to set up a CI/CD for your .NET project, you have two options :
 
-1. **Going through your repository and use its embeded GUI to create the pipeline**
+### 1. **Going through your repository and use its embeded GUI to create the pipeline**
 
 This approach is nice and helpful to get started. But most of the time, the history of changes made to the pipeline
 is separated from the history of the code base.
 
-2. **Writing a pipeline file of some sort**
+### 2. **Writing a pipeline file of some sort**
 
 Most of the time in YAML, the file that describes the steps required to build a project are providers specific.
 So even though you can write YAML, knowning how to write an Azure DevOps pipeline does not really help when it comes to writing a pipeline for GitHub Actions.
 
 ## The solution
 
-[Nuke] is a library written by [Matthias Koch] that help
+[Nuke] is a library written by [Matthias Koch] that helps creating builds.
 
 This project offers an opinionated way at writing pipelines by giving a set of components (more on that later) with the following benefits :
 
