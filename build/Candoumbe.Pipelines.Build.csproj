@@ -35,19 +35,19 @@
     <Compile Include="..\src\Candoumbe.Pipelines\Components\IReportCoverage.cs" Link="Components\IReportCoverage.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\IRestore.cs" Link="Components\IRestore.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\IUnitTest.cs" Link="Components\IUnitTest.cs" />
-    
+
     <!-- Nuget component -->
     <Compile Include="..\src\Candoumbe.Pipelines\Components\NuGet\GitHubPushNugetConfiguration.cs" Link="Components\NuGet\GitHubPushNugetConfiguration.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\NuGet\IPushNugetPackages.cs" Link="Components\NuGet\IPushNugetPackages.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\NuGet\NugetPushConfiguration.cs" Link="Components\NuGet\NugetPushConfiguration.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\NuGet\PushNugetPackageConfiguration.cs" Link="Components\NuGet\PushNugetPackageConfiguration.cs" />
-    
+
     <!-- Docker components -->
     <Compile Include="..\src\Candoumbe.Pipelines\Components\Docker\IBuildDockerImage.cs" Link="Components\Docker\IBuildDockerImage.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\Docker\IPushDockerImage.cs" Link="Components\Docker\IPushDockerImage.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\Docker\PushDockerImageConfiguration.cs" Link="Components\Docker\PushDockerImageConfiguration.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\Docker\DockerFile.cs" Link="Components\Docker\DockerFile.cs" />
-    
+
     <!-- GitHub components -->
     <Compile Include="..\src\Candoumbe.Pipelines\Components\GitHub\ICreateGithubRelease.cs" Link="Components\GitHub\ICreateGithubRelease.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\GitHub\IGitFlowWithPullRequest.cs" Link="Components\Workflows\IGitFlowWithPullRequest.cs" />
@@ -61,9 +61,10 @@
     <Compile Include="..\src\Candoumbe.Pipelines\Components\Workflows\IHaveDevelopBranch.cs" Link="Components\Workflows\IHaveDevelopBranch.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\Workflows\IHaveMainBranch.cs" Link="Components\Workflows\IHaveMainBranch.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\Workflows\IWorkflow.cs" Link="Components\Workflows\IWorkflow.cs" />
+    <Compile Include="..\src\Candoumbe.Pipelines\Components\Workflows\IHaveHotfixWorkflow.cs" Link="Components\Workflows\IHaveHotfixWorkflow.cs" />
   </ItemGroup>
 
-  
+
   <ItemGroup>
     <PackageReference Include="Nuke.Common" Version="7.0.3" PrivateAssets="all"/>
     <PackageReference Include="Candoumbe.MiscUtilities" Version="0.11.1" />

@@ -6,17 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### 🚀 New features
+- Added `IHotfixWorkflow` component which represent the `hotfix` workflow
+
 ### 🚨 Breaking changes
 
-- Removes `Github.IPullRequest.Token` property. This property was previously used by `GitHub.IGitFlowWithPullRequest` and `GitHub.IGitFlowWithPullRequest` when finishing a feature/coldfix is.
+- Removed `Github.IPullRequest.Token` property. This property was previously used by `GitHub.IGitFlowWithPullRequest` and `GitHub.IGitFlowWithPullRequest` when finishing a feature/coldfix is.
+- `IGitflow`, `IGithubflow` components extends `IHotfixWorkflow` component
 
 ### 🛠️ Fixes
 
-- Removes `nofetch` option when calling `gitversion` tool.
+- Removed `nofetch` option when calling `gitversion` tool.
 
 ### 🧹 Housekeeping
 
-- Add `GitHubToken` value in `parameters.json` : this value will be consumed directly to interact with the github repository.
+- Added `GitHubToken` value in `parameters.json` : this value will be consumed directly to interact with the github repository.
 
 ## [0.6.1] / 2023-08-31
 ### 🔧 Fixes
