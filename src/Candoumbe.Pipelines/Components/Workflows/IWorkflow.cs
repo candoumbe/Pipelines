@@ -13,7 +13,7 @@ using static Serilog.Log;
 namespace Candoumbe.Pipelines.Components.Workflows;
 
 /// <summary>
-/// Marker interface for repository that support a workflow
+/// Marker interface for git repository that support a specific workflow
 /// </summary>
 public interface IWorkflow : IHaveGitRepository, IHaveMainBranch, IHaveGitVersion, IHaveChangeLog
 {
@@ -26,12 +26,7 @@ public interface IWorkflow : IHaveGitRepository, IHaveMainBranch, IHaveGitVersio
     /// Prefix used to name feature branches
     /// </summary>
     public string FeatureBranchPrefix => "feature";
-
-    /// <summary>
-    /// Prefix used to name hotfix branches
-    /// </summary>
-    public string HotfixBranchPrefix => "hotfix";
-
+    
     /// <summary>
     /// Name of the branch to use when starting a new feature
     /// </summary>
@@ -40,13 +35,7 @@ public interface IWorkflow : IHaveGitRepository, IHaveMainBranch, IHaveGitVersio
     /// </remarks>
     string FeatureBranchSourceName { get; }
 
-    /// <summary>
-    /// Name of the branch to use when starting a new hotfix branch
-    /// </summary>
-    /// <remarks>
-    /// This property should never return <see langword="null"/>.
-    /// </remarks>
-    string HotfixBranchSourceName { get; }
+    
 
     /// <summary>
     /// Indicates if any changes should be stashed automatically prior to switching branch (Default : true
@@ -59,28 +48,7 @@ public interface IWorkflow : IHaveGitRepository, IHaveMainBranch, IHaveGitVersio
     /// </summary>
     [Parameter("Name of the branch to create")]
     string Name => TryGetValue(() => Name);
-
-    /// <summary>
-    /// Creates a new hotfix branch from the main branch.
-    /// </summary>
-    public Target Hotfix => _ => _
-        .Description($"Starts a new hotfix branch '{HotfixBranchPrefix}/*' from {HotfixBranchSourceName}")
-        .DependsOn(Changelog)
-        .Requires(() => IsLocalBuild)
-        .Requires(() => !GitRepository.IsOnHotfixBranch() || GitHasCleanWorkingCopy())
-        .Executes(async () =>
-        {
-
-            if (!GitRepository.IsOnHotfixBranch())
-            {
-                Checkout($"{HotfixBranchPrefix}/{GitVersion.Major}.{GitVersion.Minor}.{GitVersion.Patch + 1}", start: MainBranchName);
-            }
-            else
-            {
-                await FinishHotfix();
-            }
-        });
-
+    
     /// <summary>
     /// Finalizes the change log so that its up to date for the release.
     /// </summary>
@@ -212,8 +180,4 @@ public interface IWorkflow : IHaveGitRepository, IHaveMainBranch, IHaveGitVersio
     /// </summary>
     ValueTask FinishFeature() => ValueTask.CompletedTask;
 
-    /// <summary>
-    /// Merges a hotfix branch back to <see cref="HotfixBranchSourceName"/>
-    /// </summary>
-    ValueTask FinishHotfix() => ValueTask.CompletedTask;
 }

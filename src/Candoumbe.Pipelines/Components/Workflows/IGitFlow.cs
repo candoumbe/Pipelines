@@ -18,7 +18,7 @@ namespace Candoumbe.Pipelines.Components;
 /// <remarks>
 /// This interface will provide several ready to use targets to effectively manages this workflow even when the underlying "git" command does not support the gitflow verbs.
 /// </remarks>
-public interface IGitFlow : IWorkflow, IHaveDevelopBranch
+public interface IGitFlow : IHaveHotfixWorkflow, IHaveDevelopBranch
 {
     /// <summary>
     /// Name of the release branch
@@ -42,7 +42,7 @@ public interface IGitFlow : IWorkflow, IHaveDevelopBranch
     string IWorkflow.FeatureBranchSourceName => DevelopBranchName;
 
     ///<inheritdoc/>
-    string IWorkflow.HotfixBranchSourceName => MainBranchName;
+    string IHaveHotfixWorkflow.HotfixBranchSourceName => MainBranchName;
 
     /// <summary>
     /// Creates a new release branch from the develop branch.
@@ -102,7 +102,7 @@ public interface IGitFlow : IWorkflow, IHaveDevelopBranch
     /// <summary>
     /// Merges the current <see cref="ReleaseBranch"/> or <see cref="IWorkflow.HotfixBranchPrefix"/> branch back to <see cref="IHaveMainBranch.MainBranchName"/>.
     /// </summary>
-    ValueTask IWorkflow.FinishHotfix()
+    ValueTask IHaveHotfixWorkflow.FinishHotfix()
     {
         Git($"checkout {MainBranchName}");
         Git("pull");
