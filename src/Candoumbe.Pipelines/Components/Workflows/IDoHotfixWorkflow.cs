@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Candoumbe.Pipelines.Components.GitHub;
 using Nuke.Common;
 using Nuke.Common.Git;
 using Nuke.Common.Tools.GitVersion;
@@ -9,13 +8,13 @@ namespace Candoumbe.Pipelines.Components.Workflows;
 
 /// <summary>
 /// <para>
-/// Represents a nuke component that extends the <see cref="IWorkflow"/> and <see cref="IHaveGitHubRepository"/> interfaces.
+/// Represents a nuke component that extends the <see cref="IWorkflow"/> and <see cref="IHaveGitRepository"/> interfaces.
 /// </para>
 /// <para>
 /// It provides properties and a target for managing hotfix workflows, including starting a new hotfix branch and merging it back to the main branch.
 /// </para>
 /// </summary>
-public interface IHaveHotfixWorkflow : IWorkflow, IHaveGitHubRepository
+public interface IDoHotfixWorkflow : IWorkflow
 {
     /// <summary>
     /// Gets the prefix used to name hotfix branches.

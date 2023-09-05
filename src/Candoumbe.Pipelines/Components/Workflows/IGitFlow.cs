@@ -18,7 +18,7 @@ namespace Candoumbe.Pipelines.Components;
 /// <remarks>
 /// This interface will provide several ready to use targets to effectively manages this workflow even when the underlying "git" command does not support the gitflow verbs.
 /// </remarks>
-public interface IGitFlow : IHaveHotfixWorkflow, IHaveDevelopBranch
+public interface IGitFlow : IDoHotfixWorkflow, IDoFeatureWorkflow, IHaveDevelopBranch
 {
     /// <summary>
     /// Name of the release branch
@@ -39,10 +39,10 @@ public interface IGitFlow : IHaveHotfixWorkflow, IHaveDevelopBranch
     string ColdfixBranchSourceName => FeatureBranchSourceName;
 
     ///<inheritdoc/>
-    string IWorkflow.FeatureBranchSourceName => DevelopBranchName;
+    string IDoFeatureWorkflow.FeatureBranchSourceName => DevelopBranchName;
 
     ///<inheritdoc/>
-    string IHaveHotfixWorkflow.HotfixBranchSourceName => MainBranchName;
+    string IDoHotfixWorkflow.HotfixBranchSourceName => MainBranchName;
 
     /// <summary>
     /// Creates a new release branch from the develop branch.
@@ -102,7 +102,7 @@ public interface IGitFlow : IHaveHotfixWorkflow, IHaveDevelopBranch
     /// <summary>
     /// Merges the current <see cref="ReleaseBranch"/> or <see cref="IWorkflow.HotfixBranchPrefix"/> branch back to <see cref="IHaveMainBranch.MainBranchName"/>.
     /// </summary>
-    ValueTask IHaveHotfixWorkflow.FinishHotfix()
+    ValueTask IDoHotfixWorkflow.FinishHotfix()
     {
         Git($"checkout {MainBranchName}");
         Git("pull");
@@ -128,7 +128,7 @@ public interface IGitFlow : IHaveHotfixWorkflow, IHaveDevelopBranch
     /// <summary>
     /// Merges the current feature branch back to <see cref="IHaveDevelopBranch.DevelopBranchName"/>.
     /// </summary>
-    ValueTask IWorkflow.FinishFeature()
+    ValueTask IDoFeatureWorkflow.FinishFeature()
     {
         Git($"rebase {DevelopBranchName}");
         Git($"checkout {DevelopBranchName}");

@@ -69,7 +69,7 @@ namespace Candoumbe.Pipelines.Components.GitHub
         uint[] Issues => TryGetValue(() => Issues) ?? Array.Empty<uint>();
 
         ///<inheritdoc/>
-        async ValueTask IWorkflow.FinishFeature()
+        async ValueTask IDoFeatureWorkflow.FinishFeature()
         {
             string linkToIssueKeyWord = Issues.AtLeastOnce()
                 ? string.Join(',', Issues.Select(issueNumber => $"Resolves #{issueNumber}").ToArray())

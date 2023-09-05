@@ -3,11 +3,11 @@
 /// <summary>
 /// A lightweight version of <see cref="IGitFlow"/> where only a main branch exists.
 /// </summary>
-public interface IGitHubFlow : IWorkflow, IHaveHotfixWorkflow
+public interface IGitHubFlow : IDoHotfixWorkflow, IDoFeatureWorkflow
 {
     ///<inheritdoc/>
-    string IWorkflow.FeatureBranchSourceName => MainBranchName;
+    string IDoFeatureWorkflow.FeatureBranchSourceName => MainBranchName;
 
     ///<inheritdoc/>
-    string IHaveHotfixWorkflow.HotfixBranchSourceName => MainBranchName;
+    string IDoHotfixWorkflow.HotfixBranchSourceName => MainBranchName;
 }

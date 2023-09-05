@@ -7,12 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### 🚀 New features
-- Added `IHotfixWorkflow` component which represent the `hotfix` workflow
+
+- Added `IDoHotfixWorkflow` component which represent the `hotfix` workflow
+- Added `IDoFeatureWorkflow` component which represent the `feature` workflow
 
 ### 🚨 Breaking changes
 
 - Removed `Github.IPullRequest.Token` property. This property was previously used by `GitHub.IGitFlowWithPullRequest` and `GitHub.IGitFlowWithPullRequest` when finishing a feature/coldfix is.
-- `IGitflow`, `IGithubflow` components extends `IHotfixWorkflow` component
 
 ### 🛠️ Fixes
 
@@ -21,6 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🧹 Housekeeping
 
 - Added `GitHubToken` value in `parameters.json` : this value will be consumed directly to interact with the github repository.
+- `IGitflow`, `IGithubflow` components extends `IDoHotfixWorkflow` component
+- `IGitflow`, `IGithubflow` components extends `IDoHotfixWorkflow` component
 
 ## [0.6.1] / 2023-08-31
 ### 🔧 Fixes
