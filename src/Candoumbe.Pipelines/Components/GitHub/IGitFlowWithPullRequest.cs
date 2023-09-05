@@ -33,7 +33,7 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest
     }).Replace('-', ' ');
 
     ///<inheritdoc/>
-    async ValueTask IWorkflow.FinishFeature()
+    async ValueTask IDoFeatureWorkflow.FinishFeature()
     {
         string linkToIssueKeyWord = Issues.AtLeastOnce()
             ? string.Join(',', Issues.Select(issueNumber => $"Resolves #{issueNumber}").ToArray())

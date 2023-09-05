@@ -61,7 +61,8 @@
     <Compile Include="..\src\Candoumbe.Pipelines\Components\Workflows\IHaveDevelopBranch.cs" Link="Components\Workflows\IHaveDevelopBranch.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\Workflows\IHaveMainBranch.cs" Link="Components\Workflows\IHaveMainBranch.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\Workflows\IWorkflow.cs" Link="Components\Workflows\IWorkflow.cs" />
-    <Compile Include="..\src\Candoumbe.Pipelines\Components\Workflows\IHaveHotfixWorkflow.cs" Link="Components\Workflows\IHaveHotfixWorkflow.cs" />
+    <Compile Include="..\src\Candoumbe.Pipelines\Components\Workflows\IDoHotfixWorkflow.cs" Link="Components\Workflows\IDoHotfixWorkflow.cs" />
+    <Compile Include="..\src\Candoumbe.Pipelines\Components\Workflows\IDoFeatureWorkflow.cs" Link="Components\Workflows\IDoFeatureWorkflow.cs" />
   </ItemGroup>
 
 
