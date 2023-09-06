@@ -6,7 +6,7 @@ using Nuke.Common.Tools.GitVersion;
 
 using System;
 using System.Threading.Tasks;
-
+using JetBrains.Annotations;
 using static Nuke.Common.Tools.Git.GitTasks;
 using static Serilog.Log;
 
@@ -18,7 +18,7 @@ namespace Candoumbe.Pipelines.Components;
 /// <remarks>
 /// This interface will provide several ready to use targets to effectively manages this workflow even when the underlying "git" command does not support the gitflow verbs.
 /// </remarks>
-public interface IGitFlow : IDoHotfixWorkflow, IDoFeatureWorkflow, IHaveDevelopBranch
+public interface IGitFlow : IDoHotfixWorkflow, IDoColdfixWorkflow, IHaveDevelopBranch
 {
     /// <summary>
     /// Name of the release branch
@@ -30,16 +30,9 @@ public interface IGitFlow : IDoHotfixWorkflow, IDoFeatureWorkflow, IHaveDevelopB
     /// </summary>
     public string ReleaseBranchPrefix => "release";
 
-    /// <summary>
-    /// Defines the name of the branch where a "coldfix/*" branch should be merged back to (once finished).
-    /// </summary>
-    /// <remarks>
-    /// This property should never return <see langword="null"/>.
-    /// </remarks>
-    string ColdfixBranchSourceName => FeatureBranchSourceName;
 
     ///<inheritdoc/>
-    string IDoFeatureWorkflow.FeatureBranchSourceName => DevelopBranchName;
+    string IDoFeatureWorkflow.FeatureBranchSourceName => IHaveDevelopBranch.DevelopBranchName;
 
     ///<inheritdoc/>
     string IDoHotfixWorkflow.HotfixBranchSourceName => MainBranchName;
@@ -72,32 +65,11 @@ public interface IGitFlow : IDoHotfixWorkflow, IDoFeatureWorkflow, IHaveDevelopB
                 await FinishRelease();
             }
         });
-
-    /// <summary>
-    /// Creates a new coldfix branch from the develop branch.
-    /// </summary>
-    public Target Coldfix => _ => _
-        .Description($"Starts a new coldfix development by creating the associated '{ColdfixBranchPrefix}/{{name}}' from {DevelopBranchName}")
-        .Requires(() => IsLocalBuild)
-        .Requires(() => !GitRepository.Branch.Like($"{ColdfixBranchPrefix}/*", true) || GitHasCleanWorkingCopy())
-        .Executes(async () =>
-        {
-            if (!GitRepository.Branch.Like($"{ColdfixBranchPrefix}/*"))
-            {
-                Information("Enter the name of the coldfix. It will be used as the name of the coldfix/branch (leave empty to exit) :");
-                AskBranchNameAndSwitchToIt(ColdfixBranchPrefix, DevelopBranchName);
-                Information($"{EnvironmentInfo.NewLine}Good bye !");
-            }
-            else
-            {
-                await FinishColdfix();
-            }
-        });
-
+    
     /// <summary>
     /// Merges a <see cref="IWorkflow.ColdfixBranchPrefix"/> back to <see cref="IHaveDevelopBranch.DevelopBranchName"/> branch
     /// </summary>
-    async virtual ValueTask FinishColdfix() => await FinishFeature();
+    async ValueTask IDoColdfixWorkflow.FinishColdfix() => await FinishFeature();
 
     /// <summary>
     /// Merges the current <see cref="ReleaseBranch"/> or <see cref="IWorkflow.HotfixBranchPrefix"/> branch back to <see cref="IHaveMainBranch.MainBranchName"/>.

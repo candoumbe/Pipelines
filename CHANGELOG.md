@@ -8,8 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### 🚀 New features
 
-- Added `IDoHotfixWorkflow` component which represent the `hotfix` workflow
-- Added `IDoFeatureWorkflow` component which represent the `feature` workflow
+- Added `IDoHotfixWorkflow` component which represents the `hotfix` workflow
+- Added `IDoFeatureWorkflow` component which represents the `feature` workflow
+- Added `IDoColdfixWorkflow` component which represents the `coldfix` workflow
 
 ### 🚨 Breaking changes
 

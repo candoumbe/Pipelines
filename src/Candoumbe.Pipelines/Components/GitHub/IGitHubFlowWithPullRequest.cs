@@ -14,7 +14,6 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 using static Nuke.Common.Tools.Git.GitTasks;
-using static Nuke.Common.Tools.GitHub.GitHubTasks;
 using static Nuke.Common.Utilities.ConsoleUtility;
 using static Serilog.Log;
 
@@ -29,11 +28,10 @@ namespace Candoumbe.Pipelines.Components.GitHub
         /// The title of the PR that will be created
         /// </summary>
         [Parameter("Title that will be used when creating a PR")]
-        string Title => TryGetValue(() => Title) ?? ((GitRepository.IsOnFeatureBranch(), GitRepository.IsOnReleaseBranch(), GitRepository.IsOnHotfixBranch(), GitRepository.Branch.Like($"{ColdfixBranchPrefix}/*")) switch
+        string Title => TryGetValue(() => Title) ?? ((GitRepository.IsOnFeatureBranch(), GitRepository.IsOnReleaseBranch(), GitRepository.IsOnHotfixBranch()) switch
         {
-            (true, _, _, _) => $"[FEATURE] {GitRepository.Branch.Replace($"{FeatureBranchPrefix}/", string.Empty).ToTitleCase()}",
-            (_, _, true, _) => $"[HOTFIX] {GitRepository.Branch.Replace($"{HotfixBranchPrefix}/", string.Empty).ToTitleCase()}",
-            (_, _, _, true) => $"[COLDFIX] {GitRepository.Branch.Replace($"{ColdfixBranchPrefix}/", string.Empty).ToTitleCase()}",
+            (true, _, _) => $"[FEATURE] {GitRepository?.Branch?.Replace($"{FeatureBranchPrefix}/", string.Empty).ToTitleCase()}",
+            (_, _, true) => $"[HOTFIX] {GitRepository?.Branch?.Replace($"{HotfixBranchPrefix}/", string.Empty).ToTitleCase()}",
             _ => GitRepository.Branch.ToTitleCase()
         }).Replace('-', ' ');
 
@@ -87,7 +85,7 @@ namespace Candoumbe.Pipelines.Components.GitHub
 
             string title = (Console.ReadLine()) switch
             {
-                string value when !string.IsNullOrWhiteSpace(value) => value.Trim(),
+                { } value when !string.IsNullOrWhiteSpace(value) => value.Trim(),
                 _ => Title
             };
 
