@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `IDoHotfixWorkflow` component which represents the `hotfix` workflow
 - Added `IDoFeatureWorkflow` component which represents the `feature` workflow
 - Added `IDoColdfixWorkflow` component which represents the `coldfix` workflow
+- `ICreateGithubRelease.Assets` property can be used to specify which artifacts to associate with a Github release ([#103](https://github.com/candoumbe/Pipelines/issues/103))
 
 ### 🚨 Breaking changes
 
