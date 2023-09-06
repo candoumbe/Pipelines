@@ -22,9 +22,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### 🧹 Housekeeping
 
-- Added `GitHubToken` value in `parameters.json` : this value will be consumed directly to interact with the github repository.
+- Added `GitHubToken` value in `parameters.local.json` : this value will be consumed directly to interact with the github repository.
 - `IGitflow`, `IGithubflow` components extends `IDoHotfixWorkflow` component
 - `IGitflow`, `IGithubflow` components extends `IDoHotfixWorkflow` component
+- Added `NugetApi` valuen in `parameters.local.json` to interact directly with NuGet from local environment
 
 ## [0.6.1] / 2023-08-31
 ### 🔧 Fixes
