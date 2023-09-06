@@ -63,6 +63,7 @@
     <Compile Include="..\src\Candoumbe.Pipelines\Components\Workflows\IWorkflow.cs" Link="Components\Workflows\IWorkflow.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\Workflows\IDoHotfixWorkflow.cs" Link="Components\Workflows\IDoHotfixWorkflow.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\Workflows\IDoFeatureWorkflow.cs" Link="Components\Workflows\IDoFeatureWorkflow.cs" />
+    <Compile Include="..\src\Candoumbe.Pipelines\Components\Workflows\IDoColdfixWorkflow.cs" Link="Components\Workflows\IDoColdfixWorkflow.cs" />
   </ItemGroup>
 
 

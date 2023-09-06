@@ -18,11 +18,6 @@ namespace Candoumbe.Pipelines.Components.Workflows;
 public interface IWorkflow : IHaveGitRepository, IHaveMainBranch, IHaveGitVersion, IHaveChangeLog
 {
     /// <summary>
-    /// Prefix used to name coldfix branches
-    /// </summary>
-    public string ColdfixBranchPrefix => "coldfix";
-
-    /// <summary>
     /// Indicates if any changes should be stashed automatically prior to switching branch (Default : true
     /// </summary>
     [Parameter("Indicates if any changes should be stashed automatically prior to switching branch (Default : true)")]
