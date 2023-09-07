@@ -16,10 +16,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🚨 Breaking changes
 
 - Removed `Github.IPullRequest.Token` property. This property was previously used by `GitHub.IGitFlowWithPullRequest` and `GitHub.IGitFlowWithPullRequest` when finishing a feature/coldfix is.
+- Refactored `IWorkflow` component and removed inheritance from `IHaveMainBranch` component
 
 ### 🛠️ Fixes
 
-- Removed `nofetch` option when calling `gitversion` tool.
+- Removed `nofetch` option (when calling `gitversion` tool) in order to compute semver version number more accurately ([#96](https://github.com/candoumbe/Pipelines/issues/96)).
 
 ### 🧹 Housekeeping
 
