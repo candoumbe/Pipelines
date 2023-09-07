@@ -15,7 +15,7 @@ namespace Candoumbe.Pipelines.Components.Workflows;
 /// <summary>
 /// Marker interface for git repository that support a specific workflow
 /// </summary>
-public interface IWorkflow : IHaveGitRepository, IHaveMainBranch, IHaveGitVersion, IHaveChangeLog
+public interface IWorkflow : IHaveGitRepository, IHaveGitVersion, IHaveChangeLog
 {
     /// <summary>
     /// Indicates if any changes should be stashed automatically prior to switching branch (Default : true

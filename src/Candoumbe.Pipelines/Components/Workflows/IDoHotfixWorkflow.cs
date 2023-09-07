@@ -14,7 +14,7 @@ namespace Candoumbe.Pipelines.Components.Workflows;
 /// It provides properties and a target for managing hotfix workflows, including starting a new hotfix branch and merging it back to the main branch.
 /// </para>
 /// </summary>
-public interface IDoHotfixWorkflow : IWorkflow
+public interface IDoHotfixWorkflow : IWorkflow, IHaveMainBranch
 {
     /// <summary>
     /// Gets the prefix used to name hotfix branches.

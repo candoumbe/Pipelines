@@ -2,13 +2,8 @@
 
 using Nuke.Common;
 using Nuke.Common.Git;
-using Nuke.Common.Tools.GitVersion;
-
-using System;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 using static Nuke.Common.Tools.Git.GitTasks;
-using static Serilog.Log;
 
 namespace Candoumbe.Pipelines.Components;
 
@@ -30,7 +25,6 @@ public interface IGitFlow : IDoHotfixWorkflow, IDoColdfixWorkflow, IHaveDevelopB
     /// </summary>
     public string ReleaseBranchPrefix => "release";
 
-
     ///<inheritdoc/>
     string IDoFeatureWorkflow.FeatureBranchSourceName => IHaveDevelopBranch.DevelopBranchName;
 
@@ -51,7 +45,6 @@ public interface IGitFlow : IDoHotfixWorkflow, IDoColdfixWorkflow, IHaveDevelopB
         .Requires(() => !GitRepository.IsOnReleaseBranch() || GitHasCleanWorkingCopy())
         .Executes(async () =>
         {
-
             if (!GitRepository.IsOnReleaseBranch())
             {
                 string majorMinorPatchVersion = Major
@@ -65,14 +58,14 @@ public interface IGitFlow : IDoHotfixWorkflow, IDoColdfixWorkflow, IHaveDevelopB
                 await FinishRelease();
             }
         });
-    
+
     /// <summary>
-    /// Merges a <see cref="IWorkflow.ColdfixBranchPrefix"/> back to <see cref="IHaveDevelopBranch.DevelopBranchName"/> branch
+    /// Merges a <see cref="IDoColdfixWorkflow.ColdfixBranchPrefix"/> back to <see cref="IHaveDevelopBranch.DevelopBranchName"/> branch
     /// </summary>
     async ValueTask IDoColdfixWorkflow.FinishColdfix() => await FinishFeature();
 
     /// <summary>
-    /// Merges the current <see cref="ReleaseBranch"/> or <see cref="IWorkflow.HotfixBranchPrefix"/> branch back to <see cref="IHaveMainBranch.MainBranchName"/>.
+    /// Merges the current <see cref="ReleaseBranch"/> or <see cref="IDoHotfixWorkflow.HotfixBranchPrefix"/> branch back to <see cref="IHaveMainBranch.MainBranchName"/>.
     /// </summary>
     ValueTask IDoHotfixWorkflow.FinishHotfix()
     {
