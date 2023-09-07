@@ -65,7 +65,7 @@ public interface IGitFlow : IDoHotfixWorkflow, IDoColdfixWorkflow, IHaveDevelopB
     async ValueTask IDoColdfixWorkflow.FinishColdfix() => await FinishFeature();
 
     /// <summary>
-    /// Merges the current <see cref="ReleaseBranch"/> or <see cref="IDoHotfixWorkflow.HotfixBranchPrefix"/> branch back to <see cref="IHaveMainBranch.MainBranchName"/>.
+    /// Merges the current hotfix branch back to <see cref="IHaveMainBranch.MainBranchName"/>.
     /// </summary>
     ValueTask IDoHotfixWorkflow.FinishHotfix()
     {
