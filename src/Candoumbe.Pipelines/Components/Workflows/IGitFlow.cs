@@ -11,7 +11,7 @@ namespace Candoumbe.Pipelines.Components;
 /// Marks a build as supporting the <see href="https://datasift.github.io/gitflow/IntroducingGitFlow.html">git flow</see> workflow.
 /// </summary>
 /// <remarks>
-/// This interface will provide several ready to use targets to effectively manages this workflow even when the underlying "git" command does not support the gitflow verbs.
+/// This interface will provide several ready to use targets to effectively manages this workflow even when the underlying "git" command does not support gitflow verbs.
 /// </remarks>
 public interface IGitFlow : IDoHotfixWorkflow, IDoColdfixWorkflow, IHaveDevelopBranch
 {
@@ -26,7 +26,7 @@ public interface IGitFlow : IDoHotfixWorkflow, IDoColdfixWorkflow, IHaveDevelopB
     public string ReleaseBranchPrefix => "release";
 
     ///<inheritdoc/>
-    string IDoFeatureWorkflow.FeatureBranchSourceName => IHaveDevelopBranch.DevelopBranchName;
+    string IDoFeatureWorkflow.FeatureBranchSourceName => DevelopBranchName;
 
     ///<inheritdoc/>
     string IDoHotfixWorkflow.HotfixBranchSourceName => MainBranchName;

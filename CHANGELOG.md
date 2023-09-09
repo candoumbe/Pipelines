@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Removed `Github.IPullRequest.Token` property. This property was previously used by `GitHub.IGitFlowWithPullRequest` and `GitHub.IGitFlowWithPullRequest` when finishing a feature/coldfix is.
 - Refactored `IWorkflow` component and removed inheritance from `IHaveMainBranch` component
+- Refactored `ICompile` component to no longer extend `IRestore` component
+- Refactored `IPack` component to no longer extend `ICompile` component
 
 ### 🛠️ Fixes
 
