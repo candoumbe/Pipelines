@@ -114,6 +114,9 @@ public class Pipeline : NukeBuild,
     ///<inheritdoc/>
     IEnumerable<AbsolutePath> IPack.PackableProjects => SourceDirectory.GlobFiles("**/*.csproj");
 
+    ///<inheritdoc/>
+    IEnumerable<AbsolutePath> ICreateGithubRelease.Assets => this.Get<IPack>().OutputDirectory.GlobFiles("**/*.nupkg;**/*.snupkg");
+
 
     ///<inheritdoc/>
     IEnumerable<PushNugetPackageConfiguration> IPushNugetPackages.PublishConfigurations => new PushNugetPackageConfiguration[]
