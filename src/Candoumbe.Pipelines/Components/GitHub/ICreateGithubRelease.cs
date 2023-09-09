@@ -22,7 +22,7 @@ namespace Candoumbe.Pipelines.Components.GitHub;
 public interface ICreateGithubRelease : IHaveGitHubRepository, IHaveChangeLog, IHaveGitVersion
 {
     /// <summary>
-    /// Collection of assets to add to the published release.
+    /// Collection of assets/files to add to the published release.
     /// </summary>
     /// <remarks>
     /// Files will be zipped and added to the release
@@ -66,14 +66,17 @@ public interface ICreateGithubRelease : IHaveGitHubRepository, IHaveChangeLog, I
                                                                                .ConfigureAwait(false);
                 await Assets.ForEachAsync(async asset =>
                 {
-                    ReleaseAssetUpload assetToUpload = new ReleaseAssetUpload
+                    if (asset.Exists())
                     {
-                        ContentType = ContentType.File.ToString(),
-                        FileName = asset.ToFileInfo().Name,
-                        RawData = new MemoryStream(File.ReadAllBytes(asset))
-                    };
+                        ReleaseAssetUpload assetToUpload = new ReleaseAssetUpload
+                        {
+                            ContentType = ContentType.File.ToString(),
+                            FileName = asset.ToFileInfo().Name,
+                            RawData = new MemoryStream(File.ReadAllBytes(asset))
+                        };
 
-                    await gitHubClient.Repository.Release.UploadAsset(release, assetToUpload);
+                        await gitHubClient.Repository.Release.UploadAsset(release, assetToUpload);
+                    }
                 });
                 Information($"Github release {release.TagName} created successfully");
             }
