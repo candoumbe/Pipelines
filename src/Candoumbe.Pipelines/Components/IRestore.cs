@@ -12,7 +12,7 @@ namespace Candoumbe.Pipelines.Components;
 public interface IRestore : INukeBuild, IHaveSolution
 {
     /// <summary>
-    /// Runs "dotnet restore"
+    /// Restore dotnet project dependency
     /// </summary>
     public Target Restore => _ => _
         .TryDependsOn<IClean>(x => x.Clean)

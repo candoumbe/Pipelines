@@ -13,7 +13,7 @@ namespace Candoumbe.Pipelines.Components.Docker;
 /// <summary>
 /// Marks a pipeline that can compile a <see cref="IHaveSolution.Solution"/>
 /// </summary>
-public interface IBuildDockerImage : IHaveConfiguration
+public interface IBuildDockerImage : INukeBuild
 {
     /// <summary>
     /// Gets the docker files to build
