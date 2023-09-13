@@ -98,10 +98,6 @@ public interface IMutationTest : IHaveTests
 
                 Verbose("{ProjetName} will run mutation tests for the following frameworks : {@Frameworks}", sourceProject.Name, sourceProject.GetTargetFrameworks());
 
-                MutationTestRunConfiguration mutationTestRunConfiguration = (configFile?.FileExists() is true
-                                ? configFile.ReadJson<MutationTestRunConfiguration>()
-                                : null);
-
                 Arguments args = new();
                 args = args.Apply(StrykerArgumentsSettingsBase)
                            .Apply(StrykerArgumentsSettings);
@@ -115,6 +111,11 @@ public interface IMutationTest : IHaveTests
                 strykerArgs = strykerArgs.Concatenate(args);
 
                 strykerArgs.Add(@"--project {value}", sourceProject.Name);
+
+                if (configFile is not null)
+                {
+                    strykerArgs.Add(@"--config-file {value}", configFile);
+                }
 
                 testsProjects.ForEach(project =>
                 {
