@@ -123,7 +123,7 @@ public interface IMutationTest : IHaveTests
 
                 switch (this)
                 {
-                    case IGitFlow gitFlow when gitFlow.GitRepository is { } gitflowRepository:
+                    case IGitFlow { GitRepository: { } gitflowRepository } gitFlow:
                         {
                             strykerArgs = strykerArgs.Add("--version {value}", gitflowRepository.Commit ?? gitflowRepository.Branch);
                             switch (gitflowRepository.Branch)
@@ -158,7 +158,7 @@ public interface IMutationTest : IHaveTests
                             break;
                         }
 
-                    case IGitHubFlow gitHubFlow when gitHubFlow.GitRepository is { } githubFlowRepository:
+                    case IGitHubFlow { GitRepository: { } githubFlowRepository } gitHubFlow:
                         {
                             strykerArgs = strykerArgs.Add("--version {value}", githubFlowRepository.Commit ?? githubFlowRepository.Branch);
                             if (githubFlowRepository.Branch is { Length: > 0 } branchName && !string.Equals(branchName, IGitHubFlow.MainBranchName, StringComparison.InvariantCultureIgnoreCase))
@@ -216,21 +216,22 @@ public record MutationProjectConfiguration
     public Project SourceProject { get; }
 
     /// <summary>
-    /// Set
+    /// The set of projects used to validate the mutation performed.
     /// </summary>
     public IReadOnlySet<Project> TestProjects { get; }
 
     /// <summary>
-    /// Path to the JSON configuration file to use when running mutation tests for <see cref="SourceProject"/>
+    /// The path to the configuration file used by the mutation testing tool.
     /// </summary>
     public AbsolutePath ConfigurationFile { get; init; }
 
     /// <summary>
-    /// Builds a new <see cref="MutationProjectConfiguration"/>
+    /// Initializes a new instance of the <see cref="MutationProjectConfiguration"/> class.
     /// </summary>
-    /// <param name="sourceProject">The project onto which mutation will be performed</param>
-    /// <param name="testProjects">List of projects that will be used to validate mutation performed. These are usually</param>
-    /// <param name="configurationFile">Path to the configuration file that can be used by Stryker when running mutation tests.</param>
+    /// <param name="sourceProject">The project for which mutation tests will be run.</param>
+    /// <param name="testProjects">The set of projects used to validate the mutation performed.</param>
+    /// <param name="configurationFile">The path to the configuration file used by the mutation testing tool.</param>
+    /// <exception cref="ArgumentNullException">if either <paramref name="sourceProject"/> or <paramref name="testProjects"/> is <see langword="null"/>.</exception>
     public MutationProjectConfiguration(Project sourceProject, IEnumerable<Project> testProjects, AbsolutePath configurationFile = default)
     {
         SourceProject = sourceProject ?? throw new ArgumentNullException(nameof(sourceProject));
@@ -238,7 +239,12 @@ public record MutationProjectConfiguration
         ConfigurationFile = configurationFile;
     }
 
-    ///<inheritdoc/>
+    /// <summary>
+    /// Deconstructs the <see cref="MutationProjectConfiguration"/> into its individual properties.
+    /// </summary>
+    /// <param name="sourceProject">The project for which mutation tests will be run.</param>
+    /// <param name="testProjects">The set of projects used to validate the mutation performed.</param>
+    /// <param name="configurationFile">The path to the configuration file used by the mutation testing tool.</param>
     public void Deconstruct(out Project sourceProject, out IReadOnlySet<Project> testProjects, out AbsolutePath configurationFile)
     {
         sourceProject = SourceProject;
@@ -247,23 +253,71 @@ public record MutationProjectConfiguration
     }
 }
 
-file record MutationTestRunConfiguration
+/// <summary>
+/// Represents the configuration for a mutation test run.
+/// </summary>
+/// <remarks>
+/// The `MutationTestRunConfiguration` class contains information such as the module name, test projects, frameworks, and project info.
+/// </remarks>
+/// <example>
+/// <code>
+/// MutationTestRunConfiguration config = new MutationTestRunConfiguration
+/// {
+///     Module = "MyModule",
+///     TestsProjects = new string[] { "TestProject1", "TestProject2" },
+///     Frameworks = new string[] { "netcoreapp3.1", "net5.0" },
+///     ProjectInfo = new StrykerProjectInfo
+///     {
+///         Module = "MyProject",
+///         Version = "1.0.0"
+///     }
+/// };
+/// </code>
+/// </example>
+public record MutationTestRunConfiguration
 {
     /// <summary>
-    /// Name of the module under which regroup result of the current mutation test run
+    /// Gets or sets the name of the module under which the results of the mutation test run are grouped.
     /// </summary>
     public string Module { get; init; }
 
+    /// <summary>
+    /// Gets or sets the array of test project names that will be used to validate the mutation performed.
+    /// </summary>
     public string[] TestsProjects { get; init; }
 
+    /// <summary>
+    /// Gets or sets the array of target frameworks for the mutation test run.
+    /// </summary>
     public string[] Frameworks { get; init; }
 
+    /// <summary>
+    /// Gets or sets the information about the Stryker project, including the module name and version.
+    /// </summary>
     public StrykerProjectInfo ProjectInfo { get; init; }
 }
 
-file record StrykerProjectInfo
+/// <summary>
+/// Represents information about a Stryker project, including its module and version.
+/// </summary>
+/// <example>
+/// <code>
+/// StrykerProjectInfo projectInfo = new StrykerProjectInfo
+/// {
+///     Module = "MyProject",
+///     Version = "1.0.0"
+/// };
+/// </code>
+/// </example>
+public record StrykerProjectInfo
 {
+    /// <summary>
+    /// Gets or sets the name of the module under which the project is grouped.
+    /// </summary>
     public string Module { get; init; }
 
+    /// <summary>
+    /// Gets or sets the version of the project.
+    /// </summary>
     public string Version { get; init; }
 }
