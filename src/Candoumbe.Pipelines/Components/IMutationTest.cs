@@ -91,9 +91,7 @@ public interface IMutationTest : IHaveTests
                 MutationTestsProjects.ForEach(mutationProject => RunMutationTestsForTheProject(mutationProject, framework));
             }
 
-            /// <summary>
-            /// Run mutation tests for the specified project using the specified arguments
-            /// </summary>
+            // Run mutation tests for the specified project using the specified arguments
             void RunMutationTestsForTheProject(MutationProjectConfiguration mutationProject, string framework)
             {
                 (Project sourceProject, IEnumerable<Project> testsProjects, AbsolutePath configFile) = mutationProject;
@@ -117,7 +115,6 @@ public interface IMutationTest : IHaveTests
                 strykerArgs = strykerArgs.Concatenate(args);
 
                 strykerArgs.Add(@"--project {value}", sourceProject.Name);
-
 
                 testsProjects.ForEach(project =>
                 {
@@ -262,8 +259,6 @@ file record MutationTestRunConfiguration
     public string[] Frameworks { get; init; }
 
     public StrykerProjectInfo ProjectInfo { get; init; }
-
-
 }
 
 file record StrykerProjectInfo
