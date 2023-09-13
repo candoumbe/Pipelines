@@ -34,6 +34,7 @@ this new type allows to specify the path to the configuration file to use during
 - `IGitflow`, `IGithubflow` components extends `IDoHotfixWorkflow` component
 - `IGitflow`, `IGithubflow` components extends `IDoHotfixWorkflow` component
 - Added `NugetApi` valuen in `parameters.local.json` to interact directly with NuGet from local environment
+- Added documentation for `IMutationTest` classes
 
 ## [0.6.1] / 2023-08-31
 ### 🔧 Fixes
