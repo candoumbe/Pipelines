@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Refactored `IWorkflow` component and removed inheritance from `IHaveMainBranch` component
 - Refactored `ICompile` component to no longer extend `IRestore` component
 - Refactored `IPack` component to no longer extend `ICompile` component
-- Refactored `IMutationTest.MutationTestsProjects` type from `(Project SourceProject, IEnumerable<Project> TestsProjects)` to `IEnumerable<MutationTestProjectConfiguration>`:
+- Refactored `IMutationTest.MutationTestsProjects` type from `(Project SourceProject, IEnumerable<Project> TestsProjects)` to [`MutationTestProjectConfiguration`](./src/Candoumbe.Pipelines/Components/IMutationTest.cs):
 this new type allows to specify the path to the configuration file to use during each mutation test run.
 - `IMutationTest` component no longer implements `IUnitTest` but only `IHaveTests`
 
