@@ -110,11 +110,11 @@ public interface IMutationTest : IHaveTests
 
                 strykerArgs = strykerArgs.Concatenate(args);
 
-                strykerArgs.Add(@"--project {value}", sourceProject.Name);
+                strykerArgs = strykerArgs.Add(@"--project {value}", $"{sourceProject.Name}{sourceProject.Path.Extension}");
 
                 if (configFile is not null)
                 {
-                    strykerArgs.Add(@"--config-file {value}", configFile);
+                    strykerArgs = strykerArgs.Add(@"--config-file {value}", configFile);
                 }
 
                 testsProjects.ForEach(project =>
@@ -129,18 +129,18 @@ public interface IMutationTest : IHaveTests
                             strykerArgs = strykerArgs.Add("--version {value}", gitflowRepository.Commit ?? gitflowRepository.Branch);
                             switch (gitflowRepository.Branch)
                             {
-                                case string branchName when string.Equals(branchName, IGitFlow.DevelopBranchName, StringComparison.InvariantCultureIgnoreCase):
+                                case { } branchName when string.Equals(branchName, IHaveDevelopBranch.DevelopBranchName, StringComparison.InvariantCultureIgnoreCase):
                                     {
                                         // we are in git flow so we can compare develop with main branch
-                                        strykerArgs = strykerArgs.Add("--with-baseline:{value}", IGitFlow.MainBranchName);
+                                        strykerArgs = strykerArgs.Add("--with-baseline:{value}", IHaveMainBranch.MainBranchName);
                                     }
                                     break;
-                                case string branchName when branchName.Like($"{gitFlow.FeatureBranchPrefix}/*", true):
+                                case { } branchName when branchName.Like($"{gitFlow.FeatureBranchPrefix}/*", true):
                                     {
                                         strykerArgs = strykerArgs.Add("--with-baseline:{value}", gitFlow.FeatureBranchSourceName);
                                     }
                                     break;
-                                case string branchName when branchName.Like($"{gitFlow.ColdfixBranchPrefix}/*", true):
+                                case { } branchName when branchName.Like($"{gitFlow.ColdfixBranchPrefix}/*", true):
                                     {
                                         strykerArgs = strykerArgs.Add("--with-baseline:{value}", gitFlow.ColdfixBranchSourceName);
                                     }
@@ -148,7 +148,7 @@ public interface IMutationTest : IHaveTests
                                 default:
                                     {
                                         // By default we try to compare the current commit with the previous one (if any).
-                                        if (gitflowRepository.Head is string head)
+                                        if (gitflowRepository.Head is { } head)
                                         {
                                             strykerArgs = strykerArgs.Add("--with-baseline:{value}", head);
                                         }
@@ -162,9 +162,9 @@ public interface IMutationTest : IHaveTests
                     case IGitHubFlow { GitRepository: { } githubFlowRepository } gitHubFlow:
                         {
                             strykerArgs = strykerArgs.Add("--version {value}", githubFlowRepository.Commit ?? githubFlowRepository.Branch);
-                            if (githubFlowRepository.Branch is { Length: > 0 } branchName && !string.Equals(branchName, IGitHubFlow.MainBranchName, StringComparison.InvariantCultureIgnoreCase))
+                            if (githubFlowRepository.Branch is { Length: > 0 } branchName && !string.Equals(branchName, IHaveMainBranch.MainBranchName, StringComparison.InvariantCultureIgnoreCase))
                             {
-                                strykerArgs = strykerArgs.Add("--with-baseline:{0}", IGitHubFlow.MainBranchName);
+                                strykerArgs = strykerArgs.Add("--with-baseline:{0}", IHaveMainBranch.MainBranchName);
                             }
 
                             break;

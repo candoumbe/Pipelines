@@ -27,6 +27,7 @@ this new type allows to specify the path to the configuration file to use during
 ### 🛠️ Fixes
 
 - Removed `nofetch` option (when calling `gitversion` tool) in order to compute semver version number more accurately ([#96](https://github.com/candoumbe/Pipelines/issues/96)).
+- `IMutationTest.MutationTests` output the value of the `--project` parameter **with** the filename extension ([#109](https://github.com/candoumbe/Pipelines/issues/109))
 
 ### 🧹 Housekeeping
 
