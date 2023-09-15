@@ -38,6 +38,7 @@ public interface IMutationTest : IHaveTests
     /// Api Key us
     /// </summary>
     [Parameter("API KEY used to submit mutation report to a stryker dashboard")]
+    [Secret]
     public string StrykerDashboardApiKey => TryGetValue(() => StrykerDashboardApiKey);
 
     /// <summary>
