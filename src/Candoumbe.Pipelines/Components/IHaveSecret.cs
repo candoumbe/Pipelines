@@ -1,4 +1,5 @@
-﻿using Nuke.Common;
+﻿using System;
+using Nuke.Common;
 using Nuke.Common.Tooling;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 using static Serilog.Log;
@@ -11,6 +12,7 @@ namespace Candoumbe.Pipelines.Components;
 /// <remarks>
 /// The default implementation requires nuke to be install locally
 /// </remarks>
+[Obsolete("This component will be removed starting 0.8.0. Check https://www.nuke.build/docs/global-tool/secrets/ to see how you can manage secrets using nuke.")]
 public interface IHaveSecret : INukeBuild
 {
     /// <summary>
