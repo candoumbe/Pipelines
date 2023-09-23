@@ -13,41 +13,10 @@ using static Serilog.Log;
 namespace Candoumbe.Pipelines.Components.Workflows;
 
 /// <summary>
-/// Marker interface for repository that support a workflow
+/// Marker interface for git repository that support a specific workflow
 /// </summary>
-public interface IWorkflow : IHaveGitRepository, IHaveMainBranch, IHaveGitVersion, IHaveChangeLog
+public interface IWorkflow : IHaveGitRepository, IHaveGitVersion, IHaveChangeLog
 {
-    /// <summary>
-    /// Prefix used to name coldfix branches
-    /// </summary>
-    public string ColdfixBranchPrefix => "coldfix";
-
-    /// <summary>
-    /// Prefix used to name feature branches
-    /// </summary>
-    public string FeatureBranchPrefix => "feature";
-
-    /// <summary>
-    /// Prefix used to name hotfix branches
-    /// </summary>
-    public string HotfixBranchPrefix => "hotfix";
-
-    /// <summary>
-    /// Name of the branch to use when starting a new feature
-    /// </summary>
-    /// <remarks>
-    /// This property should never return <see langword="null"/>
-    /// </remarks>
-    string FeatureBranchSourceName { get; }
-
-    /// <summary>
-    /// Name of the branch to use when starting a new hotfix branch
-    /// </summary>
-    /// <remarks>
-    /// This property should never return <see langword="null"/>.
-    /// </remarks>
-    string HotfixBranchSourceName { get; }
-
     /// <summary>
     /// Indicates if any changes should be stashed automatically prior to switching branch (Default : true
     /// </summary>
@@ -59,27 +28,6 @@ public interface IWorkflow : IHaveGitRepository, IHaveMainBranch, IHaveGitVersio
     /// </summary>
     [Parameter("Name of the branch to create")]
     string Name => TryGetValue(() => Name);
-
-    /// <summary>
-    /// Creates a new hotfix branch from the main branch.
-    /// </summary>
-    public Target Hotfix => _ => _
-        .Description($"Starts a new hotfix branch '{HotfixBranchPrefix}/*' from {HotfixBranchSourceName}")
-        .DependsOn(Changelog)
-        .Requires(() => IsLocalBuild)
-        .Requires(() => !GitRepository.IsOnHotfixBranch() || GitHasCleanWorkingCopy())
-        .Executes(async () =>
-        {
-
-            if (!GitRepository.IsOnHotfixBranch())
-            {
-                Checkout($"{HotfixBranchPrefix}/{GitVersion.Major}.{GitVersion.Minor}.{GitVersion.Patch + 1}", start: MainBranchName);
-            }
-            else
-            {
-                await FinishHotfix();
-            }
-        });
 
     /// <summary>
     /// Finalizes the change log so that its up to date for the release.
@@ -115,29 +63,6 @@ public interface IWorkflow : IHaveGitRepository, IHaveMainBranch, IHaveGitVersio
                 Git($"commit -m \"Finalize {Path.GetFileName(changelogFilePath)} for {version}\"");
             }
         });
-    /// <summary>
-    /// Starts a new feature development by creating the associated branch {FeatureBranchPrefix}/{{feature-name}} from {DevelopBranch}
-    /// </summary>
-    /// <remarks>
-    /// This target will instead ends a feature if the current branch is a feature/* branch with no pending changes.
-    /// </remarks>
-    public Target Feature => _ => _
-       .Description($"Starts a new feature development by creating the associated branch {FeatureBranchPrefix}/{{feature-name}} from {FeatureBranchSourceName}")
-       .Requires(() => IsLocalBuild)
-       .Requires(() => !GitRepository.IsOnFeatureBranch() || GitHasCleanWorkingCopy())
-       .Executes(async () =>
-       {
-           if (!GitRepository.IsOnFeatureBranch())
-           {
-               Information("Enter the name of the feature. It will be used as the name of the feature/branch (leave empty to exit) :");
-               AskBranchNameAndSwitchToIt(FeatureBranchPrefix, sourceBranch: FeatureBranchSourceName);
-               Information("Good bye !");
-           }
-           else
-           {
-               await FinishFeature();
-           }
-       });
 
     /// <summary>
     /// Asks the user for a branch name
@@ -172,7 +97,7 @@ public interface IWorkflow : IHaveGitRepository, IHaveMainBranch, IHaveGitVersio
                                 break;
 
                             default:
-                                Information($"{Environment.NewLine}Exiting {nameof(Feature)} task.");
+                                Information($"{Environment.NewLine}Exiting task.");
                                 exitCreatingFeature = true;
                                 break;
                         }
@@ -206,14 +131,4 @@ public interface IWorkflow : IHaveGitRepository, IHaveMainBranch, IHaveGitVersio
             Git("stash pop");
         }
     }
-
-    /// <summary>
-    /// Merges a feature branch back to <see cref="FeatureBranchSourceName"/>
-    /// </summary>
-    ValueTask FinishFeature() => ValueTask.CompletedTask;
-
-    /// <summary>
-    /// Merges a hotfix branch back to <see cref="HotfixBranchSourceName"/>
-    /// </summary>
-    ValueTask FinishHotfix() => ValueTask.CompletedTask;
 }

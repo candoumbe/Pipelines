@@ -5,8 +5,10 @@ using Nuke.Common;
 using Nuke.Common.Git;
 using Nuke.Common.IO;
 using Nuke.Common.Tools.GitHub;
-
+using Octokit;
+using System.Buffers;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using static Nuke.Common.ChangeLog.ChangelogTasks;
@@ -20,7 +22,7 @@ namespace Candoumbe.Pipelines.Components.GitHub;
 public interface ICreateGithubRelease : IHaveGitHubRepository, IHaveChangeLog, IHaveGitVersion
 {
     /// <summary>
-    /// Collection of assets to add to the published release.
+    /// Collection of assets/files to add to the published release.
     /// </summary>
     /// <remarks>
     /// Files will be zipped and added to the release
@@ -41,9 +43,9 @@ public interface ICreateGithubRelease : IHaveGitHubRepository, IHaveChangeLog, I
         {
             string repositoryName = GitRepository.GetGitHubName();
             Information("Creating a new release for {Repository}", repositoryName);
-            Octokit.GitHubClient gitHubClient = new(new Octokit.ProductHeaderValue(repositoryName))
+            GitHubClient gitHubClient = new(new ProductHeaderValue(repositoryName))
             {
-                Credentials = new Octokit.Credentials(GitHubToken)
+                Credentials = new Credentials(GitHubToken)
             };
 
             string repositoryOwner = GitRepository.GetGitHubOwner();
@@ -53,16 +55,29 @@ public interface ICreateGithubRelease : IHaveGitHubRepository, IHaveChangeLog, I
             if (!releases.AtLeastOnce(release => release.Name == MajorMinorPatchVersion))
             {
                 string[] releaseNotes = ExtractChangelogSectionNotes(ChangeLogFile, MajorMinorPatchVersion).Select(line => $"{line}\n").ToArray();
-                Octokit.NewRelease newRelease = new(MajorMinorPatchVersion)
+                NewRelease newRelease = new(MajorMinorPatchVersion)
                 {
                     TargetCommitish = GitRepository.Commit,
                     Body = string.Join("- ", releaseNotes),
                     Name = MajorMinorPatchVersion,
                 };
 
-                Octokit.Release release = await gitHubClient.Repository.Release.Create(repositoryOwner, repositoryName, newRelease)
+                Release release = await gitHubClient.Repository.Release.Create(repositoryOwner, repositoryName, newRelease)
                                                                                .ConfigureAwait(false);
+                await Assets.ForEachAsync(async asset =>
+                {
+                    if (asset.Exists())
+                    {
+                        ReleaseAssetUpload assetToUpload = new ReleaseAssetUpload
+                        {
+                            ContentType = ContentType.File.ToString(),
+                            FileName = asset.ToFileInfo().Name,
+                            RawData = new MemoryStream(File.ReadAllBytes(asset))
+                        };
 
+                        await gitHubClient.Repository.Release.UploadAsset(release, assetToUpload);
+                    }
+                });
                 Information($"Github release {release.TagName} created successfully");
             }
             else

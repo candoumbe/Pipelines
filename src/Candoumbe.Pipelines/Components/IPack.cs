@@ -16,7 +16,7 @@ namespace Candoumbe.Pipelines.Components;
 /// <summary>
 /// Contract to extend when the build can build nuget packages
 /// </summary>
-public interface IPack : IHaveArtifacts, ICompile
+public interface IPack : IHaveArtifacts, IHaveConfiguration
 {
     /// <summary>
     /// Directory that will contains packages
@@ -33,8 +33,7 @@ public interface IPack : IHaveArtifacts, ICompile
     /// </summary>
     public Target Pack => _ => _
         .TryDependsOn<IUnitTest>(x => x.UnitTests)
-        .DependsOn(Compile)
-        .Consumes(Compile)
+        .TryDependsOn<ICompile>()
         .Produces(PackagesDirectory / "*.nupkg",
                   PackagesDirectory / "*.snupkg")
         .Executes(() =>
@@ -60,8 +59,8 @@ public interface IPack : IHaveArtifacts, ICompile
         .EnableIncludeSource()
         .EnableIncludeSymbols()
         .SetOutputDirectory(PackagesDirectory)
-        .SetNoBuild(SucceededTargets.Contains(Compile) || SkippedTargets.Contains(Compile))
-        .SetNoRestore(SucceededTargets.Contains(Restore) || SucceededTargets.Contains(Compile))
+        .WhenNotNull(this.As<ICompile>(), (_, compile) => _.SetNoBuild(SucceededTargets.Contains(compile.Compile) || SkippedTargets.Contains(compile.Compile)))
+        .WhenNotNull(this.As<IRestore>(), (_, restore) => _.SetNoRestore(SucceededTargets.Contains(restore.Restore) || SucceededTargets.Contains(restore.Restore)))
         .SetConfiguration(Configuration)
         .SetSymbolPackageFormat(DotNetSymbolPackageFormat.snupkg)
         .WhenNotNull(this.As<IHaveGitVersion>(),

@@ -20,7 +20,7 @@ using static Nuke.Common.Tools.ReportGenerator.ReportGeneratorTasks;
 /// This component requires <see href="https://nuget.org/packages/reportgenerator">ReportGenerator tool</see>
 /// </remarks>
 [NuGetPackageRequirement("ReportGenerator")]
-public interface IReportCoverage : IUnitTest
+public interface IReportCoverage : IUnitTest, IRequireNuGetPackage
 {
     /// <summary>
     /// The API key used to push code coverage to CodeCov

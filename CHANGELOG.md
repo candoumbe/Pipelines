@@ -7,6 +7,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0] / 2023-09-23
+### 🚀 New features
+
+- Added `IDoHotfixWorkflow` component which represents the `hotfix` workflow
+- Added `IDoFeatureWorkflow` component which represents the `feature` workflow
+- Added `IDoColdfixWorkflow` component which represents the `coldfix` workflow
+- `ICreateGithubRelease.Assets` property can be used to specify which artifacts to associate with a Github release ([#103](https://github.com/candoumbe/Pipelines/issues/103))
+- `IMutationTest` component can send `--config-file` option to Stryker CLI ([#90](https://github.com/candoumbe/Pipelines/issues/90))
+
+### 🚨 Breaking changes
+
+- Removed `Github.IPullRequest.Token` property. This property was previously used by `GitHub.IGitFlowWithPullRequest` and `GitHub.IGitFlowWithPullRequest` when finishing a feature/coldfix is.
+- Refactored `IWorkflow` component and removed inheritance from `IHaveMainBranch` component
+- Refactored `ICompile` component to no longer extend `IRestore` component
+- Refactored `IPack` component to no longer extend `ICompile` component
+- Refactored `IMutationTest.MutationTestsProjects` type from `(Project SourceProject, IEnumerable<Project> TestsProjects)` to [`MutationTestProjectConfiguration`](./src/Candoumbe.Pipelines/Components/IMutationTest.cs):
+this new type allows to specify the path to the configuration file to use during each mutation test run.
+- `IMutationTest` component no longer implements `IUnitTest` but only `IHaveTests`
+
+### 🛠️ Fixes
+
+- Removed `nofetch` option (when calling `gitversion` tool) in order to compute semver version number more accurately ([#96](https://github.com/candoumbe/Pipelines/issues/96)).
+- `IMutationTest.MutationTests` output the value of the `--project` parameter **with** the filename extension ([#109](https://github.com/candoumbe/Pipelines/issues/109))
+- Marked `IMutationTest.StrykerDashboardApiKey` property as a secret ([#110](https://github.com/candoumbe/Pipelines/issues/110)).
+
+### 🧹 Housekeeping
+
+- Refactoring of `IMutationTest` component to improve maintenability : the way CLI options required by Stryker are computed is now centralized.
+- Added `GitHubToken` value in `parameters.local.json` : this value will be consumed directly to interact with the github repository.
+- `IGitflow`, `IGithubflow` components extends `IDoHotfixWorkflow` component
+- `IGitflow`, `IGithubflow` components extends `IDoHotfixWorkflow` component
+- Added `NugetApi` valuen in `parameters.local.json` to interact directly with NuGet from local environment
+- Added documentation for `IMutationTest` classes
+- Deprecated `IHaveSecret` component ([#94](https://github.com/candoumbe/Pipelines/issues/94))
+
 ## [0.6.1] / 2023-08-31
 ### 🔧 Fixes
 - Fixed the way arguments sent to nuke CLI are rendered when calling `IHaveSecret.ManageSecrets` target.
@@ -201,6 +236,21 @@ So now `{MutationTestDirectory}/[{framework}]` is now changed to `{MutationTestD
 [0.1.0]: https://github.com/candoumbe/Pipelines/tree/0.1.0
 
 [Unreleased]: https://github.com/candoumbe/Pipelines/compare/0.6.1...HEAD
+[0.6.1]: https://github.com/candoumbe/Pipelines/compare/0.6.0...0.6.1
+[0.6.0]: https://github.com/candoumbe/Pipelines/compare/0.5.0...0.6.0
+[0.5.0]: https://github.com/candoumbe/Pipelines/compare/0.4.5...0.5.0
+[0.4.5]: https://github.com/candoumbe/Pipelines/compare/0.4.4...0.4.5
+[0.4.4]: https://github.com/candoumbe/Pipelines/compare/0.4.3...0.4.4
+[0.4.3]: https://github.com/candoumbe/Pipelines/compare/0.4.2...0.4.3
+[0.4.2]: https://github.com/candoumbe/Pipelines/compare/0.4.1...0.4.2
+[0.4.1]: https://github.com/candoumbe/Pipelines/compare/0.4.0...0.4.1
+[0.4.0]: https://github.com/candoumbe/Pipelines/compare/0.3.0...0.4.0
+[0.3.0]: https://github.com/candoumbe/Pipelines/compare/0.2.0...0.3.0
+[0.2.0]: https://github.com/candoumbe/Pipelines/compare/0.1.0...0.2.0
+[0.1.0]: https://github.com/candoumbe/Pipelines/tree/0.1.0
+
+[Unreleased]: https://github.com/candoumbe/Pipelines/compare/0.7.0...HEAD
+[0.7.0]: https://github.com/candoumbe/Pipelines/compare/0.6.1...0.7.0
 [0.6.1]: https://github.com/candoumbe/Pipelines/compare/0.6.0...0.6.1
 [0.6.0]: https://github.com/candoumbe/Pipelines/compare/0.5.0...0.6.0
 [0.5.0]: https://github.com/candoumbe/Pipelines/compare/0.4.5...0.5.0

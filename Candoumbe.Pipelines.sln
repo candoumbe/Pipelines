@@ -22,6 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Éléments de solution", "�
 		LICENSE.txt = LICENSE.txt
 		README.md = README.md
 		renovate.json = renovate.json
+		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{AB4D681E-80E0-4000-AF5F-CDEBF57E749A}"

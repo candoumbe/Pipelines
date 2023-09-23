@@ -2,13 +2,8 @@
 
 using Nuke.Common;
 using Nuke.Common.Git;
-using Nuke.Common.Tools.GitVersion;
-
-using System;
 using System.Threading.Tasks;
-
 using static Nuke.Common.Tools.Git.GitTasks;
-using static Serilog.Log;
 
 namespace Candoumbe.Pipelines.Components;
 
@@ -16,9 +11,9 @@ namespace Candoumbe.Pipelines.Components;
 /// Marks a build as supporting the <see href="https://datasift.github.io/gitflow/IntroducingGitFlow.html">git flow</see> workflow.
 /// </summary>
 /// <remarks>
-/// This interface will provide several ready to use targets to effectively manages this workflow even when the underlying "git" command does not support the gitflow verbs.
+/// This interface will provide several ready to use targets to effectively manages this workflow even when the underlying "git" command does not support gitflow verbs.
 /// </remarks>
-public interface IGitFlow : IWorkflow, IHaveDevelopBranch
+public interface IGitFlow : IDoHotfixWorkflow, IDoColdfixWorkflow, IHaveDevelopBranch
 {
     /// <summary>
     /// Name of the release branch
@@ -30,19 +25,11 @@ public interface IGitFlow : IWorkflow, IHaveDevelopBranch
     /// </summary>
     public string ReleaseBranchPrefix => "release";
 
-    /// <summary>
-    /// Defines the name of the branch where a "coldfix/*" branch should be merged back to (once finished).
-    /// </summary>
-    /// <remarks>
-    /// This property should never return <see langword="null"/>.
-    /// </remarks>
-    string ColdfixBranchSourceName => FeatureBranchSourceName;
+    ///<inheritdoc/>
+    string IDoFeatureWorkflow.FeatureBranchSourceName => DevelopBranchName;
 
     ///<inheritdoc/>
-    string IWorkflow.FeatureBranchSourceName => DevelopBranchName;
-
-    ///<inheritdoc/>
-    string IWorkflow.HotfixBranchSourceName => MainBranchName;
+    string IDoHotfixWorkflow.HotfixBranchSourceName => MainBranchName;
 
     /// <summary>
     /// Creates a new release branch from the develop branch.
@@ -58,7 +45,6 @@ public interface IGitFlow : IWorkflow, IHaveDevelopBranch
         .Requires(() => !GitRepository.IsOnReleaseBranch() || GitHasCleanWorkingCopy())
         .Executes(async () =>
         {
-
             if (!GitRepository.IsOnReleaseBranch())
             {
                 string majorMinorPatchVersion = Major
@@ -74,35 +60,14 @@ public interface IGitFlow : IWorkflow, IHaveDevelopBranch
         });
 
     /// <summary>
-    /// Creates a new coldfix branch from the develop branch.
+    /// Merges a <see cref="IDoColdfixWorkflow.ColdfixBranchPrefix"/> back to <see cref="IHaveDevelopBranch.DevelopBranchName"/> branch
     /// </summary>
-    public Target Coldfix => _ => _
-        .Description($"Starts a new coldfix development by creating the associated '{ColdfixBranchPrefix}/{{name}}' from {DevelopBranchName}")
-        .Requires(() => IsLocalBuild)
-        .Requires(() => !GitRepository.Branch.Like($"{ColdfixBranchPrefix}/*", true) || GitHasCleanWorkingCopy())
-        .Executes(async () =>
-        {
-            if (!GitRepository.Branch.Like($"{ColdfixBranchPrefix}/*"))
-            {
-                Information("Enter the name of the coldfix. It will be used as the name of the coldfix/branch (leave empty to exit) :");
-                AskBranchNameAndSwitchToIt(ColdfixBranchPrefix, DevelopBranchName);
-                Information($"{EnvironmentInfo.NewLine}Good bye !");
-            }
-            else
-            {
-                await FinishColdfix();
-            }
-        });
+    async ValueTask IDoColdfixWorkflow.FinishColdfix() => await FinishFeature();
 
     /// <summary>
-    /// Merges a <see cref="IWorkflow.ColdfixBranchPrefix"/> back to <see cref="IHaveDevelopBranch.DevelopBranchName"/> branch
+    /// Merges the current hotfix branch back to <see cref="IHaveMainBranch.MainBranchName"/>.
     /// </summary>
-    async virtual ValueTask FinishColdfix() => await FinishFeature();
-
-    /// <summary>
-    /// Merges the current <see cref="ReleaseBranch"/> or <see cref="IWorkflow.HotfixBranchPrefix"/> branch back to <see cref="IHaveMainBranch.MainBranchName"/>.
-    /// </summary>
-    ValueTask IWorkflow.FinishHotfix()
+    ValueTask IDoHotfixWorkflow.FinishHotfix()
     {
         Git($"checkout {MainBranchName}");
         Git("pull");
@@ -128,7 +93,7 @@ public interface IGitFlow : IWorkflow, IHaveDevelopBranch
     /// <summary>
     /// Merges the current feature branch back to <see cref="IHaveDevelopBranch.DevelopBranchName"/>.
     /// </summary>
-    ValueTask IWorkflow.FinishFeature()
+    ValueTask IDoFeatureWorkflow.FinishFeature()
     {
         Git($"rebase {DevelopBranchName}");
         Git($"checkout {DevelopBranchName}");

@@ -15,14 +15,14 @@ namespace Candoumbe.Pipelines.Components;
 /// <summary>
 /// Marks a pipeline that can compile a <see cref="IHaveSolution.Solution"/>
 /// </summary>
-public interface ICompile : IRestore, IHaveConfiguration
+public interface ICompile : IHaveSolution, IHaveConfiguration
 {
     /// <summary>
     /// Compiles the specified
     /// </summary>
     public Target Compile => _ => _
         .Description($"Compiles {Solution}")
-        .DependsOn<IRestore>()
+        .TryDependsOn<IRestore>()
         .Executes(() =>
         {
             Information("Compiling {Solution}", Solution);
@@ -40,7 +40,8 @@ public interface ICompile : IRestore, IHaveConfiguration
     /// Default compilation settings
     /// </summary>
     public sealed Configure<DotNetBuildSettings> CompileSettingsBase => _ => _
-                .SetNoRestore(SucceededTargets.Contains(Restore) || SkippedTargets.Contains(Restore))
+                .WhenNotNull(this.As<IRestore>(),
+                             (_, restore) => _.SetNoRestore(SucceededTargets.Contains(restore.Restore) || SkippedTargets.Contains(restore.Restore)))
                 .SetProjectFile(Solution)
                 .SetConfiguration(Configuration)
                 .SetContinuousIntegrationBuild(IsServerBuild)

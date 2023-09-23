@@ -95,9 +95,9 @@ In the example above, the build pipeline benefits from the [ICompile] component 
 
 #### `Candoumbe.Pipelines.Components.Workflows`
 
-Contains components related to branching strategies and providing tools that can help normalize how teams works in.
+This workspace contains components related to branching strategies and providing tools that can help normalize how teams works.
 
-[IGitFlow] and [IGitHubFlow] are two components that helps handle branching strategy locally.
+[IGitFlow] and [IGitHubFlow] are two main components that helps handle branching strategy locally.
 
 Some components are used to set the workflow to use throughout a repository and streamline the work of a developer and a team.
 
@@ -105,20 +105,20 @@ Some components are used to set the workflow to use throughout a repository and 
 
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
-flowchart LR
+flowchart
     A((start)) --> B[["./build feature"]]
     A -->O[["./build hotfix"]]
     O --> P{is on 'hotfix' branch ?}
     P -- yes --> finish-hotfix
     P -- no --> Q{{computes semver}}
-    Q --> R{{creates 'hotfix/semver' branch}}
+    Q --> R{{creates 'hotfix/<semver>' branch}}
     R --> S[work on your hotfix]
     S --> T{Are you done}
     T -- yes --> O
     T -- not yet --> S
     B --> C{is on 'feature/*' branch ?}
-    C -- no --> D[Creates a new feature/* branch]
     C -- yes --> finish-feature
+    C -- no --> D[Creates a new feature/* branch]
     D --> E[Work on your feature]
     E --> F{Are you done ?}
     F --yes --> B
@@ -180,7 +180,7 @@ the appropriate command to finish your release.
 
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
-flowchart LR
+flowchart
     A((start)) --> B["./build release"]
     B --> C{is on 'release/*' branch ?}
     C -- no --> create-branch
