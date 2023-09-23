@@ -70,8 +70,7 @@ public class Pipeline : NukeBuild,
     IHaveArtifacts,
     IPushNugetPackages,
     ICreateGithubRelease,
-    IGitFlowWithPullRequest,
-    IHaveSecret
+    IGitFlowWithPullRequest
 {
     ///<inheritdoc/>
     IEnumerable<AbsolutePath> IClean.DirectoriesToDelete => this.Get<IHaveSourceDirectory>().SourceDirectory.GlobDirectories("**/*/bin", "**/*/obj");
