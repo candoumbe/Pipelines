@@ -33,7 +33,7 @@
     </When>
   </Choose>
   <ItemGroup>
-    <PackageReference Include="Roslynator.Analyzers" Version="4.6.0">
+    <PackageReference Include="Roslynator.Analyzers" Version="4.6.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
