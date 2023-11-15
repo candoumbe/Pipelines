@@ -24,7 +24,7 @@ public interface IPushDockerImages : IBuildDockerImage
     IEnumerable<PushDockerImageConfiguration> Registries { get; }
 
     /// <summary>
-    /// Pushes images to the registry defined 
+    /// Pushes images to the registry defined
     /// </summary>
     public Target PushImages => _ => _
         .Description("Push docker images")

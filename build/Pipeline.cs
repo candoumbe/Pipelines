@@ -20,43 +20,43 @@ using static Nuke.Common.Tools.Git.GitTasks;
 [GitHubActions("integration",
     GitHubActionsImage.UbuntuLatest,
     AutoGenerate = true,
-    OnPushBranchesIgnore = new[] { IHaveMainBranch.MainBranchName },
+    OnPushBranchesIgnore = [IHaveMainBranch.MainBranchName],
     FetchDepth = 0,
-    InvokedTargets = new[] { nameof(ICompile.Compile), nameof(IPack.Pack), nameof(IPushNugetPackages.Publish) },
-    CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" },
+    InvokedTargets = [nameof(ICompile.Compile), nameof(IPack.Pack), nameof(IPushNugetPackages.Publish)],
+    CacheKeyFiles = ["global.json", "src/**/*.csproj"],
     EnableGitHubToken = true,
-    ImportSecrets = new[]
-    {
+    ImportSecrets =
+    [
         nameof(NugetApiKey)
-    },
+    ],
     PublishArtifacts = true,
-    OnPullRequestExcludePaths = new[]
-        {
+    OnPullRequestExcludePaths =
+        [
             "docs/*",
             "README.md",
             "CHANGELOG.md",
             "LICENSE"
-        })]
+        ])]
 [GitHubActions("delivery",
     GitHubActionsImage.UbuntuLatest,
     AutoGenerate = true,
-    OnPushBranches = new[] { IHaveMainBranch.MainBranchName },
+    OnPushBranches = [IHaveMainBranch.MainBranchName],
     FetchDepth = 0,
-    InvokedTargets = new[] { nameof(ICompile.Compile), nameof(IPack.Pack), nameof(IPushNugetPackages.Publish) },
-    CacheKeyFiles = new[] { "global.json", "src/**/*.csproj" },
+    InvokedTargets = [nameof(ICompile.Compile), nameof(IPack.Pack), nameof(IPushNugetPackages.Publish)],
+    CacheKeyFiles = ["global.json", "src/**/*.csproj"],
     EnableGitHubToken = true,
-    ImportSecrets = new[]
-    {
+    ImportSecrets =
+    [
         nameof(NugetApiKey)
-    },
+    ],
     PublishArtifacts = true,
-    OnPullRequestExcludePaths = new[]
-        {
+    OnPullRequestExcludePaths =
+        [
             "docs/*",
             "README.md",
             "CHANGELOG.md",
             "LICENSE"
-        })]
+        ])]
 public class Pipeline : NukeBuild,
     IHaveSourceDirectory,
     IHaveSolution,

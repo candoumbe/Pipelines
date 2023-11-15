@@ -14,7 +14,7 @@ public interface IHaveOutputDirectory : INukeBuild
     public string OutputDirectoryName => "output";
 
     /// <summary>
-    /// Directory where to store all files 
+    /// Directory where to store all files
     /// </summary>
     public AbsolutePath OutputDirectory => RootDirectory / OutputDirectoryName;
 }

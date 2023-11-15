@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Dropped `IHaveSecret` component ([#94](https://github.com/candoumbe/Pipelines/issues/94))
 
+### 🧹 Housekeeping
+
+- Adopted the new C#12 syntax
+- Added support for net8.0
+
 ## [0.7.0] / 2023-09-23
 ### 🚀 New features
 
