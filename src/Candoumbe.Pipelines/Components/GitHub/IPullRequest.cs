@@ -38,6 +38,6 @@ namespace Candoumbe.Pipelines.Components.GitHub
         /// The issue ID for witch pull request will be created.
         /// </summary>
         [Parameter("Issues that will be closed once the pull request is completed.")]
-        uint[] Issues => TryGetValue(() => Issues) ?? Array.Empty<uint>();
+        uint[] Issues => TryGetValue(() => Issues) ?? [];
     }
 }

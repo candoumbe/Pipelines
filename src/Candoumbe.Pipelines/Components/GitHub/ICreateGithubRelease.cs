@@ -68,9 +68,9 @@ public interface ICreateGithubRelease : IHaveGitHubRepository, IHaveChangeLog, I
                 {
                     if (asset.Exists())
                     {
-                        ReleaseAssetUpload assetToUpload = new ReleaseAssetUpload
+                        ReleaseAssetUpload assetToUpload = new()
                         {
-                            ContentType = ContentType.File.ToString(),
+                            ContentType = nameof(ContentType.File),
                             FileName = asset.ToFileInfo().Name,
                             RawData = new MemoryStream(File.ReadAllBytes(asset))
                         };

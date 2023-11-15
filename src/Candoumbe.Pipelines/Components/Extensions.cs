@@ -42,5 +42,4 @@ public static class Extensions
     /// <returns><see langword="true"/> if <see href="https://github.com/dotnet/sourcelink">SourceLink</see>
     /// enabled and <see langword="false"/> otherwise</returns>
     public static bool IsSourceLinkEnabled(this Project project) => false;
-
 }
