@@ -6,7 +6,7 @@ namespace Candoumbe.Pipelines.Components.GitHub;
 /// <summary>
 /// Marks a pipeline for repositories that are stored on <see href="https://github.com">GitHub</see>.
 /// </summary>
-public interface IHaveGitHubRepository : IHaveGitRepository, IHaveSecret
+public interface IHaveGitHubRepository : IHaveGitRepository
 {
     /// <summary>
     /// Token used to create a new GitHub release

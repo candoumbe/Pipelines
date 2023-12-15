@@ -111,16 +111,16 @@ public interface IMutationTest : IHaveTests
 
                 strykerArgs = strykerArgs.Concatenate(args);
 
-                strykerArgs = strykerArgs.Add(@"--project {value}", $"{sourceProject.Name}{sourceProject.Path.Extension}");
+                strykerArgs = strykerArgs.Add("--project {value}", $"{sourceProject.Name}{sourceProject.Path.Extension}");
 
                 if (configFile is not null)
                 {
-                    strykerArgs = strykerArgs.Add(@"--config-file {value}", configFile);
+                    strykerArgs = strykerArgs.Add("--config-file {value}", configFile);
                 }
 
                 testsProjects.ForEach(project =>
                 {
-                    strykerArgs = strykerArgs.Add(@"--test-project {value}", project.Path);
+                    strykerArgs = strykerArgs.Add("--test-project {value}", project.Path);
                 });
 
                 switch (this)

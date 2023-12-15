@@ -3,12 +3,14 @@
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <RootNamespace></RootNamespace>
     <NoWarn>CS0649;CS0169</NoWarn>
     <NukeRootDirectory>..</NukeRootDirectory>
     <NukeScriptDirectory>..</NukeScriptDirectory>
     <NukeTelemetryVersion>1</NukeTelemetryVersion>
+    <!-- TODO Leave until https://github.com/nuke-build/nuke/issues/818 is resolved -->
+    <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,7 +27,6 @@
     <Compile Include="..\src\Candoumbe.Pipelines\Components\IHaveGitVersion.cs" Link="Components\IHaveGitVersion.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\IHaveOutput.cs" Link="Components\IHaveOutput.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\IHaveReport.cs" Link="Components\IHaveReport.cs" />
-    <Compile Include="..\src\Candoumbe.Pipelines\Components\IHaveSecret.cs" Link="Components\IHaveSecret.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\IHaveSolution.cs" Link="Components\IHaveSolution.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\IHaveSourceDirectory.cs" Link="Components\IHaveSourceDirectory.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\IHaveTestDirectory.cs" Link="Components\IHaveTestDirectory.cs" />
@@ -68,7 +69,7 @@
 
 
   <ItemGroup>
-    <PackageReference Include="Nuke.Common" Version="7.0.3" PrivateAssets="all"/>
+    <PackageReference Include="Nuke.Common" Version="7.0.6" PrivateAssets="all"/>
     <PackageReference Include="Candoumbe.MiscUtilities" Version="0.11.1" />
     <PackageDownload Include="GitVersion.Tool" Version="[5.12.0]" />
   </ItemGroup>
