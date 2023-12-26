@@ -4,5 +4,6 @@
   ],
   "assignees": [ "candoumbe" ],
   "addLabels": [ "package-update" ],
-  "automerge": false
+  "automerge": false,
+  "ignoreDeps": ["Candoumbe.Pipelines"]
 }
