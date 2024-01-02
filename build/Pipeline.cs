@@ -10,7 +10,8 @@ using Nuke.Common.CI;
 using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
-
+using Nuke.Common.Tooling;
+using Nuke.Common.Tools.DotNet;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -112,6 +113,8 @@ public class Pipeline : NukeBuild,
 
     ///<inheritdoc/>
     IEnumerable<AbsolutePath> IPack.PackableProjects => SourceDirectory.GlobFiles("**/*.csproj");
+
+    Configure<DotNetBuildSettings> ICompile.CompileSettings => s => s.AddProperty("maxcpucount", 1);
 
     ///<inheritdoc/>
     IEnumerable<AbsolutePath> ICreateGithubRelease.Assets => this.Get<IPack>().OutputDirectory.GlobFiles("**/*.nupkg;**/*.snupkg");
