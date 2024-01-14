@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Adopted the new C#12 syntax
 - Added support for net8.0
+- Disbale parallel build on CI servers ([#125](https://github.com/candoumbe/Pipelines/issues/125))
 
 ## [0.7.0] / 2023-09-23
 ### 🚀 New features
