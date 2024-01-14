@@ -115,7 +115,7 @@ public class Pipeline : NukeBuild,
     IEnumerable<AbsolutePath> IPack.PackableProjects => SourceDirectory.GlobFiles("**/*.csproj");
 
     ///<inheritdoc/>
-    Configure<DotNetBuildSettings> ICompile.CompileSettings => s => s.SetDisableParallel(IsServerBuild);
+    Configure<DotNetBuildSettings> ICompile.CompileSettings => s => s.SetProcessArgumentConfigurator(args => args.Add("/property:maxcpucount={value}", 1));
 
     ///<inheritdoc/>
     IEnumerable<AbsolutePath> ICreateGithubRelease.Assets => this.Get<IPack>().OutputDirectory.GlobFiles("**/*.nupkg;**/*.snupkg");
