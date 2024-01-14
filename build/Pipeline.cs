@@ -114,6 +114,7 @@ public class Pipeline : NukeBuild,
     ///<inheritdoc/>
     IEnumerable<AbsolutePath> IPack.PackableProjects => SourceDirectory.GlobFiles("**/*.csproj");
 
+    ///<inheritdoc/>
     Configure<DotNetBuildSettings> ICompile.CompileSettings => s => s.AddProperty("maxcpucount", 1);
 
     ///<inheritdoc/>
