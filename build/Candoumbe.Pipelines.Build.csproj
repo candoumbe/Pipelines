@@ -13,13 +13,10 @@
     <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
   </PropertyGroup>
 
-
   <ItemGroup>
     <PackageReference Include="Nuke.Common" Version="7.0.6" PrivateAssets="all" />
-    <!-- <PackageReference Include="Candoumbe.MiscUtilities" Version="0.11.1" /> -->
     <PackageDownload Include="GitVersion.Tool" Version="[5.12.0]" />
   </ItemGroup>
-
 
   <ItemGroup>
     <ProjectReference Include="..\src\Candoumbe.Pipelines\Candoumbe.Pipelines.csproj" />

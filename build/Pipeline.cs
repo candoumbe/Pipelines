@@ -1,10 +1,15 @@
 namespace Candoumbe.Pipelines.Build;
 
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
+using System.Threading.Tasks;
 using Candoumbe.Pipelines.Components;
+using Candoumbe.Pipelines.Components.Formatting;
 using Candoumbe.Pipelines.Components.GitHub;
 using Candoumbe.Pipelines.Components.NuGet;
 using Candoumbe.Pipelines.Components.Workflows;
-
 using Nuke.Common;
 using Nuke.Common.CI;
 using Nuke.Common.CI.GitHubActions;
@@ -12,9 +17,6 @@ using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 using static Nuke.Common.Tools.Git.GitTasks;
 
@@ -64,6 +66,7 @@ public class Pipeline : NukeBuild,
     IHaveChangeLog,
     IClean,
     IRestore,
+    IDotnetFormat,
     ICompile,
     IPack,
     IHaveGitVersion,
@@ -153,5 +156,27 @@ public class Pipeline : NukeBuild,
         Git($"push origin --follow-tags {IHaveMainBranch.MainBranchName} {IHaveDevelopBranch.DevelopBranchName} {majorMinorPatchVersion}");
 
         return ValueTask.CompletedTask;
+    }
+
+    ///<inheritdoc/>
+    AbsolutePath IDotnetFormat.Workspace => Solution;
+
+    ///<inheritdoc/>
+    bool IDotnetFormat.VerifyNoChanges => IsServerBuild;
+
+    ///<inheritdoc/>
+    (IReadOnlyCollection<AbsolutePath> IncludedFiles, IReadOnlyCollection<AbsolutePath> ExcludedFiles) IDotnetFormat.Files
+    {
+        get
+        {
+            IReadOnlyCollection<AbsolutePath> includedFiles = Git("diff --name-status", workingDirectory: Solution.Directory)
+                        .Where(output => output.Text.AsSpan().StartsWith("M") || output.Text.AsSpan().StartsWith("A"))
+                        .Select(output => AbsolutePath.Create(output.Text.AsSpan()[1..].TrimStart().ToString()))
+                        .ToArray();
+
+            IReadOnlyCollection<AbsolutePath> excludedFiles = [];
+
+            return (includedFiles, excludedFiles);
+        }
     }
 }

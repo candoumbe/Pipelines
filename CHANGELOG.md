@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### 🚀 New features
+- Added `IFormat` component
+- Added `IDotnetFormat` component that format code using `dotnet-format` tool
+
 ## [0.8.0] / 2023-12-15
 ### 🚨 Breaking changes
 
