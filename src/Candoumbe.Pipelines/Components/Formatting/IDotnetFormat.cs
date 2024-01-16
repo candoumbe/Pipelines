@@ -10,6 +10,9 @@ using System;
 using Candoumbe.Pipelines.Components;
 using Nuke.Common.Tools.DotNet;
 
+/// <summary>
+/// Represents an interface for formatting code using the dotnet-format tool.
+/// </summary>
 [NuGetPackageRequirement("dotnet-format")]
 public interface IDotnetFormat : IFormat
 {
@@ -19,6 +22,9 @@ public interface IDotnetFormat : IFormat
     /// </summary>
     AbsolutePath Workspace => this.As<IHaveSolution>()?.Solution ?? TryGetValue(() => Workspace);
 
+    /// <summary>
+    /// Sets to <see langword="true"/> will halt the pipeline execution if the component will change any format.
+    /// </summary>
     [Parameter("Sets this parameter to 'true' and the pipeline will fail if any file does not follow coding styles. (default : 'false')")]
     public bool VerifyNoChanges { get; }
 
