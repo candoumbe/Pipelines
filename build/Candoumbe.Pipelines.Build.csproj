@@ -13,6 +13,7 @@
     <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
   </PropertyGroup>
 
+
   <ItemGroup>
     <Compile Include="..\src\Candoumbe.Pipelines\Components\Configuration.cs" Link="Components\Configuration.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\Extensions.cs" Link="Components\Extensions.cs" />
@@ -69,12 +70,14 @@
     <!-- Formatting components -->
     <Compile Include="..\src\Candoumbe.Pipelines\Components\Formatting\IFormat.cs" Link="Components\Formattings\IFormat.cs" />
     <Compile Include="..\src\Candoumbe.Pipelines\Components\Formatting\IDotnetFormat.cs" Link="Components\Formattings\IDotnetFormat.cs" />
-
+  </ItemGroup>
+   
+  <ItemGroup>   
+    <PackageReference Include="Nuke.Common" Version="7.0.6" PrivateAssets="all" />
+    <PackageDownload Include="GitVersion.Tool" Version="[5.12.0]" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Nuke.Common" Version="7.0.5" PrivateAssets="all"/>
-    <PackageReference Include="Candoumbe.MiscUtilities" Version="0.11.1" />
-    <PackageDownload Include="GitVersion.Tool" Version="[5.12.0]" />
+    <ProjectReference Include="..\src\Candoumbe.Pipelines\Candoumbe.Pipelines.csproj" />
   </ItemGroup>
 </Project>
