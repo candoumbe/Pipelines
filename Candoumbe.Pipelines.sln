@@ -34,6 +34,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ISSUE_TEMPLATE", "ISSUE_TEM
 		task_request.md = task_request.md
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Candoumbe.Pipelines.Build", "build\Candoumbe.Pipelines.Build.csproj", "{0E338605-C882-4485-A018-7FF55EBDDC81}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{2F9EC63F-79BF-4F39-A16C-8AC7C8CA40C6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +48,10 @@ Global
 		{C5E88444-476F-48DE-9D7D-957027AF8050}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5E88444-476F-48DE-9D7D-957027AF8050}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5E88444-476F-48DE-9D7D-957027AF8050}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E338605-C882-4485-A018-7FF55EBDDC81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E338605-C882-4485-A018-7FF55EBDDC81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E338605-C882-4485-A018-7FF55EBDDC81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E338605-C882-4485-A018-7FF55EBDDC81}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -51,6 +59,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{C5E88444-476F-48DE-9D7D-957027AF8050} = {80DFDD00-A0E2-48D4-A010-DC0378F0758F}
 		{2840620C-D0A6-4E33-9478-84B34A24D740} = {4E8513FE-04F0-4227-A5B7-7C46E8F3FA90}
+		{0E338605-C882-4485-A018-7FF55EBDDC81} = {2F9EC63F-79BF-4F39-A16C-8AC7C8CA40C6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DC79494F-6B14-48E4-BF37-EEEF6D188157}
