@@ -26,10 +26,10 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest
 {
     string IPullRequest.Title => TryGetValue(() => Title) ?? ((GitRepository.IsOnFeatureBranch(), GitRepository.IsOnReleaseBranch(), GitRepository.IsOnHotfixBranch(), GitRepository.Branch.Like($"{ColdfixBranchPrefix}/*")) switch
     {
-        (true, _, _, _) => $"✨[FEATURE] {GitRepository.Branch?.Replace($"{FeatureBranchPrefix}/", string.Empty).ToTitleCase()}",
-        (_, _, true, _) => $"🛠️[HOTFIX] {GitRepository.Branch?.Replace($"{HotfixBranchPrefix}/", string.Empty).ToTitleCase()}",
-        (_, _, _, true) => $"🧹[COLDFIX] {GitRepository.Branch?.Replace($"{ColdfixBranchPrefix}/", string.Empty).ToTitleCase()}",
-        _ => GitRepository.Branch?.ToTitleCase()
+        (true, _, _, _) => $"✨ {GitRepository.Branch?.Replace($"{FeatureBranchPrefix}/", string.Empty).ToTitleCase()}",
+        (_, _, true, _) => $"🛠️ {GitRepository.Branch?.Replace($"{HotfixBranchPrefix}/", string.Empty).ToTitleCase()}",
+        (_, _, _, true) => $"🧹 {GitRepository.Branch?.Replace($"{ColdfixBranchPrefix}/", string.Empty).ToTitleCase()}",
+        _ => $"💪🏾 {GitRepository.Branch?.ToTitleCase()}"
     }).Replace('-', ' ');
 
     ///<inheritdoc/>
