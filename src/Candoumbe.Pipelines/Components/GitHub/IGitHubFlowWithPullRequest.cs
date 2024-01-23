@@ -30,9 +30,9 @@ namespace Candoumbe.Pipelines.Components.GitHub
         [Parameter("Title that will be used when creating a PR")]
         string Title => TryGetValue(() => Title) ?? ((GitRepository.IsOnFeatureBranch(), GitRepository.IsOnReleaseBranch(), GitRepository.IsOnHotfixBranch()) switch
         {
-            (true, _, _) => $"[FEATURE] {GitRepository?.Branch?.Replace($"{FeatureBranchPrefix}/", string.Empty).ToTitleCase()}",
-            (_, _, true) => $"[HOTFIX] {GitRepository?.Branch?.Replace($"{HotfixBranchPrefix}/", string.Empty).ToTitleCase()}",
-            _ => GitRepository.Branch.ToTitleCase()
+            (true, _, _) => $"✨ {GitRepository.Branch?.Replace($"{FeatureBranchPrefix}/", string.Empty).ToTitleCase()}",
+            (_, _, true) => $"🛠️ {GitRepository.Branch?.Replace($"{HotfixBranchPrefix}/", string.Empty).ToTitleCase()}",
+            _ => $"💪🏾 {GitRepository.Branch?.ToTitleCase()}"
         }).Replace('-', ' ');
 
         /// <summary>
