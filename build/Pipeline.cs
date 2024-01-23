@@ -2,7 +2,6 @@ namespace Candoumbe.Pipelines.Build;
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using Candoumbe.Pipelines.Components;
@@ -15,9 +14,7 @@ using Nuke.Common.CI;
 using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
-using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
-
 using static Nuke.Common.Tools.Git.GitTasks;
 
 [GitHubActions("integration",
@@ -60,6 +57,7 @@ using static Nuke.Common.Tools.Git.GitTasks;
             "CHANGELOG.md",
             "LICENSE"
         ])]
+[DotNetVerbosityMapping]
 public class Pipeline : NukeBuild,
     IHaveSourceDirectory,
     IHaveSolution,
@@ -159,24 +157,11 @@ public class Pipeline : NukeBuild,
     }
 
     ///<inheritdoc/>
-    AbsolutePath IDotnetFormat.Workspace => Solution;
-
-    ///<inheritdoc/>
     bool IDotnetFormat.VerifyNoChanges => IsServerBuild;
 
     ///<inheritdoc/>
-    (IReadOnlyCollection<AbsolutePath> IncludedFiles, IReadOnlyCollection<AbsolutePath> ExcludedFiles) IDotnetFormat.Files
-    {
-        get
-        {
-            IReadOnlyCollection<AbsolutePath> includedFiles = Git("diff --name-status", workingDirectory: Solution.Directory)
-                        .Where(output => output.Text.AsSpan().StartsWith("M") || output.Text.AsSpan().StartsWith("A"))
+    IReadOnlyCollection<AbsolutePath> IDotnetFormat.Include => Git("status --porcelain", workingDirectory: Solution.Directory)
+                        .Where(output => output.Text.AsSpan().StartsWith(['M'], StringComparison.InvariantCultureIgnoreCase) || output.Text.AsSpan().StartsWith(['A'], StringComparison.InvariantCultureIgnoreCase))
                         .Select(output => AbsolutePath.Create(output.Text.AsSpan()[1..].TrimStart().ToString()))
                         .ToArray();
-
-            IReadOnlyCollection<AbsolutePath> excludedFiles = [];
-
-            return (includedFiles, excludedFiles);
-        }
-    }
 }
