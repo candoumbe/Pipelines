@@ -1,20 +1,25 @@
 namespace Candoumbe.Pipelines.Build;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Candoumbe.Pipelines.Components;
 using Candoumbe.Pipelines.Components.Formatting;
 using Candoumbe.Pipelines.Components.GitHub;
 using Candoumbe.Pipelines.Components.NuGet;
 using Candoumbe.Pipelines.Components.Workflows;
+
 using Nuke.Common;
 using Nuke.Common.CI;
 using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
+using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
+using Nuke.Common.Tools.GitHub;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
 using static Nuke.Common.Tools.Git.GitTasks;
 
 [GitHubActions("integration",
@@ -104,7 +109,6 @@ public class Pipeline : NukeBuild,
     [Secret]
     public readonly string NugetApiKey;
 
-
     /// Support plugins are available for:
     ///   - JetBrains ReSharper        https://nuke.build/resharper
     ///   - JetBrains Rider            https://nuke.build/rider
@@ -118,7 +122,6 @@ public class Pipeline : NukeBuild,
     ///<inheritdoc/>
     IEnumerable<AbsolutePath> ICreateGithubRelease.Assets => this.Get<IPack>().OutputDirectory.GlobFiles("**/*.nupkg;**/*.snupkg");
 
-
     ///<inheritdoc/>
     IEnumerable<PushNugetPackageConfiguration> IPushNugetPackages.PublishConfigurations => new PushNugetPackageConfiguration[]
     {
@@ -129,7 +132,7 @@ public class Pipeline : NukeBuild,
         ),
         new GitHubPushNugetConfiguration(
             githubToken: this.Get<ICreateGithubRelease>()?.GitHubToken,
-            source: new Uri($"https://nuget.pkg.github.com/{GitHubActions?.RepositoryOwner}/index.json"),
+            source: new Uri($"https://nuget.pkg.github.com/{ this.Get<IHaveGitHubRepository>().GitRepository.GetGitHubOwner() }/index.json"),
             canBeUsed: () => this is ICreateGithubRelease createRelease && createRelease.GitHubToken is not null
         ),
     };
@@ -160,8 +163,25 @@ public class Pipeline : NukeBuild,
     bool IDotnetFormat.VerifyNoChanges => IsServerBuild;
 
     ///<inheritdoc/>
-    IReadOnlyCollection<AbsolutePath> IDotnetFormat.Include => Git("status --porcelain", workingDirectory: Solution.Directory)
-                        .Where(output => output.Text.AsSpan().StartsWith(['M'], StringComparison.InvariantCultureIgnoreCase) || output.Text.AsSpan().StartsWith(['A'], StringComparison.InvariantCultureIgnoreCase))
-                        .Select(output => AbsolutePath.Create(output.Text.AsSpan()[1..].TrimStart().ToString()))
-                        .ToArray();
+    bool IDotnetFormat.ApplyOnlyWhitespace => IsLocalBuild;
+
+    ///<inheritdoc/>
+    bool IDotnetFormat.ApplyOnlyStyle => IsLocalBuild;
+
+    ///<inheritdoc/>
+    bool IDotnetFormat.ApplyOnlyAnalyzers => IsLocalBuild;
+
+    ///<inheritdoc/>
+    Configure<DotNetFormatSettings> IDotnetFormat.FormatSettings => settings => settings
+        .SetInclude(Git(arguments: "status --porcelain",
+                        workingDirectory: Solution.Directory,
+                        logOutput: IsLocalBuild || Verbosity is not Verbosity.Normal)
+                      .Where(output => output.Text.AsSpan().TrimStart()[..2] switch
+                        {
+                            ['M' or 'A', _] or [_, 'M' or 'A'] => true,
+                            _ => false,
+                        })
+                        .Select(output => output.Text.AsSpan()[2..].TrimStart().ToString())
+                        .ToArray())
+        .SetSeverity(DotNetFormatSeverity.info);
 }

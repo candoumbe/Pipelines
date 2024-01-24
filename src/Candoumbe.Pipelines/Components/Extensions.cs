@@ -28,8 +28,7 @@ public static class Extensions
     /// <summary>
     /// Gives access to <typeparamref name="T"/> properties and methods
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="nukeBuild"></param>
+    /// <typeparam name="T">the type that the current instance should be casted into.</typeparam>
     /// <exception cref="InvalidCastException">if <paramref name="nukeBuild"/> is not convertible to <typeparamref name="T"/>.</exception>
     public static T Get<T>(this INukeBuild nukeBuild) where T : INukeBuild
         => (T)(object)nukeBuild;
