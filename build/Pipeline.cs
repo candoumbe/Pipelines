@@ -1,11 +1,14 @@
 namespace Candoumbe.Pipelines.Build;
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Candoumbe.Pipelines.Components;
 using Candoumbe.Pipelines.Components.Formatting;
 using Candoumbe.Pipelines.Components.GitHub;
 using Candoumbe.Pipelines.Components.NuGet;
 using Candoumbe.Pipelines.Components.Workflows;
-
 using Nuke.Common;
 using Nuke.Common.CI;
 using Nuke.Common.CI.GitHubActions;
@@ -14,12 +17,6 @@ using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.GitHub;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 using static Nuke.Common.Tools.Git.GitTasks;
 
 [GitHubActions("integration",
@@ -163,13 +160,9 @@ public class Pipeline : NukeBuild,
     bool IDotnetFormat.VerifyNoChanges => IsServerBuild;
 
     ///<inheritdoc/>
-    bool IDotnetFormat.ApplyOnlyWhitespace => IsLocalBuild;
-
-    ///<inheritdoc/>
-    bool IDotnetFormat.ApplyOnlyStyle => IsLocalBuild;
-
-    ///<inheritdoc/>
-    bool IDotnetFormat.ApplyOnlyAnalyzers => IsLocalBuild;
+    DotNetFormatter[] IDotnetFormat.Formatters => IsLocalBuild
+                ? [DotNetFormatter.Analyzers, DotNetFormatter.Style, DotNetFormatter.Whitespace]
+                : [DotNetFormatter.Analyzers, DotNetFormatter.Style];
 
     ///<inheritdoc/>
     Configure<DotNetFormatSettings> IDotnetFormat.FormatSettings => settings => settings

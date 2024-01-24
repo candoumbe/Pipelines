@@ -1,16 +1,14 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Nuke.Common;
 using Nuke.Common.IO;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
-
-using System;
-using System.Collections.Generic;
-
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 using static Serilog.Log;
 
 namespace Candoumbe.Pipelines.Components.Formatting;
-
 
 /// <summary>
 /// Represents an interface for formatting code using the dotnet-format tool.
@@ -32,20 +30,8 @@ public interface IDotnetFormat : IFormat
     /// <summary>
     /// Sets to <see langword="true"/> will instruct to format code to match editorconfig settings for whitespaces.
     /// </summary>
-    [Parameter("Instructs the formatter to match editorconfig settings for whitespaces. (default : 'false')")]
-    public bool ApplyOnlyWhitespace { get; }
-
-    /// <summary>
-    /// Sets to <see langword="true"/> will instruct to format code to match editorconfig settings for analyzers.
-    /// </summary>
-    [Parameter("Instructs the formatter to match editorconfig settings for analyzers. (default : 'false')")]
-    public bool ApplyOnlyAnalyzers { get; }
-
-    /// <summary>
-    /// Sets to <see langword="true"/> will instruct to format code to match editorconfig settings for code style.
-    /// </summary>
-    [Parameter("Instructs the formatter to match editorconfig settings for code style. (default : 'false')")]
-    public bool ApplyOnlyStyle { get; }
+    [Parameter("Sets of formatters that the tool must apply")]
+    public DotNetFormatter[] Formatters => TryGetValue(() => Formatters) ?? [DotNetFormatter.Whitespace, DotNetFormatter.Style, DotNetFormatter.Analyzers];
 
     /// <summary>
     /// Sets of files / directories to exclude when formatting
@@ -66,21 +52,13 @@ public interface IDotnetFormat : IFormat
     Target IFormat.Format => _ => _
         .Inherit<IFormat>()
         .Description("Applies coding style using dotnet-format tool")
-        .OnlyWhenDynamic(() => Workspace is not null)
+        .OnlyWhenDynamic(() => Workspace is not null && Formatters.Length > 0)
         .Executes(() =>
         {
             DotNetFormatSettings dotNetFormatSettings = new();
             dotNetFormatSettings = dotNetFormatSettings.Apply(FormatSettingsBase)
                                                        .Apply(FormatSettings);
             Arguments args = new();
-            args.Add("{value}", dotNetFormatSettings.Project)
-                .Add("--no-restore", condition: dotNetFormatSettings.NoRestore)
-                .Add("--severity {value}", dotNetFormatSettings.Severity)
-                .Add("--verify-no-changes", dotNetFormatSettings.VerifyNoChanges)
-                .Add("--include-generated", dotNetFormatSettings.IncludeGenerated)
-                .Add("--verbosity {value}", dotNetFormatSettings.Verbosity)
-                .Add("--binarylog {value}", dotNetFormatSettings.BinaryLog)
-                .Add("--report {value}", dotNetFormatSettings.Report);
 
             if (dotNetFormatSettings.Include.Count > 0)
             {
@@ -96,21 +74,24 @@ public interface IDotnetFormat : IFormat
                     .Concatenate(filesExcludedArgs);
             }
 
-            if (ApplyOnlyAnalyzers || ApplyOnlyStyle || ApplyOnlyWhitespace)
+            if (Formatters.Length > 0)
             {
-                if (ApplyOnlyAnalyzers)
+                if (Formatters.Contains(DotNetFormatter.Analyzers))
                 {
-                    DotNet($"format analyzers {args}");
+                    Arguments formatAnalyzersArgs = MapArgumentsToDotNetFormatsettings(dotNetFormatSettings);
+                    DotNet($"format analyzers {formatAnalyzersArgs.Concatenate(args).Add("--severity {value}", dotNetFormatSettings.Severity)}");
                 }
 
-                if (ApplyOnlyStyle)
+                if (Formatters.Contains(DotNetFormatter.Style))
                 {
-                    DotNet($"format style {args}");
+                    Arguments formatStyleArgs = MapArgumentsToDotNetFormatsettings(dotNetFormatSettings);
+                    DotNet($"format style {formatStyleArgs.Concatenate(args).Add("--severity {value}", dotNetFormatSettings.Severity)}");
                 }
 
-                if (ApplyOnlyWhitespace)
+                if (Formatters.Contains(DotNetFormatter.Whitespace))
                 {
-                    DotNet($"format whitespace {args}");
+                    Arguments formatWhitespaceArgs = MapArgumentsToDotNetFormatsettings(dotNetFormatSettings);
+                    DotNet($"format whitespace {formatWhitespaceArgs}");
                 }
             }
             else
@@ -140,6 +121,20 @@ public interface IDotnetFormat : IFormat
                     Verbose("'{FileName}' will not be formatted", file);
                     args.Add(file);
                 });
+
+                return args;
+            }
+
+            static Arguments MapArgumentsToDotNetFormatsettings(DotNetFormatSettings dotNetFormatSettings)
+            {
+                Arguments args = new();
+                args.Add("{value}", dotNetFormatSettings.Project)
+                    .Add("--no-restore", condition: dotNetFormatSettings.NoRestore)
+                    .Add("--verify-no-changes", dotNetFormatSettings.VerifyNoChanges)
+                    .Add("--include-generated", dotNetFormatSettings.IncludeGenerated)
+                    .Add("--verbosity {value}", dotNetFormatSettings.Verbosity)
+                    .Add("--binarylog {value}", dotNetFormatSettings.BinaryLog)
+                    .Add("--report {value}", dotNetFormatSettings.Report);
 
                 return args;
             }
