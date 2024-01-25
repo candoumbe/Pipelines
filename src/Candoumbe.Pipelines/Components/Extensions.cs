@@ -1,7 +1,6 @@
-﻿using Nuke.Common;
+﻿using System;
+using Nuke.Common;
 using Nuke.Common.ProjectModel;
-
-using System;
 
 namespace Candoumbe.Pipelines.Components;
 
