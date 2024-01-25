@@ -1,15 +1,12 @@
-﻿using Candoumbe.Pipelines.Components.Workflows;
-
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Candoumbe.Pipelines.Components.Workflows;
 using Nuke.Common;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
 using Nuke.Common.Utilities;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 using static Serilog.Log;
 namespace Candoumbe.Pipelines.Components;
@@ -118,10 +115,7 @@ public interface IMutationTest : IHaveTests
                     strykerArgs = strykerArgs.Add("--config-file {value}", configFile);
                 }
 
-                testsProjects.ForEach(project =>
-                {
-                    strykerArgs = strykerArgs.Add("--test-project {value}", project.Path);
-                });
+                testsProjects.ForEach(project => strykerArgs = strykerArgs.Add("--test-project {value}", project.Path));
 
                 switch (this)
                 {

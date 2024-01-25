@@ -39,5 +39,7 @@ public static class Extensions
     /// <param name="project"></param>
     /// <returns><see langword="true"/> if <see href="https://github.com/dotnet/sourcelink">SourceLink</see>
     /// enabled and <see langword="false"/> otherwise</returns>
+#pragma warning disable RCS1175 // Unused 'this' parameter
     public static bool IsSourceLinkEnabled(this Project project) => false;
+#pragma warning restore RCS1175 // Unused 'this' parameter
 }
