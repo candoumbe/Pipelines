@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.9.0] / 2024-01-25
 ### 🚀 New features
 
 - Added `IDotnetFormat` component that format code using `dotnet-format` tool
@@ -22,7 +24,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🚨 Breaking changes
 
 - Dropped `IHaveSecret` component ([#94](https://github.com/candoumbe/Pipelines/issues/94))
-
 
 ### 🧹 Housekeeping
 
@@ -188,7 +189,8 @@ So now `{MutationTestDirectory}/[{framework}]` is now changed to `{MutationTestD
 ## [0.1.0] / 2022-10-23
 - Initial release
 
-[Unreleased]: https://github.com/candoumbe/Pipelines/compare/0.8.0...HEAD
+[Unreleased]: https://github.com/candoumbe/Pipelines/compare/0.9.0...HEAD
+[0.9.0]: https://github.com/candoumbe/Pipelines/compare/0.8.0...0.9.0
 [0.8.0]: https://github.com/candoumbe/Pipelines/compare/0.7.0...0.8.0
 [0.7.0]: https://github.com/candoumbe/Pipelines/compare/0.6.1...0.7.0
 [0.6.1]: https://github.com/candoumbe/Pipelines/compare/0.6.0...0.6.1
