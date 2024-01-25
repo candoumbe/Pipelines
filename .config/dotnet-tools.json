@@ -3,7 +3,7 @@
   "isRoot": true,
   "tools": {
     "nuke.globaltool": {
-      "version": "7.0.6",
+      "version": "8.0.0",
       "commands": [
         "nuke"
       ]
@@ -12,6 +12,12 @@
       "version": "5.12.0",
       "commands": [
         "dotnet-gitversion"
+      ]
+    },
+    "dotnet-format": {
+      "version": "5.1.250801",
+      "commands": [
+        "dotnet-format"
       ]
     }
   }

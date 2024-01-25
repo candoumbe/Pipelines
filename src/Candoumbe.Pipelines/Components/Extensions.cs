@@ -1,7 +1,6 @@
-﻿using Nuke.Common;
+﻿using System;
+using Nuke.Common;
 using Nuke.Common.ProjectModel;
-
-using System;
 
 namespace Candoumbe.Pipelines.Components;
 
@@ -28,8 +27,7 @@ public static class Extensions
     /// <summary>
     /// Gives access to <typeparamref name="T"/> properties and methods
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="nukeBuild"></param>
+    /// <typeparam name="T">the type that the current instance should be casted into.</typeparam>
     /// <exception cref="InvalidCastException">if <paramref name="nukeBuild"/> is not convertible to <typeparamref name="T"/>.</exception>
     public static T Get<T>(this INukeBuild nukeBuild) where T : INukeBuild
         => (T)(object)nukeBuild;
@@ -41,5 +39,9 @@ public static class Extensions
     /// <param name="project"></param>
     /// <returns><see langword="true"/> if <see href="https://github.com/dotnet/sourcelink">SourceLink</see>
     /// enabled and <see langword="false"/> otherwise</returns>
+#pragma warning disable RCS1175 // Unused 'this' parameter
+#pragma warning disable IDE0060 // Unused 'project' parameter
     public static bool IsSourceLinkEnabled(this Project project) => false;
+#pragma warning restore IDE0060 // Unused 'project' parameter
+#pragma warning restore RCS1175 // Unused 'this' parameter
 }

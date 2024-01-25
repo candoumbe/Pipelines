@@ -1,17 +1,13 @@
-﻿using Candoumbe.Pipelines.Components.Workflows;
-
-using Nuke.Common.Git;
-using Nuke.Common.Tools.GitHub;
-
-using Octokit;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-
+using Candoumbe.Pipelines.Components.Workflows;
+using Nuke.Common.Git;
+using Nuke.Common.Tools.GitHub;
+using Octokit;
 using static Nuke.Common.Tools.Git.GitTasks;
 using static Nuke.Common.Tools.GitHub.GitHubTasks;
 using static Nuke.Common.Utilities.ConsoleUtility;
@@ -26,10 +22,10 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest
 {
     string IPullRequest.Title => TryGetValue(() => Title) ?? ((GitRepository.IsOnFeatureBranch(), GitRepository.IsOnReleaseBranch(), GitRepository.IsOnHotfixBranch(), GitRepository.Branch.Like($"{ColdfixBranchPrefix}/*")) switch
     {
-        (true, _, _, _) => $"✨[FEATURE] {GitRepository.Branch?.Replace($"{FeatureBranchPrefix}/", string.Empty).ToTitleCase()}",
-        (_, _, true, _) => $"🛠️[HOTFIX] {GitRepository.Branch?.Replace($"{HotfixBranchPrefix}/", string.Empty).ToTitleCase()}",
-        (_, _, _, true) => $"🧹[COLDFIX] {GitRepository.Branch?.Replace($"{ColdfixBranchPrefix}/", string.Empty).ToTitleCase()}",
-        _ => GitRepository.Branch?.ToTitleCase()
+        (true, _, _, _) => $"✨ {GitRepository.Branch?.Replace($"{FeatureBranchPrefix}/", string.Empty).ToTitleCase()}",
+        (_, _, true, _) => $"🛠️ {GitRepository.Branch?.Replace($"{HotfixBranchPrefix}/", string.Empty).ToTitleCase()}",
+        (_, _, _, true) => $"🧹 {GitRepository.Branch?.Replace($"{ColdfixBranchPrefix}/", string.Empty).ToTitleCase()}",
+        _ => $"💪🏾 {GitRepository.Branch?.ToTitleCase()}"
     }).Replace('-', ' ');
 
     ///<inheritdoc/>

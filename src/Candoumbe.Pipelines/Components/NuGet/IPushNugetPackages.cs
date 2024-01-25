@@ -1,16 +1,13 @@
-﻿using Nuke.Common;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Nuke.Common;
 using Nuke.Common.Git;
 using Nuke.Common.IO;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 using static Nuke.Common.Tools.Git.GitTasks;
-
 using static Serilog.Log;
 
 namespace Candoumbe.Pipelines.Components.NuGet;

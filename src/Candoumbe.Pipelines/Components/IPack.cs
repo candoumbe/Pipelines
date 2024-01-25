@@ -1,14 +1,12 @@
-﻿using Nuke.Common;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Nuke.Common;
 using Nuke.Common.IO;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Utilities.Collections;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 namespace Candoumbe.Pipelines.Components;

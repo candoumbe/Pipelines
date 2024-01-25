@@ -1,18 +1,14 @@
-﻿using Candoumbe.Pipelines.Components.Workflows;
-
-using Nuke.Common;
-using Nuke.Common.Git;
-using Nuke.Common.Tools.GitHub;
-
-using Octokit;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-
+using Candoumbe.Pipelines.Components.Workflows;
+using Nuke.Common;
+using Nuke.Common.Git;
+using Nuke.Common.Tools.GitHub;
+using Octokit;
 using static Nuke.Common.Tools.Git.GitTasks;
 using static Nuke.Common.Utilities.ConsoleUtility;
 using static Serilog.Log;
@@ -30,9 +26,9 @@ namespace Candoumbe.Pipelines.Components.GitHub
         [Parameter("Title that will be used when creating a PR")]
         string Title => TryGetValue(() => Title) ?? ((GitRepository.IsOnFeatureBranch(), GitRepository.IsOnReleaseBranch(), GitRepository.IsOnHotfixBranch()) switch
         {
-            (true, _, _) => $"[FEATURE] {GitRepository?.Branch?.Replace($"{FeatureBranchPrefix}/", string.Empty).ToTitleCase()}",
-            (_, _, true) => $"[HOTFIX] {GitRepository?.Branch?.Replace($"{HotfixBranchPrefix}/", string.Empty).ToTitleCase()}",
-            _ => GitRepository.Branch.ToTitleCase()
+            (true, _, _) => $"✨ {GitRepository.Branch?.Replace($"{FeatureBranchPrefix}/", string.Empty).ToTitleCase()}",
+            (_, _, true) => $"🛠️ {GitRepository.Branch?.Replace($"{HotfixBranchPrefix}/", string.Empty).ToTitleCase()}",
+            _ => $"💪🏾 {GitRepository.Branch?.ToTitleCase()}"
         }).Replace('-', ' ');
 
         /// <summary>
