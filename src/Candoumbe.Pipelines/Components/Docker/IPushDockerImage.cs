@@ -1,9 +1,7 @@
-﻿using Nuke.Common;
+﻿using System.Collections.Generic;
+using Nuke.Common;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.Docker;
-
-using System.Collections.Generic;
-
 using static Nuke.Common.Tools.Docker.DockerTasks;
 
 namespace Candoumbe.Pipelines.Components.Docker;
@@ -50,7 +48,7 @@ public interface IPushDockerImages : IBuildDockerImage
     /// <summary>
     /// Configure default settings to push images
     /// </summary>
-    public sealed Configure<DockerPushSettings> PushSettingsBase => _ => _;
+    private static Configure<DockerPushSettings> PushSettingsBase => _ => _;
 
     /// <summary>
     /// Configures settings

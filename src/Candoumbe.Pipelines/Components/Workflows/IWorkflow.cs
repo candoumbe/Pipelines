@@ -1,11 +1,9 @@
-﻿using Nuke.Common;
-using Nuke.Common.Git;
-using Nuke.Common.IO;
-
-using System;
+﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-
+using Nuke.Common;
+using Nuke.Common.Git;
+using Nuke.Common.IO;
 using static Nuke.Common.ChangeLog.ChangelogTasks;
 using static Nuke.Common.Tools.Git.GitTasks;
 using static Serilog.Log;

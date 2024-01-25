@@ -7,15 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.0] / 2024-01-25
 ### 🚀 New features
-- Added `IFormat` component
+
 - Added `IDotnetFormat` component that format code using `dotnet-format` tool
+
+### 💪🏾 Miscellanous
+
+- Enhanced the way titles of pull requests are computed.
+
+### 🧹 Housekeeping
+
+- Update Nuke to 8.0.0
 
 ## [0.8.0] / 2023-12-15
 ### 🚨 Breaking changes
 
 - Dropped `IHaveSecret` component ([#94](https://github.com/candoumbe/Pipelines/issues/94))
-
 
 ### 🧹 Housekeeping
 
@@ -181,7 +189,8 @@ So now `{MutationTestDirectory}/[{framework}]` is now changed to `{MutationTestD
 ## [0.1.0] / 2022-10-23
 - Initial release
 
-[Unreleased]: https://github.com/candoumbe/Pipelines/compare/0.8.0...HEAD
+[Unreleased]: https://github.com/candoumbe/Pipelines/compare/0.9.0...HEAD
+[0.9.0]: https://github.com/candoumbe/Pipelines/compare/0.8.0...0.9.0
 [0.8.0]: https://github.com/candoumbe/Pipelines/compare/0.7.0...0.8.0
 [0.7.0]: https://github.com/candoumbe/Pipelines/compare/0.6.1...0.7.0
 [0.6.1]: https://github.com/candoumbe/Pipelines/compare/0.6.0...0.6.1

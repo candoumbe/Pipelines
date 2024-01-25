@@ -1,11 +1,9 @@
-﻿using Nuke.Common;
+﻿using System;
+using System.Collections.Generic;
+using Nuke.Common;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.Docker;
 using Nuke.Common.Utilities.Collections;
-
-using System;
-using System.Collections.Generic;
-
 using static Nuke.Common.Tools.Docker.DockerTasks;
 
 namespace Candoumbe.Pipelines.Components.Docker;
@@ -42,7 +40,7 @@ public interface IBuildDockerImage : INukeBuild
     /// <summary>
     /// Default image settings
     /// </summary>
-    public sealed Configure<DockerBuildSettings> BuildSettingsBase => _ => _.SetPath(".");
+    private static Configure<DockerBuildSettings> BuildSettingsBase => _ => _.SetPath(".");
 
     /// <summary>
     /// Configures the docker image settings

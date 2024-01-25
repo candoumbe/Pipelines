@@ -1,8 +1,7 @@
-﻿using Candoumbe.Pipelines.Components.Workflows;
-
+﻿using System.Threading.Tasks;
+using Candoumbe.Pipelines.Components.Workflows;
 using Nuke.Common;
 using Nuke.Common.Git;
-using System.Threading.Tasks;
 using static Nuke.Common.Tools.Git.GitTasks;
 
 namespace Candoumbe.Pipelines.Components;

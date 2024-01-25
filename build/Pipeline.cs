@@ -2,8 +2,6 @@ namespace Candoumbe.Pipelines.Build;
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
 using System.Threading.Tasks;
 using Candoumbe.Pipelines.Components;
 using Candoumbe.Pipelines.Components.Formatting;
@@ -17,12 +15,12 @@ using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
-
+using Nuke.Common.Tools.GitHub;
 using static Nuke.Common.Tools.Git.GitTasks;
 
 [GitHubActions("integration",
     GitHubActionsImage.UbuntuLatest,
-    AutoGenerate = true,
+    AutoGenerate = false,
     OnPushBranchesIgnore = [IHaveMainBranch.MainBranchName],
     FetchDepth = 0,
     InvokedTargets = [nameof(ICompile.Compile), nameof(IPack.Pack), nameof(IPushNugetPackages.Publish)],
@@ -42,7 +40,7 @@ using static Nuke.Common.Tools.Git.GitTasks;
         ])]
 [GitHubActions("delivery",
     GitHubActionsImage.UbuntuLatest,
-    AutoGenerate = true,
+    AutoGenerate = false,
     OnPushBranches = [IHaveMainBranch.MainBranchName],
     FetchDepth = 0,
     InvokedTargets = [nameof(ICompile.Compile), nameof(IPack.Pack), nameof(IPushNugetPackages.Publish)],
@@ -60,6 +58,7 @@ using static Nuke.Common.Tools.Git.GitTasks;
             "CHANGELOG.md",
             "LICENSE"
         ])]
+[DotNetVerbosityMapping]
 public class Pipeline : NukeBuild,
     IHaveSourceDirectory,
     IHaveSolution,
@@ -106,7 +105,6 @@ public class Pipeline : NukeBuild,
     [Secret]
     public readonly string NugetApiKey;
 
-
     /// Support plugins are available for:
     ///   - JetBrains ReSharper        https://nuke.build/resharper
     ///   - JetBrains Rider            https://nuke.build/rider
@@ -120,7 +118,6 @@ public class Pipeline : NukeBuild,
     ///<inheritdoc/>
     IEnumerable<AbsolutePath> ICreateGithubRelease.Assets => this.Get<IPack>().OutputDirectory.GlobFiles("**/*.nupkg;**/*.snupkg");
 
-
     ///<inheritdoc/>
     IEnumerable<PushNugetPackageConfiguration> IPushNugetPackages.PublishConfigurations => new PushNugetPackageConfiguration[]
     {
@@ -131,7 +128,7 @@ public class Pipeline : NukeBuild,
         ),
         new GitHubPushNugetConfiguration(
             githubToken: this.Get<ICreateGithubRelease>()?.GitHubToken,
-            source: new Uri($"https://nuget.pkg.github.com/{GitHubActions?.RepositoryOwner}/index.json"),
+            source: new Uri($"https://nuget.pkg.github.com/{ this.Get<IHaveGitHubRepository>().GitRepository.GetGitHubOwner() }/index.json"),
             canBeUsed: () => this is ICreateGithubRelease createRelease && createRelease.GitHubToken is not null
         ),
     };
@@ -159,24 +156,9 @@ public class Pipeline : NukeBuild,
     }
 
     ///<inheritdoc/>
-    AbsolutePath IDotnetFormat.Workspace => Solution;
-
-    ///<inheritdoc/>
     bool IDotnetFormat.VerifyNoChanges => IsServerBuild;
 
     ///<inheritdoc/>
-    (IReadOnlyCollection<AbsolutePath> IncludedFiles, IReadOnlyCollection<AbsolutePath> ExcludedFiles) IDotnetFormat.Files
-    {
-        get
-        {
-            IReadOnlyCollection<AbsolutePath> includedFiles = Git("diff --name-status", workingDirectory: Solution.Directory)
-                        .Where(output => output.Text.AsSpan().StartsWith("M") || output.Text.AsSpan().StartsWith("A"))
-                        .Select(output => AbsolutePath.Create(output.Text.AsSpan()[1..].TrimStart().ToString()))
-                        .ToArray();
-
-            IReadOnlyCollection<AbsolutePath> excludedFiles = [];
-
-            return (includedFiles, excludedFiles);
-        }
-    }
+    Configure<DotNetFormatSettings> IDotnetFormat.FormatSettings => settings => settings
+        .SetSeverity(DotNetFormatSeverity.info);
 }

@@ -1,16 +1,14 @@
-﻿using Candoumbe.Pipelines.Components.Docker;
+﻿using System.Buffers;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using Candoumbe.Pipelines.Components.Docker;
 using Candoumbe.Pipelines.Components.NuGet;
-
 using Nuke.Common;
 using Nuke.Common.Git;
 using Nuke.Common.IO;
 using Nuke.Common.Tools.GitHub;
 using Octokit;
-using System.Buffers;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
 using static Nuke.Common.ChangeLog.ChangelogTasks;
 using static Serilog.Log;
 
