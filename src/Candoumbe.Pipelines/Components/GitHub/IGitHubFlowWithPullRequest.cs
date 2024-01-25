@@ -1,18 +1,14 @@
-﻿using Candoumbe.Pipelines.Components.Workflows;
-
-using Nuke.Common;
-using Nuke.Common.Git;
-using Nuke.Common.Tools.GitHub;
-
-using Octokit;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-
+using Candoumbe.Pipelines.Components.Workflows;
+using Nuke.Common;
+using Nuke.Common.Git;
+using Nuke.Common.Tools.GitHub;
+using Octokit;
 using static Nuke.Common.Tools.Git.GitTasks;
 using static Nuke.Common.Utilities.ConsoleUtility;
 using static Serilog.Log;
