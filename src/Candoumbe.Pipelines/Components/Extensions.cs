@@ -1,6 +1,7 @@
-﻿using System;
-using Nuke.Common;
+﻿using Nuke.Common;
 using Nuke.Common.ProjectModel;
+
+using System;
 
 namespace Candoumbe.Pipelines.Components;
 
@@ -40,6 +41,8 @@ public static class Extensions
     /// <returns><see langword="true"/> if <see href="https://github.com/dotnet/sourcelink">SourceLink</see>
     /// enabled and <see langword="false"/> otherwise</returns>
 #pragma warning disable RCS1175 // Unused 'this' parameter
+#pragma warning disable IDE0060 // Unused 'project' parameter
     public static bool IsSourceLinkEnabled(this Project project) => false;
+#pragma warning restore IDE0060 // Unused 'project' parameter
 #pragma warning restore RCS1175 // Unused 'this' parameter
 }
