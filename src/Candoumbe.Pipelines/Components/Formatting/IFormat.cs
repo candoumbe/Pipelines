@@ -11,8 +11,11 @@ namespace Candoumbe.Pipelines.Components.Formatting;
 public interface IFormat : INukeBuild
 {
     /// <summary>
-    /// The default target of the format component
+    /// The default target of the format component.
     /// </summary>
+    /// <remarks>
+    /// By default, this target will run <strong>after</strong> <see cref="IRestore"/> component and <strong>before</strong> <see cref="ICompile"/> components.
+    /// </remarks>
     Target Format => _ => _
         .TryAfter<IRestore>()
         .TryBefore<ICompile>();

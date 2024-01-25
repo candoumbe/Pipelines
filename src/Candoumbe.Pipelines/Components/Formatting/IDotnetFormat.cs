@@ -6,6 +6,7 @@ using Nuke.Common.IO;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
+using static Nuke.Common.Tools.Git.GitTasks;
 using static Serilog.Log;
 
 namespace Candoumbe.Pipelines.Components.Formatting;
@@ -13,6 +14,13 @@ namespace Candoumbe.Pipelines.Components.Formatting;
 /// <summary>
 /// Represents an interface for formatting code using the dotnet-format tool.
 /// </summary>
+/// <remarks>
+/// By default, the format tool will target specific files depending on :
+/// <list type="bullet">
+///     <item>if the pipeline <strong>does</strong> implement / extend <see cref="IHaveGitRepository"/> : only modified/added files will be included by default</item>
+///     <item>if the pipeline <strong>does not</strong> implement / extend  <see cref="IHaveGitRepository"/> : all files will be included.</item>
+/// </list>
+/// </remarks>
 [NuGetPackageRequirement("dotnet-format")]
 public interface IDotnetFormat : IFormat
 {
@@ -28,10 +36,10 @@ public interface IDotnetFormat : IFormat
     public bool VerifyNoChanges { get; }
 
     /// <summary>
-    /// Sets to <see langword="true"/> will instruct to format code to match editorconfig settings for whitespaces.
+    /// Sets of formatters that dotnet-format will apply.
     /// </summary>
     [Parameter("Sets of formatters that the tool must apply")]
-    public DotNetFormatter[] Formatters => TryGetValue(() => Formatters) ?? [DotNetFormatter.Whitespace, DotNetFormatter.Style, DotNetFormatter.Analyzers];
+    DotNetFormatter[] Formatters => TryGetValue(() => Formatters) ?? [];
 
     /// <summary>
     /// Sets of files / directories to exclude when formatting
@@ -41,7 +49,18 @@ public interface IDotnetFormat : IFormat
     private Configure<DotNetFormatSettings> FormatSettingsBase => _ => _
         .SetProject(Workspace)
         .SetNoRestore(this is IRestore restore && SucceededTargets.Contains(restore.Restore))
-        .SetVerifyNoChanges(VerifyNoChanges);
+        .SetVerifyNoChanges(VerifyNoChanges)
+        .WhenNotNull(this.As<IHaveGitRepository>(),
+                     (settings, gitRepository) => settings.SetInclude(Git(arguments: "status --porcelain",
+                                                                          workingDirectory: gitRepository.RootDirectory,
+                                                                          logOutput: IsLocalBuild || Verbosity is not Verbosity.Normal)
+                      .Where(static output => output.Text.AsSpan().TrimStart()[..2] switch
+                      {
+                          ['M' or 'A', _] or [_, 'M' or 'A'] => true,
+                          _ => false,
+                      })
+                      .Select(static output => output.Text.AsSpan()[2..].TrimStart().ToString())
+                      .ToArray()));
 
     /// <summary>
     /// Settings used to format the code
@@ -51,8 +70,10 @@ public interface IDotnetFormat : IFormat
     ///<inheritdoc/>
     Target IFormat.Format => _ => _
         .Inherit<IFormat>()
+        .TryDependsOn<IRestore>()
+        .TryDependentFor<ICompile>()
         .Description("Applies coding style using dotnet-format tool")
-        .OnlyWhenDynamic(() => Workspace is not null && Formatters.Length > 0)
+        .OnlyWhenDynamic(() => Workspace is not null || Formatters.Length > 0)
         .Executes(() =>
         {
             DotNetFormatSettings dotNetFormatSettings = new();
