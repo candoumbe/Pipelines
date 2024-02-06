@@ -45,6 +45,7 @@ public interface ICompile : IHaveSolution, IHaveConfiguration
                 .SetProjectFile(Solution)
                 .SetConfiguration(Configuration)
                 .SetContinuousIntegrationBuild(IsServerBuild)
+                .SetProcessArgumentConfigurator(args => args.Add("--tl"))
                 .WhenNotNull(this.As<IHaveGitVersion>(),
                              (settings, gitVersion) => settings.SetAssemblyVersion(gitVersion.GitVersion.AssemblySemVer)
                                                                .SetFileVersion(gitVersion.GitVersion.AssemblySemFileVer)
