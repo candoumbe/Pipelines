@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Enabled `TerminalLogger` ([#138](https://github.com/candoumbe/Pipelines/issues/138))
 
+### 🛠️ Fixes
+- Fixed `Nuke.Common` dependency used when targeting `net6.0`
+
 ## [0.9.0] / 2024-01-25
 ### 🚀 New features
 
