@@ -15,10 +15,10 @@ using static Nuke.Common.Tools.ReportGenerator.ReportGeneratorTasks;
 /// Build component that can report unit tests code coverage
 /// </summary>
 /// <remarks>
-/// This component requires <see href="https://nuget.org/packages/reportgenerator">ReportGenerator tool</see>
+/// This component requires <see href="https://nuget.org/packages/reportgenerator">ReportGenerator tool</see> (and optionally <see href="https://nuget.org/packages/codecovuploader">CodeCov Uploader</see> if report
 /// </remarks>
 [NuGetPackageRequirement("ReportGenerator")]
-public interface IReportCoverage : IUnitTest, IRequireNuGetPackage
+public interface IReportCoverage : IUnitTest
 {
     /// <summary>
     /// The API key used to push code coverage to CodeCov
