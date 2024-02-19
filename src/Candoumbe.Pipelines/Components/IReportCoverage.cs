@@ -17,7 +17,6 @@ using static Nuke.Common.Tools.ReportGenerator.ReportGeneratorTasks;
 /// <remarks>
 /// This component requires <see href="https://nuget.org/packages/reportgenerator">ReportGenerator tool</see> (and optionally <see href="https://nuget.org/packages/codecovuploader">CodeCov Uploader</see> if report
 /// </remarks>
-[NuGetPackageRequirement("ReportGenerator")]
 public interface IReportCoverage : IUnitTest
 {
     /// <summary>
