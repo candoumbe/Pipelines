@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Threading.Tasks;
 using Nuke.Common;
 using Nuke.Common.Git;
 using Nuke.Common.IO;

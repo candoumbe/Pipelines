@@ -21,5 +21,6 @@
   </Choose>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.TeamFoundationServer.Client" Version="16.205.1" />
   </ItemGroup>
 </Project>

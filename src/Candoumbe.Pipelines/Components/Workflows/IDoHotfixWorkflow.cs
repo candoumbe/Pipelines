@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using Nuke.Common;
 using Nuke.Common.Git;
-using Nuke.Common.Tools.GitVersion;
 using static Nuke.Common.Tools.Git.GitTasks;
 
 namespace Candoumbe.Pipelines.Components.Workflows;
