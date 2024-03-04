@@ -18,20 +18,18 @@ using static Serilog.Log;
 namespace Candoumbe.Pipelines.Components.AzureDevOps;
 
 /// <summary>
-/// An <see cref="IWorkflow"/> implementation that opens a github pull request
+/// An <see cref="IWorkflow"/> implementation that opens a pull request on a Azure DevOps server
 /// </summary>
 public interface IGitFlowWithPullRequest : IGitFlow, IDoPullRequest
 {
+    ///<inheritdoc />
     string IDoPullRequest.Title => TryGetValue(() => Title) ?? ( ( GitRepository.IsOnFeatureBranch(),
             GitRepository.IsOnReleaseBranch(), GitRepository.IsOnHotfixBranch(),
             GitRepository.Branch.Like($"{ColdfixBranchPrefix}/*") ) switch
         {
-            (true, _, _, _) =>
-                $"✨ {GitRepository.Branch?.Replace($"{FeatureBranchPrefix}/", string.Empty).ToTitleCase()}",
-            (_, _, true, _) =>
-                $"🛠️ {GitRepository.Branch?.Replace($"{HotfixBranchPrefix}/", string.Empty).ToTitleCase()}",
-            (_, _, _, true) =>
-                $"🧹 {GitRepository.Branch?.Replace($"{ColdfixBranchPrefix}/", string.Empty).ToTitleCase()}",
+            (true, _, _, _) => $"✨ {GitRepository.Branch?.Replace($"{FeatureBranchPrefix}/", string.Empty).ToTitleCase()}",
+            (_, _, true, _) => $"🛠️ {GitRepository.Branch?.Replace($"{HotfixBranchPrefix}/", string.Empty).ToTitleCase()}",
+            (_, _, _, true) => $"🧹 {GitRepository.Branch?.Replace($"{ColdfixBranchPrefix}/", string.Empty).ToTitleCase()}",
             _ => $"💪🏾 {GitRepository.Branch?.ToTitleCase()}"
         } ).Replace('-', ' ');
 
@@ -47,7 +45,7 @@ public interface IGitFlowWithPullRequest : IGitFlow, IDoPullRequest
 
         string repositoryName = GitRepository.RemoteName;
         string branchName = GitCurrentBranch();
-        
+
         Information("Creating a pull request for {Repository}", repositoryName);
         Information(@"Title of the pull request (or ""{PullRequestName}"" if empty)", Title);
 
