@@ -23,7 +23,7 @@ The public **API SHOULD NOT** be considered stable.
 
 Most of the time, to set up a CI/CD for your .NET project, you have two options :
 
-### 1. **Going through your repository and use its embeded GUI to create the pipeline**
+### 1. **Going through your repository and use its embedded GUI to create the pipeline**
 
 This approach is nice and helpful to get started. But most of the time, the history of changes made to the pipeline
 is separated from the history of the code base.
@@ -31,16 +31,16 @@ is separated from the history of the code base.
 ### 2. **Writing a pipeline file of some sort**
 
 Most of the time in YAML, the file that describes the steps required to build a project are providers specific.
-So even though you can write YAML, knowning how to write an Azure DevOps pipeline does not really help when it comes to writing a pipeline for GitHub Actions.
+So even though you can write YAML, knowing how to write an Azure DevOps pipeline does not really help when it comes to writing a pipeline for GitHub Actions.
 
 ## The solution
 
-[Nuke] is a library written by [Matthias Koch] that helps creating builds.
+[Nuke] is a library written by [Matthias Koch] that helps to create builds.
 
 This project offers an opinionated way at writing pipelines by giving a set of components (more on that later) with the following benefits :
 
 1. no need to go your code management tool to set up your project CI/CD.
-2. no more YAML file : yeah YAML is great but the tooling around it is not great and the structure itself is error prone.
+2. no more YAML file : yeah YAML is great but the tooling is not great and the structure itself is error-prone.
 3. it's just a C# project that every team member can contribute to !
 4. it sits right with your source code so that each change to the pipeline is just a commit into your
 codebase.
@@ -50,12 +50,12 @@ codebase.
 To get started you'll have to :
 
 1. install [Nuke.GlobalTool] dotnet tool (locally or globally)
-2. run `dotnet nuke :setup` to setup your pipeline project
+2. run `dotnet nuke :setup` to set up your pipeline project
 3. replace the `Nuke.Common` nuget dependency with [Candoumbe.Pipelines]
 
 From this point, you should be able to customize your pipeline by adding [components] \o/.
 
-### How does it works ?
+### How does it work ?
 
 This library is built on top of [Nuke], an open source library started by [Matthias Koch].
 It provides a set of components that, when added to a pipeline, bring clever default features.
@@ -128,7 +128,7 @@ flowchart
       N{{Merges changes to develop branch}}
     end
     
-    subgraph finish-hotfix[Finish hostfix]
+    subgraph finish-hotfix[Finish hotfix]
        Y{{Merges changes to main branch}}
     end
 
@@ -228,9 +228,9 @@ PRs are welcome, check out the [contribution guidelines] if you want to contribu
 
 ## Special thanks
 
-- [Matthias Koch] for the marvelous [Nuke] library. This project would never exists without its work.
+- [Matthias Koch] for the marvelous [Nuke] library. This project would never exist without its work.
 
-[Nuke]: https//github.com/nuke/
+[Nuke]: https://github.com/nuke/
 [Nuke.GlobalTool]: https://nuget.org/packages/Nuke.GlobalTool
 [Matthias Koch]: https://github.com/matkoch
 [Candoumbe.Pipelines]: https://nuget.org/packages/Candoumbe.Pipelines

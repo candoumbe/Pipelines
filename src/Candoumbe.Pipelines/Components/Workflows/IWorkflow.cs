@@ -71,6 +71,8 @@ public interface IWorkflow : IHaveGitRepository, IHaveGitVersion, IHaveChangeLog
     {
         if (!Quiet)
         {
+            Information("Enter the name of the coldfix. It will be used as the name of the coldfix/branch (leave empty to exit) :");
+            
             string featureName;
             bool exitCreatingFeature;
             do
