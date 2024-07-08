@@ -3,7 +3,7 @@
 namespace Candoumbe.Pipelines.Components.Docker
 {
     /// <summary>
-    /// Wraps dockerfile informations.
+    /// Wraps dockerfile information.
     /// </summary>
     /// <param name="Path">Path to the <c>Dockerfile</c></param>
     /// <param name="Name">Name of the image that will be build</param>
