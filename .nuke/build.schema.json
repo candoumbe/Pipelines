@@ -123,6 +123,10 @@
             "type": "string"
           }
         },
+        "Quiet": {
+          "type": "boolean",
+          "description": "Set to true to not ask any confirmation to the end user (default: false)"
+        },
         "Root": {
           "type": "string",
           "description": "Root directory during build execution"

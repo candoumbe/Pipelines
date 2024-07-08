@@ -129,8 +129,7 @@ public class Pipeline : NukeBuild,
         new GitHubPushNugetConfiguration(
             githubToken: this.Get<ICreateGithubRelease>()?.GitHubToken,
             source: new Uri($"https://nuget.pkg.github.com/{ this.Get<IHaveGitHubRepository>().GitRepository.GetGitHubOwner() }/index.json"),
-            canBeUsed: () => this is ICreateGithubRelease createRelease && createRelease.GitHubToken is not null
-        ),
+            canBeUsed: () => this is ICreateGithubRelease { GitHubToken: not null }),
     };
 
     ///<inheritdoc/>

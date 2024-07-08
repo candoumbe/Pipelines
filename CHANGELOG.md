@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🚀 New features
 
 - Enabled `TerminalLogger` ([#138](https://github.com/candoumbe/Pipelines/issues/138))
+- Added a new `--quiet` option to skip asking confirmations ([#145](https://github.com/candoumbe/Pipelines/issues/145))
 
 ### 🛠️ Fixes
 - Fixed `Nuke.Common` dependency used when targeting `net6.0`
