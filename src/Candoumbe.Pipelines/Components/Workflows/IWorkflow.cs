@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Threading.Tasks;
 using Nuke.Common;
 using Nuke.Common.Git;
 using Nuke.Common.IO;
@@ -13,7 +12,7 @@ namespace Candoumbe.Pipelines.Components.Workflows;
 /// <summary>
 /// Marker interface for git repository that support a specific workflow
 /// </summary>
-public interface IWorkflow : IHaveGitRepository, IHaveGitVersion, IHaveChangeLog
+public interface IWorkflow : IHaveGitRepository, IHaveGitVersion, IHaveChangeLog, ICanSkipConfirmation
 {
     /// <summary>
     /// Indicates if any changes should be stashed automatically prior to switching branch (Default : true
@@ -37,76 +36,112 @@ public interface IWorkflow : IHaveGitRepository, IHaveGitVersion, IHaveChangeLog
         {
             FinalizeChangelog(ChangeLogFile, GitVersion.MajorMinorPatch, GitRepository);
 
-            if (IsLocalBuild)
+            if (IsLocalBuild && !Quiet)
             {
                 Information("Please review CHANGELOG.md ({ChangeLogFile}) and press 'Y' to validate (any other key will cancel changes)...", ChangeLogFile);
                 ConsoleKeyInfo keyInfo = Console.ReadKey();
 
                 if (keyInfo.Key == ConsoleKey.Y)
                 {
-                    Git($"add {ChangeLogFile}");
-                    Git($"commit -m \"Finalize {Path.GetFileName(ChangeLogFile)} for {GitVersion.MajorMinorPatch}\"");
+                    CommitChangelogChanges(ChangeLogFile, GitVersion.MajorMinorPatch);
                 }
             }
             else
             {
-                Information("Committing CHANGELOG.md ({ChangeLogFile})", ChangeLogFile);
                 CommitChangelogChanges(ChangeLogFile, GitVersion.MajorMinorPatch);
-                Information("CHANGELOG.md ({ChangeLogFile}) successfully commited", ChangeLogFile);
             }
 
-            static void CommitChangelogChanges(AbsolutePath changelogFilePath, string version)
+            return;
+
+            static void CommitChangelogChanges(in AbsolutePath changelogFilePath,in string version)
             {
+                Information("Committing CHANGELOG.md ({ChangeLogFile})", changelogFilePath);
                 Git($"add {changelogFilePath}");
                 Git($"commit -m \"Finalize {Path.GetFileName(changelogFilePath)} for {version}\"");
+                Information("CHANGELOG.md ({ChangeLogFile}) successfully commited", changelogFilePath);
             }
         });
 
     /// <summary>
     /// Asks the user for a branch name
     /// </summary>
-    /// <param name="branchNamePrefix">A prefix to preprend in front of the user branch name</param>
+    /// <param name="branchNamePrefix">A prefix to prepend in front of the user branch name</param>
     /// <param name="sourceBranch">Branch from which a new branch will be created</param>
     protected void AskBranchNameAndSwitchToIt(string branchNamePrefix, string sourceBranch)
     {
-        string featureName;
-        bool exitCreatingFeature;
-        do
+        if (!Quiet)
         {
-            featureName = (Name ?? Console.ReadLine() ?? string.Empty).Trim()
-                                                            .Trim('/');
-
-            switch (featureName)
+            string featureName;
+            bool exitCreatingFeature;
+            do
             {
-                case string name when !string.IsNullOrWhiteSpace(name):
+                featureName = ( Name ?? Console.ReadLine() ?? string.Empty ).Trim()
+                    .Trim('/');
+
+                switch (featureName)
+                {
+                    case { } when !string.IsNullOrWhiteSpace(featureName):
                     {
-                        string branchName = $"{branchNamePrefix}/{featureName.Slugify()}";
-                        Information($"The branch '{{BranchName}}' will be created.{Environment.NewLine}Confirm ? (Y/N) ", branchName);
+                        string branchName = ComputeSanitizedFeatureBranchName(branchNamePrefix, featureName);
+                        Information(
+                            $"The branch '{{BranchName}}' will be created.{Environment.NewLine}Confirm ? (Y/N) ",
+                            branchName);
 
                         switch (Console.ReadKey().Key)
                         {
                             case ConsoleKey.Y:
-                                Information($"{Environment.NewLine}Checking out branch '{branchName}' from '{sourceBranch}'");
-
-                                Checkout(branchName, start: sourceBranch);
-
-                                Information($"{Environment.NewLine}'{branchName}' created successfully");
+                                CheckoutBranch(branchName, sourceBranch);
                                 exitCreatingFeature = true;
                                 break;
 
                             default:
+                            {
                                 Information($"{Environment.NewLine}Exiting task.");
                                 exitCreatingFeature = true;
                                 break;
+                            }
                         }
                     }
-                    break;
-                default:
-                    Information("Exiting task.");
-                    exitCreatingFeature = true;
-                    break;
+                        break;
+                    default:
+                        Information("Exiting task.");
+                        exitCreatingFeature = true;
+                        break;
+                }
+            } while (string.IsNullOrWhiteSpace(featureName) && !exitCreatingFeature);
+        }
+        else
+        {
+            if (!string.IsNullOrWhiteSpace(Name))
+            {
+                string featureBranchName = ComputeSanitizedFeatureBranchName(branchNamePrefix, Name.Trim('/'));
+                CheckoutBranch(featureBranchName, sourceBranch);
             }
-        } while (string.IsNullOrWhiteSpace(featureName) && !exitCreatingFeature);
+            else
+            {
+                Error(@"Missing ""--{ParameterName}"" parameter.", nameof(Name).Slugify());
+            }
+        }
+
+        return;
+        
+        /*
+         * Method for checking out a branch from a specified starting branch.
+         *  Displays information about the process and the result.
+         */ 
+        void CheckoutBranch(in string branchName, in string startBranch)
+        {
+            Information($"{Environment.NewLine}Checking out branch '{branchName}' from '{startBranch}'");
+
+            Checkout(branchName, start: startBranch);
+
+            Information($"{Environment.NewLine}'{branchName}' created successfully");
+        }
+
+        /*
+         * Compute a sanitized name of the desired branch name with the specified prefix
+         */
+        static string ComputeSanitizedFeatureBranchName(in string prefix, in string desiredBranchName) => $"{prefix}/{desiredBranchName.Slugify()}";
     }
 
     /// <summary>
