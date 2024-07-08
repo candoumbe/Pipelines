@@ -79,15 +79,20 @@ namespace Candoumbe.Pipelines.Components.GitHub
             Information("Creating a pull request for {Repository}", repositoryName);
             Information(@"Title of the pull request (or ""{PullRequestName}"" if empty)", Title);
 
-            string title = (Console.ReadLine()) switch
+            string title = Title;
+            string token = GitHubToken;
+            if (!Quiet)
             {
-                { } value when !string.IsNullOrWhiteSpace(value) => value.Trim(),
-                _ => Title
-            };
+                title = (Console.ReadLine()) switch
+                {
+                    { } value when !string.IsNullOrWhiteSpace(value) => value.Trim(),
+                    _ => Title
+                };
+
+                token ??= PromptForInput("Token (leave empty to exit)", string.Empty);
+            }
 
             Information("Creating {PullRequestName} for {Repository}", title, repositoryName);
-            string token = Token ?? PromptForInput("Token (leave empty to exit)", string.Empty);
-
             if (!string.IsNullOrWhiteSpace(token))
             {
                 Information("{SourceBranch} ==> {TargetBranch}", branchName, FeatureBranchSourceName);
@@ -106,30 +111,39 @@ namespace Candoumbe.Pipelines.Components.GitHub
 
                 PullRequest pullRequest = await gitHubClient.PullRequest.Create(owner, repositoryName, newPullRequest);
 
-                DeleteLocalBranchIf(DeleteLocalOnSuccess, branchName, switchToBranchName: FeatureBranchSourceName);
+                if (Quiet)
+                {
+                    DeleteLocalBranchIf(DeleteLocalOnSuccess 
+                                        && PromptForChoice("Delete branch {BranchName} ?  (Y/N)", BuildChoices()) == ConsoleKey.Y, branchName, switchToBranchName: FeatureBranchSourceName);
+                }
+                else
+                {
+                    DeleteLocalBranchIf(DeleteLocalOnSuccess, branchName, switchToBranchName: FeatureBranchSourceName);
+                }
                 Information("PR {PullRequestUrl} created successfully", pullRequest.HtmlUrl);
 
                 OpenUrl(pullRequest.HtmlUrl);
             }
 
+            return;
+
             static void DeleteLocalBranchIf(in bool condition, in string branchName, in string switchToBranchName)
             {
-                if (condition)
+                if (!condition)
                 {
-                    if (PromptForChoice("Delete branch {BranchName} ?  (Y/N)", BuildChoices()) == ConsoleKey.Y)
-                    {
-                        Git($"switch {switchToBranchName}");
-                        Git($"branch -D {branchName}");
-                    }
+                    return;
                 }
 
-                static (ConsoleKey key, string description)[] BuildChoices() => new[]
-                {
+                Git($"switch {switchToBranchName}");
+                Git($"branch -D {branchName}");
+            }
+            
+            static (ConsoleKey key, string description)[] BuildChoices() => new[]
+            {
                 (key: ConsoleKey.Y, "Delete the local branch"),
                 (key: ConsoleKey.N, "Keep the local branch"),
             };
-            }
-
+            
             static void GitPushToRemote()
             {
                 Git($"push origin --set-upstream {GitCurrentBranch()}");
