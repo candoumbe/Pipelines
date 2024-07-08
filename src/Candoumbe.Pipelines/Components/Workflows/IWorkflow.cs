@@ -72,7 +72,7 @@ public interface IWorkflow : IHaveGitRepository, IHaveGitVersion, IHaveChangeLog
         if (!Quiet)
         {
             Information("Enter the name of the coldfix. It will be used as the name of the coldfix/branch (leave empty to exit) :");
-            
+
             string featureName;
             bool exitCreatingFeature;
             do
@@ -80,9 +80,11 @@ public interface IWorkflow : IHaveGitRepository, IHaveGitVersion, IHaveChangeLog
                 featureName = ( Name ?? Console.ReadLine() ?? string.Empty ).Trim()
                     .Trim('/');
 
+                Verbose("Current feature name is {FeatureName}", featureName);
+
                 switch (featureName)
                 {
-                    case { } when !string.IsNullOrWhiteSpace(featureName):
+                    case not null when !string.IsNullOrWhiteSpace(featureName):
                     {
                         string branchName = ComputeSanitizedFeatureBranchName(branchNamePrefix, featureName);
                         Information(
@@ -126,11 +128,11 @@ public interface IWorkflow : IHaveGitRepository, IHaveGitVersion, IHaveChangeLog
         }
 
         return;
-        
+
         /*
          * Method for checking out a branch from a specified starting branch.
          *  Displays information about the process and the result.
-         */ 
+         */
         void CheckoutBranch(in string branchName, in string startBranch)
         {
             Information($"{Environment.NewLine}Checking out branch '{branchName}' from '{startBranch}'");
