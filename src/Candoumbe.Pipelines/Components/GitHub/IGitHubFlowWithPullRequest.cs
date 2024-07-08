@@ -77,12 +77,12 @@ namespace Candoumbe.Pipelines.Components.GitHub
             string owner = GitRepository.GetGitHubOwner();
 
             Information("Creating a pull request for {Repository}", repositoryName);
-            Information(@"Title of the pull request (or ""{PullRequestName}"" if empty)", Title);
 
             string title = Title;
             string token = GitHubToken;
             if (!Quiet)
             {
+                Information(@"Title of the pull request (or ""{PullRequestName}"" if empty)", Title);
                 title = (Console.ReadLine()) switch
                 {
                     { } value when !string.IsNullOrWhiteSpace(value) => value.Trim(),
@@ -91,8 +91,13 @@ namespace Candoumbe.Pipelines.Components.GitHub
 
                 token ??= PromptForInput("Token (leave empty to exit)", string.Empty);
             }
+            else
+            {
+                Information(@"Title of the pull request : {PullRequestName}", Title);
+            }
 
             Information("Creating {PullRequestName} for {Repository}", title, repositoryName);
+
             if (!string.IsNullOrWhiteSpace(token))
             {
                 Information("{SourceBranch} ==> {TargetBranch}", branchName, FeatureBranchSourceName);

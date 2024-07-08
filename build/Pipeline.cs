@@ -65,7 +65,6 @@ public class Pipeline : NukeBuild,
     IHaveChangeLog,
     IClean,
     IRestore,
-    IDotnetFormat,
     ICompile,
     IPack,
     IHaveGitVersion,
@@ -153,11 +152,4 @@ public class Pipeline : NukeBuild,
 
         return ValueTask.CompletedTask;
     }
-
-    ///<inheritdoc/>
-    bool IDotnetFormat.VerifyNoChanges => IsServerBuild;
-
-    ///<inheritdoc/>
-    Configure<DotNetFormatSettings> IDotnetFormat.FormatSettings => settings => settings
-        .SetSeverity(DotNetFormatSeverity.info);
 }
