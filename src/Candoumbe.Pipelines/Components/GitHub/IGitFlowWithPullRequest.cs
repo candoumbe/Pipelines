@@ -47,7 +47,7 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest
 
             string title = Title;
             string token = GitHubToken;
-            if (!Quiet)
+            if (!SkipConfirmation)
             {
                 title = (Console.ReadLine()) switch
                 {
@@ -77,7 +77,7 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest
 
                 PullRequest pullRequest = await gitHubClient.PullRequest.Create(owner, repositoryName, newPullRequest);
 
-                if (Quiet)
+                if (SkipConfirmation)
                 {
                     DeleteLocalBranchIf(DeleteLocalOnSuccess 
                                         && PromptForChoice("Delete branch {BranchName} ?  (Y/N)", BuildChoices()) == ConsoleKey.Y, branchName, switchToBranchName: FeatureBranchSourceName);

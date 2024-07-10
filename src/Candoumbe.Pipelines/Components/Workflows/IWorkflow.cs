@@ -36,7 +36,7 @@ public interface IWorkflow : IHaveGitRepository, IHaveGitVersion, IHaveChangeLog
         {
             FinalizeChangelog(ChangeLogFile, GitVersion.MajorMinorPatch, GitRepository);
 
-            if (IsLocalBuild && !Quiet)
+            if (IsLocalBuild && !SkipConfirmation)
             {
                 Information("Please review CHANGELOG.md ({ChangeLogFile}) and press 'Y' to validate (any other key will cancel changes)...", ChangeLogFile);
                 ConsoleKeyInfo keyInfo = Console.ReadKey();
@@ -69,7 +69,7 @@ public interface IWorkflow : IHaveGitRepository, IHaveGitVersion, IHaveChangeLog
     /// <param name="sourceBranch">Branch from which a new branch will be created</param>
     protected void AskBranchNameAndSwitchToIt(string branchNamePrefix, string sourceBranch)
     {
-        if (!Quiet)
+        if (!SkipConfirmation)
         {
             Information("Enter the name of the coldfix. It will be used as the name of the coldfix/branch (leave empty to exit) :");
 
