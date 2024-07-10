@@ -9,7 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🚀 New features
 
 - Enabled `TerminalLogger` ([#138](https://github.com/candoumbe/Pipelines/issues/138))
-- Added a new `--quiet` option to skip asking confirmations ([#145](https://github.com/candoumbe/Pipelines/issues/145))
+- Added a new `--skip-confirmation` option to skip asking confirmations ([#145](https://github.com/candoumbe/Pipelines/issues/145))
+- Introduced [`EnhancedNukeBuild`] that can be used as drop-in replacement of the `NukeBuild`.
+[`EnhancedNukeBuild`] class adds support for some options to the `NukeBuild` such as the new `--skip-confirmation` option 
+
 
 ### 🛠️ Fixes
 - Fixed `Nuke.Common` dependency used when targeting `net6.0`
@@ -195,6 +198,8 @@ So now `{MutationTestDirectory}/[{framework}]` is now changed to `{MutationTestD
 
 ## [0.1.0] / 2022-10-23
 - Initial release
+
+[`EnhancedNukeBuild`]:./src/Candoumbe.Pipelines/Components/EnhancedNukeBuild.cs
 
 [Unreleased]: https://github.com/candoumbe/Pipelines/compare/0.9.0...HEAD
 [0.9.0]: https://github.com/candoumbe/Pipelines/compare/0.8.0...0.9.0

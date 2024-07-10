@@ -59,7 +59,7 @@ using static Nuke.Common.Tools.Git.GitTasks;
             "LICENSE"
         ])]
 [DotNetVerbosityMapping]
-public class Pipeline : NukeBuild,
+public class Pipeline : EnhancedNukeBuild,
     IHaveSourceDirectory,
     IHaveSolution,
     IHaveChangeLog,
@@ -90,7 +90,7 @@ public class Pipeline : NukeBuild,
     [Required]
     [Solution]
     public Solution Solution;
-
+    
     ///<inheritdoc/>
     Solution IHaveSolution.Solution => Solution;
 

@@ -80,7 +80,7 @@ namespace Candoumbe.Pipelines.Components.GitHub
 
             string title = Title;
             string token = GitHubToken;
-            if (!Quiet)
+            if (!SkipConfirmation)
             {
                 Information(@"Title of the pull request (or ""{PullRequestName}"" if empty)", Title);
                 title = (Console.ReadLine()) switch
@@ -116,7 +116,7 @@ namespace Candoumbe.Pipelines.Components.GitHub
 
                 PullRequest pullRequest = await gitHubClient.PullRequest.Create(owner, repositoryName, newPullRequest);
 
-                if (Quiet)
+                if (SkipConfirmation)
                 {
                     DeleteLocalBranchIf(DeleteLocalOnSuccess 
                                         && PromptForChoice("Delete branch {BranchName} ?  (Y/N)", BuildChoices()) == ConsoleKey.Y, branchName, switchToBranchName: FeatureBranchSourceName);
