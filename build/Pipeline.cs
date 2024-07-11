@@ -1,10 +1,7 @@
-namespace Candoumbe.Pipelines.Build;
-
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Candoumbe.Pipelines.Components;
-using Candoumbe.Pipelines.Components.Formatting;
 using Candoumbe.Pipelines.Components.GitHub;
 using Candoumbe.Pipelines.Components.NuGet;
 using Candoumbe.Pipelines.Components.Workflows;
@@ -13,10 +10,13 @@ using Nuke.Common.CI;
 using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
-using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
+using Nuke.Common.Tools.Git;
 using Nuke.Common.Tools.GitHub;
-using static Nuke.Common.Tools.Git.GitTasks;
+
+namespace Candoumbe.Pipelines.Build;
+
+using static GitTasks;
 
 [GitHubActions("integration",
     GitHubActionsImage.UbuntuLatest,
@@ -78,7 +78,7 @@ public class Pipeline : EnhancedNukeBuild,
     IEnumerable<AbsolutePath> IClean.DirectoriesToDelete => this.Get<IHaveSourceDirectory>().SourceDirectory.GlobDirectories("**/*/bin", "**/*/obj");
 
     ///<inheritdoc/>
-    IEnumerable<AbsolutePath> IClean.DirectoriesToEnsureExistance => new[]
+    IEnumerable<AbsolutePath> IClean.DirectoriesToEnsureExistence => new[]
     {
         this.Get<IHaveArtifacts>().OutputDirectory,
         this.Get<IHaveArtifacts>().ArtifactsDirectory,
