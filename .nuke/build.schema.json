@@ -16,7 +16,7 @@
         },
         "Configuration": {
           "type": "string",
-          "description": "Defines the configuratoin to use when building the application",
+          "description": "Defines the configuration to use when building the application",
           "enum": [
             "Debug",
             "Release"

@@ -84,18 +84,12 @@ public class Pipeline : EnhancedNukeBuild,
         this.Get<IHaveArtifacts>().ArtifactsDirectory,
     };
 
-    [CI]
-    public GitHubActions GitHubActions;
-
     [Required]
     [Solution]
     public Solution Solution;
     
     ///<inheritdoc/>
     Solution IHaveSolution.Solution => Solution;
-
-    ///<inheritdoc/>
-    public AbsolutePath SourceDirectory => RootDirectory / "src";
 
     /// <summary>
     /// Token used to interact with GitHub API
@@ -112,7 +106,7 @@ public class Pipeline : EnhancedNukeBuild,
     public static int Main() => Execute<Pipeline>(x => ((ICompile)x).Compile);
 
     ///<inheritdoc/>
-    IEnumerable<AbsolutePath> IPack.PackableProjects => SourceDirectory.GlobFiles("**/*.csproj");
+    IEnumerable<AbsolutePath> IPack.PackableProjects => this.Get<IHaveSourceDirectory>().SourceDirectory.GlobFiles("**/*.csproj");
 
     ///<inheritdoc/>
     IEnumerable<AbsolutePath> ICreateGithubRelease.Assets => this.Get<IPack>().OutputDirectory.GlobFiles("**/*.nupkg;**/*.snupkg");
