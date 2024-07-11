@@ -23,7 +23,7 @@ public interface IClean : INukeBuild
     /// <summary>
     /// Collection of directories that <see cref="Clean"/> target will make sure exist.
     /// </summary>
-    IEnumerable<AbsolutePath> DirectoriesToEnsureExistance => Enumerable.Empty<AbsolutePath>();
+    IEnumerable<AbsolutePath> DirectoriesToEnsureExistence => Enumerable.Empty<AbsolutePath>();
 
     /// <summary>
     /// Performs the clean up
@@ -32,11 +32,11 @@ public interface IClean : INukeBuild
        .TryBefore<IRestore>(x => x.Restore)
        .OnlyWhenDynamic(() => DirectoriesToClean.AtLeastOnce()
                               || DirectoriesToDelete.AtLeastOnce()
-                              || DirectoriesToEnsureExistance.AtLeastOnce())
+                              || DirectoriesToEnsureExistence.AtLeastOnce())
        .Executes(() =>
        {
            DirectoriesToDelete.ForEach(directory => directory.DeleteDirectory());
            DirectoriesToClean.ForEach(directory => directory.CreateOrCleanDirectory());
-           DirectoriesToEnsureExistance.ForEach(directory => directory.CreateDirectory());
+           DirectoriesToEnsureExistence.ForEach(directory => directory.CreateDirectory());
        });
 }
