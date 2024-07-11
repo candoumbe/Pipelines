@@ -19,7 +19,12 @@ namespace Candoumbe.Pipelines.Components
         /// </summary>
         public static readonly Configuration Release = new() { Value = nameof(Release) };
 
-        ///<inheritdoc/>
+        
+        /// <summary>
+        /// Implicit operator to convert a <see cref="Configuration"/> to <see langword="string"/>.
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <returns>The value of the configuration</returns>
         public static implicit operator string(Configuration configuration) => configuration.Value;
     }
 }
