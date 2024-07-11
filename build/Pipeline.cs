@@ -1,10 +1,7 @@
-namespace Candoumbe.Pipelines.Build;
-
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Candoumbe.Pipelines.Components;
-using Candoumbe.Pipelines.Components.Formatting;
 using Candoumbe.Pipelines.Components.GitHub;
 using Candoumbe.Pipelines.Components.NuGet;
 using Candoumbe.Pipelines.Components.Workflows;
@@ -13,10 +10,13 @@ using Nuke.Common.CI;
 using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
-using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
+using Nuke.Common.Tools.Git;
 using Nuke.Common.Tools.GitHub;
-using static Nuke.Common.Tools.Git.GitTasks;
+
+namespace Candoumbe.Pipelines.Build;
+
+using static GitTasks;
 
 [GitHubActions("integration",
     GitHubActionsImage.UbuntuLatest,
@@ -59,13 +59,12 @@ using static Nuke.Common.Tools.Git.GitTasks;
             "LICENSE"
         ])]
 [DotNetVerbosityMapping]
-public class Pipeline : NukeBuild,
+public class Pipeline : EnhancedNukeBuild,
     IHaveSourceDirectory,
     IHaveSolution,
     IHaveChangeLog,
     IClean,
     IRestore,
-    IDotnetFormat,
     ICompile,
     IPack,
     IHaveGitVersion,
@@ -79,24 +78,18 @@ public class Pipeline : NukeBuild,
     IEnumerable<AbsolutePath> IClean.DirectoriesToDelete => this.Get<IHaveSourceDirectory>().SourceDirectory.GlobDirectories("**/*/bin", "**/*/obj");
 
     ///<inheritdoc/>
-    IEnumerable<AbsolutePath> IClean.DirectoriesToEnsureExistance => new[]
+    IEnumerable<AbsolutePath> IClean.DirectoriesToEnsureExistence => new[]
     {
         this.Get<IHaveArtifacts>().OutputDirectory,
         this.Get<IHaveArtifacts>().ArtifactsDirectory,
     };
 
-    [CI]
-    public GitHubActions GitHubActions;
-
     [Required]
     [Solution]
     public Solution Solution;
-
+    
     ///<inheritdoc/>
     Solution IHaveSolution.Solution => Solution;
-
-    ///<inheritdoc/>
-    public AbsolutePath SourceDirectory => RootDirectory / "src";
 
     /// <summary>
     /// Token used to interact with GitHub API
@@ -113,7 +106,7 @@ public class Pipeline : NukeBuild,
     public static int Main() => Execute<Pipeline>(x => ((ICompile)x).Compile);
 
     ///<inheritdoc/>
-    IEnumerable<AbsolutePath> IPack.PackableProjects => SourceDirectory.GlobFiles("**/*.csproj");
+    IEnumerable<AbsolutePath> IPack.PackableProjects => this.Get<IHaveSourceDirectory>().SourceDirectory.GlobFiles("**/*.csproj");
 
     ///<inheritdoc/>
     IEnumerable<AbsolutePath> ICreateGithubRelease.Assets => this.Get<IPack>().OutputDirectory.GlobFiles("**/*.nupkg;**/*.snupkg");
@@ -129,8 +122,7 @@ public class Pipeline : NukeBuild,
         new GitHubPushNugetConfiguration(
             githubToken: this.Get<ICreateGithubRelease>()?.GitHubToken,
             source: new Uri($"https://nuget.pkg.github.com/{ this.Get<IHaveGitHubRepository>().GitRepository.GetGitHubOwner() }/index.json"),
-            canBeUsed: () => this is ICreateGithubRelease createRelease && createRelease.GitHubToken is not null
-        ),
+            canBeUsed: () => this is ICreateGithubRelease { GitHubToken: not null }),
     };
 
     ///<inheritdoc/>
@@ -154,11 +146,4 @@ public class Pipeline : NukeBuild,
 
         return ValueTask.CompletedTask;
     }
-
-    ///<inheritdoc/>
-    bool IDotnetFormat.VerifyNoChanges => IsServerBuild;
-
-    ///<inheritdoc/>
-    Configure<DotNetFormatSettings> IDotnetFormat.FormatSettings => settings => settings
-        .SetSeverity(DotNetFormatSeverity.info);
 }

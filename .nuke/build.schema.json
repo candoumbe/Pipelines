@@ -16,7 +16,7 @@
         },
         "Configuration": {
           "type": "string",
-          "description": "Defines the configuratoin to use when building the application",
+          "description": "Defines the configuration to use when building the application",
           "enum": [
             "Debug",
             "Release"
@@ -37,18 +37,6 @@
         "Draft": {
           "type": "boolean",
           "description": "Indicates to open the pull request as 'draft'"
-        },
-        "Formatters": {
-          "type": "array",
-          "description": "Sets of formatters that the tool must apply",
-          "items": {
-            "type": "string",
-            "enum": [
-              "Analyzers",
-              "Style",
-              "Whitespace"
-            ]
-          }
         },
         "GitHubToken": {
           "type": "string",
@@ -139,7 +127,6 @@
               "Coldfix",
               "Compile",
               "Feature",
-              "Format",
               "Hotfix",
               "Pack",
               "Publish",
@@ -147,6 +134,10 @@
               "Restore"
             ]
           }
+        },
+        "SkipConfirmation": {
+          "type": "boolean",
+          "description": "Set to true to not ask any confirmation to the end user (default: false)"
         },
         "Solution": {
           "type": "string",
@@ -164,7 +155,6 @@
               "Coldfix",
               "Compile",
               "Feature",
-              "Format",
               "Hotfix",
               "Pack",
               "Publish",

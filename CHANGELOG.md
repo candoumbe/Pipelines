@@ -7,12 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.0] / 2024-07-11
+### 🚀 New features
+
+- Enabled `TerminalLogger` ([#138](https://github.com/candoumbe/Pipelines/issues/138))
+- Added a new `--skip-confirmation` option to skip asking confirmations ([#145](https://github.com/candoumbe/Pipelines/issues/145)).
+This can improve usability in non-interactive environments.
+- Introduced [`EnhancedNukeBuild`] that can be used as drop-in replacement of the `NukeBuild`.
+[`EnhancedNukeBuild`] class adds support for some options to the `NukeBuild` such as the new `--skip-confirmation` option.
+
+### 🛠️ Fixes
+
+- Fixed `Nuke.Common` dependency used when targeting `net6.0`
+
+### 🧹 Housekeeping
+
+- Added `$schema` property for better completion in renovate configuration file. 
+
 ## [0.9.0] / 2024-01-25
 ### 🚀 New features
 
 - Added `IDotnetFormat` component that format code using `dotnet-format` tool
 
-### 💪🏾 Miscellanous
+### 💪🏾 Miscellaneous
 
 - Enhanced the way titles of pull requests are computed.
 
@@ -37,7 +54,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `IDoHotfixWorkflow` component which represents the `hotfix` workflow
 - Added `IDoFeatureWorkflow` component which represents the `feature` workflow
 - Added `IDoColdfixWorkflow` component which represents the `coldfix` workflow
-- `ICreateGithubRelease.Assets` property can be used to specify which artifacts to associate with a Github release ([#103](https://github.com/candoumbe/Pipelines/issues/103))
+- `ICreateGithubRelease.Assets` property can be used to specify which artifacts to associate with a GitHub release ([#103](https://github.com/candoumbe/Pipelines/issues/103))
 - `IMutationTest` component can send `--config-file` option to Stryker CLI ([#90](https://github.com/candoumbe/Pipelines/issues/90))
 
 ### 🚨 Breaking changes
@@ -58,11 +75,11 @@ this new type allows to specify the path to the configuration file to use during
 
 ### 🧹 Housekeeping
 
-- Refactoring of `IMutationTest` component to improve maintenability : the way CLI options required by Stryker are computed is now centralized.
-- Added `GitHubToken` value in `parameters.local.json` : this value will be consumed directly to interact with the github repository.
+- Refactoring of `IMutationTest` component to improve maintainability : the way CLI options required by Stryker are computed is now centralized.
+- Added `GitHubToken` value in `parameters.local.json` : this value will be consumed directly to interact with the GitHub repository.
 - `IGitflow`, `IGithubflow` components extends `IDoHotfixWorkflow` component
 - `IGitflow`, `IGithubflow` components extends `IDoHotfixWorkflow` component
-- Added `NugetApi` valuen in `parameters.local.json` to interact directly with NuGet from local environment
+- Added `NugetApi` value in `parameters.local.json` to interact directly with NuGet from local environment
 - Added documentation for `IMutationTest` classes
 - Deprecated `IHaveSecret` component ([#94](https://github.com/candoumbe/Pipelines/issues/94))
 
@@ -155,7 +172,7 @@ So now `{MutationTestDirectory}/[{framework}]` is now changed to `{MutationTestD
 ### 🚀 New features
 - Added `IGithubFlowWithPullRequest`
 - Added `IGitFlowWithPullRequest`
-- Added `IPullRequest` component which extends `IWorkflow` and create pull requests instead or merging back to `develop` (respectiveley `main`) when finishing a feature / coldfix (resp. release / hotfix) branch.
+- Added `IPullRequest` component which extends `IWorkflow` and create pull requests instead or merging back to `develop` (respectively `main`) when finishing a feature / coldfix (resp. release / hotfix) branch.
 - Added `IGitHubFlow` ([#15](https://github.com/candoumbe/pipelines/issues/15))
 - Added `IPullRequest.Issues` parameter which allows to specify issues a pull request fixes ([#9](https://github.com/candoumbe/pipelines/issues/9))
 - Added execution of `IPublish.Publish` target on `integration` workflow
@@ -189,7 +206,8 @@ So now `{MutationTestDirectory}/[{framework}]` is now changed to `{MutationTestD
 ## [0.1.0] / 2022-10-23
 - Initial release
 
-[Unreleased]: https://github.com/candoumbe/Pipelines/compare/0.9.0...HEAD
+[Unreleased]: https://github.com/candoumbe/Pipelines/compare/0.10.0...HEAD
+[0.10.0]: https://github.com/candoumbe/Pipelines/compare/0.9.0...0.10.0
 [0.9.0]: https://github.com/candoumbe/Pipelines/compare/0.8.0...0.9.0
 [0.8.0]: https://github.com/candoumbe/Pipelines/compare/0.7.0...0.8.0
 [0.7.0]: https://github.com/candoumbe/Pipelines/compare/0.6.1...0.7.0

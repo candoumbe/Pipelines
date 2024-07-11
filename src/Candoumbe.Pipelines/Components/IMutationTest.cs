@@ -6,7 +6,6 @@ using Nuke.Common;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
-using Nuke.Common.Utilities;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 using static Serilog.Log;
 namespace Candoumbe.Pipelines.Components;
@@ -22,12 +21,12 @@ namespace Candoumbe.Pipelines.Components;
 public interface IMutationTest : IHaveTests
 {
     /// <summary>
-    /// Name of the property set when <see href="SourceLink">SourceLink</see> is enabled on a projet.
+    /// Name of the property set when <see href="SourceLink">SourceLink</see> is enabled on a project.
     /// </summary>
     private const string ContinuousIntegrationBuild = nameof(ContinuousIntegrationBuild);
 
     /// <summary>
-    /// Directory where mutattion test results should be published
+    /// Directory where mutation test results should be published
     /// </summary>
     AbsolutePath MutationTestResultDirectory => TestResultDirectory / "mutation-tests";
 
@@ -75,7 +74,7 @@ public interface IMutationTest : IHaveTests
                 {
                     // We retrieve the current set of frameworks the current test project are tested against
                     IReadOnlyCollection<string> testedFrameworks = mutationProject.TestProjects.Select(csproj => csproj.GetTargetFrameworks())
-                                                                                               .SelectMany(frameworks => frameworks)
+                                                                                               .SelectMany(frmworks => frmworks)
                                                                                                .Distinct(StringComparer.OrdinalIgnoreCase)
                                                                                                .ToArray();
 
@@ -94,7 +93,7 @@ public interface IMutationTest : IHaveTests
             {
                 (Project sourceProject, IEnumerable<Project> testsProjects, AbsolutePath configFile) = mutationProject;
 
-                Verbose("{ProjetName} will run mutation tests for the following frameworks : {@Frameworks}", sourceProject.Name, sourceProject.GetTargetFrameworks());
+                Verbose("{ProjectName} will run mutation tests for the following frameworks : {@Frameworks}", sourceProject.Name, sourceProject.GetTargetFrameworks());
 
                 Arguments args = new();
                 args = args.Apply(StrykerArgumentsSettingsBase)
@@ -115,7 +114,7 @@ public interface IMutationTest : IHaveTests
                     strykerArgs = strykerArgs.Add("--config-file {value}", configFile);
                 }
 
-                testsProjects.ForEach(project => strykerArgs = strykerArgs.Add("--test-project {value}", project.Path));
+                strykerArgs = testsProjects.Aggregate(strykerArgs, (current, project) => current.Add("--test-project {value}", project.Path));
 
                 switch (this)
                 {
@@ -126,7 +125,7 @@ public interface IMutationTest : IHaveTests
                             {
                                 case { } branchName when string.Equals(branchName, IHaveDevelopBranch.DevelopBranchName, StringComparison.InvariantCultureIgnoreCase):
                                     {
-                                        // we are in git flow so we can compare develop with main branch
+                                        // we are in git flow, so we can compare develop with main branch
                                         strykerArgs = strykerArgs.Add("--with-baseline:{value}", IHaveMainBranch.MainBranchName);
                                     }
                                     break;
@@ -142,7 +141,7 @@ public interface IMutationTest : IHaveTests
                                     break;
                                 default:
                                     {
-                                        // By default we try to compare the current commit with the previous one (if any).
+                                        // By default, we try to compare the current commit with the previous one (if any).
                                         if (gitflowRepository.Head is { } head)
                                         {
                                             strykerArgs = strykerArgs.Add("--with-baseline:{value}", head);
@@ -154,7 +153,7 @@ public interface IMutationTest : IHaveTests
                             break;
                         }
 
-                    case IGitHubFlow { GitRepository: { } githubFlowRepository } gitHubFlow:
+                    case IGitHubFlow { GitRepository: { } githubFlowRepository }:
                         {
                             strykerArgs = strykerArgs.Add("--version {value}", githubFlowRepository.Commit ?? githubFlowRepository.Branch);
                             if (githubFlowRepository.Branch is { Length: > 0 } branchName && !string.Equals(branchName, IHaveMainBranch.MainBranchName, StringComparison.InvariantCultureIgnoreCase))
@@ -166,19 +165,19 @@ public interface IMutationTest : IHaveTests
                         }
 
                     default:
+                    {
                         if (!sourceProject.IsSourceLinkEnabled())
                         {
-                            if (this is IHaveGitVersion gitVersion)
+                            strykerArgs = this switch
                             {
-                                strykerArgs = strykerArgs.Add("--version {value}", gitVersion.MajorMinorPatchVersion);
-                            }
-                            else if (this is IHaveGitRepository gitRepository)
-                            {
-                                strykerArgs = strykerArgs.Add("--version {value}", gitRepository.GitRepository?.Commit ?? gitRepository?.GitRepository?.Branch);
-                            }
+                                IHaveGitVersion gitVersion => strykerArgs.Add("--version {value}", gitVersion.MajorMinorPatchVersion),
+                                IHaveGitRepository gitRepository => strykerArgs.Add("--version {value}", gitRepository.GitRepository?.Commit ?? gitRepository.GitRepository?.Branch),
+                                _ => strykerArgs
+                            };
                         }
 
                         break;
+                    }
                 }
 
                 DotNet(strykerArgs.RenderForExecution(), workingDirectory: sourceProject.Path.Parent);
