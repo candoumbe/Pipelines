@@ -17,6 +17,6 @@
     <PackageDownload Include="GitVersion.Tool" Version="[6.0.2]"/>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Candoumbe.Pipelines" Version="0.10.0" />
+    <ProjectReference Include="..\src\Candoumbe.Pipelines\Candoumbe.Pipelines.csproj"/>
   </ItemGroup>
 </Project>

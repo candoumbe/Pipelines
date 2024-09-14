@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bumped required SDK to 8.0.401
 - Bumped `Gitversion.Tool` to 6.0.2
 - Bumped `Roslynator.Analyzers` to 4.12.5
+- Replaced `NuGetVersion` usage with `SemVer` variable as nuget package version number 
 
 ## [0.10.0] / 2024-07-11
 ### 🚀 New features
