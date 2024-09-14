@@ -18,6 +18,7 @@ branches:
   release:
     regex: "^release(s)?[/-]"
     label: "rc"
+    is-release-branch: true
   develop: 
     label: "alpha"
 ignore:

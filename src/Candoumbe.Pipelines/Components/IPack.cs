@@ -65,7 +65,8 @@ public interface IPack : IHaveArtifacts, IHaveConfiguration
                      (_, versioning) => _.SetAssemblyVersion(versioning.GitVersion.AssemblySemVer)
                                         .SetFileVersion(versioning.GitVersion.AssemblySemFileVer)
                                         .SetInformationalVersion(versioning.GitVersion.InformationalVersion)
-                                        .SetVersion(versioning.GitVersion.NuGetVersion))
+                                        .SetVersion(versioning.GitVersion.SemVer)
+                                    )
         .WhenNotNull(this.As<IHaveChangeLog>(), (_, changelog) => _.SetPackageReleaseNotes(changelog.ReleaseNotes))
         .WhenNotNull(this.As<IHaveGitRepository>(), (_, repository) => _.SetRepositoryType("git")
                                                                      .SetRepositoryUrl(repository.GitRepository.HttpsUrl));

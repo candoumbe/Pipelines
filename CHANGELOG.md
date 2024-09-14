@@ -6,10 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.11.0] / 2024-09-14
 ### 🧹 Housekeeping
 - Bumped `Nuke.Common` to 8.1.0 and updated build scripts.
 - Bumped required SDK to 8.0.401
 - Bumped `Gitversion.Tool` to 6.0.2
+- Bumped `Roslynator.Analyzers` to 4.12.5
+- Replaced `NuGetVersion` usage with `SemVer` variable as nuget package version number 
 
 ## [0.10.0] / 2024-07-11
 ### 🚀 New features
@@ -210,7 +214,8 @@ So now `{MutationTestDirectory}/[{framework}]` is now changed to `{MutationTestD
 ## [0.1.0] / 2022-10-23
 - Initial release
 
-[Unreleased]: https://github.com/candoumbe/Pipelines/compare/0.10.0...HEAD
+[Unreleased]: https://github.com/candoumbe/Pipelines/compare/0.11.0...HEAD
+[0.11.0]: https://github.com/candoumbe/Pipelines/compare/0.10.0...0.11.0
 [0.10.0]: https://github.com/candoumbe/Pipelines/compare/0.9.0...0.10.0
 [0.9.0]: https://github.com/candoumbe/Pipelines/compare/0.8.0...0.9.0
 [0.8.0]: https://github.com/candoumbe/Pipelines/compare/0.7.0...0.8.0
