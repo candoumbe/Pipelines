@@ -1,6 +1,11 @@
 root = true
 [*]
 end_of_line = crlf
+indent_size = 4
+indent_style = space
+
+[{*.xml,*.json,*.csproj}]
+indent_size = 2
 
 [*.cs]
 # Style options
