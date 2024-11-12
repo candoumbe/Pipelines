@@ -71,7 +71,6 @@ public interface IUnitTest : ICompile, IHaveTests, IHaveCoverage
 
     internal sealed Configure<DotNetTestSettings> UnitTestSettingsBase => _ => _
         .SetConfiguration(Configuration.ToString())
-                .ResetVerbosity()
                 .EnableUseSourceLink()
                 .SetNoBuild(SucceededTargets.Contains(Compile))
                 .SetResultsDirectory(UnitTestResultsDirectory)
