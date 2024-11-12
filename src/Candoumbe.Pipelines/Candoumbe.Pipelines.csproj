@@ -2,24 +2,12 @@
 
   <Import Project="../../core.props" />
   <PropertyGroup>
-    <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
+    <TargetFrameworks>net8.0</TargetFrameworks>
     <Description>A Stater development kit to script your CI/CD using [Nuke](https://nuke.build).</Description>
     <PackageTags>build, pipeline, ci, workflow</PackageTags>
   </PropertyGroup>
-
-  <Choose>
-      <When Condition="'$(TargetFramework)' == 'net6.0'">
-          <ItemGroup>
-              <PackageReference Include="Nuke.Common" Version="8.1.4" />
-          </ItemGroup>
-      </When>
-      <Otherwise>
-          <ItemGroup>
-              <PackageReference Include="Nuke.Common" Version="8.1.4" />
-          </ItemGroup>
-      </Otherwise>
-  </Choose>
-
+  
   <ItemGroup>
+      <PackageReference Include="Nuke.Common" Version="8.1.4" />
   </ItemGroup>
 </Project>
