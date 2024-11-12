@@ -43,6 +43,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Candoumbe.Miscutilities" Version="0.13.0"/>
+    <PackageReference Include="Candoumbe.Miscutilities" Version="0.13.1"/>
   </ItemGroup>
 </Project>
