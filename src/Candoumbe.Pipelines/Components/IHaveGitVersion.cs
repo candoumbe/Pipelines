@@ -15,7 +15,7 @@ public interface IHaveGitVersion : INukeBuild, IRequireNuGetPackage
     /// <summary>
     /// The GitVersion tool that can be used to version the project
     /// </summary>
-    [GitVersion(Framework = "net6.0")]
+    [GitVersion(Framework = "net8.0")]
     [Required]
     public GitVersion GitVersion => TryGetValue(() => GitVersion);
 
