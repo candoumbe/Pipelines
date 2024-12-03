@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Candoumbe.Pipelines.Components.Workflows;
+using JetBrains.Annotations;
 using Nuke.Common;
+using Nuke.Common.Git;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
@@ -96,8 +98,8 @@ public interface IMutationTest : IHaveTests
                 Verbose("{ProjectName} will run mutation tests for the following frameworks : {@Frameworks}", sourceProject.Name, sourceProject.GetTargetFrameworks());
 
                 Arguments args = new();
-                args = args.Apply(StrykerArgumentsSettingsBase)
-                           .Apply(StrykerArgumentsSettings);
+                args = StrykerArgumentsSettingsBase.Invoke(args);
+                args = StrykerArgumentsSettings.Invoke(args);
 
                 args.Add("--target-framework {value}", framework)
                     .Add("--output {value}", MutationTestResultDirectory / sourceProject.Name / framework);
@@ -185,14 +187,22 @@ public interface IMutationTest : IHaveTests
         });
 
     internal Configure<Arguments> StrykerArgumentsSettingsBase => _
-        => _
-           .When(IsLocalBuild, args => args.Add("--open-report:{value}", "html"))
-           .WhenNotNull(StrykerDashboardApiKey,
-                        (args, apiKey) => args.Add("--dashboard-api-key {value}", apiKey, secret: true)
-                                              .Add("--reporter dashboard"))
-           .Add("--reporter markdown")
-           .Add("--reporter html")
-           .When(IsLocalBuild, args => args.Add("--reporter progress"));
+        =>
+    {
+        Arguments args = new();
+
+        if (IsLocalBuild)
+        {
+            args = args.Add("--open-report:{value}", "html")
+                    .Add("--reporter progress");
+        }
+
+        return args.WhenNotNull(StrykerArgumentsSettings,
+                (args, apiKey) => args.Add("--dashboard-api-key {value}", apiKey, secret: true)
+                    .Add("--reporter dashboard"))
+            .Add("--reporter markdown")
+            .Add("--reporter html");
+    };
 
     /// <summary>
     /// Configures arguments that will be used by when running Stryker tool
@@ -203,6 +213,7 @@ public interface IMutationTest : IHaveTests
 /// <summary>
 /// Wraps information on mutation tests for a specific project.
 /// </summary>
+[UsedImplicitly]
 public record MutationProjectConfiguration
 {
     /// <summary>
