@@ -17,7 +17,6 @@ using static Nuke.Common.Tools.ReportGenerator.ReportGeneratorTasks;
 /// <remarks>
 /// This component requires <see href="https://nuget.org/packages/reportgenerator">ReportGenerator tool</see>
 /// </remarks>
-[NuGetPackageRequirement("ReportGenerator")]
 public interface IReportCoverage : IUnitTest, IRequireNuGetPackage
 {
     /// <summary>
@@ -84,7 +83,7 @@ public interface IReportCoverage : IUnitTest, IRequireNuGetPackage
                            .SetHistoryDirectory(CoverageReportHistoryDirectory)
                            .SetTag(repository.Commit)
                      )
-        .When(this.As<IHaveGitRepository>() is null,
+        .When(_ => this.As<IHaveGitRepository>() is null,
               _ => _.SetTargetDirectory(CoverageReportDirectory)
                     .SetHistoryDirectory(CoverageReportHistoryDirectory));
 

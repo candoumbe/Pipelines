@@ -77,7 +77,7 @@ public interface IPushNugetPackages : IPack
                                                    (_, file) => _.SetTargetPath(file))
                                                                  .Apply(PackagePublishSettings)
                                                                  .CombineWith(PublishConfigurations,
-                                                                              (setting, config) => setting.When(config.CanBeUsed(),
+                                                                              (setting, config) => setting.When(_ => config.CanBeUsed(),
                                                                                                                 _ => _.SetApiKey(config.Key)
                                                                                                                       .SetSource(config.Source))),
                                                       degreeOfParallelism: PushDegreeOfParallelism,
@@ -88,7 +88,7 @@ public interface IPushNugetPackages : IPack
                 PushNugetPackageConfiguration publishConfiguration = PublishConfigurations.Single(config => string.Equals(config.Name, ConfigName, System.StringComparison.OrdinalIgnoreCase));
                 DotNetNuGetPush(s => s.Apply(PublishSettingsBase)
                                       .Apply(PublishSettings)
-                                      .When(publishConfiguration.CanBeUsed(),
+                                      .When(_  => publishConfiguration.CanBeUsed(),
                                             _ => _.SetApiKey(publishConfiguration.Key)
                                                   .SetSource(publishConfiguration.Source))
                                       .CombineWith(PublishPackageFiles,

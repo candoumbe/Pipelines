@@ -1,8 +1,10 @@
-﻿using Nuke.Common;
+﻿using System.Linq.Expressions;
+using Nuke.Common;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
+using static System.Linq.Expressions.ExpressionExtensions;
 
 namespace Candoumbe.Pipelines.Components;
 
@@ -23,7 +25,10 @@ public interface IRestore : INukeBuild, IHaveSolution
                 .Apply(RestoreSettings)
             );
 
-            DotNetToolRestore();
+            //TODO remove the settings => settings part once Nuke 9.0.3 is out
+            DotNetToolRestore(s => s
+                .Apply(ToolRestoreSettings)
+            );
         });
 
     internal sealed Configure<DotNetRestoreSettings> RestoreSettingsBase => _ => _
@@ -34,6 +39,11 @@ public interface IRestore : INukeBuild, IHaveSolution
     /// Options used to restore dependencies
     /// </summary>
     Configure<DotNetRestoreSettings> RestoreSettings => _ => _;
+
+    /// <summary>
+    /// Options used to restore tools dependencies
+    /// </summary>
+    Configure<DotNetToolRestoreSettings> ToolRestoreSettings => _ => _;
 
     /// <summary>
     /// Defines when set to <see langword="true"/> if unreacheable sources should make the "restore" process fail.

@@ -4,7 +4,9 @@ using System.Linq;
 using Nuke.Common;
 using Nuke.Common.IO;
 using Nuke.Common.Tooling;
+using Nuke.Common.Tools.Boots;
 using Nuke.Common.Tools.DotNet;
+using Nuke.Common.Utilities;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 using static Nuke.Common.Tools.Git.GitTasks;
 using static Serilog.Log;
@@ -21,14 +23,13 @@ namespace Candoumbe.Pipelines.Components.Formatting;
 ///     <item>if the pipeline <strong>does not</strong> implement / extend  <see cref="IHaveGitRepository"/> : all files will be included.</item>
 /// </list>
 /// </remarks>
-[NuGetPackageRequirement("dotnet-format")]
 public interface IDotnetFormat : IFormat
 {
     /// <summary>
     /// The workspace onto which the formatter will operate
     /// </summary>
     AbsolutePath Workspace => this.As<IHaveSolution>()?.Solution ?? TryGetValue(() => Workspace);
-
+    
     /// <summary>
     /// Sets to <see langword="true"/> will halt the pipeline execution if the component will change any format.
     /// </summary>
@@ -79,85 +80,27 @@ public interface IDotnetFormat : IFormat
             DotNetFormatSettings dotNetFormatSettings = new();
             dotNetFormatSettings = dotNetFormatSettings.Apply(FormatSettingsBase)
                                                        .Apply(FormatSettings);
-            Arguments args = new();
-
-            if (dotNetFormatSettings.Include.Count > 0)
-            {
-                Arguments filesIncludedArgs = HandleIncludedFiles(dotNetFormatSettings.Include);
-                args.Add("--include")
-                    .Concatenate(filesIncludedArgs);
-            }
-
-            if (dotNetFormatSettings.Exclude.Count > 0)
-            {
-                Arguments filesExcludedArgs = HandleExcludedFiles(dotNetFormatSettings.Exclude);
-                args.Add("--exclude")
-                    .Concatenate(filesExcludedArgs);
-            }
 
             if (Formatters.Length > 0)
             {
                 if (Formatters.Contains(DotNetFormatter.Analyzers))
                 {
-                    Arguments formatAnalyzersArgs = MapArgumentsToDotNetFormatsettings(dotNetFormatSettings);
-                    DotNet($"format analyzers {formatAnalyzersArgs.Concatenate(args).Add("--severity {value}", dotNetFormatSettings.Severity)}");
+                    DotNet($"format analyzers {dotNetFormatSettings}");
                 }
 
                 if (Formatters.Contains(DotNetFormatter.Style))
                 {
-                    Arguments formatStyleArgs = MapArgumentsToDotNetFormatsettings(dotNetFormatSettings);
-                    DotNet($"format style {formatStyleArgs.Concatenate(args).Add("--severity {value}", dotNetFormatSettings.Severity)}");
+                    DotNet($"format style {dotNetFormatSettings}");
                 }
 
                 if (Formatters.Contains(DotNetFormatter.Whitespace))
                 {
-                    Arguments formatWhitespaceArgs = MapArgumentsToDotNetFormatsettings(dotNetFormatSettings);
-                    DotNet($"format whitespace {formatWhitespaceArgs}");
+                    DotNet($"format whitespace {dotNetFormatSettings}");
                 }
             }
             else
             {
                 DotNetFormat(dotNetFormatSettings);
-            }
-
-            static Arguments HandleIncludedFiles(IEnumerable<string> files)
-            {
-                Arguments args = new();
-
-                files.ForEach((file) =>
-                {
-                    Verbose("'{FileName}' will be formatted", file);
-                    args.Add(file);
-                });
-
-                return args;
-            }
-
-            static Arguments HandleExcludedFiles(IEnumerable<string> files)
-            {
-                Arguments args = new();
-
-                files.ForEach((file) =>
-                {
-                    Verbose("'{FileName}' will not be formatted", file);
-                    args.Add(file);
-                });
-
-                return args;
-            }
-
-            static Arguments MapArgumentsToDotNetFormatsettings(DotNetFormatSettings dotNetFormatSettings)
-            {
-                Arguments args = new();
-                args.Add("{value}", dotNetFormatSettings.Project)
-                    .Add("--no-restore", condition: dotNetFormatSettings.NoRestore)
-                    .Add("--verify-no-changes", dotNetFormatSettings.VerifyNoChanges)
-                    .Add("--include-generated", dotNetFormatSettings.IncludeGenerated)
-                    .Add("--verbosity {value}", dotNetFormatSettings.Verbosity)
-                    .Add("--binarylog {value}", dotNetFormatSettings.BinaryLog)
-                    .Add("--report {value}", dotNetFormatSettings.Report);
-
-                return args;
             }
         });
 }
