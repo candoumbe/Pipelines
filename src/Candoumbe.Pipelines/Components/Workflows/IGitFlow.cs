@@ -38,7 +38,7 @@ public interface IGitFlow : IDoHotfixWorkflow, IDoColdfixWorkflow, IHaveDevelopB
     /// </remarks>
     public Target Release => _ => _
         .DependsOn(Changelog)
-        .Description($"Starts a new {ReleaseBranchPrefix}/{{version}} from {DevelopBranchName} if not currently on {ReleaseBranchPrefix}/{{version}}.\n" +
+        .Description($"Starts a new {ReleaseBranchPrefix}/{{version}} from {DevelopBranchName} if not currently on {ReleaseBranchPrefix}/{{version}}.{EnvironmentInfo.NewLine}" +
                      $"When already on {ReleaseBranchPrefix}/{{version}}, merges back either to {MainBranchName} or {DevelopBranchName} ")
         .Requires(() => IsLocalBuild)
         .Requires(() => !GitRepository.IsOnReleaseBranch() || GitHasCleanWorkingCopy())
@@ -59,6 +59,12 @@ public interface IGitFlow : IDoHotfixWorkflow, IDoColdfixWorkflow, IHaveDevelopB
         });
 
     /// <summary>
+    /// Defines if linear history should be preserved.
+    /// </summary>
+    [Parameter("Defines if linear history should be preserved.")]
+    bool? RequireLinearHistory { get; set; }
+
+    /// <summary>
     /// Merges a <see cref="IDoColdfixWorkflow.ColdfixBranchPrefix"/> back to <see cref="IHaveDevelopBranch.DevelopBranchName"/> branch
     /// </summary>
     async ValueTask IDoColdfixWorkflow.FinishColdfix() => await FinishFeature();
@@ -68,14 +74,28 @@ public interface IGitFlow : IDoHotfixWorkflow, IDoColdfixWorkflow, IHaveDevelopB
     /// </summary>
     ValueTask IDoHotfixWorkflow.FinishHotfix()
     {
-        Git($"checkout {MainBranchName}");
-        Git("pull");
-        Git($"merge --no-ff --no-edit {GitRepository.Branch}");
-        Git($"tag {MajorMinorPatchVersion}");
+        Git($"switch {MainBranchName}");
 
-        Git($"checkout {DevelopBranchName}");
-        Git("pull");
-        Git($"merge --no-ff --no-edit {GitRepository.Branch}");
+        if (RequireLinearHistory is true)
+        {
+            Git("pull --rebase");
+            Git($"rebase {GitRepository.Branch}");
+            Git($"tag {MajorMinorPatchVersion}");
+
+            Git($"switch {DevelopBranchName}");
+            Git("pull --rebase");
+            Git($"rebase {GitRepository.Branch}");
+        }
+        else
+        {
+            Git("pull");
+            Git($"merge --no-ff --no-edit {GitRepository.Branch}");
+            Git($"tag {MajorMinorPatchVersion}");
+
+            Git($"switch {DevelopBranchName}");
+            Git("pull");
+            Git($"merge --no-ff --no-edit {GitRepository.Branch}");
+        }
 
         Git($"branch -D {GitRepository.Branch}");
 
@@ -95,9 +115,17 @@ public interface IGitFlow : IDoHotfixWorkflow, IDoColdfixWorkflow, IHaveDevelopB
     ValueTask IDoFeatureWorkflow.FinishFeature()
     {
         Git($"rebase {DevelopBranchName}");
-        Git($"checkout {DevelopBranchName}");
-        Git("pull");
-        Git($"merge --no-ff --no-edit {GitRepository.Branch}");
+        Git($"switch {DevelopBranchName}");
+
+        if (RequireLinearHistory is true)
+        {
+            Git("pull --rebase");
+        }
+        else
+        {
+            Git("pull");
+            Git($"merge --no-ff --no-edit {GitRepository.Branch}");
+        }
 
         Git($"branch -D {GitRepository.Branch}");
         Git($"push origin {DevelopBranchName}");

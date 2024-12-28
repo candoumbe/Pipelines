@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🚨 Breaking changes
 - Dropped `net8.0` support
 
+### 🚀 New features
+- Added  `RequireLinearHistory` parameter as a hint to preserve à linear history of commits. ([#172](https://github.com/candoumbe/Pipelines/issues/172))
+
 
 ## [0.12.1] / 2024-11-12
 ### 🛠️ Fixes
