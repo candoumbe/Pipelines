@@ -25,7 +25,7 @@ public interface ICreateGithubRelease : IHaveGitHubRepository, IHaveChangeLog, I
     /// <remarks>
     /// Files will be zipped and added to the release
     /// </remarks>
-    public IEnumerable<AbsolutePath> Assets => Enumerable.Empty<AbsolutePath>();
+    public IEnumerable<AbsolutePath> Assets => [];
 
     /// <summary>
     /// Creates a Github Release
@@ -47,7 +47,7 @@ public interface ICreateGithubRelease : IHaveGitHubRepository, IHaveChangeLog, I
             };
 
             string repositoryOwner = GitRepository.GetGitHubOwner();
-            IReadOnlyList<Octokit.Release> releases = await gitHubClient.Repository.Release.GetAll(repositoryOwner, repositoryName)
+            IReadOnlyList<Release> releases = await gitHubClient.Repository.Release.GetAll(repositoryOwner, repositoryName)
                                                                                            .ConfigureAwait(false);
 
             if (!releases.AtLeastOnce(release => release.Name == MajorMinorPatchVersion))

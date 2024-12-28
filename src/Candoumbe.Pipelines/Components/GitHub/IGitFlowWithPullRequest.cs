@@ -104,12 +104,12 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest
                 Git($"branch -D {branchName}");
             }
 
-            static (ConsoleKey key, string description)[] BuildChoices() => new[]
-            {
+            static (ConsoleKey key, string description)[] BuildChoices() =>
+            [
                 (key: ConsoleKey.Y, "Delete the local branch"),
-                (key: ConsoleKey.N, "Keep the local branch"),
-            };
-            
+                (key: ConsoleKey.N, "Keep the local branch")
+            ];
+
             static void GitPushToRemote()
             {
                 Git($"push origin --set-upstream {GitCurrentBranch()}");

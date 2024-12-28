@@ -13,17 +13,17 @@ public interface IClean : INukeBuild
     /// <summary>
     /// Collection of directories that <see cref="Clean"/> target will delete
     /// </summary>
-    public IEnumerable<AbsolutePath> DirectoriesToDelete => Enumerable.Empty<AbsolutePath>();
+    public IEnumerable<AbsolutePath> DirectoriesToDelete => [];
 
     /// <summary>
     /// Collection of directories to clean
     /// </summary>
-    IEnumerable<AbsolutePath> DirectoriesToClean => Enumerable.Empty<AbsolutePath>();
+    IEnumerable<AbsolutePath> DirectoriesToClean => [];
 
     /// <summary>
     /// Collection of directories that <see cref="Clean"/> target will make sure exist.
     /// </summary>
-    IEnumerable<AbsolutePath> DirectoriesToEnsureExistence => Enumerable.Empty<AbsolutePath>();
+    IEnumerable<AbsolutePath> DirectoriesToEnsureExistence => [];
 
     /// <summary>
     /// Performs the clean up
