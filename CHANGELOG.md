@@ -9,10 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🚀 New features
 
 - Added `IIntegrationTest` component that can run integration tests ([#173](https://github.com/candoumbe/Pipelines/issues/173))
+- Added `IReportUnitTestCodeCoverage` component
+- Added `IReportIntegrationTestCodeCoverage` component
 
 ### 🚨 Breaking changes
 - Dropped `net8.0` support
-
 
 ## [0.12.1] / 2024-11-12
 ### 🛠️ Fixes
