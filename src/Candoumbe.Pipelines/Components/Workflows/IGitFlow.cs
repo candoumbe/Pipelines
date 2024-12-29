@@ -62,7 +62,7 @@ public interface IGitFlow : IDoHotfixWorkflow, IDoColdfixWorkflow, IHaveDevelopB
     /// Defines if linear history should be preserved.
     /// </summary>
     [Parameter("Defines if linear history should be preserved.")]
-    bool? RequireLinearHistory { get; set; }
+    bool RequireLinearHistory { get; }
 
     /// <summary>
     /// Merges a <see cref="IDoColdfixWorkflow.ColdfixBranchPrefix"/> back to <see cref="IHaveDevelopBranch.DevelopBranchName"/> branch

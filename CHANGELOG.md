@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🚀 New features
 - Added  `RequireLinearHistory` parameter as a hint to preserve à linear history of commits. ([#172](https://github.com/candoumbe/Pipelines/issues/172))
 
+### 🧹 Housekeeping
+- Use collection expression syntax where applicable.
 
 ## [0.12.1] / 2024-11-12
 ### 🛠️ Fixes

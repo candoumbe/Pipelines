@@ -9,7 +9,6 @@ using Nuke.Common.Git;
 using Nuke.Common.Tools.GitHub;
 using Octokit;
 using static Nuke.Common.Tools.Git.GitTasks;
-using static Nuke.Common.Tools.GitHub.GitHubTasks;
 using static Nuke.Common.Utilities.ConsoleUtility;
 using static Serilog.Log;
 
