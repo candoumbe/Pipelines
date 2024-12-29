@@ -6,17 +6,13 @@ using Candoumbe.Pipelines.Components.GitHub;
 using Candoumbe.Pipelines.Components.NuGet;
 using Candoumbe.Pipelines.Components.Workflows;
 using Nuke.Common;
-using Nuke.Common.CI;
 using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tools.DotNet;
-using Nuke.Common.Tools.Git;
 using Nuke.Common.Tools.GitHub;
 
-namespace Candoumbe.Pipelines.Build;
-
-using static GitTasks;
+using static Nuke.Common.Tools.Git.GitTasks;
 
 [GitHubActions("integration",
     GitHubActionsImage.UbuntuLatest,
