@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### 🚨 Breaking changes
 - Dropped `net8.0` support
+- Separated directory for code coverage and code coverage history between unit and integration tests for both.
 
 ## [0.12.1] / 2024-11-12
 ### 🛠️ Fixes

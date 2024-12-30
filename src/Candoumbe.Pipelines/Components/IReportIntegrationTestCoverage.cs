@@ -19,22 +19,33 @@ using static Nuke.Common.Tools.ReportGenerator.ReportGeneratorTasks;
 /// </remarks>
 public interface IReportIntegrationTestCoverage : IReportCoverage, IIntegrationTest
 {
+    /// <summary>
+    /// Directory where coverage report history files will be pushed
+    /// </summary>
+    public AbsolutePath IntegrationTestCoverageReportDirectory => CoverageReportDirectory / "unit-tests";
+
+    /// <summary>
+    /// Directory where coverage report history files will be pushed
+    /// </summary>
+    public AbsolutePath IntegrationTestCoverageReportHistoryDirectory => CoverageReportHistoryDirectory / "unit-tests";
+
+    
     internal sealed Configure<ReportGeneratorSettings> ReportGeneratorSettingsBase => _ => _
         .SetFramework("net5.0")
         .SetReports(IntegrationTestResultsDirectory / "*.xml")
         .SetReportTypes(ReportTypes.Badges, ReportTypes.HtmlChart, ReportTypes.HtmlInline)
         .WhenNotNull(this.As<IHaveGitRepository>()?.GitRepository,
             (_, repository) => !string.IsNullOrWhiteSpace(repository.Branch)
-                ? _.SetTargetDirectory(CoverageReportDirectory / repository.Branch)
-                    .SetHistoryDirectory(CoverageReportHistoryDirectory / repository.Branch)
+                ? _.SetTargetDirectory(IntegrationTestCoverageReportDirectory / repository.Branch)
+                    .SetHistoryDirectory(IntegrationTestCoverageReportHistoryDirectory / repository.Branch)
                     .SetTag(repository.Commit)
-                : _.SetTargetDirectory(CoverageReportDirectory)
-                    .SetHistoryDirectory(CoverageReportHistoryDirectory)
+                : _.SetTargetDirectory(IntegrationTestCoverageReportDirectory)
+                    .SetHistoryDirectory(IntegrationTestCoverageReportHistoryDirectory)
                     .SetTag(repository.Commit)
         )
         .When(_ => this.As<IHaveGitRepository>() is null,
-            _ => _.SetTargetDirectory(CoverageReportDirectory)
-                .SetHistoryDirectory(CoverageReportHistoryDirectory));
+            _ => _.SetTargetDirectory(IntegrationTestCoverageReportDirectory)
+                .SetHistoryDirectory(IntegrationTestCoverageReportHistoryDirectory));
 
     internal sealed Configure<CodecovSettings> CodeCovSettingsBase => _ => _
         .SetFiles(IntegrationTestResultsDirectory.GlobFiles("*.xml").Select(x => x.ToString()))
