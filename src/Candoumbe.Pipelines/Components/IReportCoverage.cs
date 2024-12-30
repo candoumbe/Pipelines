@@ -30,17 +30,4 @@ public interface IReportCoverage : IRequireNuGetPackage, IHaveCoverage
     /// Defines if the component should publish results to <see href="codecov.io">Code Cov</see>.
     /// </summary>
     bool ReportToCodeCov { get; }
-
-    /// <summary>
-    /// Defines settings used by the component
-    /// </summary>
-    /// <remarks>
-    /// These settings are only used when <see cref="ReportToCodeCov"/> is <see langword="true"/>.
-    /// </remarks>
-    Configure<CodecovSettings> CodecovSettings => _ => _;
-
-    /// <summary>
-    /// Defines settings used to report coverage
-    /// </summary>
-    Configure<ReportGeneratorSettings> ReportGeneratorSettings => _ => _;
 }

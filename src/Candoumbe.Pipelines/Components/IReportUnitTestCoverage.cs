@@ -57,6 +57,19 @@ public interface IReportUnitTestCoverage : IReportCoverage, IUnitTest
                 .SetSha(repository.GitRepository.Commit));
 
     /// <summary>
+    /// Allows to override default settings when generating code coverage report.
+    /// </summary>
+    /// <remarks>
+    /// These settings are only used when <see cref="IReportCoverage.ReportToCodeCov"/> is <see langword="true"/>.
+    /// </remarks>
+    Configure<CodecovSettings> CodecovSettings => _ => _;
+
+    /// <summary>
+    /// Allows to override default settings used to report code coverage.
+    /// </summary>
+    Configure<ReportGeneratorSettings> ReportGeneratorSettings => _ => _;
+
+    /// <summary>
     /// Pushes code coverage to CodeCov
     /// </summary>
     public Target ReportUnitTestCoverage => _ => _

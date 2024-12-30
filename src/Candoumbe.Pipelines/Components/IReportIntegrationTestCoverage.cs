@@ -12,7 +12,7 @@ using static Nuke.Common.Tools.Codecov.CodecovTasks;
 using static Nuke.Common.Tools.ReportGenerator.ReportGeneratorTasks;
 
 /// <summary>
-/// Build component that can report integration tests code coverage
+/// Build component that can report integration tests code coverage.
 /// </summary>
 /// <remarks>
 /// This component requires <see href="https://nuget.org/packages/reportgenerator">ReportGenerator tool</see>
@@ -29,7 +29,6 @@ public interface IReportIntegrationTestCoverage : IReportCoverage, IIntegrationT
     /// </summary>
     public AbsolutePath IntegrationTestCoverageReportHistoryDirectory => CoverageReportHistoryDirectory / "integration-tests";
 
-    
     internal sealed Configure<ReportGeneratorSettings> ReportGeneratorSettingsBase => _ => _
         .SetFramework("net5.0")
         .SetReports(IntegrationTestResultsDirectory / "*.xml")
@@ -56,6 +55,19 @@ public interface IReportIntegrationTestCoverage : IReportCoverage, IIntegrationT
         .WhenNotNull(this.As<IHaveGitRepository>(),
             (_, repository) => _.SetBranch(repository.GitRepository.Branch)
                 .SetSha(repository.GitRepository.Commit));
+
+    /// <summary>
+    /// Allows to override default settings when generating code coverage report.
+    /// </summary>
+    /// <remarks>
+    /// These settings are only used when <see cref="IReportCoverage.ReportToCodeCov"/> is <see langword="true"/>.
+    /// </remarks>
+    Configure<CodecovSettings> CodecovSettings => _ => _;
+
+    /// <summary>
+    /// Allows to override default settings used to report code coverage.
+    /// </summary>
+    Configure<ReportGeneratorSettings> ReportGeneratorSettings => _ => _;
 
     /// <summary>
     /// Pushes code coverage to CodeCov
