@@ -76,8 +76,8 @@ public interface IReportIntegrationTestCoverage : IReportCoverage, IIntegrationT
        .DependsOn(IntegrationTests)
        .Requires(() => !ReportToCodeCov || CodecovToken != null)
        .Consumes(IntegrationTests, IntegrationTestResultsDirectory / "*.xml")
-       .Produces(CoverageReportDirectory / "*.xml")
-       .Produces(CoverageReportHistoryDirectory / "*.xml")
+       .Produces(IntegrationTestCoverageReportDirectory / "*.xml")
+       .Produces(IntegrationTestCoverageReportHistoryDirectory / "*.xml")
        .Executes(() =>
        {
            ReportGenerator(s => s.Apply(ReportGeneratorSettingsBase)
