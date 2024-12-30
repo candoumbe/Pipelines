@@ -22,12 +22,12 @@ public interface IReportIntegrationTestCoverage : IReportCoverage, IIntegrationT
     /// <summary>
     /// Directory where coverage report history files will be pushed
     /// </summary>
-    public AbsolutePath IntegrationTestCoverageReportDirectory => CoverageReportDirectory / "unit-tests";
+    public AbsolutePath IntegrationTestCoverageReportDirectory => CoverageReportDirectory / "integration-tests";
 
     /// <summary>
     /// Directory where coverage report history files will be pushed
     /// </summary>
-    public AbsolutePath IntegrationTestCoverageReportHistoryDirectory => CoverageReportHistoryDirectory / "unit-tests";
+    public AbsolutePath IntegrationTestCoverageReportHistoryDirectory => CoverageReportHistoryDirectory / "integration-tests";
 
     
     internal sealed Configure<ReportGeneratorSettings> ReportGeneratorSettingsBase => _ => _
