@@ -16,6 +16,7 @@ branches:
   release:
     regex: "^release(s)?[/-]"
     label: "rc"
+    pre-release-weight: 30000
     is-release-branch: true
   develop: 
     label: "alpha"
