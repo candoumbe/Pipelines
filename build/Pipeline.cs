@@ -57,15 +57,9 @@ using static Nuke.Common.Tools.Git.GitTasks;
 [DotNetVerbosityMapping]
 public class Pipeline : EnhancedNukeBuild,
     IHaveSourceDirectory,
-    IHaveSolution,
-    IHaveChangeLog,
     IClean,
     IRestore,
     ICompile,
-    IPack,
-    IHaveGitVersion,
-    IHaveGitHubRepository,
-    IHaveArtifacts,
     IPushNugetPackages,
     ICreateGithubRelease,
     IGitFlowWithPullRequest
