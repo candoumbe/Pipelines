@@ -20,14 +20,24 @@ using static Nuke.Common.Tools.ReportGenerator.ReportGeneratorTasks;
 public interface IReportUnitTestCoverage : IReportCoverage, IUnitTest
 {
     /// <summary>
-    /// Directory where coverage report history files will be pushed
+    /// Name of the generated artifacts when publishing code coverage report
     /// </summary>
-    public AbsolutePath UnitTestCoverageReportDirectory => CoverageReportDirectory / "unit-tests";
+    public string CodeCoverageReportArtifactName => "unit-tests";
+
+    /// <summary>
+    /// Name of artifact when publishing code coverage history report
+    /// </summary>
+    public string CodeCoverageHistoryReportArtifactName => "unit-tests";
 
     /// <summary>
     /// Directory where coverage report history files will be pushed
     /// </summary>
-    public AbsolutePath UnitTestCoverageReportHistoryDirectory => CoverageReportHistoryDirectory / "unit-tests";
+    public AbsolutePath UnitTestCoverageReportDirectory => CoverageReportDirectory / CodeCoverageReportArtifactName;
+
+    /// <summary>
+    /// Directory where coverage report history files will be pushed
+    /// </summary>
+    public AbsolutePath UnitTestCoverageReportHistoryDirectory => CoverageReportHistoryDirectory / CodeCoverageHistoryReportArtifactName;
 
     internal sealed Configure<ReportGeneratorSettings> ReportGeneratorSettingsBase => _ => _
         .SetFramework("net5.0")

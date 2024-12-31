@@ -1,15 +1,15 @@
-﻿namespace Candoumbe.Pipelines.Components;
-
-using System;
+﻿using System;
 using System.Linq;
 using Nuke.Common;
 using Nuke.Common.IO;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.Codecov;
-using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.ReportGenerator;
-using static Nuke.Common.Tools.Codecov.CodecovTasks;
-using static Nuke.Common.Tools.ReportGenerator.ReportGeneratorTasks;
+
+namespace Candoumbe.Pipelines.Components;
+
+using static CodecovTasks;
+using static ReportGeneratorTasks;
 
 /// <summary>
 /// Build component that can report integration tests code coverage.
@@ -20,14 +20,24 @@ using static Nuke.Common.Tools.ReportGenerator.ReportGeneratorTasks;
 public interface IReportIntegrationTestCoverage : IReportCoverage, IIntegrationTest
 {
     /// <summary>
-    /// Directory where coverage report history files will be pushed
+    /// Name of the generated artifacts when publishing code coverage report
     /// </summary>
-    public AbsolutePath IntegrationTestCoverageReportDirectory => CoverageReportDirectory / "integration-tests";
+    public string CodeCoverageReportArtifactName => "integration-tests";
+
+    /// <summary>
+    /// Name of artifact when publishing code coverage history report
+    /// </summary>
+    public string CodeCoverageHistoryReportArtifactName => "integration-tests";
 
     /// <summary>
     /// Directory where coverage report history files will be pushed
     /// </summary>
-    public AbsolutePath IntegrationTestCoverageReportHistoryDirectory => CoverageReportHistoryDirectory / "integration-tests";
+    public AbsolutePath IntegrationTestCoverageReportDirectory => CoverageReportDirectory / CodeCoverageReportArtifactName;
+
+    /// <summary>
+    /// Directory where coverage report history files will be pushed
+    /// </summary>
+    public AbsolutePath IntegrationTestCoverageReportHistoryDirectory => CoverageReportHistoryDirectory / CodeCoverageHistoryReportArtifactName;
 
     internal sealed Configure<ReportGeneratorSettings> ReportGeneratorSettingsBase => _ => _
         .SetFramework("net5.0")
