@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Dropped `net8.0` support
 - Separated directory for code coverage and code coverage history between unit and integration tests for both.
 
+### 🛠️ Fixes
+- `IBuildDockerImage` component should run AFTER `IUnitTest`, `IIntegrationTest` and `IMutationTest` components.
+
+
 ## [0.12.1] / 2024-11-12
 ### 🛠️ Fixes
 - Fixed incorrect verbosity of the default implementation of the `IUnitTest` component 
