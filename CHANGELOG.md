@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `IIntegrationTest` component that can run integration tests ([#173](https://github.com/candoumbe/Pipelines/issues/173))
 - Added `IReportUnitTestCodeCoverage` component
 - Added `IReportIntegrationTestCodeCoverage` component
+- Added `IRestore.RestoreToolSettings` to configure the behavior of `dotnet tool restore` command.
 
 ### 🚨 Breaking changes
 - Dropped `net8.0` support
@@ -18,7 +19,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### 🛠️ Fixes
 - `IBuildDockerImage` component should run AFTER `IUnitTest`, `IIntegrationTest` and `IMutationTest` components.
-
 
 ## [0.12.1] / 2024-11-12
 ### 🛠️ Fixes
