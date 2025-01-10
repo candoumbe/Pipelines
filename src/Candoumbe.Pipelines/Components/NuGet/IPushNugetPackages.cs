@@ -27,7 +27,7 @@ public interface IPushNugetPackages : IPack
     IEnumerable<AbsolutePath> PublishPackageFiles => PackagesDirectory.GlobFiles("*.nupkg", "*.snupkg");
 
     /// <summary>
-    /// Explicitely
+    /// Explicitly sets the push configuration to use
     /// </summary>
     [Parameter("Defines the name of the configuration to use to publish packages.")]
     public string ConfigName => TryGetValue(() => ConfigName)?.Trim();
@@ -105,9 +105,7 @@ public interface IPushNugetPackages : IPack
             });
         });
 
-    internal Configure<DotNetNuGetPushSettings> PublishSettingsBase => _ => _
-                .EnableSkipDuplicate()
-                .EnableNoSymbols();
+    internal Configure<DotNetNuGetPushSettings> PublishSettingsBase => _ => _.EnableNoSymbols();
 
     /// <summary>
     /// Defines the settings that will be used to push packages to Nuget
