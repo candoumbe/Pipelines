@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NuGet.Configuration;
 using Nuke.Common;
 using Nuke.Common.Git;
 using Nuke.Common.IO;
@@ -24,7 +25,7 @@ public interface IPushNugetPackages : IPack
     /// <summary>
     /// Defines which files should be pushed when calling <see cref="Publish"/> target
     /// </summary>
-    IEnumerable<AbsolutePath> PublishPackageFiles => PackagesDirectory.GlobFiles("*.nupkg", "*.snupkg");
+    IEnumerable<AbsolutePath> PublishPackageFiles => PackagesDirectory.GlobFiles($"*{NuGetConstants.PackageExtension}", $"*{NuGetConstants.SnupkgExtension}");
 
     /// <summary>
     /// Explicitly sets the push configuration to use
@@ -72,16 +73,15 @@ public interface IPushNugetPackages : IPack
                 });
 
                 DotNetNuGetPush(s => s.Apply(PublishSettingsBase)
-                                      .Apply(PublishSettings)
-                                      .CombineWith(PublishPackageFiles,
-                                                   (_, file) => _.SetTargetPath(file))
-                                                                 .Apply(PackagePublishSettings)
-                                                                 .CombineWith(PublishConfigurations,
-                                                                              (setting, config) => setting.When(_ => config.CanBeUsed(),
-                                                                                                                _ => _.SetApiKey(config.Key)
-                                                                                                                      .SetSource(config.Source))),
-                                                      degreeOfParallelism: PushDegreeOfParallelism,
-                                                      completeOnFailure: PushCompleteOnFailure);
+                                                                     .Apply(PublishSettings)
+                                                                     .CombineWith(PublishPackageFiles,
+                                                                                  (_, file) => _.SetTargetPath(file))
+                                                                                                .Apply(PackagePublishSettings)
+                                                                                                .CombineWith(PublishConfigurations.Where(config => config.CanBeUsed()),
+                                                                                                             (setting, config) => setting.SetApiKey(config.Key)
+                                                                                                                                                     .SetSource(config.Source)),
+                                                                                     degreeOfParallelism: PushDegreeOfParallelism,
+                                                                                     completeOnFailure: PushCompleteOnFailure);
             }
             else
             {
