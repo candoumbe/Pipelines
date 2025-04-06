@@ -37,8 +37,8 @@ public interface IPushNugetPackages : IPack
     /// Publish all <see cref="PublishPackageFiles"/> to <see cref="PublishConfigurations"/>.
     /// </summary>
     public Target Publish => _ => _
-        .Description($"Published packages (*.nupkg and *.snupkg) to the destination server set using either {nameof(PublishConfigurations)} settings or the configuration {nameof(ConfigName)} configuration ")
-        .Consumes(Pack, ArtifactsDirectory / "*.nupkg", ArtifactsDirectory / "*.snupkg")
+        .Description($"Published packages (*{NuGetConstants.PackageExtension} and *{NuGetConstants.SnupkgExtension}) to the destination server set using either {nameof(PublishConfigurations)} settings or the configuration {nameof(ConfigName)} configuration ")
+        .Consumes(Pack, ArtifactsDirectory / $"*{NuGetConstants.PackageExtension}", ArtifactsDirectory / $"*{NuGetConstants.SnupkgExtension}")
         .DependsOn(Pack)
         .OnlyWhenDynamic(() => (!string.IsNullOrWhiteSpace(ConfigName) && PublishConfigurations.Once(config => config.Name == ConfigName))
                                 || PublishConfigurations.AtLeastOnce(config => config.CanBeUsed()))
@@ -85,7 +85,7 @@ public interface IPushNugetPackages : IPack
             }
             else
             {
-                PushNugetPackageConfiguration publishConfiguration = PublishConfigurations.Single(config => string.Equals(config.Name, ConfigName, System.StringComparison.OrdinalIgnoreCase));
+                PushNugetPackageConfiguration publishConfiguration = PublishConfigurations.Single(config => string.Equals(config.Name, ConfigName, StringComparison.OrdinalIgnoreCase));
                 DotNetNuGetPush(s => s.Apply(PublishSettingsBase)
                                       .Apply(PublishSettings)
                                       .When(_  => publishConfiguration.CanBeUsed(),
