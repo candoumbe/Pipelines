@@ -174,15 +174,13 @@ public interface IMutationTest : IHaveTests
                                 _ => strykerArgs
                             };
                         }
-
                         break;
                     }
                 }
 
-                ArgumentStringHandler args = new();
-                args.AppendLiteral(strykerArgs.ToString());
+                strykerArgs = strykerArgs.SetProcessWorkingDirectory(sourceProject.Path.Parent);
 
-                DotNet(args, workingDirectory: sourceProject.Path.Parent);
+                DotNetRun(strykerArgs);
             }
         });
 
