@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `IRestore.RestoreToolSettings` to configure the behavior of `dotnet tool restore` command.
 
 ### 🚨 Breaking changes
-- Dropped `net8.0` support
+- Dropped `net6.0` support
 - Split directory for code coverage and code coverage history between unit and integration tests for both.
 - `IPushNuGetPackages` component no longer add `--skip-duplicate` option by default.
 

@@ -97,12 +97,12 @@ public interface IMutationTest : IHaveTests
 
                 Verbose("{ProjectName} will run mutation tests for the following frameworks : {@Frameworks}", sourceProject.Name, sourceProject.GetTargetFrameworks());
 
-                DotNetRunSettings strykerArgs = default;
+                DotNetRunSettings strykerArgs = new();
                 strykerArgs = StrykerArgumentsSettingsBase.Invoke(strykerArgs);
                 strykerArgs = StrykerArgumentsSettings.Invoke(strykerArgs);
 
-                strykerArgs.AddProcessAdditionalArguments($"--target-framework {framework}",
-                                                          $"--output {MutationTestResultDirectory / sourceProject.Name / framework}");
+                strykerArgs = strykerArgs.AddProcessAdditionalArguments($"--target-framework {framework}",
+                                                                        $"--output {MutationTestResultDirectory / sourceProject.Name / framework}");
 
                 strykerArgs = strykerArgs.AddProcessAdditionalArguments("stryker");
 
@@ -179,7 +179,10 @@ public interface IMutationTest : IHaveTests
                     }
                 }
 
-                DotNet(strykerArgs.ToString(), workingDirectory: sourceProject.Path.Parent);
+                ArgumentStringHandler args = new();
+                args.AppendLiteral(strykerArgs.ToString());
+
+                DotNet(args, workingDirectory: sourceProject.Path.Parent);
             }
         });
 
