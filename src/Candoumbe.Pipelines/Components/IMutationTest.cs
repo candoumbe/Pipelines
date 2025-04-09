@@ -180,7 +180,7 @@ public interface IMutationTest : IHaveTests
 
                 strykerArgs = strykerArgs.SetProcessWorkingDirectory(sourceProject.Path.Parent);
 
-                DotNetRun(strykerArgs);
+                DotNet(strykerArgs.ToString(), workingDirectory: sourceProject.Path.Parent);
             }
         });
 
