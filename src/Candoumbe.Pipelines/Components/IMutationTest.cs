@@ -185,29 +185,28 @@ public interface IMutationTest : IHaveTests
             }
         });
 
-    internal Configure<StrykerOptions> StrykerArgumentsSettingsBase => _
+    internal Configure<StrykerOptions> StrykerArgumentsSettingsBase => options
         =>
     {
-        StrykerOptions args = new();
         if (IsLocalBuild)
         {
-            args.OpenReport = StrykerOpenReport.Html;
-            args.Reporters = [..args.Reporters, StrykerReporter.Progress];
+            options.OpenReport = StrykerOpenReport.Html;
+            options.Reporters = [..options.Reporters, StrykerReporter.Progress];
         }
 
         if (StrykerDashboardApiKey is not null)
         {
-            args.DashboardApiKey = StrykerDashboardApiKey;
-            args.Reporters = [..args.Reporters, StrykerReporter.Dashboard];
+            options.DashboardApiKey = StrykerDashboardApiKey;
+            options.Reporters = [..options.Reporters, StrykerReporter.Dashboard];
         }
 
-        return args;
+        return options;
     };
 
     /// <summary>
     /// Configures arguments that will be used by when running Stryker tool
     /// </summary>
-    Configure<StrykerOptions> StrykerArgumentsSettings => _ => _;
+    Configure<StrykerOptions> StrykerArgumentsSettings => options => options;
 }
 
 /// <summary>
@@ -519,7 +518,7 @@ public class StrykerOptions : ToolOptions
             args.AppendLiteral(" --log-to-file");
         }
 
-        if (TestProjects is [..])
+        if (TestProjects is [.., _])
         {
             foreach (AbsolutePath testProjectPath in TestProjects)
             {
@@ -527,7 +526,7 @@ public class StrykerOptions : ToolOptions
             }
         }
 
-        if (Mutate is [..])
+        if (Mutate is [.., _])
         {
             foreach (string item in Mutate)
             {
@@ -555,7 +554,7 @@ public class StrykerOptions : ToolOptions
             args.AppendLiteral($" --mutation-level {MutationLevel}");
         }
 
-        if (Reporters is [..])
+        if (Reporters is [.., _])
         {
             foreach (StrykerReporter reporter in Reporters)
             {
