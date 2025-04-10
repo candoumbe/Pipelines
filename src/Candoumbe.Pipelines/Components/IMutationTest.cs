@@ -352,7 +352,7 @@ public class StrykerOptions : ToolOptions
     /// When you have multiple test projects covering one project under test you may specify all relevant test projects in the config file.
     /// You must run stryker from the project under test instead of the test project directory when using multiple test projects.
     /// </summary>
-    [CanBeNull] public List<AbsolutePath> TestProjects { get; set; }
+    public List<AbsolutePath> TestProjects { get; set; } = [];
 
     /// <summary>
     /// <para>With <c>mutate</c> you configure the subset of files to use for mutation testing.
@@ -374,7 +374,7 @@ public class StrykerOptions : ToolOptions
     /// </table>
     /// <para>To allow more fine-grained filtering you can also specify the span of text that should be in- or excluded. A span is defined by the indices of the first character and the last character. <c>dotnet stryker -m "MyFolder/MyService.cs{10..100}"</c></para>
     /// </summary>
-    [CanBeNull] public List<string> Mutate { get; set; }
+    public List<string> Mutate { get; set; } = [];
 
     /// <summary>
     /// Allows you to specify the build configuration to use when building the project. This can be useful when you want to test the release build of your project
@@ -407,12 +407,13 @@ public class StrykerOptions : ToolOptions
     [CanBeNull]
     public StrykerMutationLevel MutationLevel { get; set; }
 
-    public List<StrykerReporter> Reporters { get; set; }
+    public List<StrykerReporter> Reporters { get; set; } = [];
 
-    /// <summary>
-    /// When this option is passed, generated reports should open in the browser automatically once Stryker starts testing mutants, and will update the report till Stryker is done. Both html and dashboard reports can be opened automatically.
-    /// </summary>
-    [CanBeNull]
+        /// <summary>
+        /// When this option is passed, generated reports should open in the browser automatically once Stryker starts testing mutants, and will update the report till Stryker is done. Both html and dashboard reports can be opened automatically.
+        /// </summary>
+        [CanBeNull]
+
     public StrykerOpenReport OpenReport { get; set; }
 
     /// <summary>
