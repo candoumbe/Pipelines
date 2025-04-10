@@ -181,7 +181,8 @@ public interface IMutationTest : IHaveTests
                 }
 
                 strykerArgs = strykerArgs.SetProcessWorkingDirectory(sourceProject.Path.Parent);
-                DotNet(strykerArgs.ToString() , workingDirectory: strykerArgs.ProcessWorkingDirectory);
+
+                DotNet(strykerArgs.ComputeArguments() , workingDirectory: strykerArgs.ProcessWorkingDirectory);
             }
         });
 
@@ -498,7 +499,7 @@ public class StrykerOptions : ToolOptions
     public bool? BreakOnInitialTestFailure { get; set; }
 
     /// <inheritdoc />
-    public override string ToString()
+    public ArgumentStringHandler ComputeArguments()
     {
         ArgumentStringHandler args = new();
         args.AppendLiteral("stryker");
@@ -627,7 +628,7 @@ public class StrykerOptions : ToolOptions
             args.AppendLiteral("--break-on-initial-test-failure");
         }
 
-        return args.ToStringAndClear();
+        return args;
     }
 }
 
