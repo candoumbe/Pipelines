@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using Candoumbe.Pipelines.Components.Workflows;
+using Candoumbe.Pipelines.Tools;
 using JetBrains.Annotations;
 using Nuke.Common;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
-using Nuke.Common.Tools.DotNet;
-using static Nuke.Common.Tools.DotNet.DotNetTasks;
 using static Serilog.Log;
+using static Candoumbe.Pipelines.Tools.StrykerTasks;
 
 namespace Candoumbe.Pipelines.Components;
 
@@ -97,45 +97,42 @@ public interface IMutationTest : IHaveTests
 
                 Verbose("{ProjectName} will run mutation tests for the following frameworks : {@Frameworks}", sourceProject.Name, sourceProject.GetTargetFrameworks());
 
-                DotNetRunSettings strykerArgs = default;
+                StrykerSettings strykerArgs = new();
                 strykerArgs = StrykerArgumentsSettingsBase.Invoke(strykerArgs);
                 strykerArgs = StrykerArgumentsSettings.Invoke(strykerArgs);
 
-                strykerArgs.AddProcessAdditionalArguments($"--target-framework {framework}",
-                                                          $"--output {MutationTestResultDirectory / sourceProject.Name / framework}");
-
-                strykerArgs = strykerArgs.AddProcessAdditionalArguments("stryker");
-
-                strykerArgs = strykerArgs.AddProcessAdditionalArguments($"--project {sourceProject.Name}{sourceProject.Path.Extension}");
+                strykerArgs = strykerArgs.SetTargetFramework(framework);
+                strykerArgs = strykerArgs.SetOutput(MutationTestResultDirectory / sourceProject.Name / framework);
+                strykerArgs = strykerArgs.SetProject($"{sourceProject.Name}{sourceProject.Path.Extension}");
 
                 if (configFile is not null)
                 {
-                    strykerArgs = strykerArgs.AddProcessAdditionalArguments("--config-file {value}", configFile);
+                    strykerArgs = strykerArgs.SetConfigFile(configFile);
                 }
 
-                strykerArgs = testsProjects.Aggregate(strykerArgs, (current, project) => current.AddProcessAdditionalArguments($"--test-project {project.Path}"));
+                strykerArgs = strykerArgs.SetTestProjects([.. testsProjects.Select(project => project.Path)]);
 
                 switch (this)
                 {
                     case IGitFlow { GitRepository: { } gitflowRepository } gitFlow:
                         {
-                            strykerArgs = strykerArgs.AddProcessAdditionalArguments($"--version {gitflowRepository.Commit ?? gitflowRepository.Branch}");
+                            strykerArgs = strykerArgs.SetProjectInfoVersion($"{gitflowRepository.Commit ?? gitflowRepository.Branch}");
                             switch (gitflowRepository.Branch)
                             {
                                 case { } branchName when string.Equals(branchName, IHaveDevelopBranch.DevelopBranchName, StringComparison.InvariantCultureIgnoreCase):
                                     {
                                         // we are in git flow, so we can compare develop with main branch
-                                        strykerArgs = strykerArgs.AddProcessAdditionalArguments($"--with-baseline:{IHaveMainBranch.MainBranchName}");
+                                        strykerArgs = strykerArgs.SetWithBaseline(IHaveMainBranch.MainBranchName);
                                     }
                                     break;
                                 case { } branchName when branchName.Like($"{gitFlow.FeatureBranchPrefix}/*", true):
                                     {
-                                        strykerArgs = strykerArgs.AddProcessAdditionalArguments($"--with-baseline:{gitFlow.FeatureBranchSourceName}");
+                                        strykerArgs = strykerArgs.SetWithBaseline(gitFlow.FeatureBranchSourceName);
                                     }
                                     break;
                                 case { } branchName when branchName.Like($"{gitFlow.ColdfixBranchPrefix}/*", true):
                                     {
-                                        strykerArgs = strykerArgs.AddProcessAdditionalArguments($"--with-baseline:{gitFlow.ColdfixBranchSourceName}");
+                                        strykerArgs = strykerArgs.SetWithBaseline(gitFlow.ColdfixBranchSourceName);
                                     }
                                     break;
                                 default:
@@ -143,7 +140,7 @@ public interface IMutationTest : IHaveTests
                                         // By default, we try to compare the current commit with the previous one (if any).
                                         if (gitflowRepository.Head is { } head)
                                         {
-                                            strykerArgs = strykerArgs.AddProcessAdditionalArguments($"--with-baseline:{head}");
+                                            strykerArgs = strykerArgs.SetWithBaseline(head);
                                         }
                                     }
                                     break;
@@ -154,10 +151,10 @@ public interface IMutationTest : IHaveTests
 
                     case IGitHubFlow { GitRepository: { } githubFlowRepository }:
                         {
-                            strykerArgs = strykerArgs.AddProcessAdditionalArguments($"--version {githubFlowRepository.Commit ?? githubFlowRepository.Branch}");
+                            strykerArgs = strykerArgs.SetProjectInfoVersion(githubFlowRepository.Commit ?? githubFlowRepository.Branch);
                             if (githubFlowRepository.Branch is { Length: > 0 } branchName && !string.Equals(branchName, IHaveMainBranch.MainBranchName, StringComparison.InvariantCultureIgnoreCase))
                             {
-                                strykerArgs = strykerArgs.AddProcessAdditionalArguments($"--with-baseline:{IHaveMainBranch.MainBranchName}");
+                                strykerArgs = strykerArgs.SetWithBaseline(IHaveMainBranch.MainBranchName);
                             }
 
                             break;
@@ -169,39 +166,30 @@ public interface IMutationTest : IHaveTests
                         {
                             strykerArgs = this switch
                             {
-                                IHaveGitVersion gitVersion => strykerArgs.AddProcessAdditionalArguments($"--version {gitVersion.MajorMinorPatchVersion}"),
-                                IHaveGitRepository gitRepository => strykerArgs.AddProcessAdditionalArguments($"--version {gitRepository.GitRepository?.Commit ?? gitRepository.GitRepository?.Branch}"),
+                                IHaveGitVersion gitVersion => strykerArgs.SetProjectInfoVersion(gitVersion.MajorMinorPatchVersion),
+                                IHaveGitRepository gitRepository => strykerArgs.SetProjectInfoVersion(gitRepository.GitRepository?.Commit ?? gitRepository.GitRepository?.Branch),
                                 _ => strykerArgs
                             };
                         }
-
                         break;
                     }
                 }
 
-                DotNet(strykerArgs.ToString(), workingDirectory: sourceProject.Path.Parent);
+                strykerArgs.SetProcessWorkingDirectory(sourceProject.Path.Parent);
+                Stryker(strykerArgs);
             }
         });
 
-    internal Configure<DotNetRunSettings> StrykerArgumentsSettingsBase => _
-        =>
-    {
-        DotNetRunSettings args = new();
-        if (IsLocalBuild)
-        {
-            args = args.AddProcessAdditionalArguments("--open-report:html", "--reporter progress");
-        }
-
-        return args.WhenNotNull(StrykerArgumentsSettings,
-                (args, apiKey) => args.AddProcessRedactedSecrets($"--dashboard-api-key {apiKey}")
-                                                .AddProcessAdditionalArguments("--reporter dashboard"))
-            .AddProcessAdditionalArguments("--reporter markdown", "--reporter html");
-    };
+    internal Configure<StrykerSettings> StrykerArgumentsSettingsBase => options
+        => options.When(_ => IsLocalBuild, (settings) => settings.SetOpenReport(StrykerOpenReport.Html)
+                                                                    .SetReporters([..settings.Reporters ?? [], StrykerReporter.Progress]))
+            .When(_ => StrykerDashboardApiKey is not null, settings => settings.SetDashboardApiKey(StrykerDashboardApiKey)
+                .SetReporters([..settings.Reporters ?? [], StrykerReporter.Dashboard]));
 
     /// <summary>
     /// Configures arguments that will be used by when running Stryker tool
     /// </summary>
-    Configure<DotNetRunSettings> StrykerArgumentsSettings => _ => _;
+    Configure<StrykerSettings> StrykerArgumentsSettings => options => options;
 }
 
 /// <summary>

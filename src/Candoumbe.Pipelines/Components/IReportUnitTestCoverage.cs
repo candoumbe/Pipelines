@@ -19,22 +19,42 @@ using static Nuke.Common.Tools.ReportGenerator.ReportGeneratorTasks;
 /// </remarks>
 public interface IReportUnitTestCoverage : IReportCoverage, IUnitTest
 {
+    /// <summary>
+    /// Name of the generated artifacts when publishing code coverage report
+    /// </summary>
+    public string CodeCoverageReportArtifactName => "unit-tests";
+
+    /// <summary>
+    /// Name of artifact when publishing code coverage history report
+    /// </summary>
+    public string CodeCoverageHistoryReportArtifactName => "unit-tests";
+
+    /// <summary>
+    /// Directory where coverage report history files will be pushed
+    /// </summary>
+    public AbsolutePath UnitTestCoverageReportDirectory => CoverageReportDirectory / CodeCoverageReportArtifactName;
+
+    /// <summary>
+    /// Directory where coverage report history files will be pushed
+    /// </summary>
+    public AbsolutePath UnitTestCoverageReportHistoryDirectory => CoverageReportHistoryDirectory / CodeCoverageHistoryReportArtifactName;
+
     internal sealed Configure<ReportGeneratorSettings> ReportGeneratorSettingsBase => _ => _
         .SetFramework("net5.0")
         .SetReports(UnitTestResultsDirectory / "*.xml")
         .SetReportTypes(ReportTypes.Badges, ReportTypes.HtmlChart, ReportTypes.HtmlInline)
         .WhenNotNull(this.As<IHaveGitRepository>()?.GitRepository,
             (_, repository) => !string.IsNullOrWhiteSpace(repository.Branch)
-                ? _.SetTargetDirectory(CoverageReportDirectory / repository.Branch)
-                    .SetHistoryDirectory(CoverageReportHistoryDirectory / repository.Branch)
+                ? _.SetTargetDirectory(UnitTestCoverageReportDirectory / repository.Branch)
+                    .SetHistoryDirectory(UnitTestCoverageReportHistoryDirectory / repository.Branch)
                     .SetTag(repository.Commit)
-                : _.SetTargetDirectory(CoverageReportDirectory)
-                    .SetHistoryDirectory(CoverageReportHistoryDirectory)
+                : _.SetTargetDirectory(UnitTestCoverageReportDirectory)
+                    .SetHistoryDirectory(UnitTestCoverageReportHistoryDirectory)
                     .SetTag(repository.Commit)
         )
         .When(_ => this.As<IHaveGitRepository>() is null,
-            _ => _.SetTargetDirectory(CoverageReportDirectory)
-                .SetHistoryDirectory(CoverageReportHistoryDirectory));
+            _ => _.SetTargetDirectory(UnitTestCoverageReportDirectory)
+                .SetHistoryDirectory(UnitTestCoverageReportHistoryDirectory));
 
     internal sealed Configure<CodecovSettings> CodeCovSettingsBase => _ => _
         .SetFiles(UnitTestResultsDirectory.GlobFiles("*.xml").Select(x => x.ToString()))
@@ -47,14 +67,27 @@ public interface IReportUnitTestCoverage : IReportCoverage, IUnitTest
                 .SetSha(repository.GitRepository.Commit));
 
     /// <summary>
+    /// Allows to override default settings when generating code coverage report.
+    /// </summary>
+    /// <remarks>
+    /// These settings are only used when <see cref="IReportCoverage.ReportToCodeCov"/> is <see langword="true"/>.
+    /// </remarks>
+    Configure<CodecovSettings> CodecovSettings => _ => _;
+
+    /// <summary>
+    /// Allows to override default settings used to report code coverage.
+    /// </summary>
+    Configure<ReportGeneratorSettings> ReportGeneratorSettings => _ => _;
+
+    /// <summary>
     /// Pushes code coverage to CodeCov
     /// </summary>
     public Target ReportUnitTestCoverage => _ => _
        .DependsOn(UnitTests)
        .Requires(() => !ReportToCodeCov || CodecovToken != null)
        .Consumes(UnitTests, UnitTestResultsDirectory / "*.xml")
-       .Produces(CoverageReportDirectory / "*.xml")
-       .Produces(CoverageReportHistoryDirectory / "*.xml")
+       .Produces(UnitTestCoverageReportDirectory / "*.xml")
+       .Produces(UnitTestCoverageReportHistoryDirectory / "*.xml")
        .Executes(() =>
        {
            ReportGenerator(s => s.Apply(ReportGeneratorSettingsBase)

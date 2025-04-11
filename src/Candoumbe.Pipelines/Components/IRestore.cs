@@ -27,7 +27,7 @@ public interface IRestore : INukeBuild, IHaveSolution
 
             //TODO remove the settings => settings part once Nuke 9.0.3 is out
             DotNetToolRestore(s => s
-                .Apply(ToolRestoreSettings)
+                .Apply(RestoreToolSettings)
             );
         });
 
@@ -43,10 +43,10 @@ public interface IRestore : INukeBuild, IHaveSolution
     /// <summary>
     /// Options used to restore tools dependencies
     /// </summary>
-    Configure<DotNetToolRestoreSettings> ToolRestoreSettings => _ => _;
+    Configure<DotNetToolRestoreSettings> RestoreToolSettings => _ => _;
 
     /// <summary>
-    /// Defines when set to <see langword="true"/> if unreacheable sources should make the "restore" process fail.
+    /// Defines when set to <see langword="true"/> if unreachable sources should make the "restore" process fail.
     /// </summary>
     [Parameter("Ignore unreachable sources during " + nameof(Restore))]
     public bool IgnoreFailedSources => TryGetValue<bool?>(() => IgnoreFailedSources) ?? false;

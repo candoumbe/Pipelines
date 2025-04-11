@@ -23,6 +23,10 @@ public interface IBuildDockerImage : INukeBuild
     /// </summary>
     public Target BuildDockerImages => _ => _
         .Description("Build docker images")
+        .TryAfter<IUnitTest>()
+        .TryAfter<IIntegrationTest>()
+        .TryAfter<IMutationTest>()
+        .TryAfter<IBenchmark>()
         .OnlyWhenStatic(() => DockerFiles.AtLeastOnce())
         .Executes(() =>
         {
