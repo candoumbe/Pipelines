@@ -182,9 +182,9 @@ public interface IMutationTest : IHaveTests
 
     internal Configure<StrykerSettings> StrykerArgumentsSettingsBase => options
         => options.When(_ => IsLocalBuild, (settings) => settings.SetOpenReport(StrykerOpenReport.Html)
-                                                                    .SetReporters([..settings.Reporters, StrykerReporter.Progress]))
+                                                                    .SetReporters([..settings.Reporters ?? [], StrykerReporter.Progress]))
             .When(_ => StrykerDashboardApiKey is not null, settings => settings.SetDashboardApiKey(StrykerDashboardApiKey)
-                .SetReporters([..settings.Reporters, StrykerReporter.Dashboard]));
+                .SetReporters([..settings.Reporters ?? [], StrykerReporter.Dashboard]));
 
     /// <summary>
     /// Configures arguments that will be used by when running Stryker tool
