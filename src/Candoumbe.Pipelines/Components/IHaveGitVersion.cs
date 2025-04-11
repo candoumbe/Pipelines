@@ -9,13 +9,12 @@ namespace Candoumbe.Pipelines.Components;
 /// <summary>
 /// Marks a pipeline that manages a Solution that follow GitVersion
 /// </summary>
-[NuGetPackageRequirement("gitversion.tool")]
 public interface IHaveGitVersion : INukeBuild, IRequireNuGetPackage
 {
     /// <summary>
     /// The GitVersion tool that can be used to version the project
     /// </summary>
-    [GitVersion(Framework = "net6.0")]
+    [GitVersion(Framework = "net8.0")]
     [Required]
     public GitVersion GitVersion => TryGetValue(() => GitVersion);
 

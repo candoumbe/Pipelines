@@ -2,24 +2,18 @@
 
   <Import Project="../../core.props" />
   <PropertyGroup>
-    <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
+    <TargetFrameworks>net8.0</TargetFrameworks>
     <Description>A Stater development kit to script your CI/CD using [Nuke](https://nuke.build).</Description>
     <PackageTags>build, pipeline, ci, workflow</PackageTags>
+    <NukeBaseDirectory>$(MsBuildProjectDirectory)\tools\Stryker</NukeBaseDirectory>
+    <NukeUseNestedNamespaces>false</NukeUseNestedNamespaces>
+    <NukeBaseNamespace>Candoumbe.Pipelines.Tools</NukeBaseNamespace>
   </PropertyGroup>
 
-  <Choose>
-      <When Condition="'$(TargetFramework)' == 'net6.0'">
-          <ItemGroup>
-              <PackageReference Include="Nuke.Common" Version="7.0.6" />
-          </ItemGroup>
-      </When>
-      <Otherwise>
-          <ItemGroup>
-              <PackageReference Include="Nuke.Common" Version="8.1.0" />
-          </ItemGroup>
-      </Otherwise>
-  </Choose>
-
   <ItemGroup>
+      <PackageReference Include="Nuke.Common" Version="9.0.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <NukeSpecificationFiles Include=".\tools\Stryker\Stryker.json"/>
   </ItemGroup>
 </Project>

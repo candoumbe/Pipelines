@@ -1,76 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "properties": {
-    "AutoStash": {
-      "type": "boolean",
-      "description": "Indicates if any changes should be stashed automatically prior to switching branch (Default : true)"
-    },
-    "ConfigName": {
-      "type": "string",
-      "description": "Defines the name of the configuration to use to publish packages"
-    },
-    "Configuration": {
-      "type": "string",
-      "description": "Defines the configuration to use when building the application",
-      "enum": [
-        "Debug",
-        "Release"
-      ]
-    },
-    "DeleteLocalOnSuccess": {
-      "type": "boolean",
-      "description": "Should the local branch be deleted after the pull request was created successfully ?"
-    },
-    "Description": {
-      "type": "string",
-      "description": "Description of the pull request"
-    },
-    "Draft": {
-      "type": "boolean",
-      "description": "Indicates to open the pull request as 'draft'"
-    },
-    "GitHubToken": {
-      "type": "string",
-      "description": "Token used to create a new release in GitHub",
-      "default": "Secrets must be entered via 'nuke :secrets [profile]'"
-    },
-    "IgnoreFailedSources": {
-      "type": "boolean",
-      "description": "Ignore unreachable sources during Restore"
-    },
-    "Issues": {
-      "type": "array",
-      "description": "Issues that will be closed once the pull request is completed",
-      "items": {
-        "type": "integer"
-      }
-    },
-    "Major": {
-      "type": "boolean",
-      "description": "Hint to create a major release"
-    },
-    "Name": {
-      "type": "string",
-      "description": "Name of the branch to create"
-    },
-    "NugetApiKey": {
-      "type": "string",
-      "description": "Token used to interact with Nuget API",
-      "default": "Secrets must be entered via 'nuke :secrets [profile]'"
-    },
-    "SkipConfirmation": {
-      "type": "boolean",
-      "description": "Set to true to not ask any confirmation to the end user (default: false)"
-    },
-    "Solution": {
-      "type": "string",
-      "description": "Path to a solution file that is automatically loaded"
-    },
-    "Title": {
-      "type": "string",
-      "description": "Title that will be used when creating a PR"
-    }
-  },
   "definitions": {
     "Host": {
       "type": "string",
@@ -176,5 +105,82 @@
       }
     }
   },
-  "$ref": "#/definitions/NukeBuild"
+  "allOf": [
+    {
+      "properties": {
+        "AutoStash": {
+          "type": "boolean",
+          "description": "Indicates if any changes should be stashed automatically prior to switching branch (Default : true)"
+        },
+        "ConfigName": {
+          "type": "string",
+          "description": "Defines the name of the configuration to use to publish packages"
+        },
+        "Configuration": {
+          "type": "string",
+          "description": "Defines the configuration to use when building the application",
+          "enum": [
+            "Debug",
+            "Release"
+          ]
+        },
+        "DeleteLocalOnSuccess": {
+          "type": "boolean",
+          "description": "Should the local branch be deleted after the pull request was created successfully ?"
+        },
+        "Description": {
+          "type": "string",
+          "description": "Description of the pull request"
+        },
+        "Draft": {
+          "type": "boolean",
+          "description": "Indicates to open the pull request as 'draft'"
+        },
+        "GitHubToken": {
+          "type": "string",
+          "description": "Token used to create a new release in GitHub",
+          "default": "Secrets must be entered via 'nuke :secrets [profile]'"
+        },
+        "IgnoreFailedSources": {
+          "type": "boolean",
+          "description": "Ignore unreachable sources during Restore"
+        },
+        "Issues": {
+          "type": "array",
+          "description": "Issues that will be closed once the pull request is completed",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "Major": {
+          "type": "boolean",
+          "description": "Hint to create a major release"
+        },
+        "Name": {
+          "type": "string",
+          "description": "Name of the branch to create"
+        },
+        "NugetApiKey": {
+          "type": "string",
+          "description": "Token used to interact with Nuget API",
+          "default": "Secrets must be entered via 'nuke :secrets [profile]'"
+        },
+        "SkipConfirmation": {
+          "type": "boolean",
+          "description": "Set to true to not ask any confirmation to the end user (default: false)"
+        },
+        "Solution": {
+          "type": "string",
+          "description": "Path to a solution file that is automatically loaded"
+        },
+        "Title": {
+          "type": "string",
+          "description": "Title that will be used when creating a PR"
+        }
+      }
+    },
+    {
+      "$ref": "#/definitions/NukeBuild"
+    }
+  ]
 }

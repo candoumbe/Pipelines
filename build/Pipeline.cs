@@ -6,17 +6,13 @@ using Candoumbe.Pipelines.Components.GitHub;
 using Candoumbe.Pipelines.Components.NuGet;
 using Candoumbe.Pipelines.Components.Workflows;
 using Nuke.Common;
-using Nuke.Common.CI;
 using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tools.DotNet;
-using Nuke.Common.Tools.Git;
 using Nuke.Common.Tools.GitHub;
 
-namespace Candoumbe.Pipelines.Build;
-
-using static GitTasks;
+using static Nuke.Common.Tools.Git.GitTasks;
 
 [GitHubActions("integration",
     GitHubActionsImage.UbuntuLatest,
@@ -61,15 +57,9 @@ using static GitTasks;
 [DotNetVerbosityMapping]
 public class Pipeline : EnhancedNukeBuild,
     IHaveSourceDirectory,
-    IHaveSolution,
-    IHaveChangeLog,
     IClean,
     IRestore,
     ICompile,
-    IPack,
-    IHaveGitVersion,
-    IHaveGitHubRepository,
-    IHaveArtifacts,
     IPushNugetPackages,
     ICreateGithubRelease,
     IGitFlowWithPullRequest
@@ -78,11 +68,11 @@ public class Pipeline : EnhancedNukeBuild,
     IEnumerable<AbsolutePath> IClean.DirectoriesToDelete => this.Get<IHaveSourceDirectory>().SourceDirectory.GlobDirectories("**/*/bin", "**/*/obj");
 
     ///<inheritdoc/>
-    IEnumerable<AbsolutePath> IClean.DirectoriesToEnsureExistence => new[]
-    {
+    IEnumerable<AbsolutePath> IClean.DirectoriesToEnsureExistence =>
+    [
         this.Get<IHaveArtifacts>().OutputDirectory,
-        this.Get<IHaveArtifacts>().ArtifactsDirectory,
-    };
+        this.Get<IHaveArtifacts>().ArtifactsDirectory
+    ];
 
     [Required]
     [Solution]
@@ -112,8 +102,8 @@ public class Pipeline : EnhancedNukeBuild,
     IEnumerable<AbsolutePath> ICreateGithubRelease.Assets => this.Get<IPack>().OutputDirectory.GlobFiles("**/*.nupkg;**/*.snupkg");
 
     ///<inheritdoc/>
-    IEnumerable<PushNugetPackageConfiguration> IPushNugetPackages.PublishConfigurations => new PushNugetPackageConfiguration[]
-    {
+    IEnumerable<PushNugetPackageConfiguration> IPushNugetPackages.PublishConfigurations =>
+    [
         new NugetPushConfiguration(
             apiKey: NugetApiKey,
             source: new Uri("https://api.nuget.org/v3/index.json"),
@@ -122,8 +112,8 @@ public class Pipeline : EnhancedNukeBuild,
         new GitHubPushNugetConfiguration(
             githubToken: this.Get<ICreateGithubRelease>()?.GitHubToken,
             source: new Uri($"https://nuget.pkg.github.com/{ this.Get<IHaveGitHubRepository>().GitRepository.GetGitHubOwner() }/index.json"),
-            canBeUsed: () => this is ICreateGithubRelease { GitHubToken: not null }),
-    };
+            canBeUsed: () => this is ICreateGithubRelease { GitHubToken: not null })
+    ];
 
     ///<inheritdoc/>
     ValueTask IGitFlow.FinishRelease()

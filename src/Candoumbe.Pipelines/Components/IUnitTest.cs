@@ -37,7 +37,7 @@ public interface IUnitTest : ICompile, IHaveTests, IHaveCoverage
         .Description("Run unit tests and collect code coverage")
         .Produces(UnitTestResultsDirectory / "*.trx")
         .Produces(UnitTestResultsDirectory / "*.xml")
-        .TryTriggers<IReportCoverage>()
+        .TryTriggers<IReportUnitTestCoverage>()
         .Executes(() =>
         {
             UnitTestsProjects.ForEach(project => Information(project));
@@ -50,23 +50,6 @@ public interface IUnitTest : ICompile, IHaveTests, IHaveCoverage
                                                                             (setting, framework) => setting.Apply<DotNetTestSettings, (Project, string)>(ProjectUnitTestSettingsBase, (project, framework))
                                                                                                            .Apply<DotNetTestSettings, (Project, string)>(ProjectUnitTestSettings, (project, framework))
                     )));
-
-            if (AzurePipelines.Instance is not null)
-            {
-                TestResultDirectory.GlobFiles("*.trx")
-                                       .ForEach(testFileResult => AzurePipelines.Instance?.PublishTestResults(title: $"{Path.GetFileNameWithoutExtension(testFileResult)} ({AzurePipelines.Instance.StageDisplayName})",
-                                                                                                              type: AzurePipelinesTestResultsType.VSTest,
-                                                                                                              files: new string[] { testFileResult })
-                            );
-
-                if (this is IReportCoverage reportCoverage)
-                {
-                    TestResultDirectory.GlobFiles("*.xml")
-                                               .ForEach(file => AzurePipelines.Instance?.PublishCodeCoverage(coverageTool: AzurePipelinesCodeCoverageToolType.Cobertura,
-                                                                                                             summaryFile: file,
-                                                                                                             reportDirectory: reportCoverage.CoverageReportDirectory));
-                }
-            }
         });
 
     internal sealed Configure<DotNetTestSettings> UnitTestSettingsBase => _ => _

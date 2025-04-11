@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NuGet.Configuration;
 using Nuke.Common;
 using Nuke.Common.Git;
 using Nuke.Common.IO;
@@ -24,10 +25,10 @@ public interface IPushNugetPackages : IPack
     /// <summary>
     /// Defines which files should be pushed when calling <see cref="Publish"/> target
     /// </summary>
-    IEnumerable<AbsolutePath> PublishPackageFiles => PackagesDirectory.GlobFiles("*.nupkg", "*.snupkg");
+    IEnumerable<AbsolutePath> PublishPackageFiles => PackagesDirectory.GlobFiles($"*{NuGetConstants.PackageExtension}", $"*{NuGetConstants.SnupkgExtension}");
 
     /// <summary>
-    /// Explicitely
+    /// Explicitly sets the push configuration to use
     /// </summary>
     [Parameter("Defines the name of the configuration to use to publish packages.")]
     public string ConfigName => TryGetValue(() => ConfigName)?.Trim();
@@ -36,8 +37,8 @@ public interface IPushNugetPackages : IPack
     /// Publish all <see cref="PublishPackageFiles"/> to <see cref="PublishConfigurations"/>.
     /// </summary>
     public Target Publish => _ => _
-        .Description($"Published packages (*.nupkg and *.snupkg) to the destination server set using either {nameof(PublishConfigurations)} settings or the configuration {nameof(ConfigName)} configuration ")
-        .Consumes(Pack, ArtifactsDirectory / "*.nupkg", ArtifactsDirectory / "*.snupkg")
+        .Description($"Published packages (*{NuGetConstants.PackageExtension} and *{NuGetConstants.SnupkgExtension}) to the destination server set using either {nameof(PublishConfigurations)} settings or the configuration {nameof(ConfigName)} configuration ")
+        .Consumes(Pack, ArtifactsDirectory / $"*{NuGetConstants.PackageExtension}", ArtifactsDirectory / $"*{NuGetConstants.SnupkgExtension}")
         .DependsOn(Pack)
         .OnlyWhenDynamic(() => (!string.IsNullOrWhiteSpace(ConfigName) && PublishConfigurations.Once(config => config.Name == ConfigName))
                                 || PublishConfigurations.AtLeastOnce(config => config.CanBeUsed()))
@@ -72,23 +73,22 @@ public interface IPushNugetPackages : IPack
                 });
 
                 DotNetNuGetPush(s => s.Apply(PublishSettingsBase)
-                                      .Apply(PublishSettings)
-                                      .CombineWith(PublishPackageFiles,
-                                                   (_, file) => _.SetTargetPath(file))
-                                                                 .Apply(PackagePublishSettings)
-                                                                 .CombineWith(PublishConfigurations,
-                                                                              (setting, config) => setting.When(config.CanBeUsed(),
-                                                                                                                _ => _.SetApiKey(config.Key)
-                                                                                                                      .SetSource(config.Source))),
-                                                      degreeOfParallelism: PushDegreeOfParallelism,
-                                                      completeOnFailure: PushCompleteOnFailure);
+                                                                     .Apply(PublishSettings)
+                                                                     .CombineWith(PublishPackageFiles,
+                                                                                  (_, file) => _.SetTargetPath(file))
+                                                                                                .Apply(PackagePublishSettings)
+                                                                                                .CombineWith(PublishConfigurations.Where(config => config.CanBeUsed()),
+                                                                                                             (setting, config) => setting.SetApiKey(config.Key)
+                                                                                                                                                     .SetSource(config.Source)),
+                                                                                     degreeOfParallelism: PushDegreeOfParallelism,
+                                                                                     completeOnFailure: PushCompleteOnFailure);
             }
             else
             {
-                PushNugetPackageConfiguration publishConfiguration = PublishConfigurations.Single(config => string.Equals(config.Name, ConfigName, System.StringComparison.OrdinalIgnoreCase));
+                PushNugetPackageConfiguration publishConfiguration = PublishConfigurations.Single(config => string.Equals(config.Name, ConfigName, StringComparison.OrdinalIgnoreCase));
                 DotNetNuGetPush(s => s.Apply(PublishSettingsBase)
                                       .Apply(PublishSettings)
-                                      .When(publishConfiguration.CanBeUsed(),
+                                      .When(_  => publishConfiguration.CanBeUsed(),
                                             _ => _.SetApiKey(publishConfiguration.Key)
                                                   .SetSource(publishConfiguration.Source))
                                       .CombineWith(PublishPackageFiles,
@@ -105,9 +105,7 @@ public interface IPushNugetPackages : IPack
             });
         });
 
-    internal Configure<DotNetNuGetPushSettings> PublishSettingsBase => _ => _
-                .EnableSkipDuplicate()
-                .EnableNoSymbols();
+    internal Configure<DotNetNuGetPushSettings> PublishSettingsBase => _ => _.EnableNoSymbols();
 
     /// <summary>
     /// Defines the settings that will be used to push packages to Nuget
