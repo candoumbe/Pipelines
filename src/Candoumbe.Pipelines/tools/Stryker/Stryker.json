@@ -12,7 +12,6 @@
   "customLogger": true,
   "tasks": [
     {
-      "definiteArgument": "stryker",
       "settingsClass": {
         "properties": [
           {

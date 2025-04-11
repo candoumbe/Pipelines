@@ -39,7 +39,7 @@ public partial class StrykerTasks : ToolTasks, IRequireNuGetPackage
 /// <inheritdoc cref="StrykerTasks.Stryker(Candoumbe.Pipelines.Tools.StrykerSettings)"/>
 [PublicAPI]
 [ExcludeFromCodeCoverage]
-[Command(Type = typeof(StrykerTasks), Command = nameof(StrykerTasks.Stryker), Arguments = "stryker")]
+[Command(Type = typeof(StrykerTasks), Command = nameof(StrykerTasks.Stryker))]
 public partial class StrykerSettings : ToolOptions
 {
     /// <summary>Path / Name of the configuration file. You can specify a custom path to the config file. For example if you want to add the stryker config section to your appsettings file. The section should still be called <c>stryker-config</c>.</summary>
