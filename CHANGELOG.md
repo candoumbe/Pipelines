@@ -12,13 +12,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `IReportUnitTestCodeCoverage` component
 - Added `IReportIntegrationTestCodeCoverage` component
 - Added `IRestore.RestoreToolSettings` to configure the behavior of `dotnet tool restore` command.
+- Added "native" stryker tool support
 
 ### 🚨 Breaking changes
 - Dropped `net6.0` support
-- Split directory for code coverage and code coverage history between unit and integration tests for both.
+  -Separated directories for code coverage and coverage history between unit and integration tests.
 - `IPushNuGetPackages` component no longer add `--skip-duplicate` option by default.
-- Replaced `Configure<DotNetRunSettings> StrykerArgumentSettings` is now `Configure<StrykerOptions>`
-
+- Replaced `Configure<DotNetRunSettings> StrykerArgumentSettings` is now `Configure<StrykerSettings>`
 
 ### 🛠️ Fixes
 - `IBuildDockerImage` component should run AFTER `IUnitTest`, `IIntegrationTest` and `IMutationTest` components.
