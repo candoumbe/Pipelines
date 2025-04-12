@@ -1,8 +1,14 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Nuke.Common;
 using Nuke.Common.Git;
+using Nuke.Common.Tooling;
 using Nuke.Common.Tools.GitVersion;
 using static Nuke.Common.Tools.Git.GitTasks;
+using static Serilog.Log;
 
 namespace Candoumbe.Pipelines.Components.Workflows;
 
@@ -41,11 +47,44 @@ public interface IDoHotfixWorkflow : IWorkflow, IHaveMainBranch
         {
             if (!GitRepository.IsOnHotfixBranch())
             {
-                Checkout($"{HotfixBranchPrefix}/{GitVersion.Major}.{GitVersion.Minor}.{GitVersion.Patch + 1}", start: HotfixBranchSourceName);
+                IReadOnlyCollection<Output> outputs = Git("tag --sort=-v:refname");
+                if (outputs.Count == 0)
+                {
+                    Warning("No version released found. No hotfix branch will be created");
+                }
+                else
+                {
+                    (int Major, int Minor, int Patch) lastReleaseVersion = outputs.Select(output => ExtractFromText(output.Text))
+                        .Where(version => version is not null)
+                        .Select(version => (version.Value.Major, version.Value.Minor, version.Value.Patch))
+                        .First();
+
+                    Checkout($"{HotfixBranchPrefix}/{lastReleaseVersion.Major}.{lastReleaseVersion.Minor}.{lastReleaseVersion.Patch + 1}", start: HotfixBranchSourceName);
+                }
             }
             else
             {
                 await FinishHotfix();
+            }
+
+            (int Major, int Minor, int Patch)? ExtractFromText(string text)
+            {
+                const string semVerRegex = @"^(?<major>(0|[1-9]\d*)+)\.(?<minor>(0|[1-9]\d*))+\.(?<patch>(0|[1-9]\d*)+)$";
+
+                Match match = Regex.Match(text, semVerRegex, RegexOptions.None, TimeSpan.FromMilliseconds(100));
+
+                (int Major, int Minor, int Patch)? version = null;
+
+                if (match.Success)
+                {
+                    int major = int.Parse(match.Groups["major"].Value);
+                    int minor = int.Parse(match.Groups["minor"].Value);
+                    int patch = int.Parse(match.Groups["patch"].Value);
+
+                    version = (major, minor, patch);
+                }
+
+                return version;
             }
         });
 
