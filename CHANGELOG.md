@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🛠️ Fixes
 
 - Fixed incorrect version number when creating a hotfix branch ([#96](https://github.com/candoumbe/Pipelines/issues/96))
-
+- Replaced commit number with branch name when submitting mutation test reports ([#183](https://github.com/candoumbe/Pipelines/issues/183))
 
 ## [0.13.0] / 2025-04-11
 ### 🚀 New features
