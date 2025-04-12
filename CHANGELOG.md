@@ -6,10 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.13.1] / 2025-04-12
 ### 🛠️ Fixes
 
 - Fixed incorrect version number when creating a hotfix branch ([#96](https://github.com/candoumbe/Pipelines/issues/96))
-- Replaced commit number with branch name when submitting mutation test reports ([#183](https://github.com/candoumbe/Pipelines/issues/183))
+- Replaced commit number with branch name when submitting versioned mutation test reports ([#183](https://github.com/candoumbe/Pipelines/issues/183))
 
 ## [0.13.0] / 2025-04-11
 ### 🚀 New features
@@ -240,7 +242,8 @@ So now `{MutationTestDirectory}/[{framework}]` is now changed to `{MutationTestD
 ## [0.1.0] / 2022-10-23
 - Initial release
 
-[Unreleased]: https://github.com/candoumbe/Pipelines/compare/0.13.0...HEAD
+[Unreleased]: https://github.com/candoumbe/Pipelines/compare/0.13.1...HEAD
+[0.13.1]: https://github.com/candoumbe/Pipelines/compare/0.13.0...0.13.1
 [0.13.0]: https://github.com/candoumbe/Pipelines/compare/0.12.1...0.13.0
 [0.12.1]: https://github.com/candoumbe/Pipelines/compare/0.11.0...0.12.1
 [0.11.0]: https://github.com/candoumbe/Pipelines/compare/0.10.0...0.11.0
