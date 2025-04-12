@@ -41,7 +41,7 @@ public static class Extensions
     /// enabled and <see langword="false"/> otherwise</returns>
 #pragma warning disable RCS1175 // Unused 'this' parameter
 #pragma warning disable IDE0060 // Unused 'project' parameter
-    public static bool IsSourceLinkEnabled(this Project project) => false;
+    public static bool IsSourceLinkEnabled(this Project project) => project.HasPackageReference("Microsoft.SourceLink.GitHub");
 #pragma warning restore IDE0060 // Unused 'project' parameter
 #pragma warning restore RCS1175 // Unused 'this' parameter
 }

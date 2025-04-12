@@ -101,9 +101,9 @@ public interface IMutationTest : IHaveTests
                 strykerArgs = StrykerArgumentsSettingsBase.Invoke(strykerArgs);
                 strykerArgs = StrykerArgumentsSettings.Invoke(strykerArgs);
 
-                strykerArgs = strykerArgs.SetTargetFramework(framework);
-                strykerArgs = strykerArgs.SetOutput(MutationTestResultDirectory / sourceProject.Name / framework);
-                strykerArgs = strykerArgs.SetProject($"{sourceProject.Name}{sourceProject.Path.Extension}");
+                strykerArgs = strykerArgs.SetTargetFramework(framework)
+                                        .SetOutput(MutationTestResultDirectory / sourceProject.Name / framework)
+                                        .SetProject($"{sourceProject.Name}{sourceProject.Path.Extension}");
 
                 if (configFile is not null)
                 {
@@ -116,7 +116,8 @@ public interface IMutationTest : IHaveTests
                 {
                     case IGitFlow { GitRepository: { } gitflowRepository } gitFlow:
                         {
-                            strykerArgs = strykerArgs.SetProjectInfoVersion($"{gitflowRepository.Commit ?? gitflowRepository.Branch}");
+                            strykerArgs = strykerArgs.SetProjectInfoVersion( gitflowRepository.Branch ?? gitflowRepository.Commit);
+
                             switch (gitflowRepository.Branch)
                             {
                                 case { } branchName when string.Equals(branchName, IHaveDevelopBranch.DevelopBranchName, StringComparison.InvariantCultureIgnoreCase):
@@ -151,7 +152,7 @@ public interface IMutationTest : IHaveTests
 
                     case IGitHubFlow { GitRepository: { } githubFlowRepository }:
                         {
-                            strykerArgs = strykerArgs.SetProjectInfoVersion(githubFlowRepository.Commit ?? githubFlowRepository.Branch);
+                            strykerArgs = strykerArgs.SetProjectInfoVersion( githubFlowRepository.Branch ?? githubFlowRepository.Commit );
                             if (githubFlowRepository.Branch is { Length: > 0 } branchName && !string.Equals(branchName, IHaveMainBranch.MainBranchName, StringComparison.InvariantCultureIgnoreCase))
                             {
                                 strykerArgs = strykerArgs.SetWithBaseline(IHaveMainBranch.MainBranchName);
@@ -167,7 +168,7 @@ public interface IMutationTest : IHaveTests
                             strykerArgs = this switch
                             {
                                 IHaveGitVersion gitVersion => strykerArgs.SetProjectInfoVersion(gitVersion.MajorMinorPatchVersion),
-                                IHaveGitRepository gitRepository => strykerArgs.SetProjectInfoVersion(gitRepository.GitRepository?.Commit ?? gitRepository.GitRepository?.Branch),
+                                IHaveGitRepository gitRepository => strykerArgs.SetProjectInfoVersion(gitRepository.GitRepository?.Branch ?? gitRepository.GitRepository?.Commit),
                                 _ => strykerArgs
                             };
                         }
