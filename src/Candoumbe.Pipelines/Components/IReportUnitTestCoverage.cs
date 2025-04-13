@@ -22,12 +22,12 @@ public interface IReportUnitTestCoverage : IReportCoverage, IUnitTest
     /// <summary>
     /// Name of the generated artifacts when publishing code coverage report
     /// </summary>
-    public string CodeCoverageReportArtifactName => "unit-tests";
+    public string CodeCoverageReportArtifactName => "unit-tests-coverage";
 
     /// <summary>
     /// Name of artifact when publishing code coverage history report
     /// </summary>
-    public string CodeCoverageHistoryReportArtifactName => "unit-tests-history";
+    public string CodeCoverageHistoryReportArtifactName => "unit-tests-coverage-history";
 
     /// <summary>
     /// Directory where coverage report history files will be pushed
