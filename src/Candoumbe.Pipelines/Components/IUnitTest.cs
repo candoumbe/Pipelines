@@ -37,7 +37,6 @@ public interface IUnitTest : ICompile, IHaveTests, IHaveCoverage
         .Description("Run unit tests and collect code coverage")
         .Produces(UnitTestResultsDirectory / "*.trx")
         .Produces(UnitTestResultsDirectory / "*.xml")
-        .TryTriggers<IReportUnitTestCoverage>()
         .Executes(() =>
         {
             UnitTestsProjects.ForEach(project => Information(project));

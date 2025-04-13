@@ -37,7 +37,6 @@ public interface IIntegrationTest : ICompile, IHaveTests, IHaveCoverage
         .Description("Run integration tests and collect code coverage")
         .Produces(IntegrationTestResultsDirectory / "*.trx")
         .Produces(IntegrationTestResultsDirectory / "*.xml")
-        .TryTriggers<IReportIntegrationTestCoverage>()
         .Executes(() =>
         {
             IntegrationTestsProjects.ForEach(project => Information(project));
