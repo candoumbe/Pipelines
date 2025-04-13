@@ -176,7 +176,7 @@ public interface IMutationTest : IHaveTests
                     }
                 }
 
-                strykerArgs.SetProcessWorkingDirectory(sourceProject.Path.Parent);
+                strykerArgs = strykerArgs.SetProcessWorkingDirectory(sourceProject.Path.Parent);
                 Stryker(strykerArgs);
             }
         });

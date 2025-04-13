@@ -22,12 +22,12 @@ public interface IReportIntegrationTestCoverage : IReportCoverage, IIntegrationT
     /// <summary>
     /// Name of the generated artifacts when publishing code coverage report
     /// </summary>
-    public string CodeCoverageReportArtifactName => "integration-tests";
+    public string CodeCoverageReportArtifactName => "integration-tests-coverage";
 
     /// <summary>
     /// Name of artifact when publishing code coverage history report
     /// </summary>
-    public string CodeCoverageHistoryReportArtifactName => "integration-tests";
+    public string CodeCoverageHistoryReportArtifactName => "integration-tests-coverage-history";
 
     /// <summary>
     /// Directory where coverage report history files will be pushed

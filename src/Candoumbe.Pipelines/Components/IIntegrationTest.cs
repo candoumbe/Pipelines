@@ -37,7 +37,7 @@ public interface IIntegrationTest : ICompile, IHaveTests, IHaveCoverage
         .Description("Run integration tests and collect code coverage")
         .Produces(IntegrationTestResultsDirectory / "*.trx")
         .Produces(IntegrationTestResultsDirectory / "*.xml")
-        .TryTriggers<IReportIntegrationTestCoverage>()
+        .TryDependsOn<IIntegrationTest>()
         .Executes(() =>
         {
             IntegrationTestsProjects.ForEach(project => Information(project));
@@ -68,7 +68,7 @@ public interface IIntegrationTest : ICompile, IHaveTests, IHaveCoverage
 
     internal Configure<DotNetTestSettings, (Project project, string framework)> ProjectIntegrationTestSettingsBase => (settings, tuple) => settings.SetFramework(tuple.framework)
                                                                                                                                     .AddLoggers($"trx;LogFileName={tuple.project.Name}.{tuple.framework}.trx")
-                                                                                                                                    .WhenNotNull(this.As<IReportCoverage>(), (settings, _) => settings.SetCoverletOutput(IntegrationTestResultsDirectory / $"{tuple.project.Name}.{tuple.framework}.xml"));
+                                                                                                                                    .WhenNotNull(this.As<IReportCoverage>(), (options, _) => options.SetCoverletOutput(IntegrationTestResultsDirectory / $"{tuple.project.Name}.{tuple.framework}.xml"));
 
     /// <summary>
     /// Configure / override integration test settings at project level
