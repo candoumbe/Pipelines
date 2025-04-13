@@ -68,7 +68,7 @@ public interface IUnitTest : ICompile, IHaveTests, IHaveCoverage
 
     internal Configure<DotNetTestSettings, (Project project, string framework)> ProjectUnitTestSettingsBase => (settings, tuple) => settings.SetFramework(tuple.framework)
                                                                                                                                     .AddLoggers($"trx;LogFileName={tuple.project.Name}.{tuple.framework}.trx")
-                                                                                                                                    .WhenNotNull(this.As<IReportCoverage>(), (settings, _) => settings.SetCoverletOutput(UnitTestResultsDirectory / $"{tuple.project.Name}.{tuple.framework}.xml"));
+                                                                                                                                    .WhenNotNull(this.As<IReportCoverage>(), (options, _) => options.SetCoverletOutput(UnitTestResultsDirectory / $"{tuple.project.Name}.{tuple.framework}.xml"));
 
     /// <summary>
     /// Configure / override unit test settings at project level

@@ -16,7 +16,7 @@ public interface IHaveTests : IHaveArtifacts
     /// Directory where to publish all test results
     /// </summary>
     /// <remarks>
-    /// By default, the root directory for all test result will be will be in <c>{ArtifactsDirectory} / "tests-results"</c>
+    /// By default, the root directory for all test result will be in <c>{ArtifactsDirectory} / "tests-results"</c>
     /// </remarks>
     public AbsolutePath TestResultDirectory => ArtifactsDirectory / TestResultDirectoryName;
 }
