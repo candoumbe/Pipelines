@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### 🛠️ Fixes
+- Removed  redundant dependency on `IIntegrationTest` default component which caused circular dependency.
+- Fixed incorrect `--with-baseline` option when running `IMutationTest` component from a `hotfix/*` branch in a GitFlow workflow.
 
 ## [0.13.2] / 2025-04-13
 ### 🛠️ Fixes

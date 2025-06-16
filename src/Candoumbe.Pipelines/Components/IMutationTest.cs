@@ -136,6 +136,11 @@ public interface IMutationTest : IHaveTests
                                         strykerArgs = strykerArgs.SetWithBaseline(gitFlow.ColdfixBranchSourceName);
                                     }
                                     break;
+                                case { } branchName when branchName.Like($"{gitFlow.HotfixBranchPrefix}/*", true):
+                                    {
+                                        strykerArgs = strykerArgs.SetWithBaseline(gitFlow.HotfixBranchSourceName);
+                                    }
+                                    break;
                                 default:
                                     {
                                         // By default, we try to compare the current commit with the previous one (if any).
