@@ -48,7 +48,7 @@ public interface IBenchmark : ICompile, IHaveArtifacts
     /// Configures the way performance tests are run.
     /// </summary>
     public sealed Configure<DotNetRunSettings> BenchmarksSettingsBase => _ => _
-            .SetConfiguration(Configuration)
+            .SetConfiguration(Configuration.Release)
             .SetProcessAdditionalArguments("-- --filter *", $"--artifacts {BenchmarkResultDirectory}", "--join");
 
     /// <summary>
