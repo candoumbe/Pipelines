@@ -71,7 +71,7 @@ public interface IUnitTest : ICompile, IHaveTests, IHaveCoverage
                                                                                                                                     .WhenNotNull(this.As<IReportCoverage>(), (options, _) => options.SetCoverletOutput(UnitTestResultsDirectory / $"{tuple.project.Name}.{tuple.framework}.xml"));
 
     /// <summary>
-    /// Configure / override unit test settings at project level
+    /// Configure / override unit test settings at the project level
     /// </summary>
     Configure<DotNetTestSettings, (Project project, string framework)> ProjectUnitTestSettings => (settings, _) => settings;
 }
