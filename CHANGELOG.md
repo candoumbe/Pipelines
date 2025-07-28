@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🛠️ Fixes
 - Removed  redundant dependency on `IIntegrationTest` default component which caused circular dependency.
 - Fixed incorrect `--with-baseline` option when running `IMutationTest` component from a `hotfix/*` branch in a GitFlow workflow.
+- Run `IBenchmark.Benchmarks` target in `Configuration.Release` by default
+
+### 🚀 New features
+- Added `HTML` reporter by default when running `IMutation.MutationTests` target locally.
+
 
 ## [0.13.2] / 2025-04-13
 ### 🛠️ Fixes
@@ -22,8 +27,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.13.1] / 2025-04-12
 ### 🛠️ Fixes
 
-- Fixed incorrect version number when creating a hotfix branch ([#96](https://github.com/candoumbe/Pipelines/issues/96))
-- Replaced commit number with branch name when submitting versioned mutation test reports ([#183](https://github.com/candoumbe/Pipelines/issues/183))
+- Fixed the incorrect version number when creating a hotfix branch ([#96](https://github.com/candoumbe/Pipelines/issues/96))
+- Replaced the commit number with the branch name when submitting versioned mutation test reports ([#183](https://github.com/candoumbe/Pipelines/issues/183))
 
 ## [0.13.0] / 2025-04-11
 ### 🚀 New features
