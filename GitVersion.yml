@@ -1,9 +1,9 @@
 mode: ContinuousDeployment
 branches:
     feature:
-        regex: "^feature(s)?[/-]"
+        regex: "^feature(s)?[/-](?<BranchName>.+)"
     coldfix:
-        regex: "^coldfix(es)?[/-]"
+        regex: "^coldfix(es)?[/-](?<BranchName>.+)"
         mode: ContinuousDelivery
         label: '{BranchName}'
         increment: Inherit
