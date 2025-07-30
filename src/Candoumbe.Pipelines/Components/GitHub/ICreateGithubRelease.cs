@@ -1,5 +1,4 @@
-﻿using System.Buffers;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Candoumbe.Pipelines.Components.Docker;
@@ -25,10 +24,10 @@ public interface ICreateGithubRelease : IHaveGitHubRepository, IHaveChangeLog, I
     /// <remarks>
     /// Files will be zipped and added to the release
     /// </remarks>
-    public IEnumerable<AbsolutePath> Assets => Enumerable.Empty<AbsolutePath>();
+    public IEnumerable<AbsolutePath> Assets => [];
 
     /// <summary>
-    /// Creates a Github Release
+    /// Creates a GiHub Release
     /// </summary>
     public Target AddGithubRelease => _ => _
         .Unlisted()
@@ -47,7 +46,7 @@ public interface ICreateGithubRelease : IHaveGitHubRepository, IHaveChangeLog, I
             };
 
             string repositoryOwner = GitRepository.GetGitHubOwner();
-            IReadOnlyList<Octokit.Release> releases = await gitHubClient.Repository.Release.GetAll(repositoryOwner, repositoryName)
+            IReadOnlyList<Release> releases = await gitHubClient.Repository.Release.GetAll(repositoryOwner, repositoryName)
                                                                                            .ConfigureAwait(false);
 
             if (!releases.AtLeastOnce(release => release.Name == MajorMinorPatchVersion))
@@ -62,25 +61,43 @@ public interface ICreateGithubRelease : IHaveGitHubRepository, IHaveChangeLog, I
 
                 Release release = await gitHubClient.Repository.Release.Create(repositoryOwner, repositoryName, newRelease)
                                                                                .ConfigureAwait(false);
+
                 await Assets.ForEachAsync(async asset =>
                 {
-                    if (asset.Exists())
+                    AbsolutePath fileToUpload = null;
+                    if (asset.FileExists())
+                    {
+                        fileToUpload = asset;
+                    }
+                    else if (asset.DirectoryExists())
+                    {
+                        fileToUpload = asset.Parent / $"{asset.NameWithoutExtension}.zip";
+                        asset.CompressTo(fileToUpload);
+                    }
+
+                    if (fileToUpload is not null)
                     {
                         ReleaseAssetUpload assetToUpload = new()
                         {
                             ContentType = nameof(ContentType.File),
-                            FileName = asset.ToFileInfo().Name,
-                            RawData = new MemoryStream(File.ReadAllBytes(asset))
+                            FileName = asset.Name,
+                            RawData = File.OpenRead(asset)
                         };
 
+                        Information("Uploading {AssetName} ({AssetPath})", asset.Name, asset.ToString() );
                         await gitHubClient.Repository.Release.UploadAsset(release, assetToUpload);
+                        Information("{AssetName} uploaded successfully", asset.Name );
+                    }
+                    else
+                    {
+                        Warning("{AssetName}({AssetPath}) could not be uploaded as its not a file or directory", asset.Name, asset.ToString());
                     }
                 });
-                Information($"Github release {release.TagName} created successfully");
+                Information("Github release {TagName} created successfully", release.TagName);
             }
             else
             {
-                Information($"Release '{MajorMinorPatchVersion}' already exists - skipping ");
+                Information("Release '{Version}' already exists - skipping ", MajorMinorPatchVersion);
             }
         });
 }
