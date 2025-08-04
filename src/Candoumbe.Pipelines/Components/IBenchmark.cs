@@ -24,6 +24,12 @@ public interface IBenchmark : ICompile, IHaveArtifacts
     public IEnumerable<Project> BenchmarkProjects { get; }
 
     /// <summary>
+    /// Allows to filter benchmarks to run by their full name (namespace.typeName.methodName) using glob pattern.
+    /// </summary>
+    [Parameter("Filter benchmarks to run by their full name (namespace.typeName.methodName) using glob pattern.")]
+    string Filter => TryGetValue(() => Filter) ?? "*";
+
+    /// <summary>
     /// Runs performance tests using <see href="https://benchmarkdotnet.org">BenchmarkDotNet</see>
     /// </summary>
     public Target Benchmarks => _ => _
@@ -49,7 +55,9 @@ public interface IBenchmark : ICompile, IHaveArtifacts
     /// </summary>
     public sealed Configure<DotNetRunSettings> BenchmarksSettingsBase => _ => _
             .SetConfiguration(Configuration.Release)
-            .SetProcessAdditionalArguments("-- --filter *", $"--artifacts {BenchmarkResultDirectory}", "--join");
+            .SetProcessAdditionalArguments($"-- --filter {Filter}",
+                                           $"--artifacts {BenchmarkResultDirectory}",
+                                           "--join");
 
     /// <summary>
     /// Configures the way performance tests are run.
