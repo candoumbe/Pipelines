@@ -1,3 +1,4 @@
+namespace Candoumbe.Pipelines.Components.Formatting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,6 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 using static Nuke.Common.Tools.Git.GitTasks;
 using static Serilog.Log;
 
-namespace Candoumbe.Pipelines.Components.Formatting;
 
 /// <summary>
 /// Represents an interface for formatting code using the dotnet-format tool.
@@ -29,7 +29,7 @@ public interface IDotnetFormat : IFormat
     /// The workspace onto which the formatter will operate
     /// </summary>
     AbsolutePath Workspace => this.As<IHaveSolution>()?.Solution ?? TryGetValue(() => Workspace);
-    
+
     /// <summary>
     /// Sets to <see langword="true"/> will halt the pipeline execution if the component will change any format.
     /// </summary>
@@ -77,29 +77,40 @@ public interface IDotnetFormat : IFormat
         .OnlyWhenDynamic(() => Workspace is not null || Formatters.Length > 0)
         .Executes(() =>
         {
-            DotNetFormatSettings dotNetFormatSettings = new();
-            dotNetFormatSettings = dotNetFormatSettings.Apply(FormatSettingsBase)
-                                                       .Apply(FormatSettings);
-
             if (Formatters.Length > 0)
             {
                 if (Formatters.Contains(DotNetFormatter.Analyzers))
                 {
-                    DotNet($"format analyzers {dotNetFormatSettings}");
+                    DotNetFormatSettings analyzersSettings = new DotNetFormatSettings().SetProcessAdditionalArguments("analyzers");
+                    analyzersSettings = FormatSettingsBase.Invoke(analyzersSettings);
+                    analyzersSettings = FormatSettings.Invoke(analyzersSettings);
+
+                    DotNetFormat(analyzersSettings);
                 }
 
                 if (Formatters.Contains(DotNetFormatter.Style))
                 {
-                    DotNet($"format style {dotNetFormatSettings}");
+                    DotNetFormatSettings styleSettings = new DotNetFormatSettings().SetProcessAdditionalArguments("style");
+                    styleSettings = FormatSettingsBase.Invoke(styleSettings);
+                    styleSettings = FormatSettings.Invoke(styleSettings);
+
+                    DotNetFormat(styleSettings);
                 }
 
                 if (Formatters.Contains(DotNetFormatter.Whitespace))
                 {
-                    DotNet($"format whitespace {dotNetFormatSettings}");
+                    DotNetFormatSettings whitespaceSettings = new DotNetFormatSettings().AddProcessAdditionalArguments("whitespace");
+                    whitespaceSettings = whitespaceSettings.Apply(FormatSettingsBase).Apply(FormatSettings);
+
+                    DotNetFormat(whitespaceSettings);
                 }
             }
             else
             {
+                DotNetFormatSettings dotNetFormatSettings = new();
+                dotNetFormatSettings = dotNetFormatSettings.Apply(FormatSettingsBase)
+                    .Apply(FormatSettings);
+
                 DotNetFormat(dotNetFormatSettings);
             }
         });
