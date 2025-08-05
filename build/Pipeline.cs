@@ -139,6 +139,6 @@ public class Pipeline : EnhancedNukeBuild,
         return ValueTask.CompletedTask;
     }
 
-    /// <inheritdoc />
-    bool IDotnetFormat.VerifyNoChanges => IsServerBuild;
+    ///<inheritdoc/>
+    bool IDotnetFormat.VerifyNoChanges => IsLocalBuild;
 }
