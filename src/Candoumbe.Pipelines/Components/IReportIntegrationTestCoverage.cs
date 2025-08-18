@@ -5,11 +5,11 @@ using Nuke.Common.IO;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.Codecov;
 using Nuke.Common.Tools.ReportGenerator;
+using static Nuke.Common.Tools.Codecov.CodecovTasks;
+using static Nuke.Common.Tools.ReportGenerator.ReportGeneratorTasks;
 
 namespace Candoumbe.Pipelines.Components;
 
-using static CodecovTasks;
-using static ReportGeneratorTasks;
 
 /// <summary>
 /// Build component that can report integration tests code coverage.

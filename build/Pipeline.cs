@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Candoumbe.Pipelines.Components;
+using Candoumbe.Pipelines.Components.Formatting;
 using Candoumbe.Pipelines.Components.GitHub;
 using Candoumbe.Pipelines.Components.NuGet;
 using Candoumbe.Pipelines.Components.Workflows;
@@ -59,6 +60,7 @@ public class Pipeline : EnhancedNukeBuild,
     IHaveSourceDirectory,
     IClean,
     IRestore,
+    IDotnetFormat,
     ICompile,
     IPushNugetPackages,
     ICreateGithubRelease,
@@ -77,7 +79,7 @@ public class Pipeline : EnhancedNukeBuild,
     [Required]
     [Solution]
     public Solution Solution;
-    
+
     ///<inheritdoc/>
     Solution IHaveSolution.Solution => Solution;
 
@@ -111,7 +113,7 @@ public class Pipeline : EnhancedNukeBuild,
         ),
         new GitHubPushNugetConfiguration(
             githubToken: this.Get<ICreateGithubRelease>()?.GitHubToken,
-            source: new Uri($"https://nuget.pkg.github.com/{ this.Get<IHaveGitHubRepository>().GitRepository.GetGitHubOwner() }/index.json"),
+            source: new Uri($"https://nuget.pkg.github.com/{this.Get<IHaveGitHubRepository>().GitRepository.GetGitHubOwner()}/index.json"),
             canBeUsed: () => this is ICreateGithubRelease { GitHubToken: not null })
     ];
 
@@ -136,4 +138,7 @@ public class Pipeline : EnhancedNukeBuild,
 
         return ValueTask.CompletedTask;
     }
+
+    ///<inheritdoc/>
+    bool IDotnetFormat.VerifyNoChanges => IsLocalBuild;
 }

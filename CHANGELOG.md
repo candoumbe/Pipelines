@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.13.4] / 2025-08-18
+### 🛠️ Fixes
+- Fixed incorrect rendering of `IDotNetFormat` command line arguments.
+
 ## [0.13.3] / 2025-07-28
 ### 🛠️ Fixes
 - Removed  redundant dependency on `IIntegrationTest` default component which caused circular dependency.
@@ -261,7 +265,8 @@ So now `{MutationTestDirectory}/[{framework}]` is now changed to `{MutationTestD
 ## [0.1.0] / 2022-10-23
 - Initial release
 
-[Unreleased]: https://github.com/candoumbe/Pipelines/compare/0.13.3...HEAD
+[Unreleased]: https://github.com/candoumbe/Pipelines/compare/0.13.4...HEAD
+[0.13.4]: https://github.com/candoumbe/Pipelines/compare/0.13.3...0.13.4
 [0.13.3]: https://github.com/candoumbe/Pipelines/compare/0.13.2...0.13.3
 [0.13.2]: https://github.com/candoumbe/Pipelines/compare/0.13.1...0.13.2
 [0.13.1]: https://github.com/candoumbe/Pipelines/compare/0.13.0...0.13.1
