@@ -25,7 +25,7 @@ using static Nuke.Common.Tools.Git.GitTasks;
     EnableGitHubToken = true,
     ImportSecrets =
     [
-        nameof(NugetApiKey)
+        nameof(IPushNugetPackages.NuGetApiKey)
     ],
     PublishArtifacts = true,
     OnPullRequestExcludePaths =
@@ -45,7 +45,7 @@ using static Nuke.Common.Tools.Git.GitTasks;
     EnableGitHubToken = true,
     ImportSecrets =
     [
-        nameof(NugetApiKey)
+        nameof(IPushNugetPackages.NuGetApiKey)
     ],
     PublishArtifacts = true,
     OnPullRequestExcludePaths =
@@ -83,12 +83,6 @@ public class Pipeline : EnhancedNukeBuild,
     ///<inheritdoc/>
     Solution IHaveSolution.Solution => Solution;
 
-    /// <summary>
-    /// Token used to interact with GitHub API
-    /// </summary>
-    [Parameter("Token used to interact with Nuget API")]
-    [Secret]
-    public readonly string NugetApiKey;
 
     /// Support plugins are available for:
     ///   - JetBrains ReSharper        https://nuke.build/resharper
@@ -107,9 +101,9 @@ public class Pipeline : EnhancedNukeBuild,
     IEnumerable<PushNugetPackageConfiguration> IPushNugetPackages.PublishConfigurations =>
     [
         new NugetPushConfiguration(
-            apiKey: NugetApiKey,
+            apiKey: this.As<IPushNugetPackages>()?.NuGetApiKey,
             source: new Uri("https://api.nuget.org/v3/index.json"),
-            canBeUsed: () => NugetApiKey is not null
+            canBeUsed: () => this.As<IPushNugetPackages>()?.NuGetApiKey is not null
         ),
         new GitHubPushNugetConfiguration(
             githubToken: this.Get<ICreateGithubRelease>()?.GitHubToken,

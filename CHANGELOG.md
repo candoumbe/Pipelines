@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### 🚀 New features
 - Added `Filter` option to specifiy which benchmarks to perform
+- Added `NuGetApiKey` parameter to `IPushNugetPackages` component
+
 
 ## [0.13.4] / 2025-08-18
 ### 🛠️ Fixes
