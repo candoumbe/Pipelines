@@ -23,6 +23,13 @@ namespace Candoumbe.Pipelines.Components.NuGet;
 public interface IPushNugetPackages : IPack
 {
     /// <summary>
+    /// API Key to use for accessing the NuGet repository.
+    /// </summary>
+    [Parameter("API Key to use for accessing the NuGet repository.")]
+    [Secret]
+    string NuGetApiKey => TryGetValue(() => NuGetApiKey);
+
+    /// <summary>
     /// Defines which files should be pushed when calling <see cref="Publish"/> target
     /// </summary>
     IEnumerable<AbsolutePath> PublishPackageFiles => PackagesDirectory.GlobFiles($"*{NuGetConstants.PackageExtension}", $"*{NuGetConstants.SnupkgExtension}");

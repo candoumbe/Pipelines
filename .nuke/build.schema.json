@@ -173,9 +173,9 @@
           "type": "string",
           "description": "Name of the branch to create"
         },
-        "NugetApiKey": {
+        "NuGetApiKey": {
           "type": "string",
-          "description": "Token used to interact with Nuget API",
+          "description": "API Key to use for accessing the NuGet repository",
           "default": "Secrets must be entered via 'nuke :secrets [profile]'"
         },
         "SkipConfirmation": {
