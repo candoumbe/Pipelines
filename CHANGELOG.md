@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `Filter` option to specifiy which benchmarks to perform
 - Added `NuGetApiKey` parameter to `IPushNugetPackages` component
 
+### 🛠️ Fixes
+- Fixed `--major` parameter not read from command line when creating a release branch.
+
 
 ## [0.13.4] / 2025-08-18
 ### 🛠️ Fixes
