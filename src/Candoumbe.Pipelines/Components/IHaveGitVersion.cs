@@ -25,7 +25,7 @@ public interface IHaveGitVersion : INukeBuild, IRequireNuGetPackage
     /// The value of this property is only taken into account when running <see cref="Release"/> target.
     /// </remarks>
     [Parameter("Hint to create a major release.")]
-    bool Major => false;
+    bool Major => TryGetValue<bool?>(() => Major) ?? false;
 
     /// <summary>
     /// Major.Minor.Patch Version number
