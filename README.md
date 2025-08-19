@@ -30,14 +30,15 @@ is separated from the history of the code base.
 
 ### 2. **Writing a pipeline file of some sort**
 
-Most of the time in YAML, the file that describes the steps required to build a project are providers specific.
+Most of the time in YAML, the file that describes the steps required to build a project is provider specific.
 So even though you can write YAML, knowing how to write an Azure DevOps pipeline does not really help when it comes to writing a pipeline for GitHub Actions.
 
 ## The solution
 
 [Nuke] is a library written by [Matthias Koch] that helps to create builds.
 
-This project offers an opinionated way at writing pipelines by giving a set of components (more on that later) with the following benefits :
+This project offers an opinionated way at writing pipelines by giving a set of components
+(more on that later) with the following benefits :
 
 1. no need to go your code management tool to set up your project CI/CD.
 2. no more YAML file : yeah YAML is great but the tooling is not great and the structure itself is error-prone.
@@ -230,7 +231,7 @@ PRs are welcome, check out the [contribution guidelines] if you want to contribu
 
 - [Matthias Koch] for the marvelous [Nuke] library. This project would never exist without its work.
 
-[Nuke]: https://github.com/nuke/
+[Nuke]: https://github.com/nuke-build/nuke
 [Nuke.GlobalTool]: https://nuget.org/packages/Nuke.GlobalTool
 [Matthias Koch]: https://github.com/matkoch
 [Candoumbe.Pipelines]: https://nuget.org/packages/Candoumbe.Pipelines
