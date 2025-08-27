@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="../../core.props" />
   <PropertyGroup>
@@ -11,9 +11,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-      <PackageReference Include="Nuke.Common" Version="9.0.4" />
+      <PackageReference Include="Nuke.Common" />
   </ItemGroup>
   <ItemGroup>
-    <NukeSpecificationFiles Include=".\tools\Stryker\Stryker.json"/>
+    <NukeSpecificationFiles Include=".\tools\Stryker\Stryker.json" />
   </ItemGroup>
 </Project>
