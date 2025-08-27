@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] / 2025-08-27
+### 🚀 New features
+- Added `Filter` option to specifiy which benchmarks to perform
+- Added `NuGetApiKey` parameter to `IPushNugetPackages` component
+
+### 🛠️ Fixes
+- Fixed `--major` parameter not read from command line when creating a release branch.
+
 ## [0.13.4] / 2025-08-18
 ### 🛠️ Fixes
 - Fixed incorrect rendering of `IDotNetFormat` command line arguments.
@@ -259,13 +267,14 @@ So now `{MutationTestDirectory}/[{framework}]` is now changed to `{MutationTestD
 
 ### 🔧 Fixes
 - Fixed directory path used by `IUnitTest` target to output unit tests results.
-- Fixed argument format used to define reporters used when running mutation tests.
+- Fixed the argument format used to define reporters used when running mutation tests.
 - Fixed `SourceName` not displayed when running `IPublish.Publish` target
 
 ## [0.1.0] / 2022-10-23
 - Initial release
 
-[Unreleased]: https://github.com/candoumbe/Pipelines/compare/0.13.4...HEAD
+[Unreleased]: https://github.com/candoumbe/Pipelines/compare/1.0.0...HEAD
+[1.0.0]: https://github.com/candoumbe/Pipelines/compare/0.13.4...1.0.0
 [0.13.4]: https://github.com/candoumbe/Pipelines/compare/0.13.3...0.13.4
 [0.13.3]: https://github.com/candoumbe/Pipelines/compare/0.13.2...0.13.3
 [0.13.2]: https://github.com/candoumbe/Pipelines/compare/0.13.1...0.13.2
