@@ -7,9 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.0.0] / 2025-08-27
+## [1.0.1] / 2025-08-27
+### 🧹 Housekeeping
+
+- Moved to central package management
+
+## [1.0.0] / 2025-08-27 **[YANKED]**
 ### 🚀 New features
-- Added `Filter` option to specifiy which benchmarks to perform
+- Added `Filter` option to specify which benchmarks to perform
 - Added `NuGetApiKey` parameter to `IPushNugetPackages` component
 
 ### 🛠️ Fixes
@@ -161,7 +166,7 @@ this new type allows to specify the path to the configuration file to use during
 ### 🔧 Fixes
 - Reduced the number of CLI options sent when `IUnitTest.UnitTests` target runs and the current build does not need to collect code coverage.
 - Made `IMutationTest.MutationTests` target to run before `IPack.Pack` does.
-- Added CLI option `--project` to the options output when running mutation tests
+- Added CLI option `--project` to the options' output when running mutation tests
 - Changed output directory for mutation report files to save them into a directory named after the source project that was mutated.
 So now `{MutationTestDirectory}/[{framework}]` is now changed to `{MutationTestDirectory}/{ProjectName}/[{framework}]` ([#88](https://github.com/candoumbe/pipelines/issues/88))
 - Fixed the name of the parameters emitted for the [project version](https://stryker-mutator.io/docs/stryker-net/configuration/#project-infoversion-committish) when using `dashboard` reporter  ([#89](https://github.com/candoumbe/pipelines/issues/89))
@@ -273,7 +278,8 @@ So now `{MutationTestDirectory}/[{framework}]` is now changed to `{MutationTestD
 ## [0.1.0] / 2022-10-23
 - Initial release
 
-[Unreleased]: https://github.com/candoumbe/Pipelines/compare/1.0.0...HEAD
+[Unreleased]: https://github.com/candoumbe/Pipelines/compare/1.0.1...HEAD
+[1.0.1]: https://github.com/candoumbe/Pipelines/compare/1.0.0...1.0.1
 [1.0.0]: https://github.com/candoumbe/Pipelines/compare/0.13.4...1.0.0
 [0.13.4]: https://github.com/candoumbe/Pipelines/compare/0.13.3...0.13.4
 [0.13.3]: https://github.com/candoumbe/Pipelines/compare/0.13.2...0.13.3

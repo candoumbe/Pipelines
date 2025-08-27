@@ -28,21 +28,21 @@
         <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
       </PropertyGroup>
       <ItemGroup Condition="'$(IsTestProject)' == 'false'">
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" Condition="'$(GITHUB_ACTIONS)' == 'true'"/>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" Condition="'$(GITHUB_ACTIONS)' == 'true'" />
       </ItemGroup>
     </When>
   </Choose>
   <ItemGroup>
-    <PackageReference Include="Roslynator.Analyzers" Version="4.14.0">
+    <PackageReference Include="Roslynator.Analyzers">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
   </ItemGroup>
   <ItemGroup Condition="'$(IsTestProject)' == 'false' and '$(MSBuildProjectName)' != '_build'">
-      <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
+      <None Include="..\..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Candoumbe.Miscutilities" Version="0.15.0"/>
+    <PackageReference Include="Candoumbe.Miscutilities" />
   </ItemGroup>
 </Project>
