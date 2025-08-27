@@ -122,7 +122,7 @@ public interface IMutationTest : IHaveTests
                             {
                                 case { } branchName when string.Equals(branchName, IHaveDevelopBranch.DevelopBranchName, StringComparison.InvariantCultureIgnoreCase):
                                     {
-                                        // we are in git flow, so we can compare develop with main branch
+                                        // we are in git flow, so we can compare the develop branch with the main branch
                                         strykerArgs = strykerArgs.SetWithBaseline(IHaveMainBranch.MainBranchName);
                                     }
                                     break;
