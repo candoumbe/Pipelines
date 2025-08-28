@@ -8,8 +8,8 @@ using Nuke.Common;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
-using static Serilog.Log;
 using static Candoumbe.Pipelines.Tools.StrykerTasks;
+using static Serilog.Log;
 
 namespace Candoumbe.Pipelines.Components;
 

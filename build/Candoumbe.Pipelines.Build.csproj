@@ -14,7 +14,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageDownload Include="CodeCovUploader" Version="[0.8.0]"/>
     <PackageDownload Include="GitVersion.Tool" Version="[6.0.2]"/>
+    <PackageDownload Include="ReportGenerator" Version="[5.4.12]"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\src\Candoumbe.Pipelines\Candoumbe.Pipelines.csproj"/>
