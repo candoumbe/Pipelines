@@ -1,15 +1,7 @@
-﻿namespace Candoumbe.Pipelines.Components;
-
-using System;
-using System.Linq;
-using Nuke.Common;
-using Nuke.Common.IO;
+﻿using Nuke.Common;
 using Nuke.Common.Tooling;
-using Nuke.Common.Tools.Codecov;
-using Nuke.Common.Tools.DotNet;
-using Nuke.Common.Tools.ReportGenerator;
-using static Nuke.Common.Tools.Codecov.CodecovTasks;
-using static Nuke.Common.Tools.ReportGenerator.ReportGeneratorTasks;
+
+namespace Candoumbe.Pipelines.Components;
 
 /// <summary>
 /// Build component that can report unit tests code coverage
