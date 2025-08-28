@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Nuke.Common;
 using Nuke.Common.IO;
@@ -89,6 +90,7 @@ public interface IReportIntegrationTestCoverage : IReportCoverage, IIntegrationT
                                                        .TryAfter<IReportUnitTestCoverage>()
                                                        .Requires(() => !ReportToCodeCov || CodecovToken != null)
                                                        .Consumes(IntegrationTests, IntegrationTestResultsDirectory / "*.xml")
+                                                       .OnlyWhenDynamic(() => IntegrationTestResultsDirectory.GlobFiles("*.xml").AtLeastOnce())
                                                        .Produces(IntegrationTestCoverageReportDirectory / "*.xml")
                                                        .Produces(IntegrationTestCoverageReportHistoryDirectory / "*.xml")
                                                        .Executes(() =>

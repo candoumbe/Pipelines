@@ -12,7 +12,7 @@ using static Nuke.Common.Tools.ReportGenerator.ReportGeneratorTasks;
 namespace Candoumbe.Pipelines.Components;
 
 /// <summary>
-/// Build component that can report unit tests code coverage
+/// Component that can report unit tests code coverage
 /// </summary>
 /// <remarks>
 /// This component requires <see href="https://nuget.org/packages/reportgenerator">ReportGenerator tool</see>
@@ -80,7 +80,7 @@ public interface IReportUnitTestCoverage : IReportCoverage, IUnitTest
     Configure<ReportGeneratorSettings> ReportGeneratorSettings => _ => _;
 
     /// <summary>
-    /// Pushes code coverage to CodeCov
+    /// Publish code coverage to CodeCov
     /// </summary>
     public Target ReportUnitTestCoverage => _ => _
        .DependsOn(UnitTests)
