@@ -30,6 +30,8 @@ public interface IPack : IHaveArtifacts, IHaveConfiguration
     /// </summary>
     public Target Pack => _ => _
         .TryDependsOn<IUnitTest>(x => x.UnitTests)
+        .TryDependsOn<IIntegrationTest>(x => x.IntegrationTests)
+        .TryDependsOn<IMutationTest>(x => x.MutationTests)
         .TryDependsOn<ICompile>()
         .Produces(PackagesDirectory / "*.nupkg",
                   PackagesDirectory / "*.snupkg")
