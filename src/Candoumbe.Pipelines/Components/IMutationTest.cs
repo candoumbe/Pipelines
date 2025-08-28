@@ -55,6 +55,7 @@ public interface IMutationTest : IHaveTests
         .Description("Runs mutation tests using Stryker tool")
         .TryDependsOn<IClean>(x => x.Clean)
         .TryBefore<IPack>()
+        .OnlyWhenStatic(() => MutationTestsProjects.AtLeastOnce())
         .TryDependsOn<ICompile>(x => x.Compile)
         .Produces(MutationTestResultDirectory / "*")
         .Executes(() =>
