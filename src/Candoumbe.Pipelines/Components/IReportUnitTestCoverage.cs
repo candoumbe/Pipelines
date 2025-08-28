@@ -85,6 +85,7 @@ public interface IReportUnitTestCoverage : IReportCoverage, IUnitTest
     public Target ReportUnitTestCoverage => _ => _
        .DependsOn(UnitTests)
        .Requires(() => !ReportToCodeCov || CodecovToken != null)
+       .OnlyWhenDynamic(() => UnitTestResultsDirectory.GlobFiles("*.xml").AtLeastOnce())
        .Consumes(UnitTests, UnitTestResultsDirectory / "*.xml")
        .Produces(UnitTestCoverageReportDirectory / "*.xml")
        .Produces(UnitTestCoverageReportHistoryDirectory / "*.xml")
