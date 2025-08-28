@@ -34,6 +34,8 @@ public interface IIntegrationTest : ICompile, IHaveTests, IHaveCoverage
     /// </summary>
     public Target IntegrationTests => _ => _
         .DependsOn(Compile)
+        .TryAfter<IUnitTest>()
+        .TryBefore<IPack>()
         .Description("Run integration tests and collect code coverage")
         .Produces(IntegrationTestResultsDirectory / "*.trx")
         .Produces(IntegrationTestResultsDirectory / "*.xml")
@@ -44,24 +46,25 @@ public interface IIntegrationTest : ICompile, IHaveTests, IHaveCoverage
             DotNetTest(s => s
                 .Apply(IntegrationTestSettingsBase)
                 .Apply(IntegrationTestSettings)
-                .CombineWith(IntegrationTestsProjects, (cs, project) => cs.SetProjectFile(project)
+                .CombineWith(IntegrationTestsProjects,
+                             (cs, project) => cs.SetProjectFile(project)
                                                                .CombineWith(project.GetTargetFrameworks(),
                                                                             (setting, framework) => setting.Apply<DotNetTestSettings, (Project, string)>(ProjectIntegrationTestSettingsBase, (project, framework))
                                                                                                            .Apply<DotNetTestSettings, (Project, string)>(ProjectIntegrationTestSettings, (project, framework))
                     )));
         });
 
-    internal sealed Configure<DotNetTestSettings> IntegrationTestSettingsBase => _ => _
-        .SetConfiguration(Configuration.ToString())
-                .EnableUseSourceLink()
-                .SetNoBuild(SucceededTargets.Contains(Compile))
-                .SetResultsDirectory(IntegrationTestResultsDirectory)
-                .WhenNotNull(this.As<IReportCoverage>(), (settings, _) => settings.EnableCollectCoverage()
-                                                                                   .SetCoverletOutputFormat(CoverletOutputFormat.lcov))
-                .AddProperty("ExcludeByAttribute", "Obsolete");
+    internal sealed Configure<DotNetTestSettings> IntegrationTestSettingsBase => _ => _ .SetConfiguration(Configuration)
+                                                                                        .EnableUseSourceLink()
+                                                                                        .SetNoBuild(SucceededTargets.Contains(Compile))
+                                                                                        .SetNoRestore(SucceededTargets.Contains(Compile))
+                                                                                        .SetResultsDirectory(IntegrationTestResultsDirectory)
+                                                                                        .WhenNotNull(this.As<IReportCoverage>(),
+                                                                                                     (settings, _) => settings.EnableCollectCoverage().SetCoverletOutputFormat(CoverletOutputFormat.lcov))
+                                                                                        .AddProperty("ExcludeByAttribute", "Obsolete");
 
     /// <summary>
-    /// Configures the Unit test target
+    /// Configures the integration test target
     /// </summary>
     public Configure<DotNetTestSettings> IntegrationTestSettings => _ => _;
 
