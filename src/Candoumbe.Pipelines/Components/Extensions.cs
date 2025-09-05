@@ -33,14 +33,12 @@ public static class Extensions
         => (T)(object)nukeBuild;
 
     /// <summary>
-    /// Uses various heuristics to tests if <paramref name="project"/> has <see href="https://github.com/dotnet/sourcelink">SourceLink</see>
-    /// enabled .
+    /// Uses various heuristics to check if <paramref name="project"/> has <see href="https://github.com/dotnet/sourcelink">SourceLink</see>
+    /// enabled.
     /// </summary>
     /// <param name="project"></param>
     /// <returns><see langword="true"/> if <see href="https://github.com/dotnet/sourcelink">SourceLink</see>
     /// enabled and <see langword="false"/> otherwise</returns>
-#pragma warning disable RCS1175 // Unused 'this' parameter
-#pragma warning disable IDE0060 // Unused 'project' parameter
     public static bool IsSourceLinkEnabled(this Project project) => project.HasPackageReference("Microsoft.SourceLink.GitHub");
 
     /// <summary>
