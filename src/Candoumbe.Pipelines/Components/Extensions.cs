@@ -42,6 +42,13 @@ public static class Extensions
 #pragma warning disable RCS1175 // Unused 'this' parameter
 #pragma warning disable IDE0060 // Unused 'project' parameter
     public static bool IsSourceLinkEnabled(this Project project) => project.HasPackageReference("Microsoft.SourceLink.GitHub");
-#pragma warning restore IDE0060 // Unused 'project' parameter
-#pragma warning restore RCS1175 // Unused 'this' parameter
+
+    /// <summary>
+    /// Checks if <paramref name="project"/> uses the <see href="https://github.com/microsoft/vstest">Microsoft.TestPlatform</see>
+    /// </summary>
+    /// <param name="project"></param>
+    /// <returns></returns>
+    public static bool IsMicrosoftTestingPlatformEnabled(this Project project) => project.GetProperty<bool>("TestingPlatformDotnetTestSupport")
+                                                                            && project.GetProperty<bool>("UseMicrosoftTestingPlatformRunner")
+                                                                            && project.HasPackageReference("Microsoft.Testing.Extensions.CodeCoverage");
 }
