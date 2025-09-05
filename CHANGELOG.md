@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🚀 New features
 - Improved targets ordering
 - Added various checks to ensure targets that depends on certain files to be present do not run when those files are not present.
+- Added support for `Microsoft.Testing.Platform` ([#198](https://github.com/candoumbe/Pipelines/issues/198))
+
+### 🧹 Housekeeping
+
 
 ## [1.0.1] / 2025-08-27
 ### 🧹 Housekeeping
