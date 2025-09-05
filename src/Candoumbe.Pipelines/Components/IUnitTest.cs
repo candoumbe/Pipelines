@@ -12,7 +12,7 @@ using static Serilog.Log;
 namespace Candoumbe.Pipelines.Components;
 
 /// <summary>
-/// Marks a pipeline that can run unit tests
+/// The <see cref="IUnitTest"/> component defines a single <see cref="UnitTests"/> target runs unit tests
 /// </summary>
 public interface IUnitTest : ICompile, IHaveTests, IHaveCoverage
 {
