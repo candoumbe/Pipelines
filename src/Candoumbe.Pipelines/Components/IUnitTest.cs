@@ -17,7 +17,7 @@ namespace Candoumbe.Pipelines.Components;
 public interface IUnitTest : ICompile, IHaveTests, IHaveCoverage
 {
     /// <summary>
-    /// Projects that contains unit tests
+    /// Projects that contain unit tests
     /// </summary>
     IEnumerable<Project> UnitTestsProjects { get; }
 
@@ -30,42 +30,58 @@ public interface IUnitTest : ICompile, IHaveTests, IHaveCoverage
     /// Runs unit tests
     /// </summary>
     public Target UnitTests => _ => _
-        .DependsOn(Compile)
-        .Description("Run unit tests and collect code coverage")
-        .Produces(UnitTestResultsDirectory / "*.trx")
-        .Produces(UnitTestResultsDirectory / "*.xml")
-        .TryTriggers<IReportUnitTestCoverage>()
-        .Executes(() =>
-        {
-            UnitTestsProjects.ForEach(project => Information(project));
+                                   .DependsOn(Compile)
+                                   .Description("Run unit tests and collect code coverage")
+                                   .Produces(UnitTestResultsDirectory / "*.trx")
+                                   .Produces(UnitTestResultsDirectory / "*.xml")
+                                   .TryTriggers<IReportUnitTestCoverage>()
+                                   .Executes(() =>
+                                             {
+                                                 UnitTestsProjects.ForEach(project => Information(project));
 
-            DotNetTest(s => s
-                .Apply(UnitTestSettingsBase)
-                .Apply(UnitTestSettings)
-                .CombineWith(UnitTestsProjects, (cs, project) => cs.SetProjectFile(project)
-                                                               .CombineWith(project.GetTargetFrameworks(),
-                                                                            (setting, framework) => setting.Apply<DotNetTestSettings, (Project, string)>(ProjectUnitTestSettingsBase, (project, framework))
-                                                                                                           .Apply<DotNetTestSettings, (Project, string)>(ProjectUnitTestSettings, (project, framework))
-                    )));
-        });
+                                                 DotNetTest(s => s
+                                                                .Apply(UnitTestSettingsBase)
+                                                                .Apply(UnitTestSettings)
+                                                                .CombineWith(UnitTestsProjects,
+                                                                             (cs, project) => cs.SetProjectFile(project)
+                                                                                 .CombineWith(project.GetTargetFrameworks(),
+                                                                                              (setting, framework) => setting.Apply<DotNetTestSettings, (Project, string)>(ProjectUnitTestSettingsBase, (project, framework))
+                                                                                                  .Apply<DotNetTestSettings, (Project, string)>(ProjectUnitTestSettings, (project, framework))
+                                                                                             )));
+                                             });
 
     internal sealed Configure<DotNetTestSettings> UnitTestSettingsBase => _ => _
-        .SetConfiguration(Configuration.ToString())
-                .EnableUseSourceLink()
-                .SetNoBuild(SucceededTargets.Contains(Compile))
-                .SetResultsDirectory(UnitTestResultsDirectory)
-                .WhenNotNull(this.As<IReportCoverage>(), (settings, _) => settings.EnableCollectCoverage()
-                                                                                   .SetCoverletOutputFormat(CoverletOutputFormat.lcov))
-                .AddProperty("ExcludeByAttribute", "Obsolete");
+                                                                              .SetConfiguration(Configuration.ToString())
+                                                                              .EnableUseSourceLink()
+                                                                              .SetNoBuild(SucceededTargets.Contains(Compile))
+                                                                              .AddProperty("ExcludeByAttribute", "Obsolete");
 
     /// <summary>
     /// Configures the Unit test target
     /// </summary>
     public Configure<DotNetTestSettings> UnitTestSettings => _ => _;
 
-    internal Configure<DotNetTestSettings, (Project project, string framework)> ProjectUnitTestSettingsBase => (settings, tuple) => settings.SetFramework(tuple.framework)
-                                                                                                                                    .AddLoggers($"trx;LogFileName={tuple.project.Name}.{tuple.framework}.trx")
-                                                                                                                                    .WhenNotNull(this.As<IReportCoverage>(), (options, _) => options.SetCoverletOutput(UnitTestResultsDirectory / $"{tuple.project.Name}.{tuple.framework}.xml"));
+    internal Configure<DotNetTestSettings, (Project project, string framework)> ProjectUnitTestSettingsBase
+        => (settings, tuple) => settings.SetFramework(tuple.framework)
+               .AddLoggers($"trx;LogFileName={tuple.project.Name}.{tuple.framework}.trx")
+               .WhenNotNull(this.As<IReportCoverage>(),
+                            (options, _) => options
+                                .WhenNotNull(this.As<IReportCoverage>(),
+                                             (coverageSettings, _) => tuple.project.IsMicrosoftTestingPlatformEnabled() switch
+                                             {
+                                                 true => coverageSettings .AddProcessAdditionalArguments(
+                                                 [
+                                                     "--",
+                                                     "--coverage", // Enable to collect coverage
+                                                     "--coverage-output-format 'cobertura'",
+                                                     $" --coverage-output '{UnitTestResultsDirectory / $"{tuple.project.Name}.{tuple.framework}.xml"}'"
+                                                 ]),
+                                                 _ => coverageSettings.EnableCollectCoverage()
+                                                         .SetCoverletOutputFormat(CoverletOutputFormat.cobertura)
+                                                         .SetCoverletOutput(UnitTestResultsDirectory / $"{tuple.project.Name}.{tuple.framework}.xml")
+                                                         .SetResultsDirectory(UnitTestResultsDirectory)
+                                             })
+                           );
 
     /// <summary>
     /// Configure / override unit test settings at the project level
