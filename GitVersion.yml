@@ -12,6 +12,18 @@ branches:
         tracks-release-branches: false
         is-release-branch: false
         pre-release-weight: 30000
+    chore:
+      regex: "^chore(s)?[/-](?<BranchName>.+)"
+      mode: ContinuousDelivery
+      label: '{BranchName}'
+      increment: None
+      prevent-increment:
+        of-merged-branch: false
+      track-merge-target: false
+      source-branches: [ 'develop', 'feature', 'support', 'hotfix' ]
+      tracks-release-branches: false
+      is-release-branch: false
+      pre-release-weight: 30000
     coldfix:
         regex: "^coldfix(es)?[/-](?<BranchName>.+)"
         mode: ContinuousDelivery
