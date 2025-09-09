@@ -48,7 +48,7 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest
             string token = GitHubToken;
             if (!SkipConfirmation)
             {
-                title = (Console.ReadLine()) switch
+                title = Console.ReadLine() switch
                 {
                     { } value when !string.IsNullOrWhiteSpace(value) => value.Trim(),
                     _ => Title
@@ -108,7 +108,7 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest
                 (key: ConsoleKey.Y, "Delete the local branch"),
                 (key: ConsoleKey.N, "Keep the local branch"),
             };
-            
+
             static void GitPushToRemote()
             {
                 Git($"push origin --set-upstream {GitCurrentBranch()}");

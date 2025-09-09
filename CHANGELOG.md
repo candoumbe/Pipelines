@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] / 2025-09-09
+### 🚀 New features
+- Added `IDoChoreWorkflow` component that can be used to work on a task using a `chore/*` branch.
+
 ## [1.1.0] / 2025-09-09
 ### 🚀 New features
 - Improved targets ordering
@@ -287,7 +291,8 @@ So now `{MutationTestDirectory}/[{framework}]` is now changed to `{MutationTestD
 ## [0.1.0] / 2022-10-23
 - Initial release
 
-[Unreleased]: https://github.com/candoumbe/Pipelines/compare/1.1.0...HEAD
+[Unreleased]: https://github.com/candoumbe/Pipelines/compare/1.2.0...HEAD
+[1.2.0]: https://github.com/candoumbe/Pipelines/compare/1.1.0...1.2.0
 [1.1.0]: https://github.com/candoumbe/Pipelines/compare/1.0.1...1.1.0
 [1.0.1]: https://github.com/candoumbe/Pipelines/compare/1.0.0...1.0.1
 [1.0.0]: https://github.com/candoumbe/Pipelines/compare/0.13.4...1.0.0
