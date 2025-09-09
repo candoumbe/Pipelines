@@ -8,8 +8,8 @@ using Nuke.Common;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
-using static Serilog.Log;
 using static Candoumbe.Pipelines.Tools.StrykerTasks;
+using static Serilog.Log;
 
 namespace Candoumbe.Pipelines.Components;
 
@@ -55,6 +55,7 @@ public interface IMutationTest : IHaveTests
         .Description("Runs mutation tests using Stryker tool")
         .TryDependsOn<IClean>(x => x.Clean)
         .TryBefore<IPack>()
+        .OnlyWhenStatic(() => MutationTestsProjects.AtLeastOnce())
         .TryDependsOn<ICompile>(x => x.Compile)
         .Produces(MutationTestResultDirectory / "*")
         .Executes(() =>

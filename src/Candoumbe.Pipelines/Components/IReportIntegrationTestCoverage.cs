@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Nuke.Common;
 using Nuke.Common.IO;
@@ -80,23 +81,26 @@ public interface IReportIntegrationTestCoverage : IReportCoverage, IIntegrationT
     Configure<ReportGeneratorSettings> ReportGeneratorSettings => _ => _;
 
     /// <summary>
-    /// Pushes code coverage to CodeCov
+    /// Publish  coverage reports associated with integration tests.
     /// </summary>
     public Target ReportIntegrationTestCoverage => _ => _
-       .DependsOn(IntegrationTests)
-       .Requires(() => !ReportToCodeCov || CodecovToken != null)
-       .Consumes(IntegrationTests, IntegrationTestResultsDirectory / "*.xml")
-       .Produces(IntegrationTestCoverageReportDirectory / "*.xml")
-       .Produces(IntegrationTestCoverageReportHistoryDirectory / "*.xml")
-       .Executes(() =>
-       {
-           ReportGenerator(s => s.Apply(ReportGeneratorSettingsBase)
-                                 .Apply(ReportGeneratorSettings));
-
-           if (ReportToCodeCov)
-           {
-               Codecov(s => s.Apply(CodeCovSettingsBase)
-                             .Apply(CodecovSettings));
-           }
-       });
+                                                       .Description("Publish coverage reports associated with integration tests.")
+                                                       .DependsOn(IntegrationTests)
+                                                       .TryTriggeredBy<IIntegrationTest>()
+                                                       .TryAfter<IReportUnitTestCoverage>()
+                                                       .Requires(() => !ReportToCodeCov || CodecovToken != null)
+                                                       .Consumes(IntegrationTests, IntegrationTestResultsDirectory / "*.xml")
+                                                       .OnlyWhenDynamic(() => IntegrationTestResultsDirectory.GlobFiles("*.xml").AtLeastOnce())
+                                                       .Produces(IntegrationTestCoverageReportDirectory / "*.xml")
+                                                       .Produces(IntegrationTestCoverageReportHistoryDirectory / "*.xml")
+                                                       .Executes(() =>
+                                                       {
+                                                           ReportGenerator(s => s.Apply(ReportGeneratorSettingsBase)
+                                                                                 .Apply(ReportGeneratorSettings));
+                                                           if (ReportToCodeCov)
+                                                           {
+                                                               Codecov(s => s.Apply(CodeCovSettingsBase)
+                                                                             .Apply(CodecovSettings));
+                                                           }
+                                                       });
 }

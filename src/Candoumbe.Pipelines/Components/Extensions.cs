@@ -33,15 +33,20 @@ public static class Extensions
         => (T)(object)nukeBuild;
 
     /// <summary>
-    /// Uses various heuristics to tests if <paramref name="project"/> has <see href="https://github.com/dotnet/sourcelink">SourceLink</see>
-    /// enabled .
+    /// Uses various heuristics to check if <paramref name="project"/> has <see href="https://github.com/dotnet/sourcelink">SourceLink</see>
+    /// enabled.
     /// </summary>
     /// <param name="project"></param>
     /// <returns><see langword="true"/> if <see href="https://github.com/dotnet/sourcelink">SourceLink</see>
     /// enabled and <see langword="false"/> otherwise</returns>
-#pragma warning disable RCS1175 // Unused 'this' parameter
-#pragma warning disable IDE0060 // Unused 'project' parameter
     public static bool IsSourceLinkEnabled(this Project project) => project.HasPackageReference("Microsoft.SourceLink.GitHub");
-#pragma warning restore IDE0060 // Unused 'project' parameter
-#pragma warning restore RCS1175 // Unused 'this' parameter
+
+    /// <summary>
+    /// Checks if <paramref name="project"/> uses the <see href="https://github.com/microsoft/vstest">Microsoft.TestPlatform</see>
+    /// </summary>
+    /// <param name="project"></param>
+    /// <returns></returns>
+    public static bool IsMicrosoftTestingPlatformEnabled(this Project project) => project.GetProperty<bool?>("TestingPlatformDotnetTestSupport") is true
+                                                                            && project.GetProperty<bool?>("UseMicrosoftTestingPlatformRunner") is true
+                                                                            && project.HasPackageReference("Microsoft.Testing.Extensions.CodeCoverage");
 }

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Nuke.Common;
-using Nuke.Common.CI.AzurePipelines;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
@@ -33,41 +30,57 @@ public interface IIntegrationTest : ICompile, IHaveTests, IHaveCoverage
     /// Runs integration tests
     /// </summary>
     public Target IntegrationTests => _ => _
-        .DependsOn(Compile)
-        .Description("Run integration tests and collect code coverage")
-        .Produces(IntegrationTestResultsDirectory / "*.trx")
-        .Produces(IntegrationTestResultsDirectory / "*.xml")
-        .Executes(() =>
-        {
-            IntegrationTestsProjects.ForEach(project => Information(project));
+                                          .DependsOn(Compile)
+                                          .TryAfter<IUnitTest>()
+                                          .TryBefore<IPack>()
+                                          .Description("Run integration tests and collect code coverage")
+                                          .Produces(IntegrationTestResultsDirectory / "*.trx")
+                                          .Produces(IntegrationTestResultsDirectory / "*.xml")
+                                          .Executes(() =>
+                                                    {
+                                                        IntegrationTestsProjects.ForEach(project => Information(project));
 
-            DotNetTest(s => s
-                .Apply(IntegrationTestSettingsBase)
-                .Apply(IntegrationTestSettings)
-                .CombineWith(IntegrationTestsProjects, (cs, project) => cs.SetProjectFile(project)
-                                                               .CombineWith(project.GetTargetFrameworks(),
-                                                                            (setting, framework) => setting.Apply<DotNetTestSettings, (Project, string)>(ProjectIntegrationTestSettingsBase, (project, framework))
-                                                                                                           .Apply<DotNetTestSettings, (Project, string)>(ProjectIntegrationTestSettings, (project, framework))
-                    )));
-        });
+                                                        DotNetTest(s => s
+                                                                       .Apply(IntegrationTestSettingsBase)
+                                                                       .Apply(IntegrationTestSettings)
+                                                                       .CombineWith(IntegrationTestsProjects,
+                                                                                    (cs, project) => cs.SetProjectFile(project)
+                                                                                        .CombineWith(project.GetTargetFrameworks(),
+                                                                                                     (setting, framework) => setting.Apply<DotNetTestSettings, (Project, string)>(ProjectIntegrationTestSettingsBase, (project, framework))
+                                                                                                         .Apply<DotNetTestSettings, (Project, string)>(ProjectIntegrationTestSettings, (project, framework))
+                                                                                                    )));
+                                                    });
 
-    internal sealed Configure<DotNetTestSettings> IntegrationTestSettingsBase => _ => _
-        .SetConfiguration(Configuration.ToString())
-                .EnableUseSourceLink()
-                .SetNoBuild(SucceededTargets.Contains(Compile))
-                .SetResultsDirectory(IntegrationTestResultsDirectory)
-                .WhenNotNull(this.As<IReportCoverage>(), (settings, _) => settings.EnableCollectCoverage()
-                                                                                   .SetCoverletOutputFormat(CoverletOutputFormat.lcov))
-                .AddProperty("ExcludeByAttribute", "Obsolete");
+    internal sealed Configure<DotNetTestSettings> IntegrationTestSettingsBase => _ => _.SetConfiguration(Configuration)
+                                                                                     .EnableUseSourceLink()
+                                                                                     .SetNoBuild(SucceededTargets.Contains(Compile))
+                                                                                     .SetNoRestore(SucceededTargets.Contains(Compile))
+                                                                                     .SetResultsDirectory(IntegrationTestResultsDirectory)
+                                                                                     .AddProperty("ExcludeByAttribute", "Obsolete");
 
     /// <summary>
-    /// Configures the Unit test target
+    /// Configures the integration test target
     /// </summary>
     public Configure<DotNetTestSettings> IntegrationTestSettings => _ => _;
 
-    internal Configure<DotNetTestSettings, (Project project, string framework)> ProjectIntegrationTestSettingsBase => (settings, tuple) => settings.SetFramework(tuple.framework)
-                                                                                                                                    .AddLoggers($"trx;LogFileName={tuple.project.Name}.{tuple.framework}.trx")
-                                                                                                                                    .WhenNotNull(this.As<IReportCoverage>(), (options, _) => options.SetCoverletOutput(IntegrationTestResultsDirectory / $"{tuple.project.Name}.{tuple.framework}.xml"));
+    internal Configure<DotNetTestSettings, (Project project, string framework)> ProjectIntegrationTestSettingsBase
+        => (settings, tuple) => settings.SetFramework(tuple.framework)
+               .WhenNotNull(this.As<IReportCoverage>(),
+                            (coverageSettings, _) => tuple.project.IsMicrosoftTestingPlatformEnabled() switch
+                            {
+                                true => coverageSettings.AddProcessAdditionalArguments(
+                                [
+                                    "--",
+                                    "--coverage", // Enable to collect coverage
+                                    "--coverage-output-format 'cobertura'",
+                                    $" --coverage-output '{IntegrationTestResultsDirectory / $"{tuple.project.Name}.{tuple.framework}.xml"}'"
+                                ]),
+                                _ => coverageSettings.EnableCollectCoverage()
+                                    .AddLoggers($"trx;LogFileName={tuple.project.Name}.{tuple.framework}.trx")
+                                    .SetCoverletOutputFormat(CoverletOutputFormat.cobertura)
+                                    .SetCoverletOutput(IntegrationTestResultsDirectory / $"{tuple.project.Name}.{tuple.framework}.xml")
+                                    .SetResultsDirectory(IntegrationTestResultsDirectory)
+                            });
 
     /// <summary>
     /// Configure / override integration test settings at project level

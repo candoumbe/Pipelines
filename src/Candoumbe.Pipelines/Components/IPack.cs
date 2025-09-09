@@ -5,7 +5,6 @@ using Nuke.Common;
 using Nuke.Common.IO;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
-using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Utilities.Collections;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
@@ -17,7 +16,7 @@ namespace Candoumbe.Pipelines.Components;
 public interface IPack : IHaveArtifacts, IHaveConfiguration
 {
     /// <summary>
-    /// Directory that will contains packages
+    /// Directory that will contain packages
     /// </summary>
     public AbsolutePath PackagesDirectory => ArtifactsDirectory / "packages";
 
@@ -31,6 +30,8 @@ public interface IPack : IHaveArtifacts, IHaveConfiguration
     /// </summary>
     public Target Pack => _ => _
         .TryDependsOn<IUnitTest>(x => x.UnitTests)
+        .TryDependsOn<IIntegrationTest>(x => x.IntegrationTests)
+        .TryDependsOn<IMutationTest>(x => x.MutationTests)
         .TryDependsOn<ICompile>()
         .Produces(PackagesDirectory / "*.nupkg",
                   PackagesDirectory / "*.snupkg")
@@ -53,21 +54,23 @@ public interface IPack : IHaveArtifacts, IHaveConfiguration
     /// </summary>
     public Configure<DotNetPackSettings> PackSettings => _ => _;
 
-    internal sealed Configure<DotNetPackSettings> PackSettingsBase => _ => _
+    internal sealed Configure<DotNetPackSettings> PackSettingsBase => packSettings => packSettings
         .EnableIncludeSource()
         .EnableIncludeSymbols()
         .SetOutputDirectory(PackagesDirectory)
-        .WhenNotNull(this.As<ICompile>(), (_, compile) => _.SetNoBuild(SucceededTargets.Contains(compile.Compile) || SkippedTargets.Contains(compile.Compile)))
-        .WhenNotNull(this.As<IRestore>(), (_, restore) => _.SetNoRestore(SucceededTargets.Contains(restore.Restore) || SucceededTargets.Contains(restore.Restore)))
+        .WhenNotNull(this.As<ICompile>(),
+                     (compileSettings, compile) => compileSettings.SetNoBuild(SucceededTargets.Contains(compile.Compile) || SkippedTargets.Contains(compile.Compile)))
+        .WhenNotNull(this.As<IRestore>(),
+                     (restoreSettings, restore) => restoreSettings.SetNoRestore(SucceededTargets.Contains(restore.Restore) || SucceededTargets.Contains(restore.Restore)))
         .SetConfiguration(Configuration)
         .SetSymbolPackageFormat(DotNetSymbolPackageFormat.snupkg)
         .WhenNotNull(this.As<IHaveGitVersion>(),
-                     (_, versioning) => _.SetAssemblyVersion(versioning.GitVersion.AssemblySemVer)
+                     (gitVersionSettings, versioning) => gitVersionSettings.SetAssemblyVersion(versioning.GitVersion.AssemblySemVer)
                                         .SetFileVersion(versioning.GitVersion.AssemblySemFileVer)
                                         .SetInformationalVersion(versioning.GitVersion.InformationalVersion)
                                         .SetVersion(versioning.GitVersion.SemVer)
                                     )
-        .WhenNotNull(this.As<IHaveChangeLog>(), (_, changelog) => _.SetPackageReleaseNotes(changelog.ReleaseNotes))
-        .WhenNotNull(this.As<IHaveGitRepository>(), (_, repository) => _.SetRepositoryType("git")
+        .WhenNotNull(this.As<IHaveChangeLog>(), (changelogSettings, changelog) => changelogSettings.SetPackageReleaseNotes(changelog.ReleaseNotes))
+        .WhenNotNull(this.As<IHaveGitRepository>(), (repositorySettings, repository) => repositorySettings.SetRepositoryType("git")
                                                                      .SetRepositoryUrl(repository.GitRepository.HttpsUrl));
 }

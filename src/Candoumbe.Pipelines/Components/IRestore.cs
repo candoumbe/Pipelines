@@ -1,10 +1,8 @@
-﻿using System.Linq.Expressions;
-using Nuke.Common;
+﻿using Nuke.Common;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
-using static System.Linq.Expressions.ExpressionExtensions;
 
 namespace Candoumbe.Pipelines.Components;
 

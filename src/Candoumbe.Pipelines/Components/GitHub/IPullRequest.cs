@@ -1,6 +1,5 @@
 ﻿using System;
 using Nuke.Common;
-using Nuke.Common.Git;
 
 namespace Candoumbe.Pipelines.Components.GitHub
 {
