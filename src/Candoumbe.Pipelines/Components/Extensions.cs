@@ -46,7 +46,7 @@ public static class Extensions
     /// </summary>
     /// <param name="project"></param>
     /// <returns></returns>
-    public static bool IsMicrosoftTestingPlatformEnabled(this Project project) => project.GetProperty<bool>("TestingPlatformDotnetTestSupport")
-                                                                            && project.GetProperty<bool>("UseMicrosoftTestingPlatformRunner")
+    public static bool IsMicrosoftTestingPlatformEnabled(this Project project) => project.GetProperty<bool?>("TestingPlatformDotnetTestSupport") is true
+                                                                            && project.GetProperty<bool?>("UseMicrosoftTestingPlatformRunner") is true
                                                                             && project.HasPackageReference("Microsoft.Testing.Extensions.CodeCoverage");
 }
