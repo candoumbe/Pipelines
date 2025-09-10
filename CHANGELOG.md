@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### 🛠️ Fixes
+- Fixed incorrect source branch name when creating a `chore` branch ([#202](https://github.com/candoumbe/pipelines/issues/202))
+
+### 🚀 New features
+- Added `IDoChoreWorkflow` to `IGitFlow` and `IGitHubFlow`: this enable the `chore` target on those workflows
 
 ## [1.2.0] / 2025-09-09
 ### 🚀 New features
@@ -16,9 +21,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved targets ordering
 - Added various checks to ensure targets that depends on certain files to be present do not run when those files are not present.
 - Added support for `Microsoft.Testing.Platform` ([#198](https://github.com/candoumbe/Pipelines/issues/198))
-
-### 🧹 Housekeeping
-
 
 ## [1.0.1] / 2025-08-27
 ### 🧹 Housekeeping
