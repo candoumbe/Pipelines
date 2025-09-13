@@ -24,13 +24,13 @@ namespace Candoumbe.Pipelines.Components.GitHub
         /// Should the local branch be deleted after the pull request was created successfully ?
         /// </summary>
         [Parameter("Should the local branch be deleted after the pull request was created successfully ?")]
-        bool DeleteLocalOnSuccess => false;
+        bool DeleteLocalOnSuccess => TryGetValue<bool?>(() => DeleteLocalOnSuccess) ?? false;
 
         /// <summary>
         /// Defines, when set to <see langword="true"/>, to open the pull request as draft.
         /// </summary>
         [Parameter("Indicates to open the pull request as 'draft'")]
-        bool Draft => false;
+        bool Draft => TryGetValue<bool?>(() => Draft) ?? false;
 
         /// <summary>
         /// The issue ID for witch pull request will be created.

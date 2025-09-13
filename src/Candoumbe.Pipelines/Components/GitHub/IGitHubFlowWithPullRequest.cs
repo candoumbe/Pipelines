@@ -18,13 +18,13 @@ namespace Candoumbe.Pipelines.Components.GitHub
     /// <summary>
     /// This interface adds a target to open a pull request
     /// </summary>
-    public interface IGitHubFlowWithPullRequest : IGitHubFlow, IHaveGitHubRepository
+    public interface IGitHubFlowWithPullRequest : IGitHubFlow, IPullRequest
     {
         /// <summary>
         /// The title of the PR that will be created
         /// </summary>
         [Parameter("Title that will be used when creating a PR")]
-        string Title => TryGetValue(() => Title) ?? ((GitRepository.IsOnFeatureBranch(), GitRepository.IsOnReleaseBranch(), GitRepository.IsOnHotfixBranch()) switch
+        string IPullRequest.Title => TryGetValue(() => Title) ?? ((GitRepository.IsOnFeatureBranch(), GitRepository.IsOnReleaseBranch(), GitRepository.IsOnHotfixBranch()) switch
         {
             (true, _, _) => $"✨ {GitRepository.Branch?.Replace($"{FeatureBranchPrefix}/", string.Empty).ToTitleCase()}",
             (_, _, true) => $"🛠️ {GitRepository.Branch?.Replace($"{HotfixBranchPrefix}/", string.Empty).ToTitleCase()}",
@@ -42,25 +42,7 @@ namespace Candoumbe.Pipelines.Components.GitHub
         /// Description of the pull request
         /// </summary>
         [Parameter("Description of the pull request")]
-        string Description => TryGetValue(() => Description) ?? this.As<IHaveChangeLog>()?.ReleaseNotes;
-
-        /// <summary>
-        /// Should the local branch be deleted after the pull request was created successfully ?
-        /// </summary>
-        [Parameter("Should the local branch be deleted after the pull request was created successfully ?")]
-        public bool DeleteLocalOnSuccess { get; }
-
-        /// <summary>
-        /// Defines, when set to <see langword="true"/>, to open the pull request as draft.
-        /// </summary>
-        [Parameter("Indicates to open the pull request as 'draft'")]
-        public bool Draft { get; }
-
-        /// <summary>
-        /// The issue ID for witch pull request will be created.
-        /// </summary>
-        [Parameter("Issues that will be closed once the pull request is merged.")]
-        uint[] Issues => TryGetValue(() => Issues) ?? [];
+        string IPullRequest.Description => TryGetValue(() => Description) ?? this.As<IHaveChangeLog>()?.ReleaseNotes;
 
         ///<inheritdoc/>
         async ValueTask IDoFeatureWorkflow.FinishFeature()
@@ -183,5 +165,8 @@ namespace Candoumbe.Pipelines.Components.GitHub
                 }
             }
         }
+
+        /// <inheritdoc />
+        async ValueTask IDoChoreWorkflow.FinishChore() => await FinishFeature();
     }
 }
