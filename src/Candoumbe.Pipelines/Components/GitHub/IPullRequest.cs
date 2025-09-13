@@ -21,7 +21,7 @@ namespace Candoumbe.Pipelines.Components.GitHub
         string Description => TryGetValue(() => Description) ?? this.As<IHaveChangeLog>()?.ReleaseNotes;
 
         /// <summary>
-        /// Should the local branch be deleted after the pull request was created successfully ?
+        /// Should the local branch be deleted after the pull request was created successfully?
         /// </summary>
         [Parameter("Should the local branch be deleted after the pull request was created successfully ?")]
         bool DeleteLocalOnSuccess => TryGetValue<bool?>(() => DeleteLocalOnSuccess) ?? false;

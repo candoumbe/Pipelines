@@ -33,15 +33,10 @@
         "Feature",
         "Format",
         "Hotfix",
-        "IntegrationTests",
-        "MutationTests",
         "Pack",
         "Publish",
         "Release",
-        "ReportIntegrationTestCoverage",
-        "ReportUnitTestCoverage",
-        "Restore",
-        "UnitTests"
+        "Restore"
       ]
     },
     "Verbosity": {
@@ -123,11 +118,6 @@
           "type": "string",
           "description": "The name of the chore branch prefix"
         },
-        "CodecovToken": {
-          "type": "string",
-          "description": "The API key used to push code coverage to CodeCov",
-          "default": "Secrets must be entered via 'nuke :secrets [profile]'"
-        },
         "ConfigName": {
           "type": "string",
           "description": "Defines the name of the configuration to use to publish packages"
@@ -200,11 +190,6 @@
         "Solution": {
           "type": "string",
           "description": "Path to a solution file that is automatically loaded"
-        },
-        "StrykerDashboardApiKey": {
-          "type": "string",
-          "description": "API KEY used to submit mutation report to a stryker dashboard",
-          "default": "Secrets must be entered via 'nuke :secrets [profile]'"
         },
         "Title": {
           "type": "string",
