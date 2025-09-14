@@ -10,9 +10,9 @@ namespace Candoumbe.Pipelines.Components;
 /// Marks a build as supporting the <see href="https://datasift.github.io/gitflow/IntroducingGitFlow.html">git flow</see> workflow.
 /// </summary>
 /// <remarks>
-/// This interface will provide several ready to use targets to effectively manages this workflow even when the underlying "git" command does not support gitflow verbs.
+/// This interface will provide several ready-to-use targets to effectively manage this workflow even when the underlying "git" command does not support gitflow verbs.
 /// </remarks>
-public interface IGitFlow : IDoHotfixWorkflow, IDoColdfixWorkflow, IHaveDevelopBranch
+public interface IGitFlow : IDoHotfixWorkflow, IDoColdfixWorkflow, IDoChoreWorkflow, IHaveDevelopBranch
 {
     /// <summary>
     /// Name of the release branch
@@ -27,6 +27,9 @@ public interface IGitFlow : IDoHotfixWorkflow, IDoColdfixWorkflow, IHaveDevelopB
     ///<inheritdoc/>
     string IDoFeatureWorkflow.FeatureBranchSourceName => DevelopBranchName;
 
+    /// <inheritdoc />
+    string IDoChoreWorkflow.ChoreBranchSourceName => FeatureBranchSourceName;
+
     ///<inheritdoc/>
     string IDoHotfixWorkflow.HotfixBranchSourceName => MainBranchName;
 
@@ -38,8 +41,10 @@ public interface IGitFlow : IDoHotfixWorkflow, IDoColdfixWorkflow, IHaveDevelopB
     /// </remarks>
     public Target Release => _ => _
         .DependsOn(Changelog)
-        .Description($"Starts a new {ReleaseBranchPrefix}/{{version}} from {DevelopBranchName} if not currently on {ReleaseBranchPrefix}/{{version}}.\n" +
-                     $"When already on {ReleaseBranchPrefix}/{{version}}, merges back either to {MainBranchName} or {DevelopBranchName} ")
+        .Description($$"""
+                       Starts a new {{ReleaseBranchPrefix}}/{version} from {{DevelopBranchName}} if not currently on {{ReleaseBranchPrefix}}/{version}.
+                       When already on {{ReleaseBranchPrefix}}/{version}, merges back either to {{MainBranchName}} or {{DevelopBranchName}} ")
+                       """)
         .Requires(() => IsLocalBuild)
         .Requires(() => !GitRepository.IsOnReleaseBranch() || GitHasCleanWorkingCopy())
         .Executes(async () =>
@@ -84,6 +89,7 @@ public interface IGitFlow : IDoHotfixWorkflow, IDoColdfixWorkflow, IHaveDevelopB
         return ValueTask.CompletedTask;
     }
 
+
     /// <summary>
     /// Merges a release branch back to the trunk branch.
     /// </summary>
@@ -104,4 +110,9 @@ public interface IGitFlow : IDoHotfixWorkflow, IDoColdfixWorkflow, IHaveDevelopB
 
         return ValueTask.CompletedTask;
     }
+
+    /// <summary>
+    /// Merges the current feature branch back to <see cref="IHaveDevelopBranch.DevelopBranchName"/>.
+    /// </summary>
+    ValueTask IDoChoreWorkflow.FinishChore() => FinishFeature();
 }

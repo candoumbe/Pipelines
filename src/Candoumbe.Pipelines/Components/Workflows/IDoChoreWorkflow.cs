@@ -13,7 +13,7 @@ namespace Candoumbe.Pipelines.Components.Workflows;
 /// <remarks>
 /// This interface extends the <see cref="IWorkflow"/> interface and adds properties and methods specific to feature branch workflows.
 /// </remarks>
-public interface IDoChoreWorkflow : IDoFeatureWorkflow
+public interface IDoChoreWorkflow : IWorkflow
 {
     /// <summary>
     /// Gets the prefix used to name feature branches.
@@ -27,8 +27,7 @@ public interface IDoChoreWorkflow : IDoFeatureWorkflow
     /// <remarks>
     /// This property should never return <see langword="null"/>.
     /// </remarks>
-    [Parameter("The name of the chore branch source")]
-    string ChoreBranchSourceName => TryGetValue(() => ChoreBranchPrefix) ?? FeatureBranchSourceName;
+    string ChoreBranchSourceName { get; }
 
     /// <summary>
     /// Merges a chore branch back to <see cref="ChoreBranchSourceName"/>.
