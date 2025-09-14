@@ -62,11 +62,6 @@ public class Pipeline : EnhancedNukeBuild,
     IRestore,
     IDotnetFormat,
     ICompile,
-    IUnitTest,
-    IMutationTest,
-    IIntegrationTest,
-    IReportUnitTestCoverage,
-    IReportIntegrationTestCoverage,
     IPushNugetPackages,
     ICreateGithubRelease,
     IGitFlowWithPullRequest
@@ -144,16 +139,4 @@ public class Pipeline : EnhancedNukeBuild,
 
     ///<inheritdoc/>
     bool IDotnetFormat.VerifyNoChanges => IsLocalBuild;
-
-    /// <inheritdoc />
-    IEnumerable<Project> IUnitTest.UnitTestsProjects => [];
-
-    /// <inheritdoc />
-    IEnumerable<Project> IIntegrationTest.IntegrationTestsProjects => [];
-
-    /// <inheritdoc />
-    IEnumerable<MutationProjectConfiguration> IMutationTest.MutationTestsProjects => [];
-
-    /// <inheritdoc />
-    bool IReportCoverage.ReportToCodeCov => false;
 }

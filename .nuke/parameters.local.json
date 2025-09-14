@@ -1,5 +1,6 @@
 {
   "$schema": "./build.schema.json",
   "GitHubToken": "v1:r3dNxCHO7M3A8kirsxd3lKDWFxE0tYfmiTF4JfCYeLBSfiwvW2wm4lHEmsVUkueoAsk1HNLnavJHVWtlxTtkJJLZMJGTtnHHRlM0FpnvsrAupxPYRJWZDqgaGNO7+hAq",
-  "NuGetApiKey": "v1:z7RveyZnVbRsGxFwVN2wEWAckFlLM/Vwb7BY9y42qpLD1nVfVbG5Q3ikRFZ9V/9W"
+  "NuGetApiKey": "v1:z7RveyZnVbRsGxFwVN2wEWAckFlLM/Vwb7BY9y42qpLD1nVfVbG5Q3ikRFZ9V/9W",
+  "DeleteLocalOnSuccess": "true"
 }
