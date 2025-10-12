@@ -65,7 +65,8 @@ public interface IWorkflow : IHaveGitRepository, IHaveGitVersion, IHaveChangeLog
     {
         if (!SkipConfirmation)
         {
-            Information("Enter the name of the coldfix. It will be used as the name of the coldfix/branch (leave empty to exit) :");
+            Information("Enter the name of the new branch. It will be used as the name of the {BranchPrefix}/{{your-branch-name}} (leave empty to exit) :",
+                branchNamePrefix);
 
             string featureName;
             bool exitCreatingFeature;
@@ -82,7 +83,10 @@ public interface IWorkflow : IHaveGitRepository, IHaveGitVersion, IHaveChangeLog
                     {
                         string branchName = ComputeSanitizedFeatureBranchName(branchNamePrefix, featureName);
                         Information(
-                            $"The branch '{{BranchName}}' will be created.{Environment.NewLine}Confirm ? (Y/N) ",
+                            """
+                            The branch '{BranchName}' will be created.
+                            Confirm ? (Y/N)
+                            """,
                             branchName);
 
                         switch (Console.ReadKey().Key)

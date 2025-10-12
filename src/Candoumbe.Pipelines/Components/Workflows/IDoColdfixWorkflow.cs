@@ -45,7 +45,6 @@ public interface IDoColdfixWorkflow : IDoFeatureWorkflow
             if (!GitRepository.Branch.Like($"{ColdfixBranchPrefix}/*"))
             {
                 AskBranchNameAndSwitchToIt(ColdfixBranchPrefix, ColdfixBranchSourceName);
-                Information($"{EnvironmentInfo.NewLine}Good bye !");
             }
             else
             {

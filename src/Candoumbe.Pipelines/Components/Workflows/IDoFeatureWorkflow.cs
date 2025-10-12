@@ -48,9 +48,7 @@ public interface IDoFeatureWorkflow : IWorkflow
        {
            if (!GitRepository.IsOnFeatureBranch())
            {
-               Information("Enter the name of the feature. It will be used as the name of the feature/branch (leave empty to exit) :");
                AskBranchNameAndSwitchToIt(FeatureBranchPrefix, sourceBranch: FeatureBranchSourceName);
-               Information("Good bye !");
            }
            else
            {
