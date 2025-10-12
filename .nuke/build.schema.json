@@ -35,6 +35,7 @@
         "Hotfix",
         "Pack",
         "Publish",
+        "RegenerateWorkflow",
         "Release",
         "Restore"
       ]
