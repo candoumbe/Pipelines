@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### 🚀 New features
+- Added `IRegenerateWorkflows` component that can be used to regenerate workflow files ([#203](https://github.com/candoumbe/pipelines/issues/203)).
+- Added `ICanRegenerateGitHubWorkflow` component that can be used to regenerate GitHub workflow files.
 
 ## [1.2.1] / 2025-09-14
 ### 🛠️ Fixes
