@@ -20,6 +20,7 @@ namespace Candoumbe.Pipelines.Components.AzureDevOps;
 /// </summary>
 public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest, IHaveAzureDevOpsRepository
 {
+    /// <inheritdoc />
     string IPullRequest.Title => TryGetValue(() => Title) ?? ((GitRepository.IsOnFeatureBranch(), GitRepository.IsOnReleaseBranch(), GitRepository.IsOnHotfixBranch(), GitRepository.Branch.Like($"{ColdfixBranchPrefix}/*")) switch
     {
         (true, _, _, _) => $"✨ {GitRepository.Branch?.Replace($"{FeatureBranchPrefix}/", string.Empty).ToTitleCase()}",
