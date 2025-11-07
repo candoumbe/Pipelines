@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 using Nuke.Common;
 using static Nuke.Common.Tools.Git.GitTasks;
-using static Serilog.Log;
 
 namespace Candoumbe.Pipelines.Components.Workflows;
 
