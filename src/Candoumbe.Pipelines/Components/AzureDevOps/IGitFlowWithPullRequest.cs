@@ -39,8 +39,9 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest, IHaveAzureDev
             // Push to the remote branch
             GitPushToRemote();
 
-            string fullRepositoryUri = GitRepository.HttpsUrl;
-            string repositoryName = GitRepository.HttpsUrl;
+            string gitRepositoryHttpsUrl = GitRepository.HttpsUrl!;
+            string fullRepositoryUri = gitRepositoryHttpsUrl.AsSpan()[.. (gitRepositoryHttpsUrl.Length - 4)].ToString();
+            string repositoryName = gitRepositoryHttpsUrl;
             string branchName = GitCurrentBranch();
             string owner = fullRepositoryUri.Substring(fullRepositoryUri.LastIndexOf('/') + 1, fullRepositoryUri.LastIndexOf('.') - fullRepositoryUri.LastIndexOf('/') - 1);
 
