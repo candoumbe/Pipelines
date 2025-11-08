@@ -72,8 +72,12 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest, IHaveAzureDev
             {
                 Information("{SourceBranch} ==> {TargetBranch}", branchName, FeatureBranchSourceName);
 
+                Debug("Login to Azure DevOps");
+
                 VssConnection vssConnection = new(new Uri(fullRepositoryUri), new VssBasicCredential(string.Empty, token));
                 GitHttpClient gitHttpClient = await vssConnection.GetClientAsync<GitHttpClient>();
+
+                Debug("Logged to Azure DevOps");
 
                 IReadOnlyList<GitRepository> repositories = await gitHttpClient.GetRepositoriesAsync(projectName).ConfigureAwait(false);
                 GitRepository currentRepository = repositories.SingleOrDefault(repository => repository.Name == projectName);
