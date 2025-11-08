@@ -41,11 +41,10 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest, IHaveAzureDev
 
             string gitRepositoryHttpsUrl = GitRepository.HttpsUrl!;
             string fullRepositoryUri = gitRepositoryHttpsUrl.AsSpan()[.. (gitRepositoryHttpsUrl.Length - 4)].ToString();
-            string repositoryName = gitRepositoryHttpsUrl;
             string branchName = GitCurrentBranch();
             string owner = fullRepositoryUri.Substring(fullRepositoryUri.LastIndexOf('/') + 1, fullRepositoryUri.LastIndexOf('.') - fullRepositoryUri.LastIndexOf('/') - 1);
 
-            Information("Creating a pull request for {Repository}", repositoryName);
+            Information("Creating a pull request for {Repository}", fullRepositoryUri);
             Information(@"Title of the pull request (or ""{PullRequestName}"" if empty)", Title);
 
             string title = Title;
@@ -61,7 +60,7 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest, IHaveAzureDev
                 token ??= PromptForInput("Token (leave empty to exit)", string.Empty);
             }
 
-            Information("Creating {PullRequestName} for {Repository}", title, repositoryName);
+            Information("Creating {PullRequestName} for {Repository}", title, fullRepositoryUri);
             if (!string.IsNullOrWhiteSpace(token))
             {
                 Information("{SourceBranch} ==> {TargetBranch}", branchName, FeatureBranchSourceName);
@@ -77,7 +76,7 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest, IHaveAzureDev
                     TargetRefName = this.Get<IGitFlow>().FeatureBranchSourceName,
                 };
 
-                pullRequest = await gitHttpClient.CreatePullRequestAsync(pullRequest, repositoryName);
+                pullRequest = await gitHttpClient.CreatePullRequestAsync(pullRequest, fullRepositoryUri);
 
                 if (SkipConfirmation)
                 {
