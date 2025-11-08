@@ -3,6 +3,9 @@ using Nuke.Common;
 
 namespace Candoumbe.Pipelines.Components.AzureDevOps;
 
+/// <summary>
+/// Marks a pipeline that can create pull requests
+/// </summary>
 public interface IPullRequest : IHaveGitRepository
 {
     /// <summary>
