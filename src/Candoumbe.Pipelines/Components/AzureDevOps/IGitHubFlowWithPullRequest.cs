@@ -12,6 +12,7 @@ using Nuke.Common.Git;
 using static Nuke.Common.Tools.Git.GitTasks;
 using static Nuke.Common.Utilities.ConsoleUtility;
 using static Serilog.Log;
+using GitRepository = Microsoft.TeamFoundation.SourceControl.WebApi.GitRepository;
 
 namespace Candoumbe.Pipelines.Components.AzureDevOps;
 
@@ -31,15 +32,19 @@ public interface IGitHubFlowWithPullRequest : IGitHubFlow, IPullRequest, IHaveAz
     ///<inheritdoc/>
     async ValueTask IDoFeatureWorkflow.FinishFeature()
         {
-            string linkToIssueKeyWord = Issues.AtLeastOnce()
-                ? string.Join(',', Issues.Select(issueNumber => $"Resolves #{issueNumber}").ToArray())
-                : null;
-
             // Push to the remote branch
             GitPushToRemote();
 
             string gitRepositoryHttpsUrl = GitRepository.HttpsUrl!;
-            string fullRepositoryUri = gitRepositoryHttpsUrl.AsSpan()[.. (gitRepositoryHttpsUrl.Length - 4)].ToString();
+            string fullRepositoryUri = gitRepositoryHttpsUrl.AsSpan().TrimEnd(".git")[.. (gitRepositoryHttpsUrl.Length - 4)].ToString();
+            const string repositoryBaseUrl = "https://dev.azure.com";
+            const int repositoryBaseUrlLength = 22;
+            string organization = fullRepositoryUri[repositoryBaseUrlLength..fullRepositoryUri.IndexOf('/', repositoryBaseUrlLength)];
+            string organizationUrl = $"{repositoryBaseUrl}/{organization}";
+
+            // Extract the project name from the repository URL
+            string projectName = fullRepositoryUri[(organizationUrl.Length + 6)..];
+
             string branchName = GitCurrentBranch();
 
             Information("Creating a pull request for {Repository}", fullRepositoryUri);
@@ -63,31 +68,46 @@ public interface IGitHubFlowWithPullRequest : IGitHubFlow, IPullRequest, IHaveAz
             {
                 Information("{SourceBranch} ==> {TargetBranch}", branchName, FeatureBranchSourceName);
 
-                VssConnection vssConnection = new(new Uri(fullRepositoryUri), new VssBasicCredential(string.Empty, token));
+                VssConnection vssConnection = new(new Uri(organizationUrl), new VssBasicCredential(string.Empty, token));
                 GitHttpClient gitHttpClient = await vssConnection.GetClientAsync<GitHttpClient>();
 
-                GitPullRequest pullRequest = new GitPullRequest()
+                IReadOnlyList<GitRepository> repositories = await gitHttpClient.GetRepositoriesAsync(projectName).ConfigureAwait(false);
+                GitRepository currentRepository = repositories.SingleOrDefault(repository => repository.Name == projectName);
+                if (currentRepository is not null)
                 {
-                    Title = title,
-                    IsDraft = Draft,
-                    Description = Description,
-                    TargetRefName = this.Get<IGitFlow>().FeatureBranchSourceName,
-                };
 
-                pullRequest = await gitHttpClient.CreatePullRequestAsync(pullRequest, fullRepositoryUri);
+                    GitPullRequest pullRequest = new GitPullRequest()
+                    {
+                        Title = title,
+                        IsDraft = Draft,
+                        Description = Description,
+                        SourceRefName = branchName,
+                        TargetRefName = this.Get<IGitFlow>().FeatureBranchSourceName,
+                    };
 
-                if (SkipConfirmation)
-                {
-                    DeleteLocalBranchIf(DeleteLocalOnSuccess 
-                                        && PromptForChoice("Delete branch {BranchName} ?  (Y/N)", BuildChoices()) == ConsoleKey.Y, branchName, switchToBranchName: FeatureBranchSourceName);
+
+                    pullRequest = await gitHttpClient.CreatePullRequestAsync(pullRequest,
+                                                                             project: projectName,
+                                                                             repositoryId: currentRepository.Id)
+                        .ConfigureAwait(false);
+
+                    if (SkipConfirmation)
+                    {
+                        DeleteLocalBranchIf(DeleteLocalOnSuccess
+                                            && PromptForChoice("Delete branch {BranchName} ?  (Y/N)", BuildChoices()) == ConsoleKey.Y, branchName, switchToBranchName: FeatureBranchSourceName);
+                    }
+                    else
+                    {
+                        DeleteLocalBranchIf(DeleteLocalOnSuccess, branchName, switchToBranchName: FeatureBranchSourceName);
+                    }
+                    Information("PR {PullRequestUrl} created successfully", pullRequest);
+
+                    OpenUrl(pullRequest.Url);
                 }
                 else
                 {
-                    DeleteLocalBranchIf(DeleteLocalOnSuccess, branchName, switchToBranchName: FeatureBranchSourceName);
+                    Error("Repository {Repository} not found in project {ProjectName}", fullRepositoryUri, projectName);
                 }
-                Information("PR {PullRequestUrl} created successfully", pullRequest);
-
-                OpenUrl(pullRequest.Url);
             }
 
             return;
