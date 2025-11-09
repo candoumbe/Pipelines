@@ -25,7 +25,7 @@ public interface IGitHubFlowWithPullRequest : IGitHubFlow, IPullRequest, IHaveAz
     /// <summary>
     /// Regulat expression to extract the organization, project and repository name from a Azure DevOps repository URL.
     /// </summary>
-    static readonly Regex s_azureDevOpsRegex = new (@"https:\/\/dev\.azure\.com\/(?<organisation>[^\/]+)\/(?<projet>[^\/]+)\/(?:_git\/)?(?<repository>[^\/]+?)(?:\.git)?",
+    static readonly Regex AzureDevOpsRegex = new (@"https:\/\/dev\.azure\.com\/(?<organisation>[^\/]+)\/(?<projet>[^\/]+)\/(?:_git\/)?(?<repository>[^\/]+?)(?:\.git)?",
                                   RegexOptions.Compiled | RegexOptions.IgnoreCase,
                                   TimeSpan.FromSeconds(1));
 
@@ -46,7 +46,7 @@ public interface IGitHubFlowWithPullRequest : IGitHubFlow, IPullRequest, IHaveAz
         string gitRepositoryHttpsUrl = GitRepository.HttpsUrl!;
 
 
-        Match match = s_azureDevOpsRegex.Match(gitRepositoryHttpsUrl);
+        Match match = AzureDevOpsRegex.Match(gitRepositoryHttpsUrl);
         if (match.Success)
         {
             const string repositoryBaseUrl = "https://dev.azure.com";
