@@ -79,7 +79,13 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest, IHaveAzureDev
 
                 Debug("Logged to Azure DevOps");
 
+                Debug("Logged into Azure DevOps");
+                Debug("Getting repositories");
+
                 IReadOnlyList<GitRepository> repositories = await gitHttpClient.GetRepositoriesAsync().ConfigureAwait(false);
+                Debug("{RepositoryCount} Repositories retrieved", repositories.Count);
+                Debug("Repositories : {@Repositories}", repositories.Select(r => new {RepositoryName = r.Name, ProjectName = r.ProjectReference.Name, ProjectId = r.ProjectReference.Id }));
+
                 Guid? currentRepositoryId = repositories.SingleOrDefault(repository => repository.Name == projectName)?.Id;
 
                 if (currentRepositoryId is not null)

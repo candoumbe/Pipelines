@@ -78,8 +78,9 @@ public interface IGitHubFlowWithPullRequest : IGitHubFlow, IPullRequest, IHaveAz
 
                 IReadOnlyList<GitRepository> repositories = await gitHttpClient.GetRepositoriesAsync().ConfigureAwait(false);
                 Debug("{RepositoryCount} Repositories retrieved", repositories.Count);
+                Debug("Repositories : {@Repositories}", repositories.Select(r => new {RepositoryName = r.Name, ProjectName = r.ProjectReference.Name, ProjectId = r.ProjectReference.Id }));
 
-                Guid? currentRepositoryId = repositories.SingleOrDefault(repository => repository.Name == projectName)?.Id;
+                Guid? currentRepositoryId = repositories.SingleOrDefault(repository => repository.ProjectReference.Name == projectName)?.Id;
 
                 if (currentRepositoryId is not null)
                 {
