@@ -41,6 +41,9 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest, IHaveAzureDev
             GitPushToRemote();
 
             string gitRepositoryHttpsUrl = GitRepository.HttpsUrl!;
+
+            Information("Creating a pull request for {Repository}", gitRepositoryHttpsUrl);
+
             string fullRepositoryUri = gitRepositoryHttpsUrl.EndsWith(".git")
                 ? gitRepositoryHttpsUrl.AsSpan().TrimEnd(".git")[..(gitRepositoryHttpsUrl.Length - 4)].ToString()
                 : gitRepositoryHttpsUrl.AsSpan()[..gitRepositoryHttpsUrl.Length].ToString();

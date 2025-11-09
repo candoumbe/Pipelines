@@ -34,8 +34,10 @@ public interface IGitHubFlowWithPullRequest : IGitHubFlow, IPullRequest, IHaveAz
         {
             // Push to the remote branch
             GitPushToRemote();
-
             string gitRepositoryHttpsUrl = GitRepository.HttpsUrl!;
+
+            Information("Creating a pull request for {Repository}", gitRepositoryHttpsUrl);
+
             string fullRepositoryUri = gitRepositoryHttpsUrl.EndsWith(".git")
                 ? gitRepositoryHttpsUrl.AsSpan().TrimEnd(".git")[..(gitRepositoryHttpsUrl.Length - 4)].ToString()
                 : gitRepositoryHttpsUrl.AsSpan()[..gitRepositoryHttpsUrl.Length].ToString();
