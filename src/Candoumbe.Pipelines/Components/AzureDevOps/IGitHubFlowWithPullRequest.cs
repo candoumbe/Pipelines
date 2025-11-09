@@ -74,19 +74,27 @@ public interface IGitHubFlowWithPullRequest : IGitHubFlow, IPullRequest, IHaveAz
                 GitHttpClient gitHttpClient = await vssConnection.GetClientAsync<GitHttpClient>();
 
                 Debug("Logged into Azure DevOps");
+                Debug("Getting repositories");
 
                 IReadOnlyList<GitRepository> repositories = await gitHttpClient.GetRepositoriesAsync(projectName).ConfigureAwait(false);
+                Debug("{RepositoryCount} repositories retrieved", repositories.Count);
+
                 GitRepository currentRepository = repositories.SingleOrDefault(repository => repository.Name == projectName);
+
                 if (currentRepository is not null)
                 {
-
-                    GitPullRequest pullRequest = new GitPullRequest()
+                    GitPullRequest pullRequest = new ()
                     {
                         Title = title,
                         IsDraft = Draft,
                         Description = Description,
-                        SourceRefName = branchName,
-                        TargetRefName = this.Get<IGitFlow>().FeatureBranchSourceName,
+                        SourceRefName = $"refs/head/{branchName}",
+                        TargetRefName = $"refs/head/{FeatureBranchSourceName}",
+                        CompletionOptions = new GitPullRequestCompletionOptions
+                        {
+                            DeleteSourceBranch = true,
+                            TransitionWorkItems = true,
+                        }
                     };
 
 
@@ -127,11 +135,11 @@ public interface IGitHubFlowWithPullRequest : IGitHubFlow, IPullRequest, IHaveAz
                 Git($"branch -D {branchName}");
             }
 
-            static (ConsoleKey key, string description)[] BuildChoices() => new[]
-            {
+            static (ConsoleKey key, string description)[] BuildChoices() =>
+            [
                 (key: ConsoleKey.Y, "Delete the local branch"),
-                (key: ConsoleKey.N, "Keep the local branch"),
-            };
+                (key: ConsoleKey.N, "Keep the local branch")
+            ];
 
             static void GitPushToRemote()
             {

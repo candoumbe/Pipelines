@@ -84,12 +84,18 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest, IHaveAzureDev
 
                 if (currentRepository is not null)
                 {
-                    GitPullRequest pullRequest = new GitPullRequest()
+                    GitPullRequest pullRequest = new ()
                     {
                         Title = title,
                         IsDraft = Draft,
                         Description = Description,
-                        TargetRefName = this.Get<IGitFlow>().FeatureBranchSourceName,
+                        SourceRefName = $"refs/head/{branchName}",
+                        TargetRefName = $"refs/head/{FeatureBranchSourceName}",
+                        CompletionOptions = new GitPullRequestCompletionOptions
+                        {
+                            DeleteSourceBranch = true,
+                            TransitionWorkItems = true,
+                        }
                     };
 
                     pullRequest = await gitHttpClient.CreatePullRequestAsync(pullRequest, project: projectName, repositoryId: projectName).ConfigureAwait(false);
@@ -126,11 +132,11 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest, IHaveAzureDev
                 Git($"branch -D {branchName}");
             }
 
-            static (ConsoleKey key, string description)[] BuildChoices() => new[]
-            {
+            static (ConsoleKey key, string description)[] BuildChoices() =>
+            [
                 (key: ConsoleKey.Y, "Delete the local branch"),
-                (key: ConsoleKey.N, "Keep the local branch"),
-            };
+                (key: ConsoleKey.N, "Keep the local branch")
+            ];
 
             static void GitPushToRemote()
             {
