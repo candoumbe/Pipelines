@@ -41,7 +41,9 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest, IHaveAzureDev
             GitPushToRemote();
 
             string gitRepositoryHttpsUrl = GitRepository.HttpsUrl!;
-            string fullRepositoryUri = gitRepositoryHttpsUrl.AsSpan().TrimEnd(".git")[.. (gitRepositoryHttpsUrl.Length - 4)].ToString();
+            string fullRepositoryUri = gitRepositoryHttpsUrl.EndsWith(".git")
+                ? gitRepositoryHttpsUrl.AsSpan().TrimEnd(".git")[..(gitRepositoryHttpsUrl.Length - 4)].ToString()
+                : gitRepositoryHttpsUrl.AsSpan()[..gitRepositoryHttpsUrl.Length].ToString();
             const string repositoryBaseUrl = "https://dev.azure.com";
             const int repositoryBaseUrlLength = 22;
             string organization = fullRepositoryUri[repositoryBaseUrlLength..fullRepositoryUri.IndexOf('/', repositoryBaseUrlLength)];
@@ -76,8 +78,6 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest, IHaveAzureDev
 
                 VssConnection vssConnection = new(new Uri(fullRepositoryUri), new VssBasicCredential(string.Empty, token));
                 GitHttpClient gitHttpClient = await vssConnection.GetClientAsync<GitHttpClient>();
-
-                Debug("Logged to Azure DevOps");
 
                 Debug("Logged into Azure DevOps");
                 Debug("Getting repositories");
