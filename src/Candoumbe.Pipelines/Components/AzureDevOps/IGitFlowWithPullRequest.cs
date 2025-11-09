@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Candoumbe.Pipelines.Components.Workflows;
 using Microsoft.TeamFoundation.SourceControl.WebApi;
@@ -21,6 +22,13 @@ namespace Candoumbe.Pipelines.Components.AzureDevOps;
 /// </summary>
 public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest, IHaveAzureDevOpsRepository
 {
+    /// <summary>
+    /// Regulat expression to extract the organization, project and repository name from a Azure DevOps repository URL.
+    /// </summary>
+    static readonly Regex s_azureDevOpsRegex = new (@"https:\/\/dev\.azure\.com\/(?<organisation>[^\/]+)\/(?<projet>[^\/]+)\/(?:_git\/)?(?<repository>[^\/]+?)(?:\.git)?",
+                                                    RegexOptions.Compiled | RegexOptions.IgnoreCase,
+                                                    TimeSpan.FromSeconds(1));
+
     /// <inheritdoc />
     string IPullRequest.Title => TryGetValue(() => Title) ?? ((GitRepository.IsOnFeatureBranch(), GitRepository.IsOnReleaseBranch(), GitRepository.IsOnHotfixBranch(), GitRepository.Branch.Like($"{ColdfixBranchPrefix}/*")) switch
     {
@@ -32,32 +40,33 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest, IHaveAzureDev
 
     ///<inheritdoc/>
     async ValueTask IDoFeatureWorkflow.FinishFeature()
+    {
+        string linkToIssueKeyWord = Issues.AtLeastOnce()
+            ? string.Join(',', Issues.Select(issueNumber => $"Resolves #{issueNumber}").ToArray())
+            : null;
+
+        GitPushToRemote();
+
+        string gitRepositoryHttpsUrl = GitRepository.HttpsUrl!;
+
+        Match match = s_azureDevOpsRegex.Match(gitRepositoryHttpsUrl!);
+
+        if (match.Success)
         {
-            string linkToIssueKeyWord = Issues.AtLeastOnce()
-                ? string.Join(',', Issues.Select(issueNumber => $"Resolves #{issueNumber}").ToArray())
-                : null;
-
-            // Push to the remote branch
-            GitPushToRemote();
-
-            string gitRepositoryHttpsUrl = GitRepository.HttpsUrl!;
-
-            Information("Creating a pull request for {Repository}", gitRepositoryHttpsUrl);
-
-            string fullRepositoryUri = gitRepositoryHttpsUrl.EndsWith(".git")
-                ? gitRepositoryHttpsUrl.AsSpan().TrimEnd(".git")[..(gitRepositoryHttpsUrl.Length - 4)].ToString()
-                : gitRepositoryHttpsUrl.AsSpan()[..gitRepositoryHttpsUrl.Length].ToString();
             const string repositoryBaseUrl = "https://dev.azure.com";
-            const int repositoryBaseUrlLength = 22;
-            string organization = fullRepositoryUri[repositoryBaseUrlLength..fullRepositoryUri.IndexOf('/', repositoryBaseUrlLength)];
+
+            string organization = match.Groups["organisation"].Value;
+            string project = match.Groups["projet"].Value;
+            string repository = match.Groups["repository"].Value;
+
+            Information("Creating a pull request for {Repository}", repository);
+
             string organizationUrl = $"{repositoryBaseUrl}/{organization}";
 
-            // Extract the project name from the repository URL
-            string projectName = fullRepositoryUri[(organizationUrl.Length + 6)..];
             string branchName = GitCurrentBranch();
 
-            Information("Creating a pull request for {Repository}", fullRepositoryUri);
-            Debug("Project name : {ProjectName}", projectName);
+            Information("Creating a pull request for {Repository}", repository);
+            Debug("Project name : {ProjectName}", project);
             Information(@"Title of the pull request (or ""{PullRequestName}"" if empty)", Title);
 
             string title = Title;
@@ -73,14 +82,15 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest, IHaveAzureDev
                 token ??= PromptForInput("Token (leave empty to exit)", string.Empty);
             }
 
-            Information("Creating {PullRequestName} for {Repository}", title, fullRepositoryUri);
+            Information("Creating {PullRequestName} for {Repository}", title, repository);
+
             if (!string.IsNullOrWhiteSpace(token))
             {
                 Information("{SourceBranch} ==> {TargetBranch}", branchName, FeatureBranchSourceName);
 
                 Debug("Login to Azure DevOps");
 
-                VssConnection vssConnection = new(new Uri(fullRepositoryUri), new VssBasicCredential(string.Empty, token));
+                VssConnection vssConnection = new(new Uri(organizationUrl), new VssBasicCredential(string.Empty, token));
                 GitHttpClient gitHttpClient = await vssConnection.GetClientAsync<GitHttpClient>();
 
                 Debug("Logged into Azure DevOps");
@@ -88,27 +98,23 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest, IHaveAzureDev
 
                 IReadOnlyList<GitRepository> repositories = await gitHttpClient.GetRepositoriesAsync().ConfigureAwait(false);
                 Debug("{RepositoryCount} Repositories retrieved", repositories.Count);
-                Debug("Repositories : {@Repositories}", repositories.Select(r => new {RepositoryName = r.Name, ProjectName = r.ProjectReference.Name, ProjectId = r.ProjectReference.Id }));
+                Debug("Repositories : {@Repositories}", repositories.Select(r => new { RepositoryName = r.Name, ProjectName = r.ProjectReference.Name, ProjectId = r.ProjectReference.Id }));
 
-                Guid? currentRepositoryId = repositories.SingleOrDefault(repository => repository.ProjectReference.Name == projectName)?.Id;
+                Guid? currentRepositoryId = repositories.SingleOrDefault(repo => repo.ProjectReference.Name == project)?.Id;
 
                 if (currentRepositoryId is not null)
                 {
-                    GitPullRequest pullRequest = new ()
+                    GitPullRequest pullRequest = new()
                     {
                         Title = title,
                         IsDraft = Draft,
                         Description = Description,
                         SourceRefName = $"refs/head/{branchName}",
                         TargetRefName = $"refs/head/{FeatureBranchSourceName}",
-                        CompletionOptions = new GitPullRequestCompletionOptions
-                        {
-                            DeleteSourceBranch = true,
-                            TransitionWorkItems = true,
-                        }
+                        CompletionOptions = new GitPullRequestCompletionOptions { DeleteSourceBranch = true, TransitionWorkItems = true, }
                     };
 
-                    pullRequest = await gitHttpClient.CreatePullRequestAsync(pullRequest, project: projectName, repositoryId: currentRepositoryId.ToString()).ConfigureAwait(false);
+                    pullRequest = await gitHttpClient.CreatePullRequestAsync(pullRequest, project: project, repositoryId: currentRepositoryId.ToString()).ConfigureAwait(false);
 
                     if (SkipConfirmation)
                     {
@@ -119,69 +125,75 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest, IHaveAzureDev
                     {
                         DeleteLocalBranchIf(DeleteLocalOnSuccess, branchName, switchToBranchName: FeatureBranchSourceName);
                     }
+
                     Information("PR {PullRequestUrl} created successfully", pullRequest);
 
                     OpenUrl(pullRequest.Url);
                 }
                 else
                 {
-                    Error("Repository {Repository} not found in project {ProjectName}", fullRepositoryUri, projectName);
-                }
-            }
-
-            return;
-
-            static void DeleteLocalBranchIf(in bool condition, in string branchName, in string switchToBranchName)
-            {
-                if (!condition)
-                {
-                    return;
-                }
-
-                Git($"switch {switchToBranchName}");
-                Git($"branch -D {branchName}");
-            }
-
-            static (ConsoleKey key, string description)[] BuildChoices() =>
-            [
-                (key: ConsoleKey.Y, "Delete the local branch"),
-                (key: ConsoleKey.N, "Keep the local branch")
-            ];
-
-            static void GitPushToRemote()
-            {
-                Git($"push origin --set-upstream {GitCurrentBranch()}");
-            }
-
-            static void OpenUrl(string url)
-            {
-                try
-                {
-                    Process.Start(url);
-                }
-                catch
-                {
-                    // hack because of this: https://github.com/dotnet/corefx/issues/10361
-                    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                    {
-                        url = url.Replace("&", "^&");
-                        Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
-                    }
-                    else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                    {
-                        Process.Start("xdg-open", url);
-                    }
-                    else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                    {
-                        Process.Start("open", url);
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    Error("Repository {Repository} not found in project {ProjectName}", repository, project);
                 }
             }
         }
+        else
+        {
+            Error("Repository URL {GitRepositoryHttpsUrl} is not a valid Azure DevOps repository URL", gitRepositoryHttpsUrl);
+        }
+
+        return;
+
+        static void DeleteLocalBranchIf(in bool condition, in string branchName, in string switchToBranchName)
+        {
+            if (!condition)
+            {
+                return;
+            }
+
+            Git($"switch {switchToBranchName}");
+            Git($"branch -D {branchName}");
+        }
+
+        static (ConsoleKey key, string description)[] BuildChoices() =>
+        [
+            (key: ConsoleKey.Y, "Delete the local branch"),
+            (key: ConsoleKey.N, "Keep the local branch")
+        ];
+
+        static void GitPushToRemote()
+        {
+            Git($"push origin --set-upstream {GitCurrentBranch()}");
+        }
+
+        static void OpenUrl(string url)
+        {
+            try
+            {
+                Process.Start(url);
+            }
+            catch
+            {
+                // hack because of this: https://github.com/dotnet/corefx/issues/10361
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    url = url.Replace("&", "^&");
+                    Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    Process.Start("xdg-open", url);
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    Process.Start("open", url);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+    }
 
     /// <inheritdoc />
     async ValueTask IDoChoreWorkflow.FinishChore() => await FinishFeature();
