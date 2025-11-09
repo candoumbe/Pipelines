@@ -52,6 +52,7 @@ public interface IGitHubFlowWithPullRequest : IGitHubFlow, IPullRequest, IHaveAz
             string branchName = GitCurrentBranch();
 
             Information("Creating a pull request for {Repository}", fullRepositoryUri);
+            Debug("Project name : {ProjectName}", projectName);
             Information(@"Title of the pull request (or ""{PullRequestName}"" if empty)", Title);
 
             string title = Title;
