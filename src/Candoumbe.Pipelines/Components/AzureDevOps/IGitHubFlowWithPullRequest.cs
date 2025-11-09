@@ -76,12 +76,12 @@ public interface IGitHubFlowWithPullRequest : IGitHubFlow, IPullRequest, IHaveAz
                 Debug("Logged into Azure DevOps");
                 Debug("Getting repositories");
 
-                IReadOnlyList<GitRepository> repositories = await gitHttpClient.GetRepositoriesAsync(projectName).ConfigureAwait(false);
-                Debug("{RepositoryCount} repositories retrieved", repositories.Count);
+                IReadOnlyList<GitRepository> repositories = await gitHttpClient.GetRepositoriesAsync().ConfigureAwait(false);
+                Debug("{RepositoryCount} Repositories retrieved", repositories.Count);
 
-                GitRepository currentRepository = repositories.SingleOrDefault(repository => repository.Name == projectName);
+                Guid? currentRepositoryId = repositories.SingleOrDefault(repository => repository.Name == projectName)?.Id;
 
-                if (currentRepository is not null)
+                if (currentRepositoryId is not null)
                 {
                     GitPullRequest pullRequest = new ()
                     {
@@ -97,11 +97,7 @@ public interface IGitHubFlowWithPullRequest : IGitHubFlow, IPullRequest, IHaveAz
                         }
                     };
 
-
-                    pullRequest = await gitHttpClient.CreatePullRequestAsync(pullRequest,
-                                                                             project: projectName,
-                                                                             repositoryId: currentRepository.Id)
-                        .ConfigureAwait(false);
+                    pullRequest = await gitHttpClient.CreatePullRequestAsync(pullRequest, project: projectName, repositoryId: currentRepositoryId.ToString()).ConfigureAwait(false);
 
                     if (SkipConfirmation)
                     {
