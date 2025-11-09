@@ -109,8 +109,8 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest, IHaveAzureDev
                         Title = title,
                         IsDraft = Draft,
                         Description = Description,
-                        SourceRefName = $"refs/head/{branchName}",
-                        TargetRefName = $"refs/head/{FeatureBranchSourceName}",
+                        SourceRefName = $"refs/heads/{branchName}",
+                        TargetRefName = $"refs/heads/{FeatureBranchSourceName}",
                         CompletionOptions = new GitPullRequestCompletionOptions { DeleteSourceBranch = true, TransitionWorkItems = true, }
                     };
 
