@@ -125,9 +125,10 @@ public interface IGitHubFlowWithPullRequest : IGitHubFlow, IPullRequest, IHaveAz
                         DeleteLocalBranchIf(DeleteLocalOnSuccess, branchName, switchToBranchName: FeatureBranchSourceName);
                     }
 
-                    Information("PR {PullRequestUrl} created successfully", pullRequest);
+                    string pullRequestUrl = $"{organizationUrl}/{project}/_git/{repository}/pullrequest/{pullRequest.PullRequestId}";
+                    Information("PR {PullRequestUrl} created successfully", pullRequestUrl);
 
-                    OpenUrl(pullRequest.Url);
+                    OpenUrl(pullRequestUrl);
                 }
                 else
                 {
