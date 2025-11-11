@@ -12,6 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🚀 New features
 - Added `IRegenerateWorkflows` component that can be used to regenerate workflow files ([#203](https://github.com/candoumbe/pipelines/issues/203)).
 - Added `ICanRegenerateGitHubWorkflow` component that can be used to regenerate GitHub workflow files.
+- Added Azure DevOps specific components ([#70](https://github.com/candoumbe/pipelines/issues/70)):
+  - Added `IHaveAzureDevOpsRepository` interface for interacting with Azure DevOps repositories.
+  - Added `IPullRequest` interface for managing pull requests on Azure DevOps.
+  - Added `IGitFlowWithPullRequest` interface for workflows involving pull request creation on Azure DevOps.
+  - Added `IGitHubFlowWithPullRequest` interface for workflows involving pull request creation on Azure DevOps.
+  - Updated dependencies to include Azure DevOps client library.
 
 ## [1.2.1] / 2025-09-14
 ### 🛠️ Fixes

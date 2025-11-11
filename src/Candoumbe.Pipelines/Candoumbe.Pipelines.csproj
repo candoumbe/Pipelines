@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="../../core.props" />
+  <Import Project="../../core.props"/>
   <PropertyGroup>
     <TargetFrameworks>net8.0</TargetFrameworks>
     <Description>A Stater development kit to script your CI/CD using [Nuke](https://nuke.build).</Description>
@@ -11,9 +11,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-      <PackageReference Include="Nuke.Common" />
+    <PackageReference Include="Nuke.Common"/>
+    <PackageReference Include="Microsoft.TeamFoundationServer.Client" />
   </ItemGroup>
   <ItemGroup>
-    <NukeSpecificationFiles Include=".\tools\Stryker\Stryker.json" />
+    <NukeSpecificationFiles Include=".\tools\Stryker\Stryker.json"/>
   </ItemGroup>
 </Project>

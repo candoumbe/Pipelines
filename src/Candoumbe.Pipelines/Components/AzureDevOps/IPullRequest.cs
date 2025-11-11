@@ -1,12 +1,12 @@
-﻿using System;
+using System;
 using Nuke.Common;
 
-namespace Candoumbe.Pipelines.Components.GitHub;
+namespace Candoumbe.Pipelines.Components.AzureDevOps;
 
 /// <summary>
-/// Wraps common parameters needed when managing pull requests
+/// Marks a pipeline that can create pull requests
 /// </summary>
-public interface IPullRequest : IHaveGitHubRepository
+public interface IPullRequest : IHaveGitRepository
 {
     /// <summary>
     /// The title of the PR that will be created
