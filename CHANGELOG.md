@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] / 2025-11-12
+### 🛠️ Fixes
+- Removed repetitive confirmation prompts when creating new branches ([#161](https://github.com/candoumbe/pipelines/issues/161)).
+
+### 🚀 New features
+- Added `IRegenerateWorkflows` component that can be used to regenerate workflow files ([#203](https://github.com/candoumbe/pipelines/issues/203)).
+- Added `ICanRegenerateGitHubWorkflow` component that can be used to regenerate GitHub workflow files.
+- Added Azure DevOps specific components ([#70](https://github.com/candoumbe/pipelines/issues/70)):
+  - Added `IHaveAzureDevOpsRepository` interface for interacting with Azure DevOps repositories.
+  - Added `IPullRequest` interface for managing pull requests on Azure DevOps.
+  - Added `IGitFlowWithPullRequest` interface for workflows involving pull request creation on Azure DevOps.
+  - Added `IGitHubFlowWithPullRequest` interface for workflows involving pull request creation on Azure DevOps.
+  - Updated dependencies to include Azure DevOps client library.
+
 ## [1.2.1] / 2025-09-14
 ### 🛠️ Fixes
 - Fixed incorrect source branch name when creating a `chore` branch ([#202](https://github.com/candoumbe/pipelines/issues/202))
@@ -296,7 +310,8 @@ So now `{MutationTestDirectory}/[{framework}]` is now changed to `{MutationTestD
 ## [0.1.0] / 2022-10-23
 - Initial release
 
-[Unreleased]: https://github.com/candoumbe/Pipelines/compare/1.2.1...HEAD
+[Unreleased]: https://github.com/candoumbe/Pipelines/compare/1.3.0...HEAD
+[1.3.0]: https://github.com/candoumbe/Pipelines/compare/1.2.1...1.3.0
 [1.2.1]: https://github.com/candoumbe/Pipelines/compare/1.2.0...1.2.1
 [1.2.0]: https://github.com/candoumbe/Pipelines/compare/1.1.0...1.2.0
 [1.1.0]: https://github.com/candoumbe/Pipelines/compare/1.0.1...1.1.0

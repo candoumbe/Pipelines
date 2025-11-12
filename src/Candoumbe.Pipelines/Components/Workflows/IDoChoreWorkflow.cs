@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Nuke.Common;
 using Nuke.Common.Git;
 using static Nuke.Common.Tools.Git.GitTasks;
-using static Serilog.Log;
 
 namespace Candoumbe.Pipelines.Components.Workflows;
 
@@ -50,9 +49,7 @@ public interface IDoChoreWorkflow : IWorkflow
        {
            if (!GitRepository.Branch.Like($"{ChoreBranchPrefix}/*", true) || !GitHasCleanWorkingCopy())
            {
-               Information("Enter the name of the chore. It will be used as the name of the chore/branch (leave empty to exit) :");
                AskBranchNameAndSwitchToIt(ChoreBranchPrefix, sourceBranch: ChoreBranchSourceName);
-               Information("Good bye !");
            }
            else
            {
