@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Candoumbe.Pipelines.Components.Workflows;
-using Candoumbe.Pipelines.Tools;
+using Candoumbe.Pipelines.Tools.Stryker;
 using JetBrains.Annotations;
 using Nuke.Common;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
-using static Candoumbe.Pipelines.Tools.StrykerTasks;
+using static Candoumbe.Pipelines.Tools.Stryker.StrykerTasks;
 using static Serilog.Log;
 
 namespace Candoumbe.Pipelines.Components;

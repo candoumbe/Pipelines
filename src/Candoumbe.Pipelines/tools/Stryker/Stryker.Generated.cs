@@ -14,7 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Candoumbe.Pipelines.Tools;
+namespace Candoumbe.Pipelines.Tools.Stryker;
 
 /// <summary><p>Stryker.NET offers you mutation testing for your .NET Core and .NET Framework projects. It allows you to test your tests by temporarily inserting bugs. Stryker.NET is installed using NuGet.  New to Stryker.NET? Begin with our guide on <see href='https://stryker-mutator.io/docs/stryker-net/Getting-started'>getting started</see></p><p>For more details, visit the <a href="https://stryker-mutator.io/docs/stryker-net/configuration">official website</a>.</p></summary>
 [PublicAPI]
@@ -30,13 +30,13 @@ public partial class StrykerTasks : ToolTasks, IRequireNuGetPackage
     /// <summary><p>Stryker.NET offers you mutation testing for your .NET Core and .NET Framework projects. It allows you to test your tests by temporarily inserting bugs. Stryker.NET is installed using NuGet.  New to Stryker.NET? Begin with our guide on <see href='https://stryker-mutator.io/docs/stryker-net/Getting-started'>getting started</see></p><p>For more details, visit the <a href="https://stryker-mutator.io/docs/stryker-net/configuration">official website</a>.</p></summary>
     /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p><ul><li><c>--break-at</c> via <see cref="StrykerSettings.BreakAt"/></li><li><c>--break-on-initial-test-failure</c> via <see cref="StrykerSettings.BreakOnInitialTestFailure"/></li><li><c>--concurrency</c> via <see cref="StrykerSettings.Concurrency"/></li><li><c>--config-file</c> via <see cref="StrykerSettings.ConfigFile"/></li><li><c>--configuration</c> via <see cref="StrykerSettings.Configuration"/></li><li><c>--dashboard-api-key</c> via <see cref="StrykerSettings.DashboardApiKey"/></li><li><c>--dev-mode</c> via <see cref="StrykerSettings.DevMode"/></li><li><c>--disable-bail</c> via <see cref="StrykerSettings.DisableBail"/></li><li><c>--log-to-file</c> via <see cref="StrykerSettings.LogToFile"/></li><li><c>--msbuild-path</c> via <see cref="StrykerSettings.MsBuildPath"/></li><li><c>--mutate</c> via <see cref="StrykerSettings.Mutate"/></li><li><c>--mutation-level</c> via <see cref="StrykerSettings.MutationLevel"/></li><li><c>--open-report</c> via <see cref="StrykerSettings.OpenReport"/></li><li><c>--output</c> via <see cref="StrykerSettings.Output"/></li><li><c>--project</c> via <see cref="StrykerSettings.Project"/></li><li><c>--reporter</c> via <see cref="StrykerSettings.Reporters"/></li><li><c>--since</c> via <see cref="StrykerSettings.Since"/></li><li><c>--solution</c> via <see cref="StrykerSettings.Solution"/></li><li><c>--target-framework</c> via <see cref="StrykerSettings.TargetFramework"/></li><li><c>--test-project</c> via <see cref="StrykerSettings.TestProjects"/></li><li><c>--threshold-high</c> via <see cref="StrykerSettings.ThresholdHigh"/></li><li><c>--threshold-low</c> via <see cref="StrykerSettings.ThresholdLow"/></li><li><c>--verbosity</c> via <see cref="StrykerSettings.Verbosity"/></li><li><c>--version</c> via <see cref="StrykerSettings.ProjectInfoVersion"/></li><li><c>--with-baseline</c> via <see cref="StrykerSettings.WithBaseline"/></li></ul></remarks>
     public static IReadOnlyCollection<Output> Stryker(StrykerSettings options = null) => new StrykerTasks().Run<StrykerSettings>(options);
-    /// <inheritdoc cref="StrykerTasks.Stryker(Candoumbe.Pipelines.Tools.StrykerSettings)"/>
+    /// <inheritdoc cref="StrykerTasks.Stryker(Candoumbe.Pipelines.Tools.Stryker.StrykerSettings)"/>
     public static IReadOnlyCollection<Output> Stryker(Configure<StrykerSettings> configurator) => new StrykerTasks().Run<StrykerSettings>(configurator.Invoke(new StrykerSettings()));
-    /// <inheritdoc cref="StrykerTasks.Stryker(Candoumbe.Pipelines.Tools.StrykerSettings)"/>
+    /// <inheritdoc cref="StrykerTasks.Stryker(Candoumbe.Pipelines.Tools.Stryker.StrykerSettings)"/>
     public static IEnumerable<(StrykerSettings Settings, IReadOnlyCollection<Output> Output)> Stryker(CombinatorialConfigure<StrykerSettings> configurator, int degreeOfParallelism = 1, bool completeOnFailure = false) => configurator.Invoke(Stryker, degreeOfParallelism, completeOnFailure);
 }
 #region StrykerSettings
-/// <inheritdoc cref="StrykerTasks.Stryker(Candoumbe.Pipelines.Tools.StrykerSettings)"/>
+/// <inheritdoc cref="StrykerTasks.Stryker(Candoumbe.Pipelines.Tools.Stryker.StrykerSettings)"/>
 [PublicAPI]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(StrykerTasks), Command = nameof(StrykerTasks.Stryker))]
@@ -95,7 +95,7 @@ public partial class StrykerSettings : ToolOptions
 }
 #endregion
 #region StrykerSettingsExtensions
-/// <inheritdoc cref="StrykerTasks.Stryker(Candoumbe.Pipelines.Tools.StrykerSettings)"/>
+/// <inheritdoc cref="StrykerTasks.Stryker(Candoumbe.Pipelines.Tools.Stryker.StrykerSettings)"/>
 [PublicAPI]
 [ExcludeFromCodeCoverage]
 public static partial class StrykerSettingsExtensions

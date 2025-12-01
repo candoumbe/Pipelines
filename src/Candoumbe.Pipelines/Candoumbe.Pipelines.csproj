@@ -5,16 +5,19 @@
     <TargetFrameworks>net8.0</TargetFrameworks>
     <Description>A Stater development kit to script your CI/CD using [Nuke](https://nuke.build).</Description>
     <PackageTags>build, pipeline, ci, workflow</PackageTags>
-    <NukeBaseDirectory>$(MsBuildProjectDirectory)\tools\Stryker</NukeBaseDirectory>
-    <NukeUseNestedNamespaces>false</NukeUseNestedNamespaces>
+    <NukeBaseDirectory>$(MsBuildProjectDirectory)\tools</NukeBaseDirectory>
+    <NukeUseNestedNamespaces>true</NukeUseNestedNamespaces>
     <NukeBaseNamespace>Candoumbe.Pipelines.Tools</NukeBaseNamespace>
+    <NukeUpdateReferences>true</NukeUpdateReferences>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Nuke.Common"/>
     <PackageReference Include="Microsoft.TeamFoundationServer.Client" />
   </ItemGroup>
+
   <ItemGroup>
-    <NukeSpecificationFiles Include=".\tools\Stryker\Stryker.json"/>
+    <NukeSpecificationFiles Include="tools\Podman\Podman.json" />
+    <NukeSpecificationFiles Include="tools\Stryker\Stryker.json" />
   </ItemGroup>
 </Project>
