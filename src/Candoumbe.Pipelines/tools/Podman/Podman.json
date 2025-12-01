@@ -1,0 +1,92 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nuke-build/nuke/master/source/Nuke.Tooling.Generator/schema.json",
+  "name": "Podman",
+  "officialUrl": "https://docs.podman.io/en/latest/Commands.html",
+  "help": "Podman is a tool for managing OCI containers and pods. Podman provides a Docker-compatible CLI (Docker command line interface) to manage OCI containers and pods.",
+  "customLogger": true,
+  "tasks": [
+    {
+      "postfix": "Attach",
+      "definiteArgument": "attach",
+      "settingsClass": {
+        "properties": [
+          {
+            "name": "DetachKeys",
+            "type": "IReadOnlyCollection<string>",
+            "format": "--detach-keys={value}",
+            "separator": ",",
+            "help": "Specify the key sequence for detaching a container. Format is a single character <c>[a-Z]</c> or one or more ctrl-&lt;value&gt; characters where &lt;value&gt; is one of: <c>a-z</c>, @, ^, [, , or _.<p>Specifying <c>“”</c> disables this feature. The default is <c>ctrl-p,ctrl-q..</c></p>"
+          },
+          {
+            "name": "Latest",
+            "type": "bool",
+            "format": "--latest}",
+            "help": "Instead of providing the container name or ID, use the last created container. <p>Note: the last started container can be from other users of Podman on the host machine. (This option is not available with the remote Podman client, including Mac and Windows (excluding WSL2) machines)</p>"
+          },
+          {
+            "name": "NoStdin",
+            "type": "bool",
+            "format": "--no-stdin",
+            "default": "false",
+            "help": "Do not attach STDIN. Default is <c>false</c>."
+          },
+          {
+            "name": "SigProxy",
+            "type": "bool",
+            "format": "--sig-proxy",
+            "default": "true",
+            "help": "Proxy received signals to the container. <c>SIGCHLD</c>, <c>SIGURG</c>, <c>SIGSTOP</c>, and <c>SIGKILL</c> are not proxied. Default is <c>true</c>."
+          }
+        ]
+      }
+    },
+    {
+      "help": "<p>Pulls down new container images and restarts containers configured for auto updates. To make use of auto updates, the container or Kubernetes workloads must run inside a systemd unit. After a successful update of an image, the containers using the image get updated by restarting the systemd units they run in. Please refer to podman-systemd.unit(5) on how to run Podman under systemd.</p>To configure a container for auto updates, it must be created with the io.containers.autoupdate label or the AutoUpdate field in podman-systemd.unit(5) with one of the following two values:",
+      "postfix": "AutoUpdate",
+      "definiteArgument": "auto-update",
+      "settingsClass": {
+        "properties": [
+          {
+            "name": "AuthFile",
+            "type": "Nuke.Common.IO.AbsolutePath",
+            "format": "--auth-file={value}",
+            "help": "<p>Path of the authentication file. Default is <c>${XDG_RUNTIME_DIR}/containers/auth.json</c> on Linux, and <c>$HOME/.config/containers/auth.json</c> on Windows/macOS. The file is created by <see href='https://docs.podman.io/en/latest/markdown/podman-login.1.html'>podman login</see>. If the authorization state is not found there, <c>$HOME/.docker/config.json</c> is checked, which is set using docker login.</p><p>Note: There is also the option to override the default path of the authentication file by setting the <c>REGISTRY_AUTH_FILE</c> environment variable. This can be done with export <c>REGISTRY_AUTH_FILE=path</c>.</p><p>Alternatively, the <c>io.containers.autoupdate.authfile</c> container label can be configured. In that case, Podman will use the specified label’s value instead.</p>>"
+          },
+          {
+            "name": "DryRun",
+            "type": "bool",
+            "format": "--dry-run",
+            "help": "Check for the availability of new images but do not perform any pull operation or restart any service or container. The UPDATED field indicates the availability of a new image with 'pending'."
+          },
+          {
+            "name": "Format",
+            "type": "string",
+            "format": "--format={value}",
+            "help": "Change the default output format. This can be of a supported type like ‘json’ or a Go template"
+          },
+          {
+            "name": "Rollback",
+            "type": "bool",
+            "format": "--rollback",
+            "default": "true",
+            "help": "<p>If restarting a systemd unit after updating the image has failed, rollback to using the previous image and restart the unit another time. Default is <see langword='true'/>.</p><p>Note that detecting if a systemd unit has failed is best done by the container sending the <c>READY</c> message via <c>SDNOTIFY</c>. This way, restarting the unit waits until having received the message or a timeout kicked in. Without that, restarting the systemd unit may succeed even if the container has failed shortly after.</p><p>Note that detecting if a systemd unit has failed is best done by the container sending the READY message via <c>SDNOTIFY</c>. This way, restarting the unit waits until having received the message or a timeout kicked in. Without that, restarting the systemd unit may succeed even if the container has failed shortly after.</p><p>For a container to send the READY message via SDNOTIFY it must be created with the <c>--sdnotify=container</c> option (see podman-run(1)). The application running inside the container can then execute systemd-notify --ready when ready or use the sdnotify bindings of the specific programming language (e.g., sd_notify(3)).</p>"
+          }
+        ]
+      }
+    },
+    {
+      "postfix": "Ps",
+      "definiteArgument": "ps",
+      "settingsClass": {
+        "properties": [
+          {
+            "name": "AllTags",
+            "type": "bool",
+            "format": "--all-tags",
+            "help": "All tagged images in the repository are pulled."
+          }
+        ]
+      }
+    }
+  ]
+}
