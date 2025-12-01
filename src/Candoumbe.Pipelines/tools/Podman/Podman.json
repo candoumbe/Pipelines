@@ -70,6 +70,12 @@
             "format": "--rollback",
             "default": "true",
             "help": "<p>If restarting a systemd unit after updating the image has failed, rollback to using the previous image and restart the unit another time. Default is <see langword='true'/>.</p><p>Note that detecting if a systemd unit has failed is best done by the container sending the <c>READY</c> message via <c>SDNOTIFY</c>. This way, restarting the unit waits until having received the message or a timeout kicked in. Without that, restarting the systemd unit may succeed even if the container has failed shortly after.</p><p>Note that detecting if a systemd unit has failed is best done by the container sending the READY message via <c>SDNOTIFY</c>. This way, restarting the unit waits until having received the message or a timeout kicked in. Without that, restarting the systemd unit may succeed even if the container has failed shortly after.</p><p>For a container to send the READY message via SDNOTIFY it must be created with the <c>--sdnotify=container</c> option (see podman-run(1)). The application running inside the container can then execute systemd-notify --ready when ready or use the sdnotify bindings of the specific programming language (e.g., sd_notify(3)).</p>"
+          },
+          {
+            "name": "TlsVerify",
+            "type": "bool",
+            "format": "--tls-verify",
+            "help": "Require HTTPS and verify certificates when contacting registries (default: <see langword='true'/>). If explicitly set to <see langword='true'/>, TLS verification is used. If set to <see langword='false'/>, TLS verification is not used. If not specified, TLS verification is used unless the target registry is listed as an insecure registry in <see href='https://github.com/containers/image/blob/main/docs/containers-registries.conf.5.md'>containers-registries.conf(5)</see>"
           }
         ]
       }

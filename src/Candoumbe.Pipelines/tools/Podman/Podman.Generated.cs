@@ -32,7 +32,7 @@ public partial class PodmanTasks : ToolTasks
     /// <inheritdoc cref="PodmanTasks.PodmanAttach(Candoumbe.Pipelines.Tools.Podman.PodmanAttachSettings)"/>
     public static IEnumerable<(PodmanAttachSettings Settings, IReadOnlyCollection<Output> Output)> PodmanAttach(CombinatorialConfigure<PodmanAttachSettings> configurator, int degreeOfParallelism = 1, bool completeOnFailure = false) => configurator.Invoke(PodmanAttach, degreeOfParallelism, completeOnFailure);
     /// <summary><p><p>Pulls down new container images and restarts containers configured for auto updates. To make use of auto updates, the container or Kubernetes workloads must run inside a systemd unit. After a successful update of an image, the containers using the image get updated by restarting the systemd units they run in. Please refer to podman-systemd.unit(5) on how to run Podman under systemd.</p>To configure a container for auto updates, it must be created with the io.containers.autoupdate label or the AutoUpdate field in podman-systemd.unit(5) with one of the following two values:</p><p>For more details, visit the <a href="https://docs.podman.io/en/latest/Commands.html">official website</a>.</p></summary>
-    /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p><ul><li><c>--auth-file</c> via <see cref="PodmanAutoUpdateSettings.AuthFile"/></li><li><c>--dry-run</c> via <see cref="PodmanAutoUpdateSettings.DryRun"/></li><li><c>--format</c> via <see cref="PodmanAutoUpdateSettings.Format"/></li><li><c>--rollback</c> via <see cref="PodmanAutoUpdateSettings.Rollback"/></li></ul></remarks>
+    /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p><ul><li><c>--auth-file</c> via <see cref="PodmanAutoUpdateSettings.AuthFile"/></li><li><c>--dry-run</c> via <see cref="PodmanAutoUpdateSettings.DryRun"/></li><li><c>--format</c> via <see cref="PodmanAutoUpdateSettings.Format"/></li><li><c>--rollback</c> via <see cref="PodmanAutoUpdateSettings.Rollback"/></li><li><c>--tls-verify</c> via <see cref="PodmanAutoUpdateSettings.TlsVerify"/></li></ul></remarks>
     public static IReadOnlyCollection<Output> PodmanAutoUpdate(PodmanAutoUpdateSettings options = null) => new PodmanTasks().Run<PodmanAutoUpdateSettings>(options);
     /// <inheritdoc cref="PodmanTasks.PodmanAutoUpdate(Candoumbe.Pipelines.Tools.Podman.PodmanAutoUpdateSettings)"/>
     public static IReadOnlyCollection<Output> PodmanAutoUpdate(Configure<PodmanAutoUpdateSettings> configurator) => new PodmanTasks().Run<PodmanAutoUpdateSettings>(configurator.Invoke(new PodmanAutoUpdateSettings()));
@@ -76,8 +76,10 @@ public partial class PodmanAutoUpdateSettings : ToolOptions
     [Argument(Format = "--dry-run")] public bool? DryRun => Get<bool?>(() => DryRun);
     /// <summary>Change the default output format. This can be of a supported type like ‘json’ or a Go template</summary>
     [Argument(Format = "--format={value}")] public string Format => Get<string>(() => Format);
-    /// <summary><p>If restarting a systemd unit after updating the image has failed, rollback to using the previous image and restart the unit another time. Default is <see langword='true'/>.</p></summary>
+    /// <summary><p>If restarting a systemd unit after updating the image has failed, rollback to using the previous image and restart the unit another time. Default is <see langword='true'/>.</p><p>Note that detecting if a systemd unit has failed is best done by the container sending the <c>READY</c> message via <c>SDNOTIFY</c>. This way, restarting the unit waits until having received the message or a timeout kicked in. Without that, restarting the systemd unit may succeed even if the container has failed shortly after.</p><p>Note that detecting if a systemd unit has failed is best done by the container sending the READY message via <c>SDNOTIFY</c>. This way, restarting the unit waits until having received the message or a timeout kicked in. Without that, restarting the systemd unit may succeed even if the container has failed shortly after.</p><p>For a container to send the READY message via SDNOTIFY it must be created with the <c>--sdnotify=container</c> option (see podman-run(1)). The application running inside the container can then execute systemd-notify --ready when ready or use the sdnotify bindings of the specific programming language (e.g., sd_notify(3)).</p></summary>
     [Argument(Format = "--rollback")] public bool? Rollback => Get<bool?>(() => Rollback);
+    /// <summary>Require HTTPS and verify certificates when contacting registries (default: <see langword='true'/>). If explicitly set to <see langword='true'/>, TLS verification is used. If set to <see langword='false'/>, TLS verification is not used. If not specified, TLS verification is used unless the target registry is listed as an insecure registry in <see href='https://github.com/containers/image/blob/main/docs/containers-registries.conf.5.md'>containers-registries.conf(5)</see></summary>
+    [Argument(Format = "--tls-verify")] public bool? TlsVerify => Get<bool?>(() => TlsVerify);
 }
 #endregion
 #region PodmanPsSettings
@@ -213,6 +215,23 @@ public static partial class PodmanAutoUpdateSettingsExtensions
     /// <inheritdoc cref="PodmanAutoUpdateSettings.Rollback"/>
     [Pure] [Builder(Type = typeof(PodmanAutoUpdateSettings), Property = nameof(PodmanAutoUpdateSettings.Rollback))]
     public static T ToggleRollback<T>(this T o) where T : PodmanAutoUpdateSettings => o.Modify(b => b.Set(() => o.Rollback, !o.Rollback));
+    #endregion
+    #region TlsVerify
+    /// <inheritdoc cref="PodmanAutoUpdateSettings.TlsVerify"/>
+    [Pure] [Builder(Type = typeof(PodmanAutoUpdateSettings), Property = nameof(PodmanAutoUpdateSettings.TlsVerify))]
+    public static T SetTlsVerify<T>(this T o, bool? v) where T : PodmanAutoUpdateSettings => o.Modify(b => b.Set(() => o.TlsVerify, v));
+    /// <inheritdoc cref="PodmanAutoUpdateSettings.TlsVerify"/>
+    [Pure] [Builder(Type = typeof(PodmanAutoUpdateSettings), Property = nameof(PodmanAutoUpdateSettings.TlsVerify))]
+    public static T ResetTlsVerify<T>(this T o) where T : PodmanAutoUpdateSettings => o.Modify(b => b.Remove(() => o.TlsVerify));
+    /// <inheritdoc cref="PodmanAutoUpdateSettings.TlsVerify"/>
+    [Pure] [Builder(Type = typeof(PodmanAutoUpdateSettings), Property = nameof(PodmanAutoUpdateSettings.TlsVerify))]
+    public static T EnableTlsVerify<T>(this T o) where T : PodmanAutoUpdateSettings => o.Modify(b => b.Set(() => o.TlsVerify, true));
+    /// <inheritdoc cref="PodmanAutoUpdateSettings.TlsVerify"/>
+    [Pure] [Builder(Type = typeof(PodmanAutoUpdateSettings), Property = nameof(PodmanAutoUpdateSettings.TlsVerify))]
+    public static T DisableTlsVerify<T>(this T o) where T : PodmanAutoUpdateSettings => o.Modify(b => b.Set(() => o.TlsVerify, false));
+    /// <inheritdoc cref="PodmanAutoUpdateSettings.TlsVerify"/>
+    [Pure] [Builder(Type = typeof(PodmanAutoUpdateSettings), Property = nameof(PodmanAutoUpdateSettings.TlsVerify))]
+    public static T ToggleTlsVerify<T>(this T o) where T : PodmanAutoUpdateSettings => o.Modify(b => b.Set(() => o.TlsVerify, !o.TlsVerify));
     #endregion
 }
 #endregion
