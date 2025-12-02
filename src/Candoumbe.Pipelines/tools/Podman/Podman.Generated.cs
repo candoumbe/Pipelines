@@ -39,7 +39,7 @@ public partial class PodmanTasks : ToolTasks
     /// <inheritdoc cref="PodmanTasks.PodmanAutoUpdate(Candoumbe.Pipelines.Tools.Podman.PodmanAutoUpdateSettings)"/>
     public static IEnumerable<(PodmanAutoUpdateSettings Settings, IReadOnlyCollection<Output> Output)> PodmanAutoUpdate(CombinatorialConfigure<PodmanAutoUpdateSettings> configurator, int degreeOfParallelism = 1, bool completeOnFailure = false) => configurator.Invoke(PodmanAutoUpdate, degreeOfParallelism, completeOnFailure);
     /// <summary><p>Builds an image using instructions from one or more Containerfiles or Dockerfiles and a specified build context directory. A Containerfile uses the same syntax as a Dockerfile internally. For this document, a file referred to as a Containerfile can be a file named either ‘Containerfile’ or ‘Dockerfile’ exclusively. Any file that has additional extension attached will not be recognized by podman <c>build</c> . unless a <c>-f</c> flag is used to specify the file.</p><p>The build context directory can be specified as the http(s) URL of an archive, git repository or Containerfile.</p><p>When invoked with -f and a path to a Containerfile, with no explicit CONTEXT directory, Podman uses the Containerfile’s parent directory as its build context.</p><p>Containerfiles ending with a “.in” suffix are preprocessed via CPP(1). This can be useful to decompose Containerfiles into several reusable parts that can be used via CPP’s #include directive. Containerfiles ending in .in are restricted to no comment lines unless they are CPP commands. Note, a Containerfile.in file can still be used by other tools when manually preprocessing them via cpp <c>-E</c>.</p><p>When the URL is an archive, the contents of the URL is downloaded to a temporary location and extracted before execution.</p><p>When the URL is a Containerfile, the Containerfile is downloaded to a temporary location.</p><p>When a Git repository is set as the URL, the repository is cloned locally and then set as the context. A URL is treated as a Git repository if it has a git:// prefix or a .git suffix.</p><p>NOTE: podman build uses code sourced from the Buildah project to build container images. This Buildah code creates Buildah containers for the RUN options in container storage. In certain situations, when the podman build crashes or users kill the podman build process, these external containers can be left in container storage. Use the podman ps --all --external command to see these containers.</p><p><c>podman buildx build</c> command is an alias of podman build. Not all <c>buildx</c> build features are available in Podman. The <c>buildx</c> build option is provided for scripting compatibility.</p><p>For more details, visit the <a href="https://docs.podman.io/en/latest/Commands.html">official website</a>.</p></summary>
-    /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p><ul><li><c>--add-host</c> via <see cref="PodmanBuildSettings.AddHost"/></li><li><c>--all-platforms</c> via <see cref="PodmanBuildSettings.AllPlatforms"/></li></ul></remarks>
+    /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p><ul><li><c>--add-host</c> via <see cref="PodmanBuildSettings.AddHost"/></li><li><c>--all-platforms</c> via <see cref="PodmanBuildSettings.AllPlatforms"/></li><li><c>--annotation</c> via <see cref="PodmanBuildSettings.Annotation"/></li></ul></remarks>
     public static IReadOnlyCollection<Output> PodmanBuild(PodmanBuildSettings options = null) => new PodmanTasks().Run<PodmanBuildSettings>(options);
     /// <inheritdoc cref="PodmanTasks.PodmanBuild(Candoumbe.Pipelines.Tools.Podman.PodmanBuildSettings)"/>
     public static IReadOnlyCollection<Output> PodmanBuild(Configure<PodmanBuildSettings> configurator) => new PodmanTasks().Run<PodmanBuildSettings>(configurator.Invoke(new PodmanBuildSettings()));
@@ -100,6 +100,8 @@ public partial class PodmanBuildSettings : ToolOptions
     [Argument(Format = "--add-host={value}", Separator = ";")] public IEnumerable<string> AddHost => Get<IEnumerable<string>>(() => AddHost);
     /// <summary>Instead of building for a set of platforms specified using the <strong>--platform</strong> option, inspect the build’s base images, and build for all of the platforms for which they are all available. Stages that use scratch as a starting point can not be inspected, so at least one non-scratch stage must be present for detection to work usefully.</summary>
     [Argument(Format = "--all-platforms")] public bool? AllPlatforms => Get<bool?>(() => AllPlatforms);
+    /// <summary><p>Add an image <i>annotation</i> (e.g. annotation=value) to the image metadata. Can be used multiple times.</p><p>Note: this information is not present in Docker image formats, so it is discarded when writing images in Docker formats.</p></summary>
+    [Argument(Format = "--annotation={key}={value}")] public IReadOnlyDictionary<string, string> Annotation => Get<IReadOnlyDictionary<string, string>>(() => Annotation);
 }
 #endregion
 #region PodmanPsSettings
@@ -285,6 +287,14 @@ public static partial class PodmanBuildSettingsExtensions
     /// <inheritdoc cref="PodmanBuildSettings.AllPlatforms"/>
     [Pure] [Builder(Type = typeof(PodmanBuildSettings), Property = nameof(PodmanBuildSettings.AllPlatforms))]
     public static T ToggleAllPlatforms<T>(this T o) where T : PodmanBuildSettings => o.Modify(b => b.Set(() => o.AllPlatforms, !o.AllPlatforms));
+    #endregion
+    #region Annotation
+    /// <inheritdoc cref="PodmanBuildSettings.Annotation"/>
+    [Pure] [Builder(Type = typeof(PodmanBuildSettings), Property = nameof(PodmanBuildSettings.Annotation))]
+    public static T SetAnnotation<T>(this T o, IReadOnlyDictionary<string, string> v) where T : PodmanBuildSettings => o.Modify(b => b.Set(() => o.Annotation, v));
+    /// <inheritdoc cref="PodmanBuildSettings.Annotation"/>
+    [Pure] [Builder(Type = typeof(PodmanBuildSettings), Property = nameof(PodmanBuildSettings.Annotation))]
+    public static T ResetAnnotation<T>(this T o) where T : PodmanBuildSettings => o.Modify(b => b.Remove(() => o.Annotation));
     #endregion
 }
 #endregion

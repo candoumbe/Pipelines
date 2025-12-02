@@ -97,6 +97,12 @@
             "type": "bool",
             "format": "--all-platforms",
             "help": "Instead of building for a set of platforms specified using the <strong>--platform</strong> option, inspect the build’s base images, and build for all of the platforms for which they are all available. Stages that use scratch as a starting point can not be inspected, so at least one non-scratch stage must be present for detection to work usefully."
+          },
+          {
+            "name": "Annotation",
+            "type": "IReadOnlyDictionary<string, string>",
+            "format": "--annotation={key}={value}",
+            "help": "<p>Add an image <i>annotation</i> (e.g. annotation=value) to the image metadata. Can be used multiple times.</p><p>Note: this information is not present in Docker image formats, so it is discarded when writing images in Docker formats.</p>"
           }
         ]
       }
