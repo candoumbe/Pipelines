@@ -103,6 +103,12 @@
             "type": "IReadOnlyDictionary<string, string>",
             "format": "--annotation={key}={value}",
             "help": "<p>Add an image <i>annotation</i> (e.g. annotation=value) to the image metadata. Can be used multiple times.</p><p>Note: this information is not present in Docker image formats, so it is discarded when writing images in Docker formats.</p>"
+          },
+          {
+            "name": "Arch",
+            "type": "string",
+            "format": "--arch={value}",
+            "help": "<p>Set the architecture of the image to be built, and that of the base image to be pulled, if the build uses one, to the provided value instead of using the architecture of the build host. Unless overridden, subsequent lookups of the same image in the local storage matches this architecture, regardless of the host. (Examples: arm, arm64, 386, amd64, ppc64le, s390x)</p>"
           }
         ]
       }
