@@ -38,6 +38,13 @@ public partial class PodmanTasks : ToolTasks
     public static IReadOnlyCollection<Output> PodmanAutoUpdate(Configure<PodmanAutoUpdateSettings> configurator) => new PodmanTasks().Run<PodmanAutoUpdateSettings>(configurator.Invoke(new PodmanAutoUpdateSettings()));
     /// <inheritdoc cref="PodmanTasks.PodmanAutoUpdate(Candoumbe.Pipelines.Tools.Podman.PodmanAutoUpdateSettings)"/>
     public static IEnumerable<(PodmanAutoUpdateSettings Settings, IReadOnlyCollection<Output> Output)> PodmanAutoUpdate(CombinatorialConfigure<PodmanAutoUpdateSettings> configurator, int degreeOfParallelism = 1, bool completeOnFailure = false) => configurator.Invoke(PodmanAutoUpdate, degreeOfParallelism, completeOnFailure);
+    /// <summary><p>Builds an image using instructions from one or more Containerfiles or Dockerfiles and a specified build context directory. A Containerfile uses the same syntax as a Dockerfile internally. For this document, a file referred to as a Containerfile can be a file named either ‘Containerfile’ or ‘Dockerfile’ exclusively. Any file that has additional extension attached will not be recognized by podman <c>build</c> . unless a <c>-f</c> flag is used to specify the file.</p><p>The build context directory can be specified as the http(s) URL of an archive, git repository or Containerfile.</p><p>When invoked with -f and a path to a Containerfile, with no explicit CONTEXT directory, Podman uses the Containerfile’s parent directory as its build context.</p><p>Containerfiles ending with a “.in” suffix are preprocessed via CPP(1). This can be useful to decompose Containerfiles into several reusable parts that can be used via CPP’s #include directive. Containerfiles ending in .in are restricted to no comment lines unless they are CPP commands. Note, a Containerfile.in file can still be used by other tools when manually preprocessing them via cpp <c>-E</c>.</p><p>When the URL is an archive, the contents of the URL is downloaded to a temporary location and extracted before execution.</p><p>When the URL is a Containerfile, the Containerfile is downloaded to a temporary location.</p><p>When a Git repository is set as the URL, the repository is cloned locally and then set as the context. A URL is treated as a Git repository if it has a git:// prefix or a .git suffix.</p><p>NOTE: podman build uses code sourced from the Buildah project to build container images. This Buildah code creates Buildah containers for the RUN options in container storage. In certain situations, when the podman build crashes or users kill the podman build process, these external containers can be left in container storage. Use the podman ps --all --external command to see these containers.</p><p><c>podman buildx build</c> command is an alias of podman build. Not all <c>buildx</c> build features are available in Podman. The <c>buildx</c> build option is provided for scripting compatibility.</p><p>For more details, visit the <a href="https://docs.podman.io/en/latest/Commands.html">official website</a>.</p></summary>
+    /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p><ul><li><c>--add-host</c> via <see cref="PodmanBuildSettings.AddHost"/></li></ul></remarks>
+    public static IReadOnlyCollection<Output> PodmanBuild(PodmanBuildSettings options = null) => new PodmanTasks().Run<PodmanBuildSettings>(options);
+    /// <inheritdoc cref="PodmanTasks.PodmanBuild(Candoumbe.Pipelines.Tools.Podman.PodmanBuildSettings)"/>
+    public static IReadOnlyCollection<Output> PodmanBuild(Configure<PodmanBuildSettings> configurator) => new PodmanTasks().Run<PodmanBuildSettings>(configurator.Invoke(new PodmanBuildSettings()));
+    /// <inheritdoc cref="PodmanTasks.PodmanBuild(Candoumbe.Pipelines.Tools.Podman.PodmanBuildSettings)"/>
+    public static IEnumerable<(PodmanBuildSettings Settings, IReadOnlyCollection<Output> Output)> PodmanBuild(CombinatorialConfigure<PodmanBuildSettings> configurator, int degreeOfParallelism = 1, bool completeOnFailure = false) => configurator.Invoke(PodmanBuild, degreeOfParallelism, completeOnFailure);
     /// <summary><p>Podman is a tool for managing OCI containers and pods. Podman provides a Docker-compatible CLI (Docker command line interface) to manage OCI containers and pods.</p><p>For more details, visit the <a href="https://docs.podman.io/en/latest/Commands.html">official website</a>.</p></summary>
     /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p><ul><li><c>--all-tags</c> via <see cref="PodmanPsSettings.AllTags"/></li></ul></remarks>
     public static IReadOnlyCollection<Output> PodmanPs(PodmanPsSettings options = null) => new PodmanTasks().Run<PodmanPsSettings>(options);
@@ -80,6 +87,17 @@ public partial class PodmanAutoUpdateSettings : ToolOptions
     [Argument(Format = "--rollback")] public bool? Rollback => Get<bool?>(() => Rollback);
     /// <summary>Require HTTPS and verify certificates when contacting registries (default: <see langword='true'/>). If explicitly set to <see langword='true'/>, TLS verification is used. If set to <see langword='false'/>, TLS verification is not used. If not specified, TLS verification is used unless the target registry is listed as an insecure registry in <see href='https://github.com/containers/image/blob/main/docs/containers-registries.conf.5.md'>containers-registries.conf(5)</see></summary>
     [Argument(Format = "--tls-verify")] public bool? TlsVerify => Get<bool?>(() => TlsVerify);
+}
+#endregion
+#region PodmanBuildSettings
+/// <inheritdoc cref="PodmanTasks.PodmanBuild(Candoumbe.Pipelines.Tools.Podman.PodmanBuildSettings)"/>
+[PublicAPI]
+[ExcludeFromCodeCoverage]
+[Command(Type = typeof(PodmanTasks), Command = nameof(PodmanTasks.PodmanBuild))]
+public partial class PodmanBuildSettings : ToolOptions
+{
+    /// <summary><p>Add a custom host-to-IP mapping to the container’s <c>/etc/hosts</c> file.</p><p>Instead of an IP address, the special flag <c>host-gateway</c> can be given. This resolves to an IP address the container can use to connect to the host. The IP address chosen depends on your network setup, thus there’s no guarantee that Podman can determine the host-gateway address automatically, which will then cause Podman to fail with an error message. You can overwrite this IP address using the <i>host_containers_internal_ip</i> option in <i>containers.conf</i>.</p><p>The <i>host-gateway</i> address is also used by Podman to automatically add the <c>host.containers.internal</x> and <c>host.docker.internal</c> hostnames to <c>/etc/hosts</c>. You can prevent that by either giving the <c>--no-hosts</c> option, or by setting <i>host_containers_internal_ip=”none”</i> in <i>containers.conf</i>. If no host-gateway address was configured manually and Podman fails to determine the IP address automatically, Podman will silently skip adding these internal hostnames to /etc/hosts. If Podman is running in a virtual machine using podman machine (this includes Mac and Windows hosts), Podman will silently skip adding the internal hostnames to /etc/hosts, unless an IP address was configured manually; the internal hostnames are resolved by the gvproxy DNS resolver instead.</p><p>Podman will use the /etc/hosts file of the host as a basis by default, i.e. any hostname present in this file will also be present in the <c>/etc/hosts file of the container. A different base file can be configured using the base_hosts_file config in containers.conf.</p></summary>
+    [Argument(Format = "--add-host={value}")] public IEnumerable<string> AddHost => Get<IEnumerable<string>>(() => AddHost);
 }
 #endregion
 #region PodmanPsSettings
@@ -232,6 +250,22 @@ public static partial class PodmanAutoUpdateSettingsExtensions
     /// <inheritdoc cref="PodmanAutoUpdateSettings.TlsVerify"/>
     [Pure] [Builder(Type = typeof(PodmanAutoUpdateSettings), Property = nameof(PodmanAutoUpdateSettings.TlsVerify))]
     public static T ToggleTlsVerify<T>(this T o) where T : PodmanAutoUpdateSettings => o.Modify(b => b.Set(() => o.TlsVerify, !o.TlsVerify));
+    #endregion
+}
+#endregion
+#region PodmanBuildSettingsExtensions
+/// <inheritdoc cref="PodmanTasks.PodmanBuild(Candoumbe.Pipelines.Tools.Podman.PodmanBuildSettings)"/>
+[PublicAPI]
+[ExcludeFromCodeCoverage]
+public static partial class PodmanBuildSettingsExtensions
+{
+    #region AddHost
+    /// <inheritdoc cref="PodmanBuildSettings.AddHost"/>
+    [Pure] [Builder(Type = typeof(PodmanBuildSettings), Property = nameof(PodmanBuildSettings.AddHost))]
+    public static T SetAddHost<T>(this T o, IEnumerable<string> v) where T : PodmanBuildSettings => o.Modify(b => b.Set(() => o.AddHost, v));
+    /// <inheritdoc cref="PodmanBuildSettings.AddHost"/>
+    [Pure] [Builder(Type = typeof(PodmanBuildSettings), Property = nameof(PodmanBuildSettings.AddHost))]
+    public static T ResetAddHost<T>(this T o) where T : PodmanBuildSettings => o.Modify(b => b.Remove(() => o.AddHost));
     #endregion
 }
 #endregion
