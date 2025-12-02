@@ -117,10 +117,16 @@
             "help": "<p>Path of the authentication file. Default is ${XDG_RUNTIME_DIR}/containers/auth.json on Linux, and <c>$HOME/.config/containers/auth.json</c> on Windows/macOS. The file is created by <see href='https://docs.podman.io/en/latest/markdown/podman-login.1.html'>podman login</see>. If the authorization state is not found there, <c>$HOME/.docker/config.json</c> is checked, which is set using <strong>docker login</strong>.</p>"
           },
           {
-            "name": "BuildArgs",
+            "name": "BuildArg",
             "type": "IReadOnlyDictionary<string, string>",
             "format": "--build-arg={key}={value}",
             "help": "<p>Specifies a build argument and its value, which is interpolated in instructions read from the Containerfiles in the same way that environment variables are, but which are not added to environment variable list in the resulting image’s configuration.</p>"
+          },
+          {
+            "name": "BuildArgFile",
+            "type": "Nuke.Common.IO.AbsolutePath",
+            "format": "--build-arg-file={value}",
+            "help": "<p>Specifies a file containing lines of build arguments of the form <c>arg=value</c>. The suggested file name is argfile.conf.</p><p>Comment lines beginning with <c>#</c> are ignored, along with blank lines. All others must be of the <c>arg=value</c> format passed to <c>--build-arg</c>.</p><p>If several arguments are provided via the <c>--build-arg-file</c> and <c>--build-arg</c> options, the build arguments are merged across all of the provided files and command line arguments.</p><p>Any file provided in a <c>--build-arg-file</c> option is read before the arguments supplied via the <c>--build-arg</c> option.</p><p>When a given argument name is specified several times, the last instance is the one that is passed to the resulting builds. This means <c>--build-arg</c> values always override those in a <c>--build-arg-file</c>.</p>"
           }
         ]
       }
