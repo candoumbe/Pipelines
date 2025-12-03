@@ -200,6 +200,12 @@
             "type": "string",
             "format": "--cpp-flag={value}",
             "help": "<p>Set additional flags to pass to the C Preprocessor cpp(1). Containerfiles ending with a “.in” suffix is preprocessed via cpp(1). This option can be used to pass additional flags to cpp.Note: You can also set default CPPFLAGS by setting the BUILDAH_CPPFLAGS environment variable (e.g., export BUILDAH_CPPFLAGS=”-DDEBUG”).</p>"
+          },
+          {
+            "name": "CpuPeriod",
+            "type": "int",
+            "format": "--cpu-period={value}",
+            "help": "<p>Set the CPU period for the Completely Fair Scheduler (CFS), which is a duration in microseconds. Once the container’s CPU quota is used up, it will not be scheduled to run until the current period ends. Defaults to <c>100_000</c> microseconds.</p><p>On some systems, changing the resource limits may not be allowed for non-root users. For more details, see https://github.com/containers/podman/blob/main/troubleshooting.md#26-running-containers-with-resource-limits-fails-with-a-permissions-error.</p><p>This option is not supported on cgroups V1 rootless systems.</p>"
           }
         ]
       }
