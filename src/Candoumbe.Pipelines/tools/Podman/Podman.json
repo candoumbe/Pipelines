@@ -170,6 +170,24 @@
             "type": "Nuke.Common.IO.AbsolutePath",
             "format": "--cert-dir={value}",
             "help": "<p>Use certificates at <i>path</i> (*.crt, *.cert, *.key) to connect to the registry. (Default: /etc/containers/certs.d) For details, see <strong><see href='https://github.com/containers/image/blob/main/docs/containers-certs.d.5.md'>containers-certs.d(5)</see></strong>. (This option is not available with the remote Podman client, including Mac and Windows (excluding WSL2) machines).</p>"
+          },
+          {
+            "name": "CgroupParent",
+            "type": "Nuke.Common.IO.AbsolutePath",
+            "format": "--cgroup-parent={value}",
+            "help": "<p>Path to cgroups under which the cgroup for the container is created. If the path is not absolute, the path is considered to be relative to the cgroups path of the init process. Cgroups are created if they do not already exist.</p>"
+          },
+          {
+            "name": "Cgroupns",
+            "type": "string",
+            "format": "--cgroupns={value}",
+            "help": "<p>Sets the configuration for cgroup namespaces when handling RUN instructions. The configured value can be “” (the empty string) or “private” to indicate that a new cgroup namespace is created, or it can be “host” to indicate that the cgroup namespace in which buildah itself is being run is reused.</p>"
+          },
+          {
+            "name": "CompatVolumes",
+            "type": "bool",
+            "format": "--compat-volumes",
+            "help": "<p>Handle directories marked using the <c>VOLUME</c> instruction (both in this build, and those inherited from base images) such that their contents can only be modified by <c>ADD</c> and <c>COPY</c> instructions. Any changes made in those locations by RUN instructions will be reverted. Before the introduction of this option, this behavior was the default, but it is now disabled by default.</p>"
           }
         ]
       }

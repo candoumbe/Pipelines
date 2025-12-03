@@ -39,7 +39,7 @@ public partial class PodmanTasks : ToolTasks
     /// <inheritdoc cref="PodmanTasks.PodmanAutoUpdate(Candoumbe.Pipelines.Tools.Podman.PodmanAutoUpdateSettings)"/>
     public static IEnumerable<(PodmanAutoUpdateSettings Settings, IReadOnlyCollection<Output> Output)> PodmanAutoUpdate(CombinatorialConfigure<PodmanAutoUpdateSettings> configurator, int degreeOfParallelism = 1, bool completeOnFailure = false) => configurator.Invoke(PodmanAutoUpdate, degreeOfParallelism, completeOnFailure);
     /// <summary><p>Builds an image using instructions from one or more Containerfiles or Dockerfiles and a specified build context directory. A Containerfile uses the same syntax as a Dockerfile internally. For this document, a file referred to as a Containerfile can be a file named either ‘Containerfile’ or ‘Dockerfile’ exclusively. Any file that has additional extension attached will not be recognized by podman <c>build</c> . unless a <c>-f</c> flag is used to specify the file.</p><p>The build context directory can be specified as the http(s) URL of an archive, git repository or Containerfile.</p><p>When invoked with -f and a path to a Containerfile, with no explicit CONTEXT directory, Podman uses the Containerfile’s parent directory as its build context.</p><p>Containerfiles ending with a “.in” suffix are preprocessed via CPP(1). This can be useful to decompose Containerfiles into several reusable parts that can be used via CPP’s #include directive. Containerfiles ending in .in are restricted to no comment lines unless they are CPP commands. Note, a Containerfile.in file can still be used by other tools when manually preprocessing them via cpp <c>-E</c>.</p><p>When the URL is an archive, the contents of the URL is downloaded to a temporary location and extracted before execution.</p><p>When the URL is a Containerfile, the Containerfile is downloaded to a temporary location.</p><p>When a Git repository is set as the URL, the repository is cloned locally and then set as the context. A URL is treated as a Git repository if it has a git:// prefix or a .git suffix.</p><p>NOTE: podman build uses code sourced from the Buildah project to build container images. This Buildah code creates Buildah containers for the RUN options in container storage. In certain situations, when the podman build crashes or users kill the podman build process, these external containers can be left in container storage. Use the podman ps --all --external command to see these containers.</p><p><c>podman buildx build</c> command is an alias of podman build. Not all <c>buildx</c> build features are available in Podman. The <c>buildx</c> build option is provided for scripting compatibility.</p><p>For more details, visit the <a href="https://docs.podman.io/en/latest/Commands.html">official website</a>.</p></summary>
-    /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p><ul><li><c>--add-host</c> via <see cref="PodmanBuildSettings.AddHost"/></li><li><c>--all-platforms</c> via <see cref="PodmanBuildSettings.AllPlatforms"/></li><li><c>--annotation</c> via <see cref="PodmanBuildSettings.Annotation"/></li><li><c>--arch</c> via <see cref="PodmanBuildSettings.Arch"/></li><li><c>--authfile</c> via <see cref="PodmanBuildSettings.AuthFile"/></li><li><c>--build-arg</c> via <see cref="PodmanBuildSettings.BuildArg"/></li><li><c>--build-arg-file</c> via <see cref="PodmanBuildSettings.BuildArgFile"/></li><li><c>--build-context</c> via <see cref="PodmanBuildSettings.BuildContext"/></li><li><c>--cache-from</c> via <see cref="PodmanBuildSettings.CacheFrom"/></li><li><c>--cache-to</c> via <see cref="PodmanBuildSettings.CacheTo"/></li><li><c>--cache-ttl</c> via <see cref="PodmanBuildSettings.CacheTtl"/></li><li><c>--cap-add</c> via <see cref="PodmanBuildSettings.CapAdd"/></li><li><c>--cap-drop</c> via <see cref="PodmanBuildSettings.CapDrop"/></li><li><c>--cert-dir</c> via <see cref="PodmanBuildSettings.CertDir"/></li></ul></remarks>
+    /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p><ul><li><c>--add-host</c> via <see cref="PodmanBuildSettings.AddHost"/></li><li><c>--all-platforms</c> via <see cref="PodmanBuildSettings.AllPlatforms"/></li><li><c>--annotation</c> via <see cref="PodmanBuildSettings.Annotation"/></li><li><c>--arch</c> via <see cref="PodmanBuildSettings.Arch"/></li><li><c>--authfile</c> via <see cref="PodmanBuildSettings.AuthFile"/></li><li><c>--build-arg</c> via <see cref="PodmanBuildSettings.BuildArg"/></li><li><c>--build-arg-file</c> via <see cref="PodmanBuildSettings.BuildArgFile"/></li><li><c>--build-context</c> via <see cref="PodmanBuildSettings.BuildContext"/></li><li><c>--cache-from</c> via <see cref="PodmanBuildSettings.CacheFrom"/></li><li><c>--cache-to</c> via <see cref="PodmanBuildSettings.CacheTo"/></li><li><c>--cache-ttl</c> via <see cref="PodmanBuildSettings.CacheTtl"/></li><li><c>--cap-add</c> via <see cref="PodmanBuildSettings.CapAdd"/></li><li><c>--cap-drop</c> via <see cref="PodmanBuildSettings.CapDrop"/></li><li><c>--cert-dir</c> via <see cref="PodmanBuildSettings.CertDir"/></li><li><c>--cgroup-parent</c> via <see cref="PodmanBuildSettings.CgroupParent"/></li><li><c>--cgroupns</c> via <see cref="PodmanBuildSettings.Cgroupns"/></li><li><c>--compat-volumes</c> via <see cref="PodmanBuildSettings.CompatVolumes"/></li></ul></remarks>
     public static IReadOnlyCollection<Output> PodmanBuild(PodmanBuildSettings options = null) => new PodmanTasks().Run<PodmanBuildSettings>(options);
     /// <inheritdoc cref="PodmanTasks.PodmanBuild(Candoumbe.Pipelines.Tools.Podman.PodmanBuildSettings)"/>
     public static IReadOnlyCollection<Output> PodmanBuild(Configure<PodmanBuildSettings> configurator) => new PodmanTasks().Run<PodmanBuildSettings>(configurator.Invoke(new PodmanBuildSettings()));
@@ -122,8 +122,14 @@ public partial class PodmanBuildSettings : ToolOptions
     [Argument(Format = "--cap-add={value}", Separator = ",")] public IEnumerable<string> CapAdd => Get<IEnumerable<string>>(() => CapAdd);
     /// <summary><p>When executing <c>RUN</c> instructions, run the command specified in the instruction with the specified capability removed from its capability set. The <c>CAP_CHOWN</c>, <c>CAP_DAC_OVERRIDE</c>, <c>CAP_FOWNER</c>, <c>CAP_FSETID</c>, <c>CAP_KILL</c>, <c>CAP_NET_BIND_SERVICE</c>, <c>CAP_SETFCAP</c>, <c>CAP_SETGID</c>, <c>CAP_SETPCAP</c>, and <c>CAP_SETUID</c> capabilities are granted by default; this option can be used to remove them.</p><p>If a capability is specified to both the <strong>--cap-add</strong> and <strong>--cap-drop</strong> options, it is dropped, regardless of the order in which the options were given.</p></summary>
     [Argument(Format = "--cap-drop={value}")] public IEnumerable<string> CapDrop => Get<IEnumerable<string>>(() => CapDrop);
-    /// <summary><p>Use certificates at <c>{dir}/certs.d/{hostname}</c> (for example, <c>${XDG_RUNTIME_DIR}/containers/certs.d/{hostname}</c>) to connect to the specified Docker daemon. Certificates at <c>{dir}/certs.d/localhost</c> are also used in case of self-signed certificates.</p><p>Certificates are used by TLS-enabled Docker daemon, Docker daemon over TCP with Unix sockets, and Podman machine.</p></summary>
+    /// <summary><p>Use certificates at <i>path</i> (*.crt, *.cert, *.key) to connect to the registry. (Default: /etc/containers/certs.d) For details, see <strong><see href='https://github.com/containers/image/blob/main/docs/containers-certs.d.5.md'>containers-certs.d(5)</see></strong>. (This option is not available with the remote Podman client, including Mac and Windows (excluding WSL2) machines).</p></summary>
     [Argument(Format = "--cert-dir={value}")] public Nuke.Common.IO.AbsolutePath CertDir => Get<Nuke.Common.IO.AbsolutePath>(() => CertDir);
+    /// <summary><p>Path to cgroups under which the cgroup for the container is created. If the path is not absolute, the path is considered to be relative to the cgroups path of the init process. Cgroups are created if they do not already exist.</p></summary>
+    [Argument(Format = "--cgroup-parent={value}")] public Nuke.Common.IO.AbsolutePath CgroupParent => Get<Nuke.Common.IO.AbsolutePath>(() => CgroupParent);
+    /// <summary><p>Sets the configuration for cgroup namespaces when handling RUN instructions. The configured value can be “” (the empty string) or “private” to indicate that a new cgroup namespace is created, or it can be “host” to indicate that the cgroup namespace in which buildah itself is being run is reused.</p></summary>
+    [Argument(Format = "--cgroupns={value}")] public string Cgroupns => Get<string>(() => Cgroupns);
+    /// <summary><p>Handle directories marked using the <c>VOLUME</c> instruction (both in this build, and those inherited from base images) such that their contents can only be modified by <c>ADD</c> and <c>COPY</c> instructions. Any changes made in those locations by RUN instructions will be reverted. Before the introduction of this option, this behavior was the default, but it is now disabled by default.</p></summary>
+    [Argument(Format = "--compat-volumes")] public bool? CompatVolumes => Get<bool?>(() => CompatVolumes);
 }
 #endregion
 #region PodmanPsSettings
@@ -405,6 +411,39 @@ public static partial class PodmanBuildSettingsExtensions
     /// <inheritdoc cref="PodmanBuildSettings.CertDir"/>
     [Pure] [Builder(Type = typeof(PodmanBuildSettings), Property = nameof(PodmanBuildSettings.CertDir))]
     public static T ResetCertDir<T>(this T o) where T : PodmanBuildSettings => o.Modify(b => b.Remove(() => o.CertDir));
+    #endregion
+    #region CgroupParent
+    /// <inheritdoc cref="PodmanBuildSettings.CgroupParent"/>
+    [Pure] [Builder(Type = typeof(PodmanBuildSettings), Property = nameof(PodmanBuildSettings.CgroupParent))]
+    public static T SetCgroupParent<T>(this T o, Nuke.Common.IO.AbsolutePath v) where T : PodmanBuildSettings => o.Modify(b => b.Set(() => o.CgroupParent, v));
+    /// <inheritdoc cref="PodmanBuildSettings.CgroupParent"/>
+    [Pure] [Builder(Type = typeof(PodmanBuildSettings), Property = nameof(PodmanBuildSettings.CgroupParent))]
+    public static T ResetCgroupParent<T>(this T o) where T : PodmanBuildSettings => o.Modify(b => b.Remove(() => o.CgroupParent));
+    #endregion
+    #region Cgroupns
+    /// <inheritdoc cref="PodmanBuildSettings.Cgroupns"/>
+    [Pure] [Builder(Type = typeof(PodmanBuildSettings), Property = nameof(PodmanBuildSettings.Cgroupns))]
+    public static T SetCgroupns<T>(this T o, string v) where T : PodmanBuildSettings => o.Modify(b => b.Set(() => o.Cgroupns, v));
+    /// <inheritdoc cref="PodmanBuildSettings.Cgroupns"/>
+    [Pure] [Builder(Type = typeof(PodmanBuildSettings), Property = nameof(PodmanBuildSettings.Cgroupns))]
+    public static T ResetCgroupns<T>(this T o) where T : PodmanBuildSettings => o.Modify(b => b.Remove(() => o.Cgroupns));
+    #endregion
+    #region CompatVolumes
+    /// <inheritdoc cref="PodmanBuildSettings.CompatVolumes"/>
+    [Pure] [Builder(Type = typeof(PodmanBuildSettings), Property = nameof(PodmanBuildSettings.CompatVolumes))]
+    public static T SetCompatVolumes<T>(this T o, bool? v) where T : PodmanBuildSettings => o.Modify(b => b.Set(() => o.CompatVolumes, v));
+    /// <inheritdoc cref="PodmanBuildSettings.CompatVolumes"/>
+    [Pure] [Builder(Type = typeof(PodmanBuildSettings), Property = nameof(PodmanBuildSettings.CompatVolumes))]
+    public static T ResetCompatVolumes<T>(this T o) where T : PodmanBuildSettings => o.Modify(b => b.Remove(() => o.CompatVolumes));
+    /// <inheritdoc cref="PodmanBuildSettings.CompatVolumes"/>
+    [Pure] [Builder(Type = typeof(PodmanBuildSettings), Property = nameof(PodmanBuildSettings.CompatVolumes))]
+    public static T EnableCompatVolumes<T>(this T o) where T : PodmanBuildSettings => o.Modify(b => b.Set(() => o.CompatVolumes, true));
+    /// <inheritdoc cref="PodmanBuildSettings.CompatVolumes"/>
+    [Pure] [Builder(Type = typeof(PodmanBuildSettings), Property = nameof(PodmanBuildSettings.CompatVolumes))]
+    public static T DisableCompatVolumes<T>(this T o) where T : PodmanBuildSettings => o.Modify(b => b.Set(() => o.CompatVolumes, false));
+    /// <inheritdoc cref="PodmanBuildSettings.CompatVolumes"/>
+    [Pure] [Builder(Type = typeof(PodmanBuildSettings), Property = nameof(PodmanBuildSettings.CompatVolumes))]
+    public static T ToggleCompatVolumes<T>(this T o) where T : PodmanBuildSettings => o.Modify(b => b.Set(() => o.CompatVolumes, !o.CompatVolumes));
     #endregion
 }
 #endregion
