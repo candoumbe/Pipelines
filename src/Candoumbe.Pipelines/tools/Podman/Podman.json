@@ -188,6 +188,18 @@
             "type": "bool",
             "format": "--compat-volumes",
             "help": "<p>Handle directories marked using the <c>VOLUME</c> instruction (both in this build, and those inherited from base images) such that their contents can only be modified by <c>ADD</c> and <c>COPY</c> instructions. Any changes made in those locations by RUN instructions will be reverted. Before the introduction of this option, this behavior was the default, but it is now disabled by default.</p>"
+          },
+          {
+            "name": "Compress",
+            "type": "bool",
+            "format": "--compress",
+            "help": "<p>This option is added to be aligned with other containers CLIs. Podman doesn’t communicate with a daemon or a remote server. Thus, compressing the data before sending it is irrelevant to Podman. (This option is not available with the remote Podman client, including Mac and Windows (excluding WSL2) machines).</p>"
+          },
+          {
+            "name": "CppFlag",
+            "type": "string",
+            "format": "--cpp-flag={value}",
+            "help": "<p>Set additional flags to pass to the C Preprocessor cpp(1). Containerfiles ending with a “.in” suffix is preprocessed via cpp(1). This option can be used to pass additional flags to cpp.Note: You can also set default CPPFLAGS by setting the BUILDAH_CPPFLAGS environment variable (e.g., export BUILDAH_CPPFLAGS=”-DDEBUG”).</p>"
           }
         ]
       }
