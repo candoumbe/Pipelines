@@ -39,7 +39,7 @@ public partial class PodmanTasks : ToolTasks
     /// <inheritdoc cref="PodmanTasks.PodmanAutoUpdate(Candoumbe.Pipelines.Tools.Podman.PodmanAutoUpdateSettings)"/>
     public static IEnumerable<(PodmanAutoUpdateSettings Settings, IReadOnlyCollection<Output> Output)> PodmanAutoUpdate(CombinatorialConfigure<PodmanAutoUpdateSettings> configurator, int degreeOfParallelism = 1, bool completeOnFailure = false) => configurator.Invoke(PodmanAutoUpdate, degreeOfParallelism, completeOnFailure);
     /// <summary><p>Builds an image using instructions from one or more Containerfiles or Dockerfiles and a specified build context directory. A Containerfile uses the same syntax as a Dockerfile internally. For this document, a file referred to as a Containerfile can be a file named either ‘Containerfile’ or ‘Dockerfile’ exclusively. Any file that has additional extension attached will not be recognized by podman <c>build</c> . unless a <c>-f</c> flag is used to specify the file.</p><p>The build context directory can be specified as the http(s) URL of an archive, git repository or Containerfile.</p><p>When invoked with -f and a path to a Containerfile, with no explicit CONTEXT directory, Podman uses the Containerfile’s parent directory as its build context.</p><p>Containerfiles ending with a “.in” suffix are preprocessed via CPP(1). This can be useful to decompose Containerfiles into several reusable parts that can be used via CPP’s #include directive. Containerfiles ending in .in are restricted to no comment lines unless they are CPP commands. Note, a Containerfile.in file can still be used by other tools when manually preprocessing them via cpp <c>-E</c>.</p><p>When the URL is an archive, the contents of the URL is downloaded to a temporary location and extracted before execution.</p><p>When the URL is a Containerfile, the Containerfile is downloaded to a temporary location.</p><p>When a Git repository is set as the URL, the repository is cloned locally and then set as the context. A URL is treated as a Git repository if it has a git:// prefix or a .git suffix.</p><p>NOTE: podman build uses code sourced from the Buildah project to build container images. This Buildah code creates Buildah containers for the RUN options in container storage. In certain situations, when the podman build crashes or users kill the podman build process, these external containers can be left in container storage. Use the podman ps --all --external command to see these containers.</p><p><c>podman buildx build</c> command is an alias of podman build. Not all <c>buildx</c> build features are available in Podman. The <c>buildx</c> build option is provided for scripting compatibility.</p><p>For more details, visit the <a href="https://docs.podman.io/en/latest/Commands.html">official website</a>.</p></summary>
-    /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p><ul><li><c>--add-host</c> via <see cref="PodmanBuildSettings.AddHost"/></li><li><c>--all-platforms</c> via <see cref="PodmanBuildSettings.AllPlatforms"/></li><li><c>--annotation</c> via <see cref="PodmanBuildSettings.Annotation"/></li><li><c>--arch</c> via <see cref="PodmanBuildSettings.Arch"/></li><li><c>--authfile</c> via <see cref="PodmanBuildSettings.AuthFile"/></li><li><c>--build-arg</c> via <see cref="PodmanBuildSettings.BuildArg"/></li><li><c>--build-arg-file</c> via <see cref="PodmanBuildSettings.BuildArgFile"/></li><li><c>--build-context</c> via <see cref="PodmanBuildSettings.BuildContext"/></li></ul></remarks>
+    /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p><ul><li><c>--add-host</c> via <see cref="PodmanBuildSettings.AddHost"/></li><li><c>--all-platforms</c> via <see cref="PodmanBuildSettings.AllPlatforms"/></li><li><c>--annotation</c> via <see cref="PodmanBuildSettings.Annotation"/></li><li><c>--arch</c> via <see cref="PodmanBuildSettings.Arch"/></li><li><c>--authfile</c> via <see cref="PodmanBuildSettings.AuthFile"/></li><li><c>--build-arg</c> via <see cref="PodmanBuildSettings.BuildArg"/></li><li><c>--build-arg-file</c> via <see cref="PodmanBuildSettings.BuildArgFile"/></li><li><c>--build-context</c> via <see cref="PodmanBuildSettings.BuildContext"/></li><li><c>--cache-from</c> via <see cref="PodmanBuildSettings.CacheFrom"/></li><li><c>--cache-to</c> via <see cref="PodmanBuildSettings.CacheTo"/></li><li><c>--cache-ttl</c> via <see cref="PodmanBuildSettings.CacheTtl"/></li></ul></remarks>
     public static IReadOnlyCollection<Output> PodmanBuild(PodmanBuildSettings options = null) => new PodmanTasks().Run<PodmanBuildSettings>(options);
     /// <inheritdoc cref="PodmanTasks.PodmanBuild(Candoumbe.Pipelines.Tools.Podman.PodmanBuildSettings)"/>
     public static IReadOnlyCollection<Output> PodmanBuild(Configure<PodmanBuildSettings> configurator) => new PodmanTasks().Run<PodmanBuildSettings>(configurator.Invoke(new PodmanBuildSettings()));
@@ -112,6 +112,12 @@ public partial class PodmanBuildSettings : ToolOptions
     [Argument(Format = "--build-arg-file={value}")] public Nuke.Common.IO.AbsolutePath BuildArgFile => Get<Nuke.Common.IO.AbsolutePath>(() => BuildArgFile);
     /// <summary><p>Specify an additional build context using its short name and its location. Additional build contexts can be referenced in the same manner as we access different stages in COPY instruction.</p></summary>
     [Argument(Format = "--build-context={value}")] public string BuildContext => Get<string>(() => BuildContext);
+    /// <summary><p>Repository to utilize as a potential cache source. When specified, Buildah tries to look for cache images in the specified repository and attempts to pull cache images instead of actually executing the build steps locally. Buildah only attempts to pull previously cached images if they are considered as valid cache hits.</p><p>Use the <c>--cache-to</c> option to populate a remote repository with cache content.</p><p>Note: <c>--cache-from</c> option is ignored unless <c>--layers</c> is specified.</p></summary>
+    [Argument(Format = "--cache-from={value}")] public string CacheFrom => Get<string>(() => CacheFrom);
+    /// <summary><p>Set this flag to specify a remote repository that is used to store cache images. Buildah attempts to push newly built cache image to the remote repository.</p><p>Note: Use the <c>--cache-from</c> option in order to use cache content in a remote repository.</p><p>Note: <c>--cache-to</c> option is ignored unless <c>--layers</c> is specified.</p></summary>
+    [Argument(Format = "--cache-to={value}")] public string CacheTo => Get<string>(() => CacheTo);
+    /// <summary><p>Limit the use of cached images to only consider images with created timestamps less than duration ago. For example if <c>--cache-ttl=1h</c> is specified, Buildah considers intermediate cache images which are created under the duration of one hour, and intermediate cache images outside this duration is ignored.</p><p>Note: Setting <c>--cache-ttl=0</c> manually is equivalent to using <c>--no-cache</c> in the implementation since this means that the user does not want to use cache at all.</p></summary>
+    [Argument(Format = "--cache-ttl={value}")] public string CacheTtl => Get<string>(() => CacheTtl);
 }
 #endregion
 #region PodmanPsSettings
@@ -345,6 +351,30 @@ public static partial class PodmanBuildSettingsExtensions
     /// <inheritdoc cref="PodmanBuildSettings.BuildContext"/>
     [Pure] [Builder(Type = typeof(PodmanBuildSettings), Property = nameof(PodmanBuildSettings.BuildContext))]
     public static T ResetBuildContext<T>(this T o) where T : PodmanBuildSettings => o.Modify(b => b.Remove(() => o.BuildContext));
+    #endregion
+    #region CacheFrom
+    /// <inheritdoc cref="PodmanBuildSettings.CacheFrom"/>
+    [Pure] [Builder(Type = typeof(PodmanBuildSettings), Property = nameof(PodmanBuildSettings.CacheFrom))]
+    public static T SetCacheFrom<T>(this T o, string v) where T : PodmanBuildSettings => o.Modify(b => b.Set(() => o.CacheFrom, v));
+    /// <inheritdoc cref="PodmanBuildSettings.CacheFrom"/>
+    [Pure] [Builder(Type = typeof(PodmanBuildSettings), Property = nameof(PodmanBuildSettings.CacheFrom))]
+    public static T ResetCacheFrom<T>(this T o) where T : PodmanBuildSettings => o.Modify(b => b.Remove(() => o.CacheFrom));
+    #endregion
+    #region CacheTo
+    /// <inheritdoc cref="PodmanBuildSettings.CacheTo"/>
+    [Pure] [Builder(Type = typeof(PodmanBuildSettings), Property = nameof(PodmanBuildSettings.CacheTo))]
+    public static T SetCacheTo<T>(this T o, string v) where T : PodmanBuildSettings => o.Modify(b => b.Set(() => o.CacheTo, v));
+    /// <inheritdoc cref="PodmanBuildSettings.CacheTo"/>
+    [Pure] [Builder(Type = typeof(PodmanBuildSettings), Property = nameof(PodmanBuildSettings.CacheTo))]
+    public static T ResetCacheTo<T>(this T o) where T : PodmanBuildSettings => o.Modify(b => b.Remove(() => o.CacheTo));
+    #endregion
+    #region CacheTtl
+    /// <inheritdoc cref="PodmanBuildSettings.CacheTtl"/>
+    [Pure] [Builder(Type = typeof(PodmanBuildSettings), Property = nameof(PodmanBuildSettings.CacheTtl))]
+    public static T SetCacheTtl<T>(this T o, string v) where T : PodmanBuildSettings => o.Modify(b => b.Set(() => o.CacheTtl, v));
+    /// <inheritdoc cref="PodmanBuildSettings.CacheTtl"/>
+    [Pure] [Builder(Type = typeof(PodmanBuildSettings), Property = nameof(PodmanBuildSettings.CacheTtl))]
+    public static T ResetCacheTtl<T>(this T o) where T : PodmanBuildSettings => o.Modify(b => b.Remove(() => o.CacheTtl));
     #endregion
 }
 #endregion
