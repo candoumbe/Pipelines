@@ -233,6 +233,12 @@
             "format": "--cpuset-mems={value}",
             "separator": ",",
             "help": "<p>Memory nodes (MEMs) in which to allow execution (0-3, 0,1). Only effective on NUMA systems.</p><p>If there are four memory nodes on the system (0-3), use <strong>--cpuset-mems=0,1</strong> then processes in the container only uses memory from the first two memory nodes.</p><p>On some systems, changing the resource limits may not be allowed for non-root users. For more details, <see href='https://github.com/containers/podman/blob/main/troubleshooting.md#26-running-containers-with-resource-limits-fails-with-a-permissions-error'/>.</p><p>This option is not supported on cgroups V1 rootless systems.</p>"
+          },
+          {
+            "name": "CreatedAnnotation",
+            "type": "bool",
+            "format": "--created-annotation",
+            "help": "<p>Add an image annotation (see also --annotation) to the image metadata setting <c>'org.opencontainers.image.created'</c> to the current time, or to the datestamp specified to the <c>--source-date-epoch</c> or <c>--timestamp</c> flag, if either was used. If <see langword='false'/>, no such annotation will be present in the written image.</p><p>Note: this information is not present in Docker image formats, so it is discarded when writing images in Docker formats.</>"
           }
         ]
       }
