@@ -164,6 +164,12 @@
             "type": "IEnumerable<string>",
             "format": "--cap-drop={value}",
             "help": "<p>When executing <c>RUN</c> instructions, run the command specified in the instruction with the specified capability removed from its capability set. The <c>CAP_CHOWN</c>, <c>CAP_DAC_OVERRIDE</c>, <c>CAP_FOWNER</c>, <c>CAP_FSETID</c>, <c>CAP_KILL</c>, <c>CAP_NET_BIND_SERVICE</c>, <c>CAP_SETFCAP</c>, <c>CAP_SETGID</c>, <c>CAP_SETPCAP</c>, and <c>CAP_SETUID</c> capabilities are granted by default; this option can be used to remove them.</p><p>If a capability is specified to both the <strong>--cap-add</strong> and <strong>--cap-drop</strong> options, it is dropped, regardless of the order in which the options were given.</p>"
+          },
+          {
+            "name": "CertDir",
+            "type": "Nuke.Common.IO.AbsolutePath",
+            "format": "--cert-dir={value}",
+            "help": "<p>Use certificates at <i>path</i> (*.crt, *.cert, *.key) to connect to the registry. (Default: /etc/containers/certs.d) For details, see <strong><see href='https://github.com/containers/image/blob/main/docs/containers-certs.d.5.md'>containers-certs.d(5)</see></strong>. (This option is not available with the remote Podman client, including Mac and Windows (excluding WSL2) machines).</p>"
           }
         ]
       }
