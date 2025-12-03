@@ -151,6 +151,19 @@
             "type": "string",
             "format": "--cache-ttl={value}",
             "help": "<p>Limit the use of cached images to only consider images with created timestamps less than duration ago. For example if <c>--cache-ttl=1h</c> is specified, Buildah considers intermediate cache images which are created under the duration of one hour, and intermediate cache images outside this duration is ignored.</p><p>Note: Setting <c>--cache-ttl=0</c> manually is equivalent to using <c>--no-cache</c> in the implementation since this means that the user does not want to use cache at all.</p>"
+          },
+          {
+            "name": "CapAdd",
+            "type": "IEnumerable<string>",
+            "format": "--cap-add={value}",
+            "separator": ",",
+            "help": "<p>When executing <c>RUN</c> instructions, run the command specified in the instruction with the specified capability added to its capability set. Certain capabilities are granted by default; this option can be used to add more.</p>"
+          },
+          {
+            "name": "CapDrop",
+            "type": "IEnumerable<string>",
+            "format": "--cap-drop={value}",
+            "help": "<p>When executing <c>RUN</c> instructions, run the command specified in the instruction with the specified capability removed from its capability set. The <c>CAP_CHOWN</c>, <c>CAP_DAC_OVERRIDE</c>, <c>CAP_FOWNER</c>, <c>CAP_FSETID</c>, <c>CAP_KILL</c>, <c>CAP_NET_BIND_SERVICE</c>, <c>CAP_SETFCAP</c>, <c>CAP_SETGID</c>, <c>CAP_SETPCAP</c>, and <c>CAP_SETUID</c> capabilities are granted by default; this option can be used to remove them.</p><p>If a capability is specified to both the <strong>--cap-add</strong> and <strong>--cap-drop</strong> options, it is dropped, regardless of the order in which the options were given.</p>"
           }
         ]
       }
