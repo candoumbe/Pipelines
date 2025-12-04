@@ -166,7 +166,7 @@ public partial class PodmanBuildSettings : ToolOptions
     [Argument(Format = "--dns-search={value}", Separator = ",")] public string DnsSearch => Get<string>(() => DnsSearch);
     /// <summary><p>Add a value (e.g. <c>env=value</c>) to the built image. Can be used multiple times. If neither <c>=</c> nor a <i>value</i> are specified, but env is set in the current environment, the value from the current environment is added to the image. To remove an environment variable from the built image, use the <c>--unsetenv</c> option.</p></summary>
     [Argument(Format = "--env={value}", Separator = ",")] public string Env => Get<string>(() => Env);
-    /// <summary><p>Specifies a Containerfile which contains instructions for building the image, either a local file or an <strong>http</strong> or <strong>https</strong> URL. If more than one Containerfile is specified, <strong>FROM</strong> instructions are only be accepted from the last specified file.</p></summary>
+    /// <summary><p>Specifies a Containerfile which contains instructions for building the image, either a local file or an <strong>http</strong> or <strong>https</strong> URL. If more than one Containerfile is specified, <strong>FROM</strong> instructions are only be accepted from the last specified file.</p><p>If a build context is not specified, and at least one Containerfile is a local file, the directory in which it resides is used as the build context.</p><p>Specifying the option <c>-f -</c> causes the Containerfile contents to be read from stdin.</p></summary>
     [Argument(Format = "--file={value}")] public string File => Get<string>(() => File);
 }
 #endregion
