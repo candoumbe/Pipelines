@@ -406,6 +406,13 @@
             "type": "uint",
             "format": "--jobs={value}",
             "help": "<p>Run up to N concurrent stages in parallel. If the number of jobs is greater than 1, stdin is read from /dev/null. If 0 is specified, then there is no limit in the number of jobs that run in parallel.</p>"
+          },
+          {
+            "name": "Label",
+            "type": "IEnumerable<string>",
+            "format": "--label={value}",
+            "separator": ",",
+            "help": "<p>Add an image label (e.g. label=value) to the image metadata. Can be used multiple times.</p><p>Users can set a special LABEL <strong>io.containers.capabilities<strong>=<strong>CAP1</strong>,<strong>CAP2</strong>,<strong>CAP3<strong> in a Containerfile that specifies the list of Linux capabilities required for the container to run properly. This label specified in a container image tells Podman to run the container with just these capabilities. Podman launches the container with just the specified capabilities, as long as this list of capabilities is a subset of the default list.</p><p>If the specified capabilities are not in the default set, Podman prints an error message and runs the container with the default capabilities.</p>"
           }
         ]
       }
