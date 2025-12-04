@@ -426,6 +426,12 @@
             "format": "--layers",
             "default": "true",
             "help": "<p>Cache intermediate images during the build process (Default is <see langword='true'/>).</p><p>Note: You can also override the default value of layers by setting the BUILDAH_LAYERS environment variable. <c>export BUILDAH_LAYERS=true</c></p>"
+          },
+          {
+            "name": "LogFile",
+            "type": "string",
+            "format": "--logfile={value}",
+            "help": "<p>Log output which is sent to standard output and standard error to the specified file instead of to standard output and standard error. This option is not supported on the remote client, including Mac and Windows (excluding WSL2) machines.</p>"
           }
         ]
       }
