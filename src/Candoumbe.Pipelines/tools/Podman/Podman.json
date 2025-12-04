@@ -291,7 +291,14 @@
             "name": "DnsOption",
             "type": "string",
             "format": "--dns-option={value}",
-            "help": "Set custom DNS options to be used during the build."
+            "help": "<p>Set custom DNS options to be used during the build.</p>"
+          },
+          {
+            "name": "DnsSearch",
+            "type": "string",
+            "format": "--dns-search={value}",
+            "separator": ",",
+            "help": "<p>Set custom DNS search domains to be used during the build.</p>"
           }
         ]
       }
