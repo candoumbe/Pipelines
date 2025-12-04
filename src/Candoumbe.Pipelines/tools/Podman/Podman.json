@@ -368,6 +368,12 @@
             "type": "Nuke.Common.IO.AbsolutePath",
             "format": "--ignore-file={value}",
             "help": "<p>Path to an alternative <c>.containerignore</c> file.</p>"
+          },
+          {
+            "name": "Iidfile",
+            "type": "string",
+            "format": "--iidfile={value}",
+            "help": "<p>Write the built image’s ID to the file. When <c>--platform</c> is specified more than once, attempting to use this option triggers an error.</p>"
           }
         ]
       }
