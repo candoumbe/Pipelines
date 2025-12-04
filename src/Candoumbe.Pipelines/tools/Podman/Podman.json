@@ -279,6 +279,13 @@
             "type": "bool",
             "format": "--disable-content-trust",
             "help": "<p>This is a Docker-specific option to disable image verification to a container registry and is not supported by Podman. This option is a NOOP and provided solely for scripting compatibility.</p>"
+          },
+          {
+            "name": "Dns",
+            "type": "System.Net.IPAddress",
+            "format": "--dns={value}",
+            "separator": ",",
+            "help": "<p>Set custom DNS servers.</p><p>This option can be used to override the DNS configuration passed to the container. Typically this is necessary when the host DNS configuration is invalid for the container (e.g., <strong>127.0.0.1</strong>). When this is the case the <c>--dns</c> flag is necessary for every run.</p><p>The special value none can be specified to disable creation of /etc/resolv.conf in the container by Podman. The /etc/resolv.conf file in the image is then used without changes.</p><p>The special value none can be specified to disable creation of /etc/resolv.conf in the container by Podman. The <i>/etc/resolv.conf</i> file in the image is then used without changes.</p><p>This option cannot be combined with <c>--network</c> that is set to <c>none</c>.</p><p>Note: this option takes effect only during <i>RUN</i> instructions in the build. It does not affect <i>/etc/resolv.conf</i> in the final image.</p>"
           }
         ]
       }
