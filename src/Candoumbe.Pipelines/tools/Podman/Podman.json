@@ -374,6 +374,13 @@
             "type": "string",
             "format": "--iidfile={value}",
             "help": "<p>Write the built image’s ID to the file. When <c>--platform</c> is specified more than once, attempting to use this option triggers an error.</p>"
+          },
+          {
+            "name": "InheritAnnotations",
+            "type": "bool",
+            "format": "--inherit-annotations={value}",
+            "default": "true",
+            "help": "<p>Inherit the annotations from the base image or base stages. (default <see langword='true'/>). Use cases which set this flag to <see langword='false'/> may need to do the same for the <c>--created-annotation</c> flag.</p>"
           }
         ]
       }
