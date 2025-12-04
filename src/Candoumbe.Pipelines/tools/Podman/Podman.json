@@ -381,6 +381,13 @@
             "format": "--inherit-annotations={value}",
             "default": "true",
             "help": "<p>Inherit the annotations from the base image or base stages. (default <see langword='true'/>). Use cases which set this flag to <see langword='false'/> may need to do the same for the <c>--created-annotation</c> flag.</p>"
+          },
+          {
+            "name": "InheritLabels",
+            "type": "bool",
+            "format": "--inherit-labels={value}",
+            "default": "true",
+            "help": "<p>Inherit the labels from the base image or base stages. (default <see langword='true'/>).</p>"
           }
         ]
       }
