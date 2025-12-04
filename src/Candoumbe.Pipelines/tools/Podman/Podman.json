@@ -362,6 +362,12 @@
             "format": "--identity-label={value}",
             "default": "true",
             "help": "<p>Adds default identity label io.buildah.version if set. (default <see langword='true'/>).</p>"
+          },
+          {
+            "name": "IgnoreFile",
+            "type": "Nuke.Common.IO.AbsolutePath",
+            "format": "--ignore-file={value}",
+            "help": "<p>Path to an alternative <c>.containerignore</c> file.</p>"
           }
         ]
       }
