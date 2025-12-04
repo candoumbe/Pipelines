@@ -400,6 +400,12 @@
             "type": "string",
             "format": "--isolation={value}",
             "help": "<p>Controls what type of isolation is used for running processes as part of <c>RUN</c> instructions. Recognized types include <i>oci</i> (OCI-compatible runtime, the default), <i>rootless</i> (OCI-compatible runtime invoked using a modified configuration and its --rootless option enabled, with <c>--no-new-keyring</c> <c>--no-pivot</c> added to its create invocation, with network and UTS namespaces disabled, and IPC, PID, and user namespaces enabled; the default for unprivileged users), and chroot (an internal wrapper that leans more toward chroot(1) than container technology).</p><p>Note: You can also override the default isolation type by setting the BUILDAH_ISOLATION environment variable. <c>export BUILDAH_ISOLATION=oci</c>.</p>"
+          },
+          {
+            "name": "Jobs",
+            "type": "uint",
+            "format": "--jobs={value}",
+            "help": "<p>Run up to N concurrent stages in parallel. If the number of jobs is greater than 1, stdin is read from /dev/null. If 0 is specified, then there is no limit in the number of jobs that run in parallel.</p>"
           }
         ]
       }
