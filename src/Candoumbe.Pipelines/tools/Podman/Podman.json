@@ -432,6 +432,12 @@
             "type": "string",
             "format": "--logfile={value}",
             "help": "<p>Log output which is sent to standard output and standard error to the specified file instead of to standard output and standard error. This option is not supported on the remote client, including Mac and Windows (excluding WSL2) machines.</p>"
+          },
+          {
+            "name": "LogSplit",
+            "type": "bool",
+            "format": "--log-split={value}",
+            "help": "<p>If <c>--logfile</c> and <c>--platform</c> are specified, the <c>--logsplit</c> option allows end-users to split the log file for each platform into different files in the following format: <c>${logfile}_${platform-os}_${platform-arch}</c>. This option is not supported on the remote client, including Mac and Windows (excluding WSL2) machines.</p>"
           }
         ]
       }
