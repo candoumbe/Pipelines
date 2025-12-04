@@ -312,6 +312,25 @@
             "type": "string",
             "format": "--file={value}",
             "help": "<p>Specifies a Containerfile which contains instructions for building the image, either a local file or an <strong>http</strong> or <strong>https</strong> URL. If more than one Containerfile is specified, <strong>FROM</strong> instructions are only be accepted from the last specified file.</p><p>If a build context is not specified, and at least one Containerfile is a local file, the directory in which it resides is used as the build context.</p><p>Specifying the option <c>-f -</c> causes the Containerfile contents to be read from stdin.</p>"
+          },
+          {
+            "name": "ForceRm",
+            "type": "bool",
+            "format": "--force-rm",
+            "default": "true",
+            "help": "<p>Always remove intermediate containers after a build, even if the build fails (default <see langword='true'/>).</p>"
+          },
+          {
+            "name": "Format",
+            "type": "string",
+            "format": "--format={value}",
+            "help": "<p>Control the format for the built image’s manifest and configuration data. Recognized formats include <i>oci</i> (OCI image-spec v1.0, the default) and <i>docker</i> (version 2, using schema format 2 for the manifest).</p><p>Note: You can also override the default format by setting the BUILDAH_FORMAT environment variable. <c>export BUILDAH_FORMAT=docker</c></p>"
+          },
+          {
+            "name": "From",
+            "type": "string",
+            "format": "--from={value}",
+            "help": "<p>Overrides the first FROM instruction within the Containerfile. If there are multiple FROM instructions in a Containerfile, only the first is changed.</p></p>With the remote podman client, not all container transports work as expected. For example, oci-archive:/x.tar references /x.tar on the remote machine instead of on the client. When using podman remote clients it is best to restrict use to <i>containers-storage</i>, and <i>docker:// transports</i>.</p>"
           }
         ]
       }
