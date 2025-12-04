@@ -299,6 +299,13 @@
             "format": "--dns-search={value}",
             "separator": ",",
             "help": "<p>Set custom DNS search domains to be used during the build.</p>"
+          },
+          {
+            "name": "Env",
+            "type": "string",
+            "format": "--env={value}",
+            "separator": ",",
+            "help": "<p>Add a value (e.g. <c>env=value</c>) to the built image. Can be used multiple times. If neither <c>=</c> nor a <i>value</i> are specified, but env is set in the current environment, the value from the current environment is added to the image. To remove an environment variable from the built image, use the <c>--unsetenv</c> option.</p>"
           }
         ]
       }
