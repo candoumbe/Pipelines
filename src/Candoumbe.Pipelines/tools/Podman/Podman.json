@@ -444,6 +444,12 @@
             "type": "string",
             "format": "--manifest={value}",
             "help": "<p>Name of the manifest list to which the image is added. Creates the manifest list if it does not exist. This option is useful for building multi architecture images.</p>"
+          },
+          {
+            "name": "Memory",
+            "type": "string",
+            "format": "--memory={value}",
+            "help": "<p>Memory limit. A <i>unit</i> can be <strong>b</strong> (bytes), <strong>k</strong> (kibibytes), <strong>m</strong> (mebibytes), or <strong>g</strong> (gibibytes).</p><p>Allows the memory available to a container to be constrained. If the host supports swap memory, then the <strong>-m</strong> memory setting can be larger than physical RAM. If a limit of 0 is specified (not using <strong>-m</strong>), the container’s memory is not limited. The actual limit may be rounded up to a multiple of the operating system’s page size (the value is very large, that’s millions of trillions).</p><p>This option is not supported on cgroups V1 rootless systems.</p>"
           }
         ]
       }
