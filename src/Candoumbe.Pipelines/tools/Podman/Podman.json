@@ -438,6 +438,12 @@
             "type": "bool",
             "format": "--logsplit={value}",
             "help": "<p>If <c>--logfile</c> and <c>--platform</c> are specified, the <c>--logsplit</c> option allows end-users to split the log file for each platform into different files in the following format: <c>${logfile}_${platform-os}_${platform-arch}</c>. This option is not supported on the remote client, including Mac and Windows (excluding WSL2) machines.</p>"
+          },
+          {
+            "name": "Manifest",
+            "type": "string",
+            "format": "--manifest={value}",
+            "help": "<p>Name of the manifest list to which the image is added. Creates the manifest list if it does not exist. This option is useful for building multi architecture images.</p>"
           }
         ]
       }
