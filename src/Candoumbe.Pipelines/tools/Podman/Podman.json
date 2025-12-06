@@ -450,6 +450,12 @@
             "type": "string",
             "format": "--memory={value}",
             "help": "<p>Memory limit. A <i>unit</i> can be <strong>b</strong> (bytes), <strong>k</strong> (kibibytes), <strong>m</strong> (mebibytes), or <strong>g</strong> (gibibytes).</p><p>Allows the memory available to a container to be constrained. If the host supports swap memory, then the <strong>-m</strong> memory setting can be larger than physical RAM. If a limit of 0 is specified (not using <strong>-m</strong>), the container’s memory is not limited. The actual limit may be rounded up to a multiple of the operating system’s page size (the value is very large, that’s millions of trillions).</p><p>This option is not supported on cgroups V1 rootless systems.</p>"
+          },
+          {
+            "name": "MemorySwap",
+            "type": "string",
+            "format": "--memory-swap={value}",
+            "help": "<p>A limit value equal to memory plus swap. A <i>unit</i> can be <strong>b</strong> (bytes), <strong>k</strong> (kibibytes), <strong>m</strong> (mebibytes), or <strong>g</strong> (gibibytes).</p><p>Must be used with the <strong>-m</strong> (<strong>--memory</strong>) flag. The argument value must be larger than that of <strong>-m</strong> (<strong>--memory</strong>) By default, it is set to double the value of <strong>--memory</strong>.</p><p>Set number to <c>-1</c> to enable unlimited swap.</p><p>This option is not supported on cgroups V1 rootless systems.</p>"
           }
         ]
       }
