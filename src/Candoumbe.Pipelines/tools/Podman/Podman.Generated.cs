@@ -46,7 +46,7 @@ public partial class PodmanTasks : ToolTasks
     /// <inheritdoc cref="PodmanTasks.PodmanBuild(Candoumbe.Pipelines.Tools.Podman.PodmanBuildSettings)"/>
     public static IEnumerable<(PodmanBuildSettings Settings, IReadOnlyCollection<Output> Output)> PodmanBuild(CombinatorialConfigure<PodmanBuildSettings> configurator, int degreeOfParallelism = 1, bool completeOnFailure = false) => configurator.Invoke(PodmanBuild, degreeOfParallelism, completeOnFailure);
     /// <summary><p>Creates an image based on a changed container. The author of the image can be set using the <b>--author</b> OPTION. Various image instructions can be configured with the <b>--change</b> OPTION and a commit message can be set using the <b>--message</b> OPTION. The container and its processes aren’t paused while the image is committed. If this is not desired, the <b>--pause</b> OPTION can be set to <see langword="true"/>. When the commit is complete, Podman prints out the ID of the new image.</p><p>If <b>image</b> does not begin with a registry name component, <c>localhost</c> is added to the name. If <c>image</c> is not provided, the values for the <c>REPOSITORY</c> and <c>TAG</c> values of the created image is set to <c>&lt;none&gt;</c>.</p><p>For more details, visit the <a href="https://docs.podman.io/en/latest/Commands.html">official website</a>.</p></summary>
-    /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p></remarks>
+    /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p><ul><li><c>--author</c> via <see cref="PodmanCommitSettings.Author"/></li><li><c>--change</c> via <see cref="PodmanCommitSettings.Change"/></li></ul></remarks>
     public static IReadOnlyCollection<Output> PodmanCommit(PodmanCommitSettings options = null) => new PodmanTasks().Run<PodmanCommitSettings>(options);
     /// <inheritdoc cref="PodmanTasks.PodmanCommit(Candoumbe.Pipelines.Tools.Podman.PodmanCommitSettings)"/>
     public static IReadOnlyCollection<Output> PodmanCommit(Configure<PodmanCommitSettings> configurator) => new PodmanTasks().Run<PodmanCommitSettings>(configurator.Invoke(new PodmanCommitSettings()));
@@ -334,6 +334,10 @@ public partial class PodmanBuildSettings : ToolOptions
 [Command(Type = typeof(PodmanTasks), Command = nameof(PodmanTasks.PodmanCommit), Arguments = "commit")]
 public partial class PodmanCommitSettings : ToolOptions
 {
+    /// <summary>Set the author field for the generated image.</summary>
+    [Argument(Format = "--author={value}")] public string Author => Get<string>(() => Author);
+    /// <summary>Apply the following possible instructions to the created image :<list type='bullet'><item><i>CMD</i></item><item><i>ENTRYPOINT</i></item><item><i>ENV</i></item><item><i>EXPOSE</i></item><item><i>LABEL</i></item><item><i>ONBUILD</i></item><item><i>STOPSIGNAL</i></item><item><i>USER</i></item><item><i>VOLUME</i></item><item><i>WORKDIR</i></item></list><p>Can be set multiple times</p></summary>
+    [Argument(Format = "--change={value}")] public IReadOnlyList<(InstructionType, string)> Change => Get<IReadOnlyList<(InstructionType, string)>>(() => Change);
 }
 #endregion
 #region PodmanPsSettings
@@ -1625,6 +1629,22 @@ public static partial class PodmanBuildSettingsExtensions
 [ExcludeFromCodeCoverage]
 public static partial class PodmanCommitSettingsExtensions
 {
+    #region Author
+    /// <inheritdoc cref="PodmanCommitSettings.Author"/>
+    [Pure] [Builder(Type = typeof(PodmanCommitSettings), Property = nameof(PodmanCommitSettings.Author))]
+    public static T SetAuthor<T>(this T o, string v) where T : PodmanCommitSettings => o.Modify(b => b.Set(() => o.Author, v));
+    /// <inheritdoc cref="PodmanCommitSettings.Author"/>
+    [Pure] [Builder(Type = typeof(PodmanCommitSettings), Property = nameof(PodmanCommitSettings.Author))]
+    public static T ResetAuthor<T>(this T o) where T : PodmanCommitSettings => o.Modify(b => b.Remove(() => o.Author));
+    #endregion
+    #region Change
+    /// <inheritdoc cref="PodmanCommitSettings.Change"/>
+    [Pure] [Builder(Type = typeof(PodmanCommitSettings), Property = nameof(PodmanCommitSettings.Change))]
+    public static T SetChange<T>(this T o, IReadOnlyList<(InstructionType, string)> v) where T : PodmanCommitSettings => o.Modify(b => b.Set(() => o.Change, v));
+    /// <inheritdoc cref="PodmanCommitSettings.Change"/>
+    [Pure] [Builder(Type = typeof(PodmanCommitSettings), Property = nameof(PodmanCommitSettings.Change))]
+    public static T ResetChange<T>(this T o) where T : PodmanCommitSettings => o.Modify(b => b.Remove(() => o.Change));
+    #endregion
 }
 #endregion
 #region PodmanPsSettingsExtensions
@@ -1729,6 +1749,30 @@ public partial class SecurityOptions : Enumeration
     public static implicit operator SecurityOptions(string value)
     {
         return new SecurityOptions { Value = value };
+    }
+}
+#endregion
+#region InstructionType
+/// <summary>Used within <see cref="PodmanTasks"/>.</summary>
+[PublicAPI]
+[Serializable]
+[ExcludeFromCodeCoverage]
+[TypeConverter(typeof(TypeConverter<InstructionType>))]
+public partial class InstructionType : Enumeration
+{
+    public static InstructionType CMD = (InstructionType) "CMD";
+    public static InstructionType ENTRYPOINT = (InstructionType) "ENTRYPOINT";
+    public static InstructionType ENV = (InstructionType) "ENV";
+    public static InstructionType EXPOSE = (InstructionType) "EXPOSE";
+    public static InstructionType LABEL = (InstructionType) "LABEL";
+    public static InstructionType ONBUILD = (InstructionType) "ONBUILD";
+    public static InstructionType STOPSIGNAL = (InstructionType) "STOPSIGNAL";
+    public static InstructionType USER = (InstructionType) "USER";
+    public static InstructionType VOLUME = (InstructionType) "VOLUME";
+    public static InstructionType WORKDIR = (InstructionType) "WORKDIR";
+    public static implicit operator InstructionType(string value)
+    {
+        return new InstructionType { Value = value };
     }
 }
 #endregion
