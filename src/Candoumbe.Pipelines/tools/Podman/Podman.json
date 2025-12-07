@@ -686,6 +686,12 @@
             "type": "string",
             "format": "--tag={value}",
             "help": "Specifies the name which is assigned to the resulting image if the build process completes successfully. If <i>imageName</i> does not include a registry name, the registry name <i>localhost</i> is prepended to the image name."
+          },
+          {
+            "name": "Target",
+            "type": "string",
+            "format": "--target={value}",
+            "help": "Set the target build stage to build. When building a Containerfile with multiple build stages, --target can be used to specify an intermediate build stage by name as the final stage for the resulting image. Commands after the target stage is skipped."
           }
         ]
       }
