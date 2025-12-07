@@ -469,6 +469,13 @@
             "format": "--no-cache",
             "default": "true",
             "help": "<p>Do not use existing cached images for the container build. Build from the start with a new set of cached layers.</p>"
+          },
+          {
+            "name": "NoHostname",
+            "type": "bool",
+            "format": "--no-hostname",
+            "default": "true",
+            "help": "<p>Do not create the <i>/etc/hostname</i> file in the container.</p><p>By default, Podman manages the <i>/etc/hostname</i> file, adding the container’s own hostname. When the <b>--no-hostname</b> option is set, the image’s <i>/etc/hostname</i> will be preserved unmodified if it exists.</p>"
           }
         ]
       }
