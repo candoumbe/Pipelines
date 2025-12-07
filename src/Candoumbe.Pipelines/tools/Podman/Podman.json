@@ -637,6 +637,12 @@
             "format": "--shm-size={value}",
             "default": "64m",
             "help": "Size of <c>/dev/shm</c>. A unit can be <b>b</b> (bytes), <b>k</b> (kibibytes), <b>m</b> (mebibytes), or <b>g</b> (gibibytes). If the unit is omitted, the system uses bytes. If the size is omitted, the default is <b>64m</b>. When size is <b>0</b>, there is no limit on the amount of memory used for IPC by the container. This option conflicts with <b>--ipc</b>=<b>host</b>"
+          },
+          {
+            "name": "SignBy",
+            "type": "string",
+            "format": "--sign-by={value}",
+            "help": "Sign the image using a GPG key with the specified FINGERPRINT. (This option is not available with the remote Podman client, including Mac and Windows (excluding WSL2) machines,)"
           }
         ]
       }
