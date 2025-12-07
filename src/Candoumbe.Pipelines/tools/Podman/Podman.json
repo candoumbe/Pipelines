@@ -674,6 +674,12 @@
             "type": "string",
             "format": "--ssh={value}",
             "help": "<p>SSH agent socket or keys to expose to the build. The socket path can be left empty to use the value of <c>default=$SSH_AUTH_SOCK</c>.</p><p>To later use the ssh agent, use the <c>--mount</c> option in a <c>RUN</c> instruction within a Containerfile:<code>RUN --mount=type=ssh,id=id mycmd</code></p>"
+          },
+          {
+            "name": "Stdin",
+            "type": "bool",
+            "format": "--stdin",
+            "help": "Pass stdin into the RUN containers. Sometime commands being RUN within a Containerfile want to request information from the user. For example apt asking for a confirmation for install. Use --stdin to be able to interact from the terminal during the build."
           }
         ]
       }
