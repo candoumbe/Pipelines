@@ -717,6 +717,18 @@
             "type": "string",
             "format": "--unsetannotation={value}",
             "help": "Unset the image annotation, causing the annotation not to be inherited from the base image."
+          },
+          {
+            "name": "UnsetEnv",
+            "type": "string",
+            "format": "--unsetenv={value}",
+            "help": "Unset environment variables from the final image."
+          },
+          {
+            "name": "UnsetLabel",
+            "type": "string",
+            "format": "--unsetlabel={value}",
+            "help": "Unset the image label, causing the label not to be inherited from the base image."
           }
         ]
       }
