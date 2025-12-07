@@ -630,6 +630,13 @@
             "type": "SecurityOptions",
             "format": "--security-opt={value}",
             "help": "Security options : <list type='bullet'><item><term><c>apparmor=unconfined</c></term><description>Turn off apparmor confinement for the container</description></item><item><term><c>apparmor=alternate-profile</c></term><description>Set the apparmor confinement profile for the container</description></item><item><term><c>label=user:USER</c></term><description>Set the label user for the container processes</description></item><item><term><c>label=role:ROLE</c></term><description>Set the label role for the container processes</description></item><item><term><c>label=type:TYPE</c></term><description>Set the label process type for the container processes</description></item><item><term><c>label=level:LEVEL</c></term><description>Set the label level for the container processes</description></item><item><term><c>label=filetype:TYPE</c></term><description>Set the label file type for the container processes</description></item><item><term><c>label=disable</c></term><description>Turn off label separation for container</description></item><item><term><c>no-new-privileges</c></term><description>Disable container processes for gaining additional privileges</description></item><item><term><c>seccomp=unconfined</c></term><description>Turn off seccomp confinement for the container</description></item><item><term><c>seccomp=profile.json</c></term><description>JSON file to be used as the seccomp filter for the container</description></item></list>"
+          },
+          {
+            "name": "ShmSize",
+            "type": "string",
+            "format": "--shm-size={value}",
+            "default": "64m",
+            "help": "Size of <c>/dev/shm</c>. A unit can be <b>b</b> (bytes), <b>k</b> (kibibytes), <b>m</b> (mebibytes), or <b>g</b> (gibibytes). If the unit is omitted, the system uses bytes. If the size is omitted, the default is <b>64m</b>. When size is <b>0</b>, there is no limit on the amount of memory used for IPC by the container. This option conflicts with <b>--ipc</b>=<b>host</b>"
           }
         ]
       }
