@@ -643,6 +643,13 @@
             "type": "string",
             "format": "--sign-by={value}",
             "help": "Sign the image using a GPG key with the specified FINGERPRINT. (This option is not available with the remote Podman client, including Mac and Windows (excluding WSL2) machines,)"
+          },
+          {
+            "name": "SkipUnusedStages",
+            "type": "bool",
+            "format": "--skip-unused-stages",
+            "default": "true",
+            "help": "Skip stages in multi-stage builds which don’t affect the target stage. (Default: <see langword=\"true\"/>)."
           }
         ]
       }
