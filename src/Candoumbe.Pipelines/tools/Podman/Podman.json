@@ -551,6 +551,24 @@
             "format": "--retry-delay={value}",
             "default": "",
             "help": "<p>Duration of delay between retry attempts when pulling or pushing images between the registry and local storage in case of failure. The default is to start at two seconds and then exponentially back off. The delay is used when this value is set, and no exponential back off occurs.</p>"
+          },
+          {
+            "name": "RewriteTimestamp",
+            "type": "bool",
+            "format": "--rewrite-timestamp",
+            "help": "<p>When generating new layers for the image, ensure that no newly added content bears a timestamp later than the value used by the <b>--source-date-epoch</b> flag, if one was provided, by replacing any timestamps which are later than that value, with that value.</p>"
+          },
+          {
+            "name": "Rm",
+            "type": "bool",
+            "format": "--rm",
+            "help": "<p>Remove intermediate containers after a successful build (default <see langword=\"true\"/>).</p>"
+          },
+          {
+            "name": "Runtime",
+            "type": "Nuke.Common.IO.AbsolutePath",
+            "format": "--runtime={value}",
+            "help": "<p>The path to an alternate OCI-compatible runtime, which is used to run commands specified by the <b>RUN</b> instruction.</p><p>Note: You can also override the default runtime by setting the BUILDAH_RUNTIME environment variable. <c>export BUILDAH_RUNTIME=/usr/local/bin/runc</c>.</p>"
           }
         ]
       }
