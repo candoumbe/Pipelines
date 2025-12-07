@@ -537,6 +537,13 @@
             "type": "bool",
             "format": "--quiet",
             "help": "<p>Suppress output messages which indicate which instruction is being processed, and of progress when pulling images from a registry, and when writing the output image.</p>"
+          },
+          {
+            "name": "Retry",
+            "type": "uint",
+            "format": "--retry={value}",
+            "default": "3",
+            "help": "<p>Number of times to retry pulling or pushing images between the registry and local storage in case of failure. Default is <c>3</c>.</p>"
           }
         ]
       }
