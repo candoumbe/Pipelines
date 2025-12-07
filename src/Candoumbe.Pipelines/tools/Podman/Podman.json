@@ -575,6 +575,12 @@
             "type": "string",
             "format": "--runtime-flag={value}",
             "help": "<p>Adds global flags for the container runtime. To list the supported flags, please consult the manpages of the selected container runtime.</p><p>Default runtime flags can be added in containers.conf.</p><p>Note: Do not pass the leading -- to the flag. To pass the runc flag --log-format json to buildah build, the option given is --runtime-flag log-format=json.</p>"
+          },
+          {
+            "name": "Sbom",
+            "type": "SbomPreset",
+            "format": "--sbom={value}",
+            "help": "<p>Generate SBOMs (Software Bills Of Materials) for the output image by scanning the working container and build contexts using the named combination of scanner image, scanner commands, and merge strategy. Must be specified with one or more of <b>--sbom-image-output</b>, <b>--sbom-image-purl-output</b>, <b>--sbom-output</b>, and <b>--sbom-purl-output</b>. Recognized presets, and the set of options which they equate to:<list type='bullet'><item><term>\"syft\", \"syft-cyclonedx\"</term><description>--sbom-scanner-image=ghcr.io/anchore/syft --sbom-scanner-command=”/syft scan -q dir:{ROOTFS} --output cyclonedx-json={OUTPUT}” --sbom-scanner-command=”/syft scan -q dir:{CONTEXT} --output cyclonedx-json={OUTPUT}” --sbom-merge-strategy=merge-cyclonedx-by-component-name-and-version</description></item><item><term>\"syft-spdx\"</term><description>--sbom-scanner-image=ghcr.io/anchore/syft --sbom-scanner-command=”/syft scan -q dir:{ROOTFS} --output spdx-json={OUTPUT}” --sbom-scanner-command=”/syft scan -q dir:{CONTEXT} --output spdx-json={OUTPUT}” --sbom-merge-strategy=merge-spdx-by-package-name-and-versioninfo</description></item><item><term>\"trivy\", \"trivy-cyclonedx\"</term><description>--sbom-scanner-image=ghcr.io/aquasecurity/trivy --sbom-scanner-command=”trivy filesystem -q {ROOTFS} --format cyclonedx --output {OUTPUT}” --sbom-scanner-command=”trivy filesystem -q {CONTEXT} --format cyclonedx --output {OUTPUT}” --sbom-merge-strategy=merge-cyclonedx-by-component-name-and-version</description></item><item><term>\"trivy-spdx\"</term><description>--sbom-scanner-image=ghcr.io/aquasecurity/trivy --sbom-scanner-command=”trivy filesystem -q {ROOTFS} --format spdx-json --output {OUTPUT}” --sbom-scanner-command=”trivy filesystem -q {CONTEXT} --format spdx-json --output {OUTPUT}” --sbom-merge-strategy=merge-spdx-by-package-name-and-versioninfo</description></item></list></p>"
           }
         ]
       }
@@ -602,6 +608,17 @@
         "missing",
         "never",
         "newer"
+      ]
+    },
+    {
+      "name": "SbomPreset",
+      "values": [
+        "syft",
+        "syft-cyclonedx",
+        "syft-spdx",
+        "trivy",
+        "trivy-cyclonedx",
+        "trivy-spdx"
       ]
     }
   ]
