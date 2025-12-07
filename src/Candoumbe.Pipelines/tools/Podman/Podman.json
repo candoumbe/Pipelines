@@ -650,6 +650,12 @@
             "format": "--skip-unused-stages",
             "default": "true",
             "help": "Skip stages in multi-stage builds which don’t affect the target stage. (Default: <see langword=\"true\"/>)."
+          },
+          {
+            "name": "SourceDateEpoch",
+            "type": "uint",
+            "format": "--source-date-epoch={value}",
+            "help": "<p>Set the “created” timestamp for the built image to this number of seconds since the epoch (Unix time 0, i.e., 00:00:00 UTC on 1 January 1970) (default is to use the value set in the <c>SOURCE_DATE_EPOCH</c> environment variable, or the current time if it is not set).</p><p>The “created” timestamp is written into the image’s configuration and manifest when the image is committed, so running the same build two different times will ordinarily produce images with different sha256 hashes, even if no other changes were made to the Containerfile and build context.</p><p>When this flag is set, a <c>SOURCE_DATE_EPOCH</c> build arg will provide its value for a stage in which it is declared.</p><p>When this flag is set, the image configuration’s “created” timestamp is always set to the time specified, which should allow for identical images to be built at different times using the same set of inputs.</p><p>When this flag is set, output written as specified to the <b>--output</b> flag will bear exactly the specified timestamp.</p><p>Conflicts with the similar <b>--timestamp</b> flag, which also sets its specified time on the contents of new layers.</p>"
           }
         ]
       }
