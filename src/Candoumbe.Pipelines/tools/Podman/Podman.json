@@ -759,6 +759,12 @@
             "type": "string",
             "format": "--userns-uid-map-user={value}",
             "help": "<p>Specifies that a UID mapping to be used to set ownership, at the filesystem level, on the working container’s contents, can be found in entries in the <c>/etc/subuid</c> file which correspond to the specified user. Commands run when handling <c>RUN</c> instructions defaults to being run in their own user namespaces, configured using the UID and GID maps. If --userns-gid-map-group is specified, but --userns-uid-map-user is not specified, <c>podman</c> assumes that the specified user name is also a suitable group name to use as the default setting for this option.</p><p>NOTE: When this option is specified by a rootless user, the specified mappings are relative to the rootless user namespace in the container, rather than being relative to the host as it is when run rootful.</p>"
+          },
+          {
+            "name": "Uts",
+            "type": "string",
+            "format": "--uts={value}",
+            "help": "Sets the configuration for UTS namespaces when handling RUN instructions. The configured value can be “” (the empty string) or “container” to indicate that a new UTS namespace to be created, or it can be “host” to indicate that the UTS namespace in which <c>podman</c> itself is being run is reused, or it can be the path to a UTS namespace which is already in use by another process."
           }
         ]
       }
