@@ -729,6 +729,18 @@
             "type": "string",
             "format": "--unsetlabel={value}",
             "help": "Unset the image label, causing the label not to be inherited from the base image."
+          },
+          {
+            "name": "Userns",
+            "type": "string",
+            "format": "--userns={value}",
+            "help": "Sets the configuration for user namespaces when handling <c>RUN</c> instructions. The configured value can be “” (the empty string) or “container” to indicate that a new user namespace is created, it can be “host” to indicate that the user namespace in which podman itself is being run is reused, or it can be the path to a user namespace which is already in use by another process."
+          },
+          {
+            "name": "UsernsGidMap",
+            "type": "IReadOnlyDictionary<string, string>",
+            "format": "--userns-gid-map={value}",
+            "help": "<p>Directly specifies a GID mapping to be used to set ownership, at the filesystem level, on the working container’s contents. Commands run when handling RUN instructions defaults to being run in their own user namespaces, configured using the UID and GID maps.</p><p>Entries in this map take the form of one or more triples of a starting in-container GID, a corresponding starting host-level GID, and the number of consecutive IDs which the map entry represents.</p><p>This option overrides the remap-gids setting in the options section of /etc/containers/storage.conf.</p><p>If this option is not specified, but a global --userns-gid-map setting is supplied, settings from the global option is used.</p><p>If none of --userns-uid-map-user, --userns-gid-map-group, or --userns-gid-map are specified, but --userns-uid-map is specified, the GID map is set to use the same numeric values as the UID map.</p>"
           }
         ]
       }
