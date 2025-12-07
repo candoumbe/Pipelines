@@ -624,6 +624,12 @@
             "format": "--secret={value}",
             "secret": true,
             "help": "<p>Pass secret information to be used in the Containerfile for building images in a safe way that will not end up stored in the final image, or be seen in other stages. The value of the secret will be read from an environment variable or file named by the “id” option, or named by the “src” option if it is specified, or from an environment variable specified by the “env” option. See <see href=\"https://docs.podman.io/en/latest/markdown/podman-build.1.html#examples\">EXAMPLES</see>. The secret will be mounted in the container at <c>/run/secrets/id</c> by default.</p><p>To later use the secret, use the <c>--mount</c> flag in a <c>RUN</c> instruction within <c>ContainerFile</c> : <code>RUN --mount=type=secret,id=mysecret cat /run/secrets/mysecret</code>The location of the secret in the container can be overriden using the \"target\" , \"dst\", or \"destination\" option in the RUN <c>--mount</c> flag.<code>RUN --mount=type=secret,id=mysecret,target=/run/secrets/myothersecret cat /run/secrets/myothersecret</code>Note: changing the contents of secret files will not trigger a rebuild of layers that use said secrets.</p>"
+          },
+          {
+            "name": "SecurityOpt",
+            "type": "SecurityOptions",
+            "format": "--security-opt={value}",
+            "help": "Security options : <list type='bullet'><item><term><c>apparmor=unconfined</c></term><description>Turn off apparmor confinement for the container</description></item><item><term><c>apparmor=alternate-profile</c></term><description>Set the apparmor confinement profile for the container</description></item><item><term><c>label=user:USER</c></term><description>Set the label user for the container processes</description></item><item><term><c>label=role:ROLE</c></term><description>Set the label role for the container processes</description></item><item><term><c>label=type:TYPE</c></term><description>Set the label process type for the container processes</description></item><item><term><c>label=level:LEVEL</c></term><description>Set the label level for the container processes</description></item><item><term><c>label=filetype:TYPE</c></term><description>Set the label file type for the container processes</description></item><item><term><c>label=disable</c></term><description>Turn off label separation for container</description></item><item><term><c>no-new-privileges</c></term><description>Disable container processes for gaining additional privileges</description></item><item><term><c>seccomp=unconfined</c></term><description>Turn off seccomp confinement for the container</description></item><item><term><c>seccomp=profile.json</c></term><description>JSON file to be used as the seccomp filter for the container</description></item></list>"
           }
         ]
       }
@@ -670,6 +676,22 @@
         "cat",
         "merge-cyclonedx-by-component-name-and-version",
         "merge-spdx-by-package-name-and-versioninfo"
+      ]
+    },
+    {
+      "name": "SecurityOptions",
+      "values": [
+        "apparmor=unconfined",
+        "apparmor=alternate-profile",
+        "label=user:USER",
+        "label=role:ROLE",
+        "label=type:TYPE",
+        "label=level:LEVEL",
+        "label=filetype:TYPE",
+        "label=disable",
+        "no-new-privileges",
+        "seccomp=unconfined",
+        "seccomp=profile.json"
       ]
     }
   ]
