@@ -811,6 +811,46 @@
             "format": "--format={value}",
             "default": "oci",
             "help": "Set the format of the image manifest and metadata. The currently supported formats are oci and docker.<br />The default is <b>oci</b>."
+          },
+          {
+            "name": "Iidfile",
+            "type": "string",
+            "format": "--iidfile={value}",
+            "help": "Write the image ID to the file."
+          },
+          {
+            "name": "IncludeVolumes",
+            "type": "bool",
+            "format": "--include-volumes={value}",
+            "default": "false",
+            "help": "Include in the committed image any volumes added to the container by the <b>--volume</b> or <b>--mount</b> OPTIONS to the <b><see href='https://docs.podman.io/en/latest/markdown/podman-create.1.html'>podman create</see></b> and <b><see href='https://docs.podman.io/en/latest/markdown/podman-run.1.html'>podman run</see></b> commands.<br />The default is <see langword='false'/>."
+          },
+          {
+            "name": "Message",
+            "type": "string",
+            "format": "--message={value}",
+            "help": "Set the commit message for the commmitted image.<br /><i>IMPORTANT : The message field is not supported in oc format</i> "
+          },
+          {
+            "name": "Pause",
+            "type": "bool",
+            "format": "--pause={value}",
+            "default": "false",
+            "help": "Pause the container when creating an image.<br /> The default is <see langword='false'/>."
+          },
+          {
+            "name": "Quiet",
+            "type": "bool",
+            "format": "--quiet",
+            "default": "false",
+            "help": "Suppresses output.<br />The default is <see langword='false'/>."
+          },
+          {
+            "name": "Squash",
+            "type": "bool",
+            "format": "--squash",
+            "default": "false",
+            "help": "Squash newly built layers into a single new layer.<br />The default is <see langword='false'/>."
           }
         ]
       }

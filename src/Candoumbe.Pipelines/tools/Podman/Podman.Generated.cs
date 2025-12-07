@@ -46,7 +46,7 @@ public partial class PodmanTasks : ToolTasks
     /// <inheritdoc cref="PodmanTasks.PodmanBuild(Candoumbe.Pipelines.Tools.Podman.PodmanBuildSettings)"/>
     public static IEnumerable<(PodmanBuildSettings Settings, IReadOnlyCollection<Output> Output)> PodmanBuild(CombinatorialConfigure<PodmanBuildSettings> configurator, int degreeOfParallelism = 1, bool completeOnFailure = false) => configurator.Invoke(PodmanBuild, degreeOfParallelism, completeOnFailure);
     /// <summary><p>Creates an image based on a changed container. The author of the image can be set using the <b>--author</b> OPTION. Various image instructions can be configured with the <b>--change</b> OPTION and a commit message can be set using the <b>--message</b> OPTION. The container and its processes aren’t paused while the image is committed. If this is not desired, the <b>--pause</b> OPTION can be set to <see langword="true"/>. When the commit is complete, Podman prints out the ID of the new image.</p><p>If <b>image</b> does not begin with a registry name component, <c>localhost</c> is added to the name. If <c>image</c> is not provided, the values for the <c>REPOSITORY</c> and <c>TAG</c> values of the created image is set to <c>&lt;none&gt;</c>.</p><p>For more details, visit the <a href="https://docs.podman.io/en/latest/Commands.html">official website</a>.</p></summary>
-    /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p><ul><li><c>--author</c> via <see cref="PodmanCommitSettings.Author"/></li><li><c>--change</c> via <see cref="PodmanCommitSettings.Change"/></li><li><c>--config</c> via <see cref="PodmanCommitSettings.Config"/></li><li><c>--format</c> via <see cref="PodmanCommitSettings.Format"/></li></ul></remarks>
+    /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p><ul><li><c>--author</c> via <see cref="PodmanCommitSettings.Author"/></li><li><c>--change</c> via <see cref="PodmanCommitSettings.Change"/></li><li><c>--config</c> via <see cref="PodmanCommitSettings.Config"/></li><li><c>--format</c> via <see cref="PodmanCommitSettings.Format"/></li><li><c>--iidfile</c> via <see cref="PodmanCommitSettings.Iidfile"/></li><li><c>--include-volumes</c> via <see cref="PodmanCommitSettings.IncludeVolumes"/></li></ul></remarks>
     public static IReadOnlyCollection<Output> PodmanCommit(PodmanCommitSettings options = null) => new PodmanTasks().Run<PodmanCommitSettings>(options);
     /// <inheritdoc cref="PodmanTasks.PodmanCommit(Candoumbe.Pipelines.Tools.Podman.PodmanCommitSettings)"/>
     public static IReadOnlyCollection<Output> PodmanCommit(Configure<PodmanCommitSettings> configurator) => new PodmanTasks().Run<PodmanCommitSettings>(configurator.Invoke(new PodmanCommitSettings()));
@@ -342,6 +342,10 @@ public partial class PodmanCommitSettings : ToolOptions
     [Argument(Format = "--config={value}")] public string Config => Get<string>(() => Config);
     /// <summary>Set the format of the image manifest and metadata. The currently supported formats are oci and docker.<br />The default is <b>oci</b>.</summary>
     [Argument(Format = "--format={value}")] public FormatType Format => Get<FormatType>(() => Format);
+    /// <summary>Write the image ID to the file.</summary>
+    [Argument(Format = "--iidfile={value}")] public string Iidfile => Get<string>(() => Iidfile);
+    /// <summary>Include in the committed image any volumes added to the container by the <b>--volume</b> or <b>--mount</b> OPTIONS to the podman create and podman run commands.<br />The default is <see langword='false'/>.</summary>
+    [Argument(Format = "--include-volumes={value}")] public bool? IncludeVolumes => Get<bool?>(() => IncludeVolumes);
 }
 #endregion
 #region PodmanPsSettings
@@ -1664,6 +1668,31 @@ public static partial class PodmanCommitSettingsExtensions
     /// <inheritdoc cref="PodmanCommitSettings.Format"/>
     [Pure] [Builder(Type = typeof(PodmanCommitSettings), Property = nameof(PodmanCommitSettings.Format))]
     public static T ResetFormat<T>(this T o) where T : PodmanCommitSettings => o.Modify(b => b.Remove(() => o.Format));
+    #endregion
+    #region Iidfile
+    /// <inheritdoc cref="PodmanCommitSettings.Iidfile"/>
+    [Pure] [Builder(Type = typeof(PodmanCommitSettings), Property = nameof(PodmanCommitSettings.Iidfile))]
+    public static T SetIidfile<T>(this T o, string v) where T : PodmanCommitSettings => o.Modify(b => b.Set(() => o.Iidfile, v));
+    /// <inheritdoc cref="PodmanCommitSettings.Iidfile"/>
+    [Pure] [Builder(Type = typeof(PodmanCommitSettings), Property = nameof(PodmanCommitSettings.Iidfile))]
+    public static T ResetIidfile<T>(this T o) where T : PodmanCommitSettings => o.Modify(b => b.Remove(() => o.Iidfile));
+    #endregion
+    #region IncludeVolumes
+    /// <inheritdoc cref="PodmanCommitSettings.IncludeVolumes"/>
+    [Pure] [Builder(Type = typeof(PodmanCommitSettings), Property = nameof(PodmanCommitSettings.IncludeVolumes))]
+    public static T SetIncludeVolumes<T>(this T o, bool? v) where T : PodmanCommitSettings => o.Modify(b => b.Set(() => o.IncludeVolumes, v));
+    /// <inheritdoc cref="PodmanCommitSettings.IncludeVolumes"/>
+    [Pure] [Builder(Type = typeof(PodmanCommitSettings), Property = nameof(PodmanCommitSettings.IncludeVolumes))]
+    public static T ResetIncludeVolumes<T>(this T o) where T : PodmanCommitSettings => o.Modify(b => b.Remove(() => o.IncludeVolumes));
+    /// <inheritdoc cref="PodmanCommitSettings.IncludeVolumes"/>
+    [Pure] [Builder(Type = typeof(PodmanCommitSettings), Property = nameof(PodmanCommitSettings.IncludeVolumes))]
+    public static T EnableIncludeVolumes<T>(this T o) where T : PodmanCommitSettings => o.Modify(b => b.Set(() => o.IncludeVolumes, true));
+    /// <inheritdoc cref="PodmanCommitSettings.IncludeVolumes"/>
+    [Pure] [Builder(Type = typeof(PodmanCommitSettings), Property = nameof(PodmanCommitSettings.IncludeVolumes))]
+    public static T DisableIncludeVolumes<T>(this T o) where T : PodmanCommitSettings => o.Modify(b => b.Set(() => o.IncludeVolumes, false));
+    /// <inheritdoc cref="PodmanCommitSettings.IncludeVolumes"/>
+    [Pure] [Builder(Type = typeof(PodmanCommitSettings), Property = nameof(PodmanCommitSettings.IncludeVolumes))]
+    public static T ToggleIncludeVolumes<T>(this T o) where T : PodmanCommitSettings => o.Modify(b => b.Set(() => o.IncludeVolumes, !o.IncludeVolumes));
     #endregion
 }
 #endregion
