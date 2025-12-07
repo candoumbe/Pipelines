@@ -524,6 +524,13 @@
             "type": "string",
             "format": "--platform={value}",
             "help": "<p>Set the <i>os/arch</i> of the built image (and its base image, when using one) to the provided value instead of using the current operating system and architecture of the host (for example <c>linux/arm</c>). Unless overridden, subsequent lookups of the same image in the local storage matches this platform, regardless of the host.</p><p>If <c>--platform</c> is set, then the values of the <c>--arch</c>, <c>--os</c>, and <c>--variant</c> options is overridden.</p><p>The <c>--platform</c> option can be specified more than once, or given a comma-separated list of values as its argument. When more than one platform is specified, the <c>--manifest</c> option is used instead of the <c>--tag</c> option.</p><p>Os/arch pairs are those used by the Go Programming Language. In several cases the <i>arch</i> value for a platform differs from one produced by other tools such as the <c>arch</c> command. Valid OS and architecture name combinations are listed as values for $GOOS and $GOARCH at <see href=\"https://golang.org/doc/install/source#environment\"/>, and can also be found by running <c>go tool dist list</c>.</p><p>While <c>podman build</c> is happy to use base images and build images for any platform that exists, <c>RUN</c> instructions are unable to succeed without the help of emulation provided by packages like <c>qemu-user-static</c>.</p>"
+          },
+          {
+            "name": "Pull",
+            "type": "PullPolicy",
+            "format": "--pull={value}",
+            "default": "missing",
+            "help": "<p>Pull image policy.</p><list type='bullet'><item><term>always</term><description>Always pull the image and throw an error if the pull fails.</description></item><item><term>missing</term><description>Onlu pull the image when it does not exist in the local containers storage. Throw an error if no image is found and the pull fails.</description></item><item><term>never</term><description>Never pull the image but use the one form the local containers storage. Throw an error when no image is found.</description></item><item><term>newer</term><description>Pull if the image on the registry is newer than the one in the local containers storage. An image is considered to be newer when the digests are different. Comparing the time stamps is prone to errors. Pull errors are suppressed if a local image was found.</description></item></list>"
           }
         ]
       }
@@ -541,6 +548,17 @@
           }
         ]
       }
+    }
+  ],
+  "enumerations": [
+    {
+      "name": "PullPolicy",
+      "values": [
+        "always",
+        "missing",
+        "never",
+        "newer"
+      ]
     }
   ]
 }
