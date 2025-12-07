@@ -798,6 +798,19 @@
             "type": "IReadOnlyList<(InstructionType, string)>",
             "format": "--change={value}",
             "help": "Apply the following possible instructions to the created image :<list type='bullet'><item><i>CMD</i></item><item><i>ENTRYPOINT</i></item><item><i>ENV</i></item><item><i>EXPOSE</i></item><item><i>LABEL</i></item><item><i>ONBUILD</i></item><item><i>STOPSIGNAL</i></item><item><i>USER</i></item><item><i>VOLUME</i></item><item><i>WORKDIR</i></item></list><p>Can be set multiple times</p>"
+          },
+          {
+            "name": "Config",
+            "type": "string",
+            "format": "--config={value}",
+            "help": "Merge the container configuration from the specified file into the configuration for the image as it is being committed. The file contents should be a JSON-encoded version of a Schema2Config structure, which is defined at <see href='https://github.com/containers/image/blob/v5.29.0/manifest/docker_schema2.go#L67'/>."
+          },
+          {
+            "name": "Format",
+            "type": "FormatType",
+            "format": "--format={value}",
+            "default": "oci",
+            "help": "Set the format of the image manifest and metadata. The currently supported formats are oci and docker.<br />The default is <b>oci</b>."
           }
         ]
       }
@@ -860,6 +873,13 @@
         "no-new-privileges",
         "seccomp=unconfined",
         "seccomp=profile.json"
+      ]
+    },
+    {
+      "name": "FormatType",
+      "values": [
+        "docker",
+        "oci"
       ]
     },
     {
