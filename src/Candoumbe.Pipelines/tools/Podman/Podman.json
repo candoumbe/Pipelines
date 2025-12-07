@@ -544,6 +544,13 @@
             "format": "--retry={value}",
             "default": "3",
             "help": "<p>Number of times to retry pulling or pushing images between the registry and local storage in case of failure. Default is <c>3</c>.</p>"
+          },
+          {
+            "name": "RetryDelay",
+            "type": "uint",
+            "format": "--retry-delay={value}",
+            "default": "",
+            "help": "<p>Duration of delay between retry attempts when pulling or pushing images between the registry and local storage in case of failure. The default is to start at two seconds and then exponentially back off. The delay is used when this value is set, and no exponential back off occurs.</p>"
           }
         ]
       }
