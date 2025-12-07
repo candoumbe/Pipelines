@@ -617,6 +617,13 @@
             "type": "string",
             "format": "--sbom-scanner-image={value}",
             "help": "Generate SBOMs using the specified scanner image."
+          },
+          {
+            "name": "Secret",
+            "type": "IReadOnlyDictionary<string, string>",
+            "format": "--secret={value}",
+            "secret": true,
+            "help": "<p>Pass secret information to be used in the Containerfile for building images in a safe way that will not end up stored in the final image, or be seen in other stages. The value of the secret will be read from an environment variable or file named by the “id” option, or named by the “src” option if it is specified, or from an environment variable specified by the “env” option. See <see href=\"https://docs.podman.io/en/latest/markdown/podman-build.1.html#examples\">EXAMPLES</see>. The secret will be mounted in the container at <c>/run/secrets/id</c> by default.</p><p>To later use the secret, use the <c>--mount</c> flag in a <c>RUN</c> instruction within <c>ContainerFile</c> : <code>RUN --mount=type=secret,id=mysecret cat /run/secrets/mysecret</code>The location of the secret in the container can be overriden using the \"target\" , \"dst\", or \"destination\" option in the RUN <c>--mount</c> flag.<code>RUN --mount=type=secret,id=mysecret,target=/run/secrets/myothersecret cat /run/secrets/myothersecret</code>Note: changing the contents of secret files will not trigger a rebuild of layers that use said secrets.</p>"
           }
         ]
       }
