@@ -599,6 +599,24 @@
             "type": "string",
             "format": "--sbom-output={value}",
             "help": "<p>When generating SBOMs, store the generated SBOM in the named file on the local filesystem. There is no default.</p>"
+          },
+          {
+            "name": "SbomPurlOutput",
+            "type": "string",
+            "format": "--sbom-purl-output={value}",
+            "help": "When generating SBOMs, scan them for PURL (<see href='https://github.com/package-url/purl-spec/blob/master/PURL-SPECIFICATION.rst'>package URL</see>) information, and save a list of found PURLs to the named file in the local filesystem. There is no default."
+          },
+          {
+            "name": "SbomScannerCommand",
+            "type": "string",
+            "format": "--sbom-scanner-command={value}",
+            "help": "Generate SBOMs by running the specified command from the scanner image. If multiple commands are specified, they are run in the order in which they are specified. These text substitutions are performed:<list type='bullet'><item><term>{ROOTFS}</term><description>The root of the build image's filesystem, bind mounted.</description></item><item><term>{CONTEXT}</term><description>The build context and additional build contexts, bind mounted</description></item><item><term>{OUTPUT}</term><description>The name of a temporary output file, to be read and merged with others or copied elsewhere.</description></item></list>"
+          },
+          {
+            "name": "SbomScannerImage",
+            "type": "string",
+            "format": "--sbom-scanner-image={value}",
+            "help": "Generate SBOMs using the specified scanner image."
           }
         ]
       }
