@@ -753,6 +753,12 @@
             "type": "IReadOnlyDictionary<string, string>",
             "format": "--userns-uid-map={value}",
             "help": "<p>Directly specifies a UID mapping to be used to set ownership, at the filesystem level, on the working container’s contents. Commands run when handling <c>RUN</c> instructions defaults to being run in their own user namespaces, configured using the UID and GID maps.</p><p>Entries in this map take the form of one or more triples of a starting in-container UID, a corresponding starting host-level UID, and the number of consecutive IDs which the map entry represents.</p><p>This option overrides the <i>remap-uids</i> setting in the <i>options</i> section of /etc/containers/storage.conf.</p><p>If this option is not specified, but a global --userns-uid-map setting is supplied, settings from the global option is used.</p><p>If none of --userns-uid-map-user, --userns-gid-map-group, or --userns-gid-map are specified, but --userns-gid-map is specified, the UID map is set to use the same numeric values as the GID map.</p>"
+          },
+          {
+            "name": "UsernsUidMapUser",
+            "type": "string",
+            "format": "--userns-uid-map-user={value}",
+            "help": "<p>Specifies that a UID mapping to be used to set ownership, at the filesystem level, on the working container’s contents, can be found in entries in the <c>/etc/subuid</c> file which correspond to the specified user. Commands run when handling <c>RUN</c> instructions defaults to being run in their own user namespaces, configured using the UID and GID maps. If --userns-gid-map-group is specified, but --userns-uid-map-user is not specified, <c>podman</c> assumes that the specified user name is also a suitable group name to use as the default setting for this option.</p><p>NOTE: When this option is specified by a rootless user, the specified mappings are relative to the rootless user namespace in the container, rather than being relative to the host as it is when run rootful.</p>"
           }
         ]
       }
