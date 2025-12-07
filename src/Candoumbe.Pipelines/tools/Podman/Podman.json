@@ -698,6 +698,13 @@
             "type": "uint",
             "format": "--timestamp={value}",
             "help": "<p>Set the create timestamp to seconds since epoch to allow for deterministic builds (defaults to current time). By default, the created timestamp is changed and written into the image manifest with every commit, causing the image’s sha256 hash to be different even if the sources are exactly the same otherwise. When --timestamp is set, the created timestamp is always set to the time specified and therefore not changed, allowing the image’s sha256 hash to remain the same. All files committed to the layers of the image is created with the timestamp.</p><p>If the only instruction in a Containerfile is FROM, this flag has no effect.</p>"
+          },
+          {
+            "name": "TlsVerify",
+            "type": "bool",
+            "format": "--tls-verify={value}",
+            "default": "true",
+            "help": "Require HTTPS and verify certificates when contacting registries (default: <see langword=\"true\"). If explicitly set to <see langword=\"true\"/>, TLS verification is used. If set to <see langword=\"false\"/>, TLS verification is not used. If not specified, TLS verification is used unless the target registry is listed as an insecure registry in <see href=\"https://github.com/containers/image/blob/main/docs/containers-registries.conf.5.md\">containers-registries.conf(5)</see>"
           }
         ]
       }
