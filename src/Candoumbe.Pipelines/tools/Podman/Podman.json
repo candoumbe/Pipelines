@@ -476,6 +476,12 @@
             "format": "--no-hostname",
             "default": "true",
             "help": "<p>Do not create the <i>/etc/hostname</i> file in the container.</p><p>By default, Podman manages the <i>/etc/hostname</i> file, adding the container’s own hostname. When the <b>--no-hostname</b> option is set, the image’s <i>/etc/hostname</i> will be preserved unmodified if it exists.</p>"
+          },
+          {
+            "name": "NoHosts",
+            "type": "bool",
+            "format": "--no-hosts",
+            "help": "<p>Do not modify the <i>/etc/hosts</i> file in the container.</p><p>Podman assumes control over the container’s <c>/etc/hosts</c> file by default and adds entries for the container’s name (see <b>--name</b> option) and hostname (see <b>--hostname</b> option), the internal <c>host.containers.internal</c> and <c>host.docker.internal</c> hosts, as well as any hostname added using the <b>--add-host</b> option. Refer to the <b>--add-host</b> option for details. Passing <b>--no-hosts</b> disables this, so that the image’s <c>/etc/hosts</c> file is kept unmodified. The same can be achieved globally by setting <c>no_hosts=true</c> in <c>containers.conf</c>.</p><p>This options conflicts with <b>--add-host</b>.</p>"
           }
         ]
       }
