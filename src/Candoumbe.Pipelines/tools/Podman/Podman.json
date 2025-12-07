@@ -668,6 +668,12 @@
             "type": "bool",
             "format": "--squash-all",
             "help": "Squash all of the new image’s layers (including those inherited from a base image) into a single new layer."
+          },
+          {
+            "name": "Ssh",
+            "type": "string",
+            "format": "--ssh={value}",
+            "help": "<p>SSH agent socket or keys to expose to the build. The socket path can be left empty to use the value of <c>default=$SSH_AUTH_SOCK</c>.</p><p>To later use the ssh agent, use the <c>--mount</c> option in a <c>RUN</c> instruction within a Containerfile:<code>RUN --mount=type=ssh,id=id mycmd</code></p>"
           }
         ]
       }
