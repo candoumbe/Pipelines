@@ -488,6 +488,12 @@
             "type": "bool",
             "format": "--omit-history",
             "help": "<p>Omit build history information in the built image. (default <see langword=\"false\">).</p><p>This option is useful for the cases where end users explicitly want to set <c>--omit-history</c> to omit the optional <c>History</c> from built images or when working with images built using build tools that do not include <c>History</c> information in their images.</p>"
+          },
+          {
+            "name": "Os",
+            "type": "string",
+            "format": "--os={value}",
+            "help": "<p>Set the OS of the image to be built, and that of the base image to be pulled, if the build uses one, instead of using the current operating system of the build host. Unless overridden, subsequent lookups of the same image in the local storage matches this OS, regardless of the host.</p>"
           }
         ]
       }
