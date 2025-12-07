@@ -782,6 +782,12 @@
       }
     },
     {
+      "help": "<p>Creates an image based on a changed container. The author of the image can be set using the <b>--author</b> OPTION. Various image instructions can be configured with the <b>--change</b> OPTION and a commit message can be set using the <b>--message</b> OPTION. The container and its processes aren’t paused while the image is committed. If this is not desired, the <b>--pause</b> OPTION can be set to <see langword=\"true\"/>. When the commit is complete, Podman prints out the ID of the new image.</p><p>If <b>image</b> does not begin with a registry name component, <c>localhost</c> is added to the name. If <c>image</c> is not provided, the values for the <c>REPOSITORY</c> and <c>TAG</c> values of the created image is set to <c>&lt;none&gt;</c>.</p>",
+      "postfix": "Commit",
+      "definiteArgument": "commit",
+      "settingsClass": {}
+    },
+    {
       "postfix": "Ps",
       "definiteArgument": "ps",
       "settingsClass": {
