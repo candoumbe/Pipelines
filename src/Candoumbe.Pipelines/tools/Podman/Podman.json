@@ -1547,7 +1547,7 @@
       }
     },
     {
-      "help": "<p>Displays changes on a container or image’s filesystem. The container or image is compared to its parent layer or the second argument when given.</p><p>The output is prefixed with the following symbols:</p><list type='table'><item><term>A</term><description>A file or a directory was added</description></item><item>D<term></term><description>A file or a directory was deleted</description></item><item><term>C</term><description>A file or a directory was changed</description></item></list>",
+      "help": "<p>Displays changes on a container or image’s filesystem. The container or image is compared to its parent layer or the second argument when given.</p><p>The output is prefixed with the following symbols:</p><list type='table'><listheader><term>Symbol</term><description>Description</description></listheader><item><term>A</term><description>A file or a directory was added</description></item><item>D<term>D</term><description>A file or a directory was deleted</description></item><item><term>C</term><description>A file or a directory was changed</description></item></list>",
       "postfix": "Diff",
       "definiteArgument": "diff",
       "settingsClass": {}
