@@ -96,7 +96,7 @@
             "name": "AllPlatforms",
             "type": "bool",
             "format": "--all-platforms",
-            "help": "Instead of building for a set of platforms specified using the <strong>--platform</strong> option, inspect the build’s base images, and build for all of the platforms for which they are all available. Stages that use scratch as a starting point can not be inspected, so at least one non-scratch stage must be present for detection to work usefully."
+            "help": "Instead of building for a set of platforms specified using the <b>--platform</b> option, inspect the build’s base images, and build for all of the platforms for which they are all available. Stages that use scratch as a starting point can not be inspected, so at least one non-scratch stage must be present for detection to work usefully."
           },
           {
             "name": "Annotation",
@@ -114,7 +114,7 @@
             "name": "AuthFile",
             "type": "Nuke.Common.IO.AbsolutePath",
             "format": "--authfile={value}",
-            "help": "<para>Path of the authentication file. Default is ${XDG_RUNTIME_DIR}/containers/auth.json on Linux, and <c>$HOME/.config/containers/auth.json</c> on Windows/macOS. The file is created by <see href='https://docs.podman.io/en/latest/markdown/podman-login.1.html'>podman login</see>. If the authorization state is not found there, <c>$HOME/.docker/config.json</c> is checked, which is set using <strong>docker login</strong>.</para>"
+            "help": "<para>Path of the authentication file. Default is ${XDG_RUNTIME_DIR}/containers/auth.json on Linux, and <c>$HOME/.config/containers/auth.json</c> on Windows/macOS. The file is created by <see href='https://docs.podman.io/en/latest/markdown/podman-login.1.html'>podman login</see>. If the authorization state is not found there, <c>$HOME/.docker/config.json</c> is checked, which is set using <b>docker login</b>.</para>"
           },
           {
             "name": "BuildArg",
@@ -163,13 +163,13 @@
             "name": "CapDrop",
             "type": "IEnumerable<string>",
             "format": "--cap-drop={value}",
-            "help": "<para>When executing <c>RUN</c> instructions, run the command specified in the instruction with the specified capability removed from its capability set. The <c>CAP_CHOWN</c>, <c>CAP_DAC_OVERRIDE</c>, <c>CAP_FOWNER</c>, <c>CAP_FSETID</c>, <c>CAP_KILL</c>, <c>CAP_NET_BIND_SERVICE</c>, <c>CAP_SETFCAP</c>, <c>CAP_SETGID</c>, <c>CAP_SETPCAP</c>, and <c>CAP_SETUID</c> capabilities are granted by default; this option can be used to remove them.</para><para>If a capability is specified to both the <strong>--cap-add</strong> and <strong>--cap-drop</strong> options, it is dropped, regardless of the order in which the options were given.</para>"
+            "help": "<para>When executing <c>RUN</c> instructions, run the command specified in the instruction with the specified capability removed from its capability set. The <c>CAP_CHOWN</c>, <c>CAP_DAC_OVERRIDE</c>, <c>CAP_FOWNER</c>, <c>CAP_FSETID</c>, <c>CAP_KILL</c>, <c>CAP_NET_BIND_SERVICE</c>, <c>CAP_SETFCAP</c>, <c>CAP_SETGID</c>, <c>CAP_SETPCAP</c>, and <c>CAP_SETUID</c> capabilities are granted by default; this option can be used to remove them.</para><para>If a capability is specified to both the <b>--cap-add</b> and <b>--cap-drop</b> options, it is dropped, regardless of the order in which the options were given.</para>"
           },
           {
             "name": "CertDir",
             "type": "Nuke.Common.IO.AbsolutePath",
             "format": "--cert-dir={value}",
-            "help": "<para>Use certificates at <i>path</i> (*.crt, *.cert, *.key) to connect to the registry. (Default: /etc/containers/certs.d) For details, see <strong><see href='https://github.com/containers/image/blob/main/docs/containers-certs.d.5.md'>containers-certs.d(5)</see></strong>. (This option is not available with the remote Podman client, including Mac and Windows (excluding WSL2) machines).</para>"
+            "help": "<para>Use certificates at <i>path</i> (*.crt, *.cert, *.key) to connect to the registry. (Default: /etc/containers/certs.d) For details, see <b><see href='https://github.com/containers/image/blob/main/docs/containers-certs.d.5.md'>containers-certs.d(5)</see></b>. (This option is not available with the remote Podman client, including Mac and Windows (excluding WSL2) machines).</para>"
           },
           {
             "name": "CgroupParent",
@@ -212,7 +212,7 @@
             "name": "CpuQuota",
             "type": "int",
             "format": "--cpu-quota={value}",
-            "help": "<para>Limit the CPU Completely Fair Scheduler (CFS) quota.</para><para>Limit the container’s CPU usage. By default, containers run with the full CPU resource. The limit is a number in microseconds. If a number is provided, the container is allowed to use that much CPU time until the CPU period ends (controllable via <strong>--cpu-period</strong>).</para>"
+            "help": "<para>Limit the CPU Completely Fair Scheduler (CFS) quota.</para><para>Limit the container’s CPU usage. By default, containers run with the full CPU resource. The limit is a number in microseconds. If a number is provided, the container is allowed to use that much CPU time until the CPU period ends (controllable via <b>--cpu-period</b>).</para>"
           },
           {
             "name": "CpuShares",
@@ -232,7 +232,7 @@
             "type": "IEnumerable<string>",
             "format": "--cpuset-mems={value}",
             "separator": ",",
-            "help": "<para>Memory nodes (MEMs) in which to allow execution (0-3, 0,1). Only effective on NUMA systems.</para><para>If there are four memory nodes on the system (0-3), use <strong>--cpuset-mems=0,1</strong> then processes in the container only uses memory from the first two memory nodes.</para><para>On some systems, changing the resource limits may not be allowed for non-root users. For more details, <see href='https://github.com/containers/podman/blob/main/troubleshooting.md#26-running-containers-with-resource-limits-fails-with-a-permissions-error'/>.</para><para>This option is not supported on cgroups V1 rootless systems.</para>"
+            "help": "<para>Memory nodes (MEMs) in which to allow execution (0-3, 0,1). Only effective on NUMA systems.</para><para>If there are four memory nodes on the system (0-3), use <b>--cpuset-mems=0,1</b> then processes in the container only uses memory from the first two memory nodes.</para><para>On some systems, changing the resource limits may not be allowed for non-root users. For more details, <see href='https://github.com/containers/podman/blob/main/troubleshooting.md#26-running-containers-with-resource-limits-fails-with-a-permissions-error'/>.</para><para>This option is not supported on cgroups V1 rootless systems.</para>"
           },
           {
             "name": "CreatedAnnotation",
@@ -266,13 +266,13 @@
             "name": "Device",
             "type": "string",
             "format": "--device={value}",
-            "help": "<para>Add a host device to the container. Optional permissions parameter can be used to specify device permissions by combining <strong>r</strong> for read, <strong>w</strong> for write, and <strong>m</strong> for <strong>mknod</strong>(2).</para><para><example>--device=/dev/sdc:/dev/xvdc:rwm</example></para><para>Note: if <i>host-device</i> is a symbolic link then it is resolved first. The container only stores the major and minor numbers of the host device.</para><para>Podman may load kernel modules required for using the specified device. The devices that Podman loads modules for when necessary are: /dev/fuse.</para><para>In rootless mode, the new device is bind mounted in the container from the host rather than Podman creating it within the container space. Because the bind mount retains its SELinux label on SELinux systems, the container can get permission denied when accessing the mounted device. Modify SELinux settings to allow containers to use all device labels via the following command:</para><para>$ sudo setsebool -P container_use_devices=true</para><para>Note: if the user only has access rights via a group, accessing the device from inside a rootless container fails. The <see href='https://github.com/containers/crun/tree/main/crun.1.md'>crun(1)</see> runtime offers a workaround for this by adding the option <strong>--annotation run.oci.keep_original_groups=1</strong>.</para>"
+            "help": "<para>Add a host device to the container. Optional permissions parameter can be used to specify device permissions by combining <b>r</b> for read, <b>w</b> for write, and <b>m</b> for <b>mknod</b>(2).</para><para><example>--device=/dev/sdc:/dev/xvdc:rwm</example></para><para>Note: if <i>host-device</i> is a symbolic link then it is resolved first. The container only stores the major and minor numbers of the host device.</para><para>Podman may load kernel modules required for using the specified device. The devices that Podman loads modules for when necessary are: /dev/fuse.</para><para>In rootless mode, the new device is bind mounted in the container from the host rather than Podman creating it within the container space. Because the bind mount retains its SELinux label on SELinux systems, the container can get permission denied when accessing the mounted device. Modify SELinux settings to allow containers to use all device labels via the following command:</para><para>$ sudo setsebool -P container_use_devices=true</para><para>Note: if the user only has access rights via a group, accessing the device from inside a rootless container fails. The <see href='https://github.com/containers/crun/tree/main/crun.1.md'>crun(1)</see> runtime offers a workaround for this by adding the option <b>--annotation run.oci.keep_original_groups=1</b>.</para>"
           },
           {
             "name": "DisableCompression",
             "type": "bool",
             "format": "--disable-compression",
-            "help": "<para>Don’t compress filesystem layers when building the image unless it is required by the location where the image is being written. This is the default setting, because image layers are compressed automatically when they are pushed to registries, and images being written to local storage only need to be decompressed again to be stored. Compression can be forced in all cases by specifying <strong>--disable-compression=false</strong>.</para>"
+            "help": "<para>Don’t compress filesystem layers when building the image unless it is required by the location where the image is being written. This is the default setting, because image layers are compressed automatically when they are pushed to registries, and images being written to local storage only need to be decompressed again to be stored. Compression can be forced in all cases by specifying <b>--disable-compression=false</b>.</para>"
           },
           {
             "name": "DisableContentTrust",
@@ -285,7 +285,7 @@
             "type": "System.Net.IPAddress",
             "format": "--dns={value}",
             "separator": ",",
-            "help": "<para>Set custom DNS servers.</para><para>This option can be used to override the DNS configuration passed to the container. Typically this is necessary when the host DNS configuration is invalid for the container (e.g., <strong>127.0.0.1</strong>). When this is the case the <c>--dns</c> flag is necessary for every run.</para><para>The special value none can be specified to disable creation of /etc/resolv.conf in the container by Podman. The /etc/resolv.conf file in the image is then used without changes.</para><para>The special value none can be specified to disable creation of /etc/resolv.conf in the container by Podman. The <i>/etc/resolv.conf</i> file in the image is then used without changes.</para><para>This option cannot be combined with <c>--network</c> that is set to <c>none</c>.</para><para>Note: this option takes effect only during <i>RUN</i> instructions in the build. It does not affect <i>/etc/resolv.conf</i> in the final image.</para>"
+            "help": "<para>Set custom DNS servers.</para><para>This option can be used to override the DNS configuration passed to the container. Typically this is necessary when the host DNS configuration is invalid for the container (e.g., <b>127.0.0.1</b>). When this is the case the <c>--dns</c> flag is necessary for every run.</para><para>The special value none can be specified to disable creation of /etc/resolv.conf in the container by Podman. The /etc/resolv.conf file in the image is then used without changes.</para><para>The special value none can be specified to disable creation of /etc/resolv.conf in the container by Podman. The <i>/etc/resolv.conf</i> file in the image is then used without changes.</para><para>This option cannot be combined with <c>--network</c> that is set to <c>none</c>.</para><para>Note: this option takes effect only during <i>RUN</i> instructions in the build. It does not affect <i>/etc/resolv.conf</i> in the final image.</para>"
           },
           {
             "name": "DnsOption",
@@ -311,7 +311,7 @@
             "name": "File",
             "type": "string",
             "format": "--file={value}",
-            "help": "<para>Specifies a Containerfile which contains instructions for building the image, either a local file or an <strong>http</strong> or <strong>https</strong> URL. If more than one Containerfile is specified, <strong>FROM</strong> instructions are only be accepted from the last specified file.</para><para>If a build context is not specified, and at least one Containerfile is a local file, the directory in which it resides is used as the build context.</para><para>Specifying the option <c>-f -</c> causes the Containerfile contents to be read from stdin.</para>"
+            "help": "<para>Specifies a Containerfile which contains instructions for building the image, either a local file or an <b>http</b> or <b>https</b> URL. If more than one Containerfile is specified, <b>FROM</b> instructions are only be accepted from the last specified file.</para><para>If a build context is not specified, and at least one Containerfile is a local file, the directory in which it resides is used as the build context.</para><para>Specifying the option <c>-f -</c> causes the Containerfile contents to be read from stdin.</para>"
           },
           {
             "name": "ForceRm",
@@ -354,7 +354,7 @@
             "name": "HttpProxy",
             "type": "bool",
             "format": "--http-proxy={value}",
-            "help": "<para>By default proxy environment variables are passed into the container if set for the Podman process. This can be disabled by setting the value to <see langword='false'/>. The environment variables passed in include <strong>http_proxy</strong>, <strong>https_proxy</strong>, <strong>ftp_proxy</strong>, <strong>no_proxy</strong>, and also the upper case versions of those. This option is only needed when the host system must use a proxy but the container does not use any proxy. Proxy environment variables specified for the container in any other way overrides the values that have been passed through from the host. (Other ways to specify the proxy for the container include passing the values with the <strong>--env</strong> flag, or hard coding the proxy environment at container build time.) When used with the remote client it uses the proxy environment variables that are set on the server process.</para><para>Defaults to <see langword='true'/>.</para>"
+            "help": "<para>By default proxy environment variables are passed into the container if set for the Podman process. This can be disabled by setting the value to <see langword='false'/>. The environment variables passed in include <b>http_proxy</b>, <b>https_proxy</b>, <b>ftp_proxy</b>, <b>no_proxy</b>, and also the upper case versions of those. This option is only needed when the host system must use a proxy but the container does not use any proxy. Proxy environment variables specified for the container in any other way overrides the values that have been passed through from the host. (Other ways to specify the proxy for the container include passing the values with the <b>--env</b> flag, or hard coding the proxy environment at container build time.) When used with the remote client it uses the proxy environment variables that are set on the server process.</para><para>Defaults to <see langword='true'/>.</para>"
           },
           {
             "name": "IdentityLabel",
@@ -412,7 +412,7 @@
             "type": "IEnumerable<string>",
             "format": "--label={value}",
             "separator": ",",
-            "help": "<para>Add an image label (e.g. label=value) to the image metadata. Can be used multiple times.</para><para>Users can set a special LABEL <strong>io.containers.capabilities</strong>=<strong>CAP1</strong>,<strong>CAP2</strong>,<strong>CAP3</strong> in a Containerfile that specifies the list of Linux capabilities required for the container to run properly. This label specified in a container image tells Podman to run the container with just these capabilities. Podman launches the container with just the specified capabilities, as long as this list of capabilities is a subset of the default list.</para><para>If the specified capabilities are not in the default set, Podman prints an error message and runs the container with the default capabilities.</para>"
+            "help": "<para>Add an image label (e.g. label=value) to the image metadata. Can be used multiple times.</para><para>Users can set a special LABEL <b>io.containers.capabilities</b>=<b>CAP1</b>,<b>CAP2</b>,<b>CAP3</b> in a Containerfile that specifies the list of Linux capabilities required for the container to run properly. This label specified in a container image tells Podman to run the container with just these capabilities. Podman launches the container with just the specified capabilities, as long as this list of capabilities is a subset of the default list.</para><para>If the specified capabilities are not in the default set, Podman prints an error message and runs the container with the default capabilities.</para>"
           },
           {
             "name": "LayerLabel",
@@ -449,13 +449,13 @@
             "name": "Memory",
             "type": "string",
             "format": "--memory={value}",
-            "help": "<para>Memory limit. A <i>unit</i> can be <strong>b</strong> (bytes), <strong>k</strong> (kibibytes), <strong>m</strong> (mebibytes), or <strong>g</strong> (gibibytes).</para><para>Allows the memory available to a container to be constrained. If the host supports swap memory, then the <strong>-m</strong> memory setting can be larger than physical RAM. If a limit of 0 is specified (not using <strong>-m</strong>), the container’s memory is not limited. The actual limit may be rounded up to a multiple of the operating system’s page size (the value is very large, that’s millions of trillions).</para><para>This option is not supported on cgroups V1 rootless systems.</para>"
+            "help": "<para>Memory limit. A <i>unit</i> can be <b>b</b> (bytes), <b>k</b> (kibibytes), <b>m</b> (mebibytes), or <b>g</b> (gibibytes).</para><para>Allows the memory available to a container to be constrained. If the host supports swap memory, then the <b>-m</b> memory setting can be larger than physical RAM. If a limit of 0 is specified (not using <b>-m</b>), the container’s memory is not limited. The actual limit may be rounded up to a multiple of the operating system’s page size (the value is very large, that’s millions of trillions).</para><para>This option is not supported on cgroups V1 rootless systems.</para>"
           },
           {
             "name": "MemorySwap",
             "type": "string",
             "format": "--memory-swap={value}",
-            "help": "<para>A limit value equal to memory plus swap. A <i>unit</i> can be <strong>b</strong> (bytes), <strong>k</strong> (kibibytes), <strong>m</strong> (mebibytes), or <strong>g</strong> (gibibytes).</para><para>Must be used with the <strong>-m</strong> (<strong>--memory</strong>) flag. The argument value must be larger than that of <strong>-m</strong> (<strong>--memory</strong>) By default, it is set to double the value of <strong>--memory</strong>.</para><para>Set number to <c>-1</c> to enable unlimited swap.</para><para>This option is not supported on cgroups V1 rootless systems.</para>"
+            "help": "<para>A limit value equal to memory plus swap. A <i>unit</i> can be <b>b</b> (bytes), <b>k</b> (kibibytes), <b>m</b> (mebibytes), or <b>g</b> (gibibytes).</para><para>Must be used with the <b>-m</b> (<b>--memory</b>) flag. The argument value must be larger than that of <b>-m</b> (<b>--memory</b>) By default, it is set to double the value of <b>--memory</b>.</para><para>Set number to <c>-1</c> to enable unlimited swap.</para><para>This option is not supported on cgroups V1 rootless systems.</para>"
           },
           {
             "name": "Network",
