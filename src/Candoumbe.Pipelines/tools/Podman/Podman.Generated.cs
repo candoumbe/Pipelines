@@ -60,7 +60,7 @@ public partial class PodmanTasks : ToolTasks
     /// <inheritdoc cref="PodmanTasks.PodmanCp(Candoumbe.Pipelines.Tools.Podman.PodmanCpSettings)"/>
     public static IEnumerable<(PodmanCpSettings Settings, IReadOnlyCollection<Output> Output)> PodmanCp(CombinatorialConfigure<PodmanCpSettings> configurator, int degreeOfParallelism = 1, bool completeOnFailure = false) => configurator.Invoke(PodmanCp, degreeOfParallelism, completeOnFailure);
     /// <summary><p>Creates a writable container layer over the specified image and prepares it for running the specified command. The container ID is then printed to STDOUT. This is similar to <b>podman run -d</b> except the container is never started. Use the <b>podman start</b> <i>container</i> command to start the container at any point.</p><p>The initial status of the container created with <b>podman create</b> is ‘created’.</p><p>Default settings for flags are defined in containers.conf. Most settings for remote connections use the server’s <c>containers.conf</c>, except when documented in man pages.</p><p>For more details, visit the <a href="https://docs.podman.io/en/latest/Commands.html">official website</a>.</p></summary>
-    /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p></remarks>
+    /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p><ul><li><c>--add-host</c> via <see cref="PodmanCreateSettings.AddHost"/></li><li><c>--annotation</c> via <see cref="PodmanCreateSettings.Annotation"/></li><li><c>--arch</c> via <see cref="PodmanCreateSettings.Arch"/></li><li><c>--attach</c> via <see cref="PodmanCreateSettings.Attach"/></li><li><c>--authfile</c> via <see cref="PodmanCreateSettings.AuthFile"/></li><li><c>--blkio-weight</c> via <see cref="PodmanCreateSettings.BlkioWeight"/></li><li><c>--blkio-weight-device</c> via <see cref="PodmanCreateSettings.BlkioWeightDevice"/></li><li><c>--cap-add</c> via <see cref="PodmanCreateSettings.CapAdd"/></li><li><c>--cap-drop</c> via <see cref="PodmanCreateSettings.CapDrop"/></li><li><c>--cgroup-conf</c> via <see cref="PodmanCreateSettings.CgroupConf"/></li><li><c>--cgroup-parent</c> via <see cref="PodmanCreateSettings.CgroupParent"/></li><li><c>--cgroupns</c> via <see cref="PodmanCreateSettings.CgroupNs"/></li><li><c>--cgroups</c> via <see cref="PodmanCreateSettings.Cgroups"/></li><li><c>--chrootdirs</c> via <see cref="PodmanCreateSettings.ChrootDirs"/></li><li><c>--cidfile</c> via <see cref="PodmanCreateSettings.CidFile"/></li><li><c>--conmon-pidfile</c> via <see cref="PodmanCreateSettings.ConmonPidFile"/></li><li><c>--cpu-period</c> via <see cref="PodmanCreateSettings.CpuPeriod"/></li><li><c>--cpu-quota</c> via <see cref="PodmanCreateSettings.CpuQuota"/></li><li><c>--cpu-rt-period</c> via <see cref="PodmanCreateSettings.CpuRtPeriod"/></li><li><c>--cpu-rt-runtime</c> via <see cref="PodmanCreateSettings.CpuRtRuntime"/></li><li><c>--cpuset-cpus</c> via <see cref="PodmanCreateSettings.CpusetCpus"/></li><li><c>--cpuset-mems</c> via <see cref="PodmanCreateSettings.CpusetMems"/></li><li><c>--decryption-key</c> via <see cref="PodmanCreateSettings.DecryptionKey"/></li><li><c>--device</c> via <see cref="PodmanCreateSettings.Device"/></li><li><c>--device-cgroup-rule</c> via <see cref="PodmanCreateSettings.DeviceCgroupRule"/></li><li><c>--device-read-bps</c> via <see cref="PodmanCreateSettings.DeviceReadBps"/></li><li><c>--device-read-iops</c> via <see cref="PodmanCreateSettings.DeviceReadIops"/></li><li><c>--device-write-bps</c> via <see cref="PodmanCreateSettings.DeviceWriteBps"/></li><li><c>--device-write-iops</c> via <see cref="PodmanCreateSettings.DeviceWriteIops"/></li><li><c>--disable-content-trust</c> via <see cref="PodmanCreateSettings.DisableContentTrust"/></li><li><c>--dns</c> via <see cref="PodmanCreateSettings.Dns"/></li><li><c>--dns-option</c> via <see cref="PodmanCreateSettings.DnsOption"/></li><li><c>--dns-search</c> via <see cref="PodmanCreateSettings.DnsSearch"/></li><li><c>--entrypoint</c> via <see cref="PodmanCreateSettings.EntryPoint"/></li><li><c>--env</c> via <see cref="PodmanCreateSettings.Env"/></li><li><c>--env-file</c> via <see cref="PodmanCreateSettings.EnvFile"/></li><li><c>--env-host</c> via <see cref="PodmanCreateSettings.EnvHost"/></li><li><c>--env-merge</c> via <see cref="PodmanCreateSettings.EnvMerge"/></li><li><c>--expose</c> via <see cref="PodmanCreateSettings.Expose"/></li><li><c>--gidmap</c> via <see cref="PodmanCreateSettings.GidMap"/></li><li><c>--gpus</c> via <see cref="PodmanCreateSettings.Gpus"/></li><li><c>--group-add</c> via <see cref="PodmanCreateSettings.GroupAdd"/></li><li><c>--group-entry</c> via <see cref="PodmanCreateSettings.GroupEntry"/></li><li><c>--health-cmd</c> via <see cref="PodmanCreateSettings.HealthCmd"/></li><li><c>--health-interval</c> via <see cref="PodmanCreateSettings.HealthInterval"/></li><li><c>--health-log-destination</c> via <see cref="PodmanCreateSettings.HealthLogDestination"/></li><li><c>--health-max-log-count</c> via <see cref="PodmanCreateSettings.HealthMaxLogCount"/></li><li><c>--health-max-log-size</c> via <see cref="PodmanCreateSettings.HealthMaxLogSize"/></li><li><c>--health-on-failure</c> via <see cref="PodmanCreateSettings.HealthOnFailure"/></li><li><c>--health-retries</c> via <see cref="PodmanCreateSettings.HealthRetries"/></li><li><c>--health-start-period</c> via <see cref="PodmanCreateSettings.HealthStartPeriod"/></li><li><c>--health-startup-cmd</c> via <see cref="PodmanCreateSettings.HealthStartupCmd"/></li><li><c>--health-startup-interval</c> via <see cref="PodmanCreateSettings.HealthStartupInterval"/></li><li><c>--health-startup-retries</c> via <see cref="PodmanCreateSettings.HealthStartupRetries"/></li><li><c>--health-startup-success</c> via <see cref="PodmanCreateSettings.HealthStartupSuccess"/></li><li><c>--health-startup-timeout</c> via <see cref="PodmanCreateSettings.HealthStartupTimeout"/></li><li><c>--health-timeout</c> via <see cref="PodmanCreateSettings.HealthTimeout"/></li><li><c>--hostname</c> via <see cref="PodmanCreateSettings.Hostname"/></li><li><c>--hostuser</c> via <see cref="PodmanCreateSettings.HostUser"/></li><li><c>--http-proxy</c> via <see cref="PodmanCreateSettings.HttpProxy"/></li><li><c>--image-volume</c> via <see cref="PodmanCreateSettings.ImageVolume"/></li><li><c>--init</c> via <see cref="PodmanCreateSettings.Init"/></li><li><c>--init-ctr</c> via <see cref="PodmanCreateSettings.InitCtr"/></li><li><c>--init-path</c> via <see cref="PodmanCreateSettings.InitPath"/></li><li><c>--interactive</c> via <see cref="PodmanCreateSettings.Interactive"/></li><li><c>--ip</c> via <see cref="PodmanCreateSettings.Ip"/></li><li><c>--ip6</c> via <see cref="PodmanCreateSettings.Ip6"/></li><li><c>--label</c> via <see cref="PodmanCreateSettings.Label"/></li><li><c>--log-driver</c> via <see cref="PodmanCreateSettings.LogDriver"/></li><li><c>--log-opt</c> via <see cref="PodmanCreateSettings.LogOpt"/></li><li><c>--mac-address</c> via <see cref="PodmanCreateSettings.MacAddress"/></li><li><c>--memory</c> via <see cref="PodmanCreateSettings.Memory"/></li><li><c>--memory-swap</c> via <see cref="PodmanCreateSettings.MemorySwap"/></li><li><c>--mount</c> via <see cref="PodmanCreateSettings.Mount"/></li><li><c>--name</c> via <see cref="PodmanCreateSettings.Name"/></li><li><c>--network</c> via <see cref="PodmanCreateSettings.Network"/></li><li><c>--network-alias</c> via <see cref="PodmanCreateSettings.NetworkAlias"/></li><li><c>--no-hosts</c> via <see cref="PodmanCreateSettings.NoHosts"/></li><li><c>--oom-kill-disable</c> via <see cref="PodmanCreateSettings.OomKillDisable"/></li><li><c>--oom-score-adj</c> via <see cref="PodmanCreateSettings.OomScoreAdj"/></li><li><c>--pid</c> via <see cref="PodmanCreateSettings.Pid"/></li><li><c>--pids-limit</c> via <see cref="PodmanCreateSettings.PidsLimit"/></li><li><c>--pod</c> via <see cref="PodmanCreateSettings.Pod"/></li><li><c>--pod-id-file</c> via <see cref="PodmanCreateSettings.PodIdFile"/></li><li><c>--preserve-fds</c> via <see cref="PodmanCreateSettings.PreserveFds"/></li><li><c>--privileged</c> via <see cref="PodmanCreateSettings.Privileged"/></li><li><c>--publish</c> via <see cref="PodmanCreateSettings.Publish"/></li><li><c>--publish-all</c> via <see cref="PodmanCreateSettings.PublishAll"/></li><li><c>--read-only</c> via <see cref="PodmanCreateSettings.ReadOnly"/></li><li><c>--read-only-tmpfs</c> via <see cref="PodmanCreateSettings.ReadOnlyTmpfs"/></li><li><c>--replace</c> via <see cref="PodmanCreateSettings.Replace"/></li><li><c>--restart</c> via <see cref="PodmanCreateSettings.Restart"/></li><li><c>--rm</c> via <see cref="PodmanCreateSettings.Rm"/></li><li><c>--security-opt</c> via <see cref="PodmanCreateSettings.SecurityOpt"/></li><li><c>--shm-size</c> via <see cref="PodmanCreateSettings.ShmSize"/></li><li><c>--sig-proxy</c> via <see cref="PodmanCreateSettings.SigProxy"/></li><li><c>--stop-signal</c> via <see cref="PodmanCreateSettings.StopSignal"/></li><li><c>--stop-timeout</c> via <see cref="PodmanCreateSettings.StopTimeout"/></li><li><c>--subgidname</c> via <see cref="PodmanCreateSettings.Subgidname"/></li><li><c>--subuidname</c> via <see cref="PodmanCreateSettings.Subuidname"/></li><li><c>--sysctl</c> via <see cref="PodmanCreateSettings.Sysctl"/></li><li><c>--tmpfs</c> via <see cref="PodmanCreateSettings.Tmpfs"/></li><li><c>--tty</c> via <see cref="PodmanCreateSettings.Tty"/></li><li><c>--ulimit</c> via <see cref="PodmanCreateSettings.Ulimit"/></li><li><c>--user</c> via <see cref="PodmanCreateSettings.User"/></li><li><c>--userns</c> via <see cref="PodmanCreateSettings.Userns"/></li><li><c>--uts</c> via <see cref="PodmanCreateSettings.Uts"/></li><li><c>--volume</c> via <see cref="PodmanCreateSettings.Volume"/></li><li><c>--volumes-from</c> via <see cref="PodmanCreateSettings.VolumesFrom"/></li><li><c>--workdir</c> via <see cref="PodmanCreateSettings.Workdir"/></li></ul></remarks>
     public static IReadOnlyCollection<Output> PodmanCreate(PodmanCreateSettings options = null) => new PodmanTasks().Run<PodmanCreateSettings>(options);
     /// <inheritdoc cref="PodmanTasks.PodmanCreate(Candoumbe.Pipelines.Tools.Podman.PodmanCreateSettings)"/>
     public static IReadOnlyCollection<Output> PodmanCreate(Configure<PodmanCreateSettings> configurator) => new PodmanTasks().Run<PodmanCreateSettings>(configurator.Invoke(new PodmanCreateSettings()));
@@ -390,6 +390,226 @@ public partial class PodmanCpSettings : ToolOptions
 [Command(Type = typeof(PodmanTasks), Command = nameof(PodmanTasks.PodmanCreate), Arguments = "create")]
 public partial class PodmanCreateSettings : ToolOptions
 {
+    /// <summary><para>Add a custom host-to-IP mapping to the container’s <c>/etc/hosts</c> file.<para>The option takes one or multiple semicolon-separated hostnames to be mapped to a single IPv4 or IPv6 address, separated by a colon. It can also be used to overwrite the IP addresses of hostnames Podman adds to <c>/etc/hosts</c> by default (also see the <c>--name</c> and <c>--hostname</c> options). This option can be specified multiple times to add additional mappings to <c>/etc/hosts</c>. It conflicts with the <c>--no-hosts</c> option and conflicts with <c>no_hosts=true</c> in <c>containers.conf</c>.</para><para>Instead of an IP address, the special flag <c>host-gateway</c> can be given. This resolves to an IP address the container can use to connect to the host. The IP address chosen depends on your network setup, thus there’s no guarantee that Podman can determine the <c>host-gateway</c> address automatically, which will then cause Podman to fail with an error message. You can overwrite this IP address using the <c>host_containers_internal_ip</c> option in <c>containers.conf</c>.</para></para></summary>
+    [Argument(Format = "--add-host={value}")] public IReadOnlyList<string> AddHost => Get<IReadOnlyList<string>>(() => AddHost);
+    /// <summary><para>Add an annotation to the container.<para>This option can be set multiple times.</para></para></summary>
+    [Argument(Format = "--annotation={value}")] public IReadOnlyList<string> Annotation => Get<IReadOnlyList<string>>(() => Annotation);
+    /// <summary><para>Override the architecture, defaults to hosts, of the image to be pulled.<para>For example, <c>arm</c>. Unless overridden, subsequent lookups of the same image in the local storage matches this architecture, regardless of the host.</para></para></summary>
+    [Argument(Format = "--arch={value}")] public string Arch => Get<string>(() => Arch);
+    /// <summary><para>Attach to STDIN, STDOUT or STDERR.<para>In foreground mode (the default when <c>-d</c> is not specified), <c>podman run</c> can start the process in the container and attach the console to the process’s standard input, output, and error. It can even pretend to be a TTY (this is what most command-line executables expect) and pass along signals. The <c>-a</c> option can be set for each of <c>stdin</c>, <c>stdout</c>, and <c>stderr</c>.</para></para></summary>
+    [Argument(Format = "--attach={value}")] public IReadOnlyList<string> Attach => Get<IReadOnlyList<string>>(() => Attach);
+    /// <summary><para>Path of the authentication file.<para>Default is <c>${XDG_RUNTIME_DIR}/containers/auth.json</c> on Linux, and <c>$HOME/.config/containers/auth.json</c> on Windows/macOS. The file is created by <c>podman login</c>. If the authorization state is not found there, <c>$HOME/.docker/config.json</c> is checked, which is set using <c>docker login</c>.</para><para>Note: There is also the option to override the default path of the authentication file by setting the <c>REGISTRY_AUTH_FILE</c> environment variable. This can be done with <c>export REGISTRY_AUTH_FILE=path</c>.</para></para></summary>
+    [Argument(Format = "--authfile={value}")] public string AuthFile => Get<string>(() => AuthFile);
+    /// <summary><para>Block IO relative weight.<para>The <c>weight</c> is a value between <c>10</c> and <c>1000</c>.</para><para>This option is not supported on cgroups V1 rootless systems.</para></para></summary>
+    [Argument(Format = "--blkio-weight={value}")] public int? BlkioWeight => Get<int?>(() => BlkioWeight);
+    /// <summary><para>Block IO relative device weight.</para></summary>
+    [Argument(Format = "--blkio-weight-device={value}")] public IReadOnlyList<string> BlkioWeightDevice => Get<IReadOnlyList<string>>(() => BlkioWeightDevice);
+    /// <summary><para>Add Linux capabilities.<para>Granting additional capabilities increases the privileges of the processes running inside the container and potentially allow it to break out of confinement. Capabilities like <c>CAP_SYS_ADMIN</c>, <c>CAP_SYS_PTRACE</c>, <c>CAP_MKNOD</c> and <c>CAP_SYS_MODULE</c> are particularly dangerous when they are not used within a user namespace. Please refer to <c>user_namespaces(7)</c> for a more detailed explanation of the interaction between user namespaces and capabilities.</para><para>Before adding any capability, review its security implications and ensure it is really necessary for the container’s functionality. See <c>capabilities(7)</c> for more information.</para></para></summary>
+    [Argument(Format = "--cap-add={value}")] public IReadOnlyList<string> CapAdd => Get<IReadOnlyList<string>>(() => CapAdd);
+    /// <summary><para>Drop Linux capabilities.</para></summary>
+    [Argument(Format = "--cap-drop={value}")] public IReadOnlyList<string> CapDrop => Get<IReadOnlyList<string>>(() => CapDrop);
+    /// <summary><para>When running on cgroup v2, specify the cgroup file to write to and its value.<para>For example <c>--cgroup-conf=memory.high=1073741824</c> sets the memory.high limit to 1GB.</para></para></summary>
+    [Argument(Format = "--cgroup-conf={value}")] public IReadOnlyList<string> CgroupConf => Get<IReadOnlyList<string>>(() => CgroupConf);
+    /// <summary><para>Path to cgroups under which the cgroup for the container is created.<para>If the path is not absolute, the path is considered to be relative to the cgroups path of the init process. Cgroups are created if they do not already exist.</para></para></summary>
+    [Argument(Format = "--cgroup-parent={value}")] public string CgroupParent => Get<string>(() => CgroupParent);
+    /// <summary><para>Set the cgroup namespace mode for the container.<para>Possible values: <c>host</c> (use the host’s cgroup namespace inside the container), <c>container:id</c> (join the namespace of the specified container), <c>private</c> (create a new cgroup namespace), <c>ns:path</c> (join the namespace at the specified path).</para><para>If the host uses cgroups v1, the default is set to <c>host</c>. On cgroups v2, the default is <c>private</c>.</para></para></summary>
+    [Argument(Format = "--cgroupns={value}")] public string CgroupNs => Get<string>(() => CgroupNs);
+    /// <summary><para>Determines whether the container creates cgroups.<para>Default is <c>enabled</c>.</para><para>The <c>enabled</c> option creates a new cgroup under the cgroup-parent. The <c>disabled</c> option forces the container to not create cgroups, and thus conflicts with cgroup options (<c>--cgroupns</c> and <c>--cgroup-parent</c>). The <c>no-conmon</c> option disables a new cgroup only for the <c>conmon</c> process. The <c>split</c> option splits the current cgroup in two sub-cgroups: one for conmon and one for the container payload. It is not possible to set <c>--cgroup-parent</c> with <c>split</c>.</para></para></summary>
+    [Argument(Format = "--cgroups={value}")] public string Cgroups => Get<string>(() => Cgroups);
+    /// <summary><para>Path to a directory inside the container that is treated as a <c>chroot</c> directory.<para>Any Podman managed file (e.g., <c>/etc/resolv.conf</c>, <c>/etc/hosts</c>, <c>/etc/hostname</c>) that is mounted into the root directory is mounted into that location as well. Multiple directories are separated with a comma.</para></para></summary>
+    [Argument(Format = "--chrootdirs={value}")] public IReadOnlyList<string> ChrootDirs => Get<IReadOnlyList<string>>(() => ChrootDirs);
+    /// <summary><para>Write the container ID to value. The file is removed along with the container, except when used with podman --remote run on detached containers.</para></summary>
+    [Argument(Format = "--cidfile={value}")] public string CidFile => Get<string>(() => CidFile);
+    /// <summary><para>Write the pid of the <c>conmon</c> process to a file.<para>As <c>conmon</c> runs in a separate process than Podman, this is necessary when using systemd to restart Podman containers.</para><para>This option is not available with the remote Podman client, including Mac and Windows (excluding WSL2) machines.</para></para></summary>
+    [Argument(Format = "--conmon-pidfile={value}")] public string ConmonPidFile => Get<string>(() => ConmonPidFile);
+    /// <summary><para>Set the CPU period for the Completely Fair Scheduler (CFS), which is a duration in microseconds.<para>Once the container’s CPU quota is used up, it will not be scheduled to run until the current period ends. Defaults to 100000 microseconds.</para><para>On some systems, changing the resource limits may not be allowed for non-root users.</para><para>This option is not supported on cgroups V1 rootless systems.</para></para></summary>
+    [Argument(Format = "--cpu-period={value}")] public int? CpuPeriod => Get<int?>(() => CpuPeriod);
+    /// <summary><para>Limit the CPU Completely Fair Scheduler (CFS) quota.<para>Limit the container’s CPU usage. By default, containers run with the full CPU resource. The limit is a number in microseconds. If a number is provided, the container is allowed to use that much CPU time until the CPU period ends (controllable via <c>--cpu-period</c>).</para><para>On some systems, changing the resource limits may not be allowed for non-root users.</para><para>This option is not supported on cgroups V1 rootless systems.</para></para></summary>
+    [Argument(Format = "--cpu-quota={value}")] public int? CpuQuota => Get<int?>(() => CpuQuota);
+    /// <summary><para>Limit the CPU real-time period in microseconds.<para>Limit the container’s Real Time CPU usage. This option tells the kernel to restrict the container’s Real Time CPU usage to the period specified.</para><para>This option is only supported on cgroups V1 rootful systems.</para></para></summary>
+    [Argument(Format = "--cpu-rt-period={value}")] public int? CpuRtPeriod => Get<int?>(() => CpuRtPeriod);
+    /// <summary><para>Limit the CPU real-time runtime in microseconds.<para>Limit the containers Real Time CPU usage. This option tells the kernel to limit the amount of time in a given CPU period Real Time tasks may consume. Ex: Period of 1,000,000us and Runtime of 950,000us means that this container can consume 95% of available CPU and leave the remaining 5% to normal priority tasks.</para><para>The sum of all runtimes across containers cannot exceed the amount allotted to the parent cgroup.</para><para>This option is only supported on cgroups V1 rootful systems.</para></para></summary>
+    [Argument(Format = "--cpu-rt-runtime={value}")] public int? CpuRtRuntime => Get<int?>(() => CpuRtRuntime);
+    /// <summary><para>CPUs in which to allow execution.<para>Can be specified as a comma-separated list (e.g. <c>0,1</c>), as a range (e.g. <c>0-3</c>), or any combination thereof (e.g. <c>0-3,7,11-15</c>).</para><para>On some systems, changing the resource limits may not be allowed for non-root users.</para><para>This option is not supported on cgroups V1 rootless systems.</para></para></summary>
+    [Argument(Format = "--cpuset-cpus={value}")] public string CpusetCpus => Get<string>(() => CpusetCpus);
+    /// <summary><para>Memory nodes (MEMs) in which to allow execution (0-3, 0,1).<para>Only effective on NUMA systems.</para><para>If there are four memory nodes on the system (0-3), use <c>--cpuset-mems=0,1</c> then processes in the container only uses memory from the first two memory nodes.</para><para>On some systems, changing the resource limits may not be allowed for non-root users.</para><para>This option is not supported on cgroups V1 rootless systems.</para></para></summary>
+    [Argument(Format = "--cpuset-mems={value}")] public string CpusetMems => Get<string>(() => CpusetMems);
+    /// <summary><para>The <c>[key[:passphrase]]</c> to be used for decryption of images.<para>Key can point to keys and/or certificates. Decryption is tried with all keys. If the key is protected by a passphrase, it is required to be passed in the argument and omitted otherwise.</para></para></summary>
+    [Argument(Format = "--decryption-key={value}")] public IReadOnlyList<string> DecryptionKey => Get<IReadOnlyList<string>>(() => DecryptionKey);
+    /// <summary><para>Add a host device to the container.<para>Optional value parameter can be used to specify device permissions by combining <c>r</c> for read, <c>w</c> for write, and <c>m</c> for <c>mknod(2)</c>.</para><para>Example: <c>--device=/dev/sdc:/dev/xvdc:rwm</c>.</para><para>Note: if <c>host-device</c> is a symbolic link then it is resolved first. The container only stores the major and minor numbers of the host device.</para><para>Podman may load kernel modules required for using the specified device. The devices that Podman loads modules for when necessary are: <c>/dev/fuse</c>.</para><para>In rootless mode, the new device is bind mounted in the container from the host rather than Podman creating it within the container space. Because the bind mount retains its SELinux label on SELinux systems, the container can get permission denied when accessing the mounted device. Modify SELinux settings to allow containers to use all device labels via the following command: <c>sudo setsebool -P container_use_devices=true</c>.</para><para>Note: if the user only has access rights via a group, accessing the device from inside a rootless container fails. Use the <c>--group-add keep-groups</c> flag to pass the user’s supplementary group access into the container.</para></para></summary>
+    [Argument(Format = "--device={value}")] public IReadOnlyList<string> Device => Get<IReadOnlyList<string>>(() => Device);
+    /// <summary><para>Add a rule to the cgroup allowed devices list.<para>The rule is expected to be in the format specified in the Linux kernel documentation: <c>type</c> can be <c>a</c> (all), <c>c</c> (char), or <c>b</c> (block); <c>major</c> and <c>minor</c> can be a number or <c>*</c>; <c>mode</c> is a composition of <c>r</c> (read), <c>w</c> (write), and <c>m</c> (mknod(2)).</para></para></summary>
+    [Argument(Format = "--device-cgroup-rule={value}")] public IReadOnlyList<string> DeviceCgroupRule => Get<IReadOnlyList<string>>(() => DeviceCgroupRule);
+    /// <summary><para>Limit read rate (in bytes per second) from a device.<para>Example: <c>--device-read-bps=/dev/sda:1mb</c>.</para><para>On some systems, changing the resource limits may not be allowed for non-root users.</para><para>This option is not supported on cgroups V1 rootless systems.</para></para></summary>
+    [Argument(Format = "--device-read-bps={value}")] public IReadOnlyList<string> DeviceReadBps => Get<IReadOnlyList<string>>(() => DeviceReadBps);
+    /// <summary><para>Limit read rate (in IO operations per second) from a device.<para>Example: <c>--device-read-iops=/dev/sda:1000</c>.</para><para>On some systems, changing the resource limits may not be allowed for non-root users.</para><para>This option is not supported on cgroups V1 rootless systems.</para></para></summary>
+    [Argument(Format = "--device-read-iops={value}")] public IReadOnlyList<string> DeviceReadIops => Get<IReadOnlyList<string>>(() => DeviceReadIops);
+    /// <summary><para>Limit write rate (in bytes per second) to a device.<para>Example: <c>--device-write-bps=/dev/sda:1mb</c>.</para><para>On some systems, changing the resource limits may not be allowed for non-root users.</para><para>This option is not supported on cgroups V1 rootless systems.</para></para></summary>
+    [Argument(Format = "--device-write-bps={value}")] public IReadOnlyList<string> DeviceWriteBps => Get<IReadOnlyList<string>>(() => DeviceWriteBps);
+    /// <summary><para>Limit write rate (in IO operations per second) to a device.<para>Example: <c>--device-write-iops=/dev/sda:1000</c>.</para><para>On some systems, changing the resource limits may not be allowed for non-root users.</para><para>This option is not supported on cgroups V1 rootless systems.</para></para></summary>
+    [Argument(Format = "--device-write-iops={value}")] public IReadOnlyList<string> DeviceWriteIops => Get<IReadOnlyList<string>>(() => DeviceWriteIops);
+    /// <summary><para>This is a Docker-specific option to disable image verification to a container registry and is not supported by Podman.<para>This option is a NOOP and provided solely for scripting compatibility.</para></para></summary>
+    [Argument(Format = "--disable-content-trust")] public bool? DisableContentTrust => Get<bool?>(() => DisableContentTrust);
+    /// <summary><para>Set custom DNS servers.<para>This option can be used to override the DNS configuration passed to the container. Typically this is necessary when the host DNS configuration is invalid for the container (e.g., <c>127.0.0.1</c>). When this is the case the <c>--dns</c> flag is necessary for every run.</para><para>The special value <c>none</c> can be specified to disable creation of <c>/etc/resolv.conf</c> in the container by Podman. The <c>/etc/resolv.conf</c> file in the image is then used without changes.</para><para>Note that <c>ipaddr</c> may be added directly to the container’s <c>/etc/resolv.conf</c>. This is not guaranteed though. For example, passing a custom network whose <c>dns_enabled</c> is set to <c>true</c> to <c>--network</c> will result in <c>/etc/resolv.conf</c> only referring to the aardvark-dns server. aardvark-dns then forwards to the supplied <c>ipaddr</c> for all non-container name queries.</para><para>This option cannot be combined with <c>--network</c> that is set to <c>none</c> or <c>container:id</c>.</para></para></summary>
+    [Argument(Format = "--dns={value}")] public IReadOnlyList<string> Dns => Get<IReadOnlyList<string>>(() => Dns);
+    /// <summary><para>Set custom DNS options.<para>Invalid if using <c>--dns-option</c> with <c>--network</c> that is set to <c>none</c> or <c>container:id</c>.</para></para></summary>
+    [Argument(Format = "--dns-option={value}")] public IReadOnlyList<string> DnsOption => Get<IReadOnlyList<string>>(() => DnsOption);
+    /// <summary><para>Set custom DNS search domains.<para>Invalid if using <c>--dns-search</c> with <c>--network</c> that is set to <c>none</c> or <c>container:id</c>. Use <c>--dns-search=.</c> to remove the search domain.</para></para></summary>
+    [Argument(Format = "--dns-search={value}")] public IReadOnlyList<string> DnsSearch => Get<IReadOnlyList<string>>(() => DnsSearch);
+    /// <summary><para>Override the default ENTRYPOINT from the image.<para>The ENTRYPOINT of an image is similar to a COMMAND because it specifies what executable to run when the container starts, but it is (purposely) more difficult to override. The ENTRYPOINT gives a container its default nature or behavior. When the ENTRYPOINT is set, the container runs as if it were that binary, complete with default options. More options can be passed in via the COMMAND. But, if a user wants to run something else inside the container, the <c>--entrypoint</c> option allows a new ENTRYPOINT to be specified.</para><para>Specify multi option commands in the form of a JSON string.</para></para></summary>
+    [Argument(Format = "--entrypoint={value}")] public IReadOnlyList<string> EntryPoint => Get<IReadOnlyList<string>>(() => EntryPoint);
+    /// <summary><para>Set environment variables.<para>This option allows arbitrary environment variables that are available for the process to be launched inside of the container. If an environment variable is specified without a value, Podman checks the host environment for a value and set the variable only if it is set on the host. As a special case, if an environment variable ending in <c>*</c> is specified without a value, Podman searches the host environment for variables starting with the prefix and adds those variables to the container.</para></para></summary>
+    [Argument(Format = "--env={value}")] public IReadOnlyList<string> Env => Get<IReadOnlyList<string>>(() => Env);
+    /// <summary><para>Read in a line-delimited file of environment variables.</para></summary>
+    [Argument(Format = "--env-file={value}")] public string EnvFile => Get<string>(() => EnvFile);
+    /// <summary><para>Use host environment inside of the container.<para>See Environment note below for precedence. This option is not available with the remote Podman client, including Mac and Windows (excluding WSL2) machines.</para></para></summary>
+    [Argument(Format = "--env-host")] public bool? EnvHost => Get<bool?>(() => EnvHost);
+    /// <summary><para>Preprocess default environment variables for the containers.<para>For example if image contains environment variable <c>hello=world</c> user can preprocess it using <c>--env-merge hello=${hello}-some</c> so new value is <c>hello=world-some</c>.</para><para>Please note that if the environment variable <c>hello</c> is not present in the image, then it’ll be replaced by an empty string and so using <c>--env-merge hello=${hello}-some</c> would result in the new value of <c>hello=-some</c>, notice the leading <c>-</c> delimiter.</para></para></summary>
+    [Argument(Format = "--env-merge={value}")] public IReadOnlyList<string> EnvMerge => Get<IReadOnlyList<string>>(() => EnvMerge);
+    /// <summary><para>Expose a port or a range of ports (e.g. <c>--expose=3300-3310</c>).<para>The protocol can be <c>tcp</c>, <c>udp</c> or <c>sctp</c> and if not given <c>tcp</c> is assumed. This option matches the EXPOSE instruction for image builds and has no effect on the actual networking rules unless <c>-P/--publish-all</c> is used to forward to all exposed ports from random host ports. To forward specific ports from the host into the container use the <c>-p/--publish</c> option instead.</para></para></summary>
+    [Argument(Format = "--expose={value}")] public IReadOnlyList<string> Expose => Get<IReadOnlyList<string>>(() => Expose);
+    /// <summary><para>Run the container in a new user namespace using the supplied GID mapping.<para>This option conflicts with the <c>--userns</c> and <c>--subgidname</c> options. This option provides a way to map host GIDs to container GIDs in the same way as <c>--uidmap</c> maps host UIDs to container UIDs. For details see <c>--uidmap</c>.</para><para>Note: the <c>--gidmap</c> option cannot be called in conjunction with the <c>--pod</c> option as a gidmap cannot be set on the container level when in a pod.</para></para></summary>
+    [Argument(Format = "--gidmap={value}")] public IReadOnlyList<string> GidMap => Get<IReadOnlyList<string>>(() => GidMap);
+    /// <summary><para>GPU devices to add to the container (‘all’ to pass all GPUs).<para>Currently only Nvidia devices are supported.</para></para></summary>
+    [Argument(Format = "--gpus={value}")] public string Gpus => Get<string>(() => Gpus);
+    /// <summary><para>Assign additional groups to the primary user running within the container process.<para><c>keep-groups</c> is a special flag that tells Podman to keep the supplementary group access.</para><para>Allows container to use the user’s supplementary group access. If file systems or devices are only accessible by the rootless user’s group, this flag tells the OCI runtime to pass the group access into the container. Currently only available with the <c>crun</c> OCI runtime. Note: <c>keep-groups</c> is exclusive, other groups cannot be specified with this flag. This option is not available for remote commands, including Mac and Windows (excluding WSL2) machines.</para></para></summary>
+    [Argument(Format = "--group-add={value}")] public IReadOnlyList<string> GroupAdd => Get<IReadOnlyList<string>>(() => GroupAdd);
+    /// <summary><para>Customize the entry that is written to the <c>/etc/group</c> file within the container when <c>--user</c> is used.<para>The variables <c>$GROUPNAME</c>, <c>$GID</c>, and <c>$USERLIST</c> are automatically replaced with their value at runtime if present.</para></para></summary>
+    [Argument(Format = "--group-entry={value}")] public string GroupEntry => Get<string>(() => GroupEntry);
+    /// <summary><para>Set or alter a healthcheck command for a container.<para>The command is a command to be executed inside the container that determines the container health. The command is required for other healthcheck options to be applied. A value of <c>none</c> disables existing healthchecks.</para><para>Multiple options can be passed in the form of a JSON array; otherwise, the command is interpreted as an argument to <c>/bin/sh -c</c>.</para></para></summary>
+    [Argument(Format = "--health-cmd={value}")] public IReadOnlyList<string> HealthCmd => Get<IReadOnlyList<string>>(() => HealthCmd);
+    /// <summary><para>Set an interval for the healthchecks.<para>An <c>interval</c> of <c>disable</c> results in no automatic timer setup. The default is <c>30s</c>.</para></para></summary>
+    [Argument(Format = "--health-interval={value}")] public string HealthInterval => Get<string>(() => HealthInterval);
+    /// <summary><para>Set the destination of the HealthCheck log.<para>Possible values: <c>local</c> (HealthCheck logs are stored in overlay containers), <c>directory</c> (creates a log file named <c>&lt;container-ID&gt;-healthcheck.log</c> with HealthCheck logs in the specified directory), <c>events_logger</c> (the log will be written with logging mechanism set by events_logger).</para></para></summary>
+    [Argument(Format = "--health-log-destination={value}")] public string HealthLogDestination => Get<string>(() => HealthLogDestination);
+    /// <summary><para>Set maximum number of attempts in the HealthCheck log file.<para>‘0’ value means an infinite number of attempts in the log file. Default: 5 attempts.</para></para></summary>
+    [Argument(Format = "--health-max-log-count={value}")] public int? HealthMaxLogCount => Get<int?>(() => HealthMaxLogCount);
+    /// <summary><para>Set maximum length in characters of stored HealthCheck log.<para>‘0’ value means an infinite log length. Default: 500 characters.</para></para></summary>
+    [Argument(Format = "--health-max-log-size={value}")] public int? HealthMaxLogSize => Get<int?>(() => HealthMaxLogSize);
+    /// <summary><para>Action to take once the container transitions to an unhealthy state.<para>Possible values: <c>none</c> (take no action), <c>kill</c> (kill the container), <c>restart</c> (restart the container; do not combine the <c>restart</c> action with the <c>--restart</c> flag), <c>stop</c> (stop the container).</para></para></summary>
+    [Argument(Format = "--health-on-failure={value}")] public string HealthOnFailure => Get<string>(() => HealthOnFailure);
+    /// <summary><para>The number of retries allowed before a healthcheck is considered to be unhealthy.<para>The default value is <c>3</c>.</para></para></summary>
+    [Argument(Format = "--health-retries={value}")] public int? HealthRetries => Get<int?>(() => HealthRetries);
+    /// <summary><para>The initialization time needed for a container to bootstrap.<para>The value can be expressed in time format like <c>2m3s</c>. The default value is <c>0s</c>.</para><para>Note: The health check command is executed as soon as a container is started, if the health check is successful the container’s health state will be updated to <c>healthy</c>. However, if the health check fails, the health state will stay as <c>starting</c> until either the health check is successful or until the <c>--health-start-period</c> time is over. If the health check command fails after the <c>--health-start-period</c> time is over, the health state will be updated to <c>unhealthy</c>.</para></para></summary>
+    [Argument(Format = "--health-start-period={value}")] public string HealthStartPeriod => Get<string>(() => HealthStartPeriod);
+    /// <summary><para>Set a startup healthcheck command for a container.<para>This command is executed inside the container and is used to gate the regular healthcheck. When the startup command succeeds, the regular healthcheck begins and the startup healthcheck ceases. Optionally, if the command fails for a set number of attempts, the container is restarted. A startup healthcheck can be used to ensure that containers with an extended startup period are not marked as unhealthy until they are fully started. Startup healthchecks can only be used when a regular healthcheck (from the container’s image or the <c>--health-cmd</c> option) is also set.</para></para></summary>
+    [Argument(Format = "--health-startup-cmd={value}")] public IReadOnlyList<string> HealthStartupCmd => Get<IReadOnlyList<string>>(() => HealthStartupCmd);
+    /// <summary><para>Set an interval for the startup healthcheck.<para>An <c>interval</c> of <c>disable</c> results in no automatic timer setup. The default is <c>30s</c>.</para></para></summary>
+    [Argument(Format = "--health-startup-interval={value}")] public string HealthStartupInterval => Get<string>(() => HealthStartupInterval);
+    /// <summary><para>The number of attempts allowed before the startup healthcheck restarts the container.<para>If set to <c>0</c>, the container is never restarted. The default is <c>0</c>.</para></para></summary>
+    [Argument(Format = "--health-startup-retries={value}")] public int? HealthStartupRetries => Get<int?>(() => HealthStartupRetries);
+    /// <summary><para>The number of successful runs required before the startup healthcheck succeeds and the regular healthcheck begins.<para>A value of <c>0</c> means that any success begins the regular healthcheck. The default is <c>0</c>.</para></para></summary>
+    [Argument(Format = "--health-startup-success={value}")] public int? HealthStartupSuccess => Get<int?>(() => HealthStartupSuccess);
+    /// <summary><para>The maximum time a startup healthcheck command has to complete before it is marked as failed.<para>The value can be expressed in a time format like <c>2m3s</c>. The default value is <c>30s</c>.</para></para></summary>
+    [Argument(Format = "--health-startup-timeout={value}")] public string HealthStartupTimeout => Get<string>(() => HealthStartupTimeout);
+    /// <summary><para>The maximum time allowed to complete the healthcheck before an interval is considered failed.<para>Like start-period, the value can be expressed in a time format such as <c>1m22s</c>. The default value is <c>30s</c>.</para></para></summary>
+    [Argument(Format = "--health-timeout={value}")] public string HealthTimeout => Get<string>(() => HealthTimeout);
+    /// <summary><para>Sets the container host name that is available inside the container.<para>Can only be used with a private UTS namespace <c>--uts=private</c> (default). If <c>--pod</c> is specified and the pod shares the UTS namespace (default) the pod’s hostname is used.</para></para></summary>
+    [Argument(Format = "--hostname={value}")] public string Hostname => Get<string>(() => Hostname);
+    /// <summary><para>Add a user account to <c>/etc/passwd</c> from the host to the container.<para>The Username or UID must exist on the host system.</para></para></summary>
+    [Argument(Format = "--hostuser={value}")] public string HostUser => Get<string>(() => HostUser);
+    /// <summary><para>By default proxy environment variables are passed into the container if set for the Podman process.<para>This can be disabled by setting the value to <c>false</c>. The environment variables passed in include <c>http_proxy</c>, <c>https_proxy</c>, <c>ftp_proxy</c>, <c>no_proxy</c>, and also the upper case versions of those. This option is only needed when the host system must use a proxy but the container does not use any proxy. Proxy environment variables specified for the container in any other way overrides the values that have been passed through from the host. When used with the remote client it uses the proxy environment variables that are set on the server process.</para><para>Defaults to <c>true</c>.</para></para></summary>
+    [Argument(Format = "--http-proxy={value}")] public bool? HttpProxy => Get<bool?>(() => HttpProxy);
+    /// <summary><para>Tells Podman how to handle the builtin image volumes.<para>Possible values: <c>bind</c> (an anonymous named volume is created and mounted into the container), <c>tmpfs</c> (the volume is mounted onto the container as a tmpfs, which allows the users to create content that disappears when the container is stopped), <c>ignore</c> (all volumes are just ignored and no action is taken).</para></para></summary>
+    [Argument(Format = "--image-volume={value}")] public string ImageVolume => Get<string>(() => ImageVolume);
+    /// <summary><para>Run an init inside the container that forwards signals and reaps processes.<para>The container-init binary is mounted at <c>/run/podman-init</c>. Mounting over <c>/run</c> breaks container execution.</para></para></summary>
+    [Argument(Format = "--init")] public bool? Init => Get<bool?>(() => Init);
+    /// <summary><para>When using pods, create an init style container.<para>Valid values: <c>always</c> (the container runs with each and every <c>pod start</c>), <c>once</c> (the container only runs once when the pod is started and then the container is removed).</para><para>Init containers are only run on pod <c>start</c>. Restarting a pod does not execute any init containers. Furthermore, init containers can only be created in a pod when that pod is not running.</para></para></summary>
+    [Argument(Format = "--init-ctr={value}")] public string InitCtr => Get<string>(() => InitCtr);
+    /// <summary><para>Path to the container-init binary.</para></summary>
+    [Argument(Format = "--init-path={value}")] public string InitPath => Get<string>(() => InitPath);
+    /// <summary><para>When set to <c>true</c>, keep stdin open even if not attached.<para>The default is <c>false</c>.</para></para></summary>
+    [Argument(Format = "--interactive")] public bool? Interactive => Get<bool?>(() => Interactive);
+    /// <summary><para>Specify a static IPv4 address for the container.<para>Example: <c>10.88.64.128</c>. This option can only be used if the container is joined to only a single network - i.e., <c>--network=network-name</c> is used at most once - and if the container is not joining another container’s network namespace via <c>--network=container:id</c>. The address must be within the network’s IP address pool (default <c>10.88.0.0/16</c>).</para><para>To specify multiple static IP addresses per container, set multiple networks using the <c>--network</c> option with a static IP address specified for each using the <c>ip</c> mode for that option.</para></para></summary>
+    [Argument(Format = "--ip={value}")] public string Ip => Get<string>(() => Ip);
+    /// <summary><para>Specify a static IPv6 address for the container.</para></summary>
+    [Argument(Format = "--ip6={value}")] public string Ip6 => Get<string>(() => Ip6);
+    /// <summary><para>Add metadata to a container.<para>Example: <c>--label com.example.key=value</c>.</para></para></summary>
+    [Argument(Format = "--label={value}")] public IReadOnlyList<string> Label => Get<IReadOnlyList<string>>(() => Label);
+    /// <summary><para>Logging driver for the container.<para>Possible values: <c>k8s-file</c>, <c>journald</c>, <c>json-file</c>, <c>none</c>.</para></para></summary>
+    [Argument(Format = "--log-driver={value}")] public string LogDriver => Get<string>(() => LogDriver);
+    /// <summary><para>Log driver options.</para></summary>
+    [Argument(Format = "--log-opt={value}")] public IReadOnlyList<string> LogOpt => Get<IReadOnlyList<string>>(() => LogOpt);
+    /// <summary><para>Container MAC address.<para>Example: <c>92:d0:c6:0a:29:33</c>.</para></para></summary>
+    [Argument(Format = "--mac-address={value}")] public string MacAddress => Get<string>(() => MacAddress);
+    /// <summary><para>Memory limit.<para>Format: <c>&lt;number&gt;[&lt;unit&gt;]</c>, where unit = b (bytes), k (kilobytes), m (megabytes), or g (gigabytes).</para></para></summary>
+    [Argument(Format = "--memory={value}")] public string Memory => Get<string>(() => Memory);
+    /// <summary><para>Swap limit equal to memory plus swap.<para><c>0</c> to disable swap.</para></para></summary>
+    [Argument(Format = "--memory-swap={value}")] public string MemorySwap => Get<string>(() => MemorySwap);
+    /// <summary><para>Attach a filesystem mount to the container.</para></summary>
+    [Argument(Format = "--mount={value}")] public IReadOnlyList<string> Mount => Get<IReadOnlyList<string>>(() => Mount);
+    /// <summary><para>Assign a name to the container.</para></summary>
+    [Argument(Format = "--name={value}")] public string Name => Get<string>(() => Name);
+    /// <summary><para>Connect a container to a network.<para>Possible values: <c>bridge</c>, <c>host</c>, <c>none</c>, <c>container:id</c>.</para></para></summary>
+    [Argument(Format = "--network={value}")] public IReadOnlyList<string> Network => Get<IReadOnlyList<string>>(() => Network);
+    /// <summary><para>Add network-scoped alias for the container.</para></summary>
+    [Argument(Format = "--network-alias={value}")] public IReadOnlyList<string> NetworkAlias => Get<IReadOnlyList<string>>(() => NetworkAlias);
+    /// <summary><para>Do not create <c>/etc/hosts</c> for the container.</para></summary>
+    [Argument(Format = "--no-hosts")] public bool? NoHosts => Get<bool?>(() => NoHosts);
+    /// <summary><para>Disable OOM Killer for the container.</para></summary>
+    [Argument(Format = "--oom-kill-disable")] public bool? OomKillDisable => Get<bool?>(() => OomKillDisable);
+    /// <summary><para>Tune the host’s OOM preferences for the container.</para></summary>
+    [Argument(Format = "--oom-score-adj={value}")] public int? OomScoreAdj => Get<int?>(() => OomScoreAdj);
+    /// <summary><para>Set the PID namespace mode for the container.<para>Possible values: <c>container:id</c> (reuses another container’s PID namespace), <c>host</c> (use the host’s PID namespace inside the container), <c>private</c> (create a new PID namespace).</para></para></summary>
+    [Argument(Format = "--pid={value}")] public string Pid => Get<string>(() => Pid);
+    /// <summary><para>Tune container pids limit.</para></summary>
+    [Argument(Format = "--pids-limit={value}")] public int? PidsLimit => Get<int?>(() => PidsLimit);
+    /// <summary><para>Run container in an existing pod.</para></summary>
+    [Argument(Format = "--pod={value}")] public string Pod => Get<string>(() => Pod);
+    /// <summary><para>Write the pod ID to the file.</para></summary>
+    [Argument(Format = "--pod-id-file={value}")] public string PodIdFile => Get<string>(() => PodIdFile);
+    /// <summary><para>Pass value additional file descriptors to the container.</para></summary>
+    [Argument(Format = "--preserve-fds={value}")] public int? PreserveFds => Get<int?>(() => PreserveFds);
+    /// <summary><para>Give extended privileges to this container.</para></summary>
+    [Argument(Format = "--privileged")] public bool? Privileged => Get<bool?>(() => Privileged);
+    /// <summary><para>Publish a container’s port to the host.<para>Format: <c>ip:hostPort:containerPort</c> or <c>hostPort:containerPort</c>.</para></para></summary>
+    [Argument(Format = "--publish={value}")] public IReadOnlyList<string> Publish => Get<IReadOnlyList<string>>(() => Publish);
+    /// <summary><para>Publish all exposed ports to random ports.</para></summary>
+    [Argument(Format = "--publish-all")] public bool? PublishAll => Get<bool?>(() => PublishAll);
+    /// <summary><para>Mount the container’s root filesystem as read only.</para></summary>
+    [Argument(Format = "--read-only")] public bool? ReadOnly => Get<bool?>(() => ReadOnly);
+    /// <summary><para>Mount a tmpfs on <c>/run</c>, <c>/tmp</c>, and <c>/var/tmp</c>.</para></summary>
+    [Argument(Format = "--read-only-tmpfs")] public bool? ReadOnlyTmpfs => Get<bool?>(() => ReadOnlyTmpfs);
+    /// <summary><para>If a container with the same name exists, replace it.</para></summary>
+    [Argument(Format = "--replace")] public bool? Replace => Get<bool?>(() => Replace);
+    /// <summary><para>Restart policy to apply when a container exits.<para>Possible values: <c>no</c>, <c>always</c>, <c>on-failure</c>, <c>unless-stopped</c>.</para></para></summary>
+    [Argument(Format = "--restart={value}")] public string Restart => Get<string>(() => Restart);
+    /// <summary><para>Remove the container and pod if it exists after it exits.</para></summary>
+    [Argument(Format = "--rm")] public bool? Rm => Get<bool?>(() => Rm);
+    /// <summary><para>Security Options.</para></summary>
+    [Argument(Format = "--security-opt={value}")] public IReadOnlyList<string> SecurityOpt => Get<IReadOnlyList<string>>(() => SecurityOpt);
+    /// <summary><para>Size of <c>/dev/shm</c>.</para></summary>
+    [Argument(Format = "--shm-size={value}")] public string ShmSize => Get<string>(() => ShmSize);
+    /// <summary><para>Proxy received signals to the process.</para></summary>
+    [Argument(Format = "--sig-proxy={value}")] public bool? SigProxy => Get<bool?>(() => SigProxy);
+    /// <summary><para>Signal to stop a container.</para></summary>
+    [Argument(Format = "--stop-signal={value}")] public string StopSignal => Get<string>(() => StopSignal);
+    /// <summary><para>Timeout (in seconds) to stop a container.</para></summary>
+    [Argument(Format = "--stop-timeout={value}")] public int? StopTimeout => Get<int?>(() => StopTimeout);
+    /// <summary><para>Name of range listed in <c>/etc/subgid</c>.</para></summary>
+    [Argument(Format = "--subgidname={value}")] public string Subgidname => Get<string>(() => Subgidname);
+    /// <summary><para>Name of range listed in <c>/etc/subuid</c>.</para></summary>
+    [Argument(Format = "--subuidname={value}")] public string Subuidname => Get<string>(() => Subuidname);
+    /// <summary><para>Sysctl options.</para></summary>
+    [Argument(Format = "--sysctl={value}")] public IReadOnlyList<string> Sysctl => Get<IReadOnlyList<string>>(() => Sysctl);
+    /// <summary><para>Mount a tmpfs.</para></summary>
+    [Argument(Format = "--tmpfs={value}")] public IReadOnlyList<string> Tmpfs => Get<IReadOnlyList<string>>(() => Tmpfs);
+    /// <summary><para>Allocate a pseudo-TTY.</para></summary>
+    [Argument(Format = "--tty")] public bool? Tty => Get<bool?>(() => Tty);
+    /// <summary><para>Ulimit options.</para></summary>
+    [Argument(Format = "--ulimit={value}")] public IReadOnlyList<string> Ulimit => Get<IReadOnlyList<string>>(() => Ulimit);
+    /// <summary><para>Username or UID.<para>Format: <c>&lt;name|uid&gt;[:&lt;group|gid&gt;]</c>.</para></para></summary>
+    [Argument(Format = "--user={value}")] public string User => Get<string>(() => User);
+    /// <summary><para>Set the user namespace mode for the container.<para>Possible values: <c>host</c> (use the host’s user namespace inside the container), <c>container:id</c> (join the namespace of the specified container), <c>private</c> (create a new user namespace), <c>ns:path</c> (join the namespace at the specified path).</para></para></summary>
+    [Argument(Format = "--userns={value}")] public string Userns => Get<string>(() => Userns);
+    /// <summary><para>Set the UTS namespace mode for the container.<para>Possible values: <c>host</c> (use the host’s UTS namespace inside the container), <c>container:id</c> (join the namespace of the specified container), <c>private</c> (create a new UTS namespace), <c>ns:path</c> (join the namespace at the specified path).</para></para></summary>
+    [Argument(Format = "--uts={value}")] public string Uts => Get<string>(() => Uts);
+    /// <summary><para>Bind mount a volume.</para></summary>
+    [Argument(Format = "--volume={value}")] public IReadOnlyList<string> Volume => Get<IReadOnlyList<string>>(() => Volume);
+    /// <summary><para>Mount volumes from the specified container(s).</para></summary>
+    [Argument(Format = "--volumes-from={value}")] public IReadOnlyList<string> VolumesFrom => Get<IReadOnlyList<string>>(() => VolumesFrom);
+    /// <summary><para>Working directory inside the container.</para></summary>
+    [Argument(Format = "--workdir={value}")] public string Workdir => Get<string>(() => Workdir);
 }
 #endregion
 #region PodmanPsSettings
@@ -1847,6 +2067,1021 @@ public static partial class PodmanCpSettingsExtensions
 [ExcludeFromCodeCoverage]
 public static partial class PodmanCreateSettingsExtensions
 {
+    #region AddHost
+    /// <inheritdoc cref="PodmanCreateSettings.AddHost"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.AddHost))]
+    public static T SetAddHost<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.AddHost, v));
+    /// <inheritdoc cref="PodmanCreateSettings.AddHost"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.AddHost))]
+    public static T ResetAddHost<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.AddHost));
+    #endregion
+    #region Annotation
+    /// <inheritdoc cref="PodmanCreateSettings.Annotation"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Annotation))]
+    public static T SetAnnotation<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Annotation, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Annotation"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Annotation))]
+    public static T ResetAnnotation<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Annotation));
+    #endregion
+    #region Arch
+    /// <inheritdoc cref="PodmanCreateSettings.Arch"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Arch))]
+    public static T SetArch<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Arch, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Arch"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Arch))]
+    public static T ResetArch<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Arch));
+    #endregion
+    #region Attach
+    /// <inheritdoc cref="PodmanCreateSettings.Attach"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Attach))]
+    public static T SetAttach<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Attach, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Attach"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Attach))]
+    public static T ResetAttach<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Attach));
+    #endregion
+    #region AuthFile
+    /// <inheritdoc cref="PodmanCreateSettings.AuthFile"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.AuthFile))]
+    public static T SetAuthFile<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.AuthFile, v));
+    /// <inheritdoc cref="PodmanCreateSettings.AuthFile"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.AuthFile))]
+    public static T ResetAuthFile<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.AuthFile));
+    #endregion
+    #region BlkioWeight
+    /// <inheritdoc cref="PodmanCreateSettings.BlkioWeight"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.BlkioWeight))]
+    public static T SetBlkioWeight<T>(this T o, int? v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.BlkioWeight, v));
+    /// <inheritdoc cref="PodmanCreateSettings.BlkioWeight"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.BlkioWeight))]
+    public static T ResetBlkioWeight<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.BlkioWeight));
+    #endregion
+    #region BlkioWeightDevice
+    /// <inheritdoc cref="PodmanCreateSettings.BlkioWeightDevice"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.BlkioWeightDevice))]
+    public static T SetBlkioWeightDevice<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.BlkioWeightDevice, v));
+    /// <inheritdoc cref="PodmanCreateSettings.BlkioWeightDevice"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.BlkioWeightDevice))]
+    public static T ResetBlkioWeightDevice<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.BlkioWeightDevice));
+    #endregion
+    #region CapAdd
+    /// <inheritdoc cref="PodmanCreateSettings.CapAdd"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.CapAdd))]
+    public static T SetCapAdd<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.CapAdd, v));
+    /// <inheritdoc cref="PodmanCreateSettings.CapAdd"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.CapAdd))]
+    public static T ResetCapAdd<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.CapAdd));
+    #endregion
+    #region CapDrop
+    /// <inheritdoc cref="PodmanCreateSettings.CapDrop"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.CapDrop))]
+    public static T SetCapDrop<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.CapDrop, v));
+    /// <inheritdoc cref="PodmanCreateSettings.CapDrop"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.CapDrop))]
+    public static T ResetCapDrop<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.CapDrop));
+    #endregion
+    #region CgroupConf
+    /// <inheritdoc cref="PodmanCreateSettings.CgroupConf"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.CgroupConf))]
+    public static T SetCgroupConf<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.CgroupConf, v));
+    /// <inheritdoc cref="PodmanCreateSettings.CgroupConf"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.CgroupConf))]
+    public static T ResetCgroupConf<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.CgroupConf));
+    #endregion
+    #region CgroupParent
+    /// <inheritdoc cref="PodmanCreateSettings.CgroupParent"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.CgroupParent))]
+    public static T SetCgroupParent<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.CgroupParent, v));
+    /// <inheritdoc cref="PodmanCreateSettings.CgroupParent"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.CgroupParent))]
+    public static T ResetCgroupParent<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.CgroupParent));
+    #endregion
+    #region CgroupNs
+    /// <inheritdoc cref="PodmanCreateSettings.CgroupNs"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.CgroupNs))]
+    public static T SetCgroupNs<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.CgroupNs, v));
+    /// <inheritdoc cref="PodmanCreateSettings.CgroupNs"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.CgroupNs))]
+    public static T ResetCgroupNs<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.CgroupNs));
+    #endregion
+    #region Cgroups
+    /// <inheritdoc cref="PodmanCreateSettings.Cgroups"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Cgroups))]
+    public static T SetCgroups<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Cgroups, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Cgroups"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Cgroups))]
+    public static T ResetCgroups<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Cgroups));
+    #endregion
+    #region ChrootDirs
+    /// <inheritdoc cref="PodmanCreateSettings.ChrootDirs"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.ChrootDirs))]
+    public static T SetChrootDirs<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.ChrootDirs, v));
+    /// <inheritdoc cref="PodmanCreateSettings.ChrootDirs"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.ChrootDirs))]
+    public static T ResetChrootDirs<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.ChrootDirs));
+    #endregion
+    #region CidFile
+    /// <inheritdoc cref="PodmanCreateSettings.CidFile"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.CidFile))]
+    public static T SetCidFile<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.CidFile, v));
+    /// <inheritdoc cref="PodmanCreateSettings.CidFile"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.CidFile))]
+    public static T ResetCidFile<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.CidFile));
+    #endregion
+    #region ConmonPidFile
+    /// <inheritdoc cref="PodmanCreateSettings.ConmonPidFile"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.ConmonPidFile))]
+    public static T SetConmonPidFile<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.ConmonPidFile, v));
+    /// <inheritdoc cref="PodmanCreateSettings.ConmonPidFile"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.ConmonPidFile))]
+    public static T ResetConmonPidFile<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.ConmonPidFile));
+    #endregion
+    #region CpuPeriod
+    /// <inheritdoc cref="PodmanCreateSettings.CpuPeriod"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.CpuPeriod))]
+    public static T SetCpuPeriod<T>(this T o, int? v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.CpuPeriod, v));
+    /// <inheritdoc cref="PodmanCreateSettings.CpuPeriod"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.CpuPeriod))]
+    public static T ResetCpuPeriod<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.CpuPeriod));
+    #endregion
+    #region CpuQuota
+    /// <inheritdoc cref="PodmanCreateSettings.CpuQuota"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.CpuQuota))]
+    public static T SetCpuQuota<T>(this T o, int? v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.CpuQuota, v));
+    /// <inheritdoc cref="PodmanCreateSettings.CpuQuota"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.CpuQuota))]
+    public static T ResetCpuQuota<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.CpuQuota));
+    #endregion
+    #region CpuRtPeriod
+    /// <inheritdoc cref="PodmanCreateSettings.CpuRtPeriod"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.CpuRtPeriod))]
+    public static T SetCpuRtPeriod<T>(this T o, int? v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.CpuRtPeriod, v));
+    /// <inheritdoc cref="PodmanCreateSettings.CpuRtPeriod"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.CpuRtPeriod))]
+    public static T ResetCpuRtPeriod<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.CpuRtPeriod));
+    #endregion
+    #region CpuRtRuntime
+    /// <inheritdoc cref="PodmanCreateSettings.CpuRtRuntime"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.CpuRtRuntime))]
+    public static T SetCpuRtRuntime<T>(this T o, int? v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.CpuRtRuntime, v));
+    /// <inheritdoc cref="PodmanCreateSettings.CpuRtRuntime"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.CpuRtRuntime))]
+    public static T ResetCpuRtRuntime<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.CpuRtRuntime));
+    #endregion
+    #region CpusetCpus
+    /// <inheritdoc cref="PodmanCreateSettings.CpusetCpus"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.CpusetCpus))]
+    public static T SetCpusetCpus<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.CpusetCpus, v));
+    /// <inheritdoc cref="PodmanCreateSettings.CpusetCpus"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.CpusetCpus))]
+    public static T ResetCpusetCpus<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.CpusetCpus));
+    #endregion
+    #region CpusetMems
+    /// <inheritdoc cref="PodmanCreateSettings.CpusetMems"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.CpusetMems))]
+    public static T SetCpusetMems<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.CpusetMems, v));
+    /// <inheritdoc cref="PodmanCreateSettings.CpusetMems"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.CpusetMems))]
+    public static T ResetCpusetMems<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.CpusetMems));
+    #endregion
+    #region DecryptionKey
+    /// <inheritdoc cref="PodmanCreateSettings.DecryptionKey"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.DecryptionKey))]
+    public static T SetDecryptionKey<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.DecryptionKey, v));
+    /// <inheritdoc cref="PodmanCreateSettings.DecryptionKey"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.DecryptionKey))]
+    public static T ResetDecryptionKey<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.DecryptionKey));
+    #endregion
+    #region Device
+    /// <inheritdoc cref="PodmanCreateSettings.Device"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Device))]
+    public static T SetDevice<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Device, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Device"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Device))]
+    public static T ResetDevice<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Device));
+    #endregion
+    #region DeviceCgroupRule
+    /// <inheritdoc cref="PodmanCreateSettings.DeviceCgroupRule"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.DeviceCgroupRule))]
+    public static T SetDeviceCgroupRule<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.DeviceCgroupRule, v));
+    /// <inheritdoc cref="PodmanCreateSettings.DeviceCgroupRule"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.DeviceCgroupRule))]
+    public static T ResetDeviceCgroupRule<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.DeviceCgroupRule));
+    #endregion
+    #region DeviceReadBps
+    /// <inheritdoc cref="PodmanCreateSettings.DeviceReadBps"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.DeviceReadBps))]
+    public static T SetDeviceReadBps<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.DeviceReadBps, v));
+    /// <inheritdoc cref="PodmanCreateSettings.DeviceReadBps"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.DeviceReadBps))]
+    public static T ResetDeviceReadBps<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.DeviceReadBps));
+    #endregion
+    #region DeviceReadIops
+    /// <inheritdoc cref="PodmanCreateSettings.DeviceReadIops"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.DeviceReadIops))]
+    public static T SetDeviceReadIops<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.DeviceReadIops, v));
+    /// <inheritdoc cref="PodmanCreateSettings.DeviceReadIops"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.DeviceReadIops))]
+    public static T ResetDeviceReadIops<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.DeviceReadIops));
+    #endregion
+    #region DeviceWriteBps
+    /// <inheritdoc cref="PodmanCreateSettings.DeviceWriteBps"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.DeviceWriteBps))]
+    public static T SetDeviceWriteBps<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.DeviceWriteBps, v));
+    /// <inheritdoc cref="PodmanCreateSettings.DeviceWriteBps"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.DeviceWriteBps))]
+    public static T ResetDeviceWriteBps<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.DeviceWriteBps));
+    #endregion
+    #region DeviceWriteIops
+    /// <inheritdoc cref="PodmanCreateSettings.DeviceWriteIops"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.DeviceWriteIops))]
+    public static T SetDeviceWriteIops<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.DeviceWriteIops, v));
+    /// <inheritdoc cref="PodmanCreateSettings.DeviceWriteIops"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.DeviceWriteIops))]
+    public static T ResetDeviceWriteIops<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.DeviceWriteIops));
+    #endregion
+    #region DisableContentTrust
+    /// <inheritdoc cref="PodmanCreateSettings.DisableContentTrust"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.DisableContentTrust))]
+    public static T SetDisableContentTrust<T>(this T o, bool? v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.DisableContentTrust, v));
+    /// <inheritdoc cref="PodmanCreateSettings.DisableContentTrust"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.DisableContentTrust))]
+    public static T ResetDisableContentTrust<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.DisableContentTrust));
+    /// <inheritdoc cref="PodmanCreateSettings.DisableContentTrust"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.DisableContentTrust))]
+    public static T EnableDisableContentTrust<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.DisableContentTrust, true));
+    /// <inheritdoc cref="PodmanCreateSettings.DisableContentTrust"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.DisableContentTrust))]
+    public static T DisableDisableContentTrust<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.DisableContentTrust, false));
+    /// <inheritdoc cref="PodmanCreateSettings.DisableContentTrust"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.DisableContentTrust))]
+    public static T ToggleDisableContentTrust<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.DisableContentTrust, !o.DisableContentTrust));
+    #endregion
+    #region Dns
+    /// <inheritdoc cref="PodmanCreateSettings.Dns"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Dns))]
+    public static T SetDns<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Dns, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Dns"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Dns))]
+    public static T ResetDns<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Dns));
+    #endregion
+    #region DnsOption
+    /// <inheritdoc cref="PodmanCreateSettings.DnsOption"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.DnsOption))]
+    public static T SetDnsOption<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.DnsOption, v));
+    /// <inheritdoc cref="PodmanCreateSettings.DnsOption"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.DnsOption))]
+    public static T ResetDnsOption<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.DnsOption));
+    #endregion
+    #region DnsSearch
+    /// <inheritdoc cref="PodmanCreateSettings.DnsSearch"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.DnsSearch))]
+    public static T SetDnsSearch<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.DnsSearch, v));
+    /// <inheritdoc cref="PodmanCreateSettings.DnsSearch"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.DnsSearch))]
+    public static T ResetDnsSearch<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.DnsSearch));
+    #endregion
+    #region EntryPoint
+    /// <inheritdoc cref="PodmanCreateSettings.EntryPoint"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.EntryPoint))]
+    public static T SetEntryPoint<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.EntryPoint, v));
+    /// <inheritdoc cref="PodmanCreateSettings.EntryPoint"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.EntryPoint))]
+    public static T ResetEntryPoint<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.EntryPoint));
+    #endregion
+    #region Env
+    /// <inheritdoc cref="PodmanCreateSettings.Env"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Env))]
+    public static T SetEnv<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Env, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Env"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Env))]
+    public static T ResetEnv<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Env));
+    #endregion
+    #region EnvFile
+    /// <inheritdoc cref="PodmanCreateSettings.EnvFile"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.EnvFile))]
+    public static T SetEnvFile<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.EnvFile, v));
+    /// <inheritdoc cref="PodmanCreateSettings.EnvFile"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.EnvFile))]
+    public static T ResetEnvFile<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.EnvFile));
+    #endregion
+    #region EnvHost
+    /// <inheritdoc cref="PodmanCreateSettings.EnvHost"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.EnvHost))]
+    public static T SetEnvHost<T>(this T o, bool? v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.EnvHost, v));
+    /// <inheritdoc cref="PodmanCreateSettings.EnvHost"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.EnvHost))]
+    public static T ResetEnvHost<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.EnvHost));
+    /// <inheritdoc cref="PodmanCreateSettings.EnvHost"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.EnvHost))]
+    public static T EnableEnvHost<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.EnvHost, true));
+    /// <inheritdoc cref="PodmanCreateSettings.EnvHost"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.EnvHost))]
+    public static T DisableEnvHost<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.EnvHost, false));
+    /// <inheritdoc cref="PodmanCreateSettings.EnvHost"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.EnvHost))]
+    public static T ToggleEnvHost<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.EnvHost, !o.EnvHost));
+    #endregion
+    #region EnvMerge
+    /// <inheritdoc cref="PodmanCreateSettings.EnvMerge"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.EnvMerge))]
+    public static T SetEnvMerge<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.EnvMerge, v));
+    /// <inheritdoc cref="PodmanCreateSettings.EnvMerge"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.EnvMerge))]
+    public static T ResetEnvMerge<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.EnvMerge));
+    #endregion
+    #region Expose
+    /// <inheritdoc cref="PodmanCreateSettings.Expose"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Expose))]
+    public static T SetExpose<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Expose, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Expose"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Expose))]
+    public static T ResetExpose<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Expose));
+    #endregion
+    #region GidMap
+    /// <inheritdoc cref="PodmanCreateSettings.GidMap"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.GidMap))]
+    public static T SetGidMap<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.GidMap, v));
+    /// <inheritdoc cref="PodmanCreateSettings.GidMap"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.GidMap))]
+    public static T ResetGidMap<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.GidMap));
+    #endregion
+    #region Gpus
+    /// <inheritdoc cref="PodmanCreateSettings.Gpus"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Gpus))]
+    public static T SetGpus<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Gpus, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Gpus"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Gpus))]
+    public static T ResetGpus<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Gpus));
+    #endregion
+    #region GroupAdd
+    /// <inheritdoc cref="PodmanCreateSettings.GroupAdd"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.GroupAdd))]
+    public static T SetGroupAdd<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.GroupAdd, v));
+    /// <inheritdoc cref="PodmanCreateSettings.GroupAdd"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.GroupAdd))]
+    public static T ResetGroupAdd<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.GroupAdd));
+    #endregion
+    #region GroupEntry
+    /// <inheritdoc cref="PodmanCreateSettings.GroupEntry"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.GroupEntry))]
+    public static T SetGroupEntry<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.GroupEntry, v));
+    /// <inheritdoc cref="PodmanCreateSettings.GroupEntry"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.GroupEntry))]
+    public static T ResetGroupEntry<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.GroupEntry));
+    #endregion
+    #region HealthCmd
+    /// <inheritdoc cref="PodmanCreateSettings.HealthCmd"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HealthCmd))]
+    public static T SetHealthCmd<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.HealthCmd, v));
+    /// <inheritdoc cref="PodmanCreateSettings.HealthCmd"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HealthCmd))]
+    public static T ResetHealthCmd<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.HealthCmd));
+    #endregion
+    #region HealthInterval
+    /// <inheritdoc cref="PodmanCreateSettings.HealthInterval"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HealthInterval))]
+    public static T SetHealthInterval<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.HealthInterval, v));
+    /// <inheritdoc cref="PodmanCreateSettings.HealthInterval"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HealthInterval))]
+    public static T ResetHealthInterval<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.HealthInterval));
+    #endregion
+    #region HealthLogDestination
+    /// <inheritdoc cref="PodmanCreateSettings.HealthLogDestination"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HealthLogDestination))]
+    public static T SetHealthLogDestination<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.HealthLogDestination, v));
+    /// <inheritdoc cref="PodmanCreateSettings.HealthLogDestination"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HealthLogDestination))]
+    public static T ResetHealthLogDestination<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.HealthLogDestination));
+    #endregion
+    #region HealthMaxLogCount
+    /// <inheritdoc cref="PodmanCreateSettings.HealthMaxLogCount"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HealthMaxLogCount))]
+    public static T SetHealthMaxLogCount<T>(this T o, int? v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.HealthMaxLogCount, v));
+    /// <inheritdoc cref="PodmanCreateSettings.HealthMaxLogCount"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HealthMaxLogCount))]
+    public static T ResetHealthMaxLogCount<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.HealthMaxLogCount));
+    #endregion
+    #region HealthMaxLogSize
+    /// <inheritdoc cref="PodmanCreateSettings.HealthMaxLogSize"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HealthMaxLogSize))]
+    public static T SetHealthMaxLogSize<T>(this T o, int? v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.HealthMaxLogSize, v));
+    /// <inheritdoc cref="PodmanCreateSettings.HealthMaxLogSize"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HealthMaxLogSize))]
+    public static T ResetHealthMaxLogSize<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.HealthMaxLogSize));
+    #endregion
+    #region HealthOnFailure
+    /// <inheritdoc cref="PodmanCreateSettings.HealthOnFailure"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HealthOnFailure))]
+    public static T SetHealthOnFailure<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.HealthOnFailure, v));
+    /// <inheritdoc cref="PodmanCreateSettings.HealthOnFailure"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HealthOnFailure))]
+    public static T ResetHealthOnFailure<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.HealthOnFailure));
+    #endregion
+    #region HealthRetries
+    /// <inheritdoc cref="PodmanCreateSettings.HealthRetries"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HealthRetries))]
+    public static T SetHealthRetries<T>(this T o, int? v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.HealthRetries, v));
+    /// <inheritdoc cref="PodmanCreateSettings.HealthRetries"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HealthRetries))]
+    public static T ResetHealthRetries<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.HealthRetries));
+    #endregion
+    #region HealthStartPeriod
+    /// <inheritdoc cref="PodmanCreateSettings.HealthStartPeriod"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HealthStartPeriod))]
+    public static T SetHealthStartPeriod<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.HealthStartPeriod, v));
+    /// <inheritdoc cref="PodmanCreateSettings.HealthStartPeriod"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HealthStartPeriod))]
+    public static T ResetHealthStartPeriod<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.HealthStartPeriod));
+    #endregion
+    #region HealthStartupCmd
+    /// <inheritdoc cref="PodmanCreateSettings.HealthStartupCmd"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HealthStartupCmd))]
+    public static T SetHealthStartupCmd<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.HealthStartupCmd, v));
+    /// <inheritdoc cref="PodmanCreateSettings.HealthStartupCmd"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HealthStartupCmd))]
+    public static T ResetHealthStartupCmd<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.HealthStartupCmd));
+    #endregion
+    #region HealthStartupInterval
+    /// <inheritdoc cref="PodmanCreateSettings.HealthStartupInterval"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HealthStartupInterval))]
+    public static T SetHealthStartupInterval<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.HealthStartupInterval, v));
+    /// <inheritdoc cref="PodmanCreateSettings.HealthStartupInterval"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HealthStartupInterval))]
+    public static T ResetHealthStartupInterval<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.HealthStartupInterval));
+    #endregion
+    #region HealthStartupRetries
+    /// <inheritdoc cref="PodmanCreateSettings.HealthStartupRetries"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HealthStartupRetries))]
+    public static T SetHealthStartupRetries<T>(this T o, int? v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.HealthStartupRetries, v));
+    /// <inheritdoc cref="PodmanCreateSettings.HealthStartupRetries"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HealthStartupRetries))]
+    public static T ResetHealthStartupRetries<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.HealthStartupRetries));
+    #endregion
+    #region HealthStartupSuccess
+    /// <inheritdoc cref="PodmanCreateSettings.HealthStartupSuccess"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HealthStartupSuccess))]
+    public static T SetHealthStartupSuccess<T>(this T o, int? v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.HealthStartupSuccess, v));
+    /// <inheritdoc cref="PodmanCreateSettings.HealthStartupSuccess"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HealthStartupSuccess))]
+    public static T ResetHealthStartupSuccess<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.HealthStartupSuccess));
+    #endregion
+    #region HealthStartupTimeout
+    /// <inheritdoc cref="PodmanCreateSettings.HealthStartupTimeout"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HealthStartupTimeout))]
+    public static T SetHealthStartupTimeout<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.HealthStartupTimeout, v));
+    /// <inheritdoc cref="PodmanCreateSettings.HealthStartupTimeout"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HealthStartupTimeout))]
+    public static T ResetHealthStartupTimeout<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.HealthStartupTimeout));
+    #endregion
+    #region HealthTimeout
+    /// <inheritdoc cref="PodmanCreateSettings.HealthTimeout"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HealthTimeout))]
+    public static T SetHealthTimeout<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.HealthTimeout, v));
+    /// <inheritdoc cref="PodmanCreateSettings.HealthTimeout"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HealthTimeout))]
+    public static T ResetHealthTimeout<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.HealthTimeout));
+    #endregion
+    #region Hostname
+    /// <inheritdoc cref="PodmanCreateSettings.Hostname"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Hostname))]
+    public static T SetHostname<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Hostname, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Hostname"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Hostname))]
+    public static T ResetHostname<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Hostname));
+    #endregion
+    #region HostUser
+    /// <inheritdoc cref="PodmanCreateSettings.HostUser"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HostUser))]
+    public static T SetHostUser<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.HostUser, v));
+    /// <inheritdoc cref="PodmanCreateSettings.HostUser"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HostUser))]
+    public static T ResetHostUser<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.HostUser));
+    #endregion
+    #region HttpProxy
+    /// <inheritdoc cref="PodmanCreateSettings.HttpProxy"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HttpProxy))]
+    public static T SetHttpProxy<T>(this T o, bool? v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.HttpProxy, v));
+    /// <inheritdoc cref="PodmanCreateSettings.HttpProxy"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HttpProxy))]
+    public static T ResetHttpProxy<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.HttpProxy));
+    /// <inheritdoc cref="PodmanCreateSettings.HttpProxy"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HttpProxy))]
+    public static T EnableHttpProxy<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.HttpProxy, true));
+    /// <inheritdoc cref="PodmanCreateSettings.HttpProxy"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HttpProxy))]
+    public static T DisableHttpProxy<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.HttpProxy, false));
+    /// <inheritdoc cref="PodmanCreateSettings.HttpProxy"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.HttpProxy))]
+    public static T ToggleHttpProxy<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.HttpProxy, !o.HttpProxy));
+    #endregion
+    #region ImageVolume
+    /// <inheritdoc cref="PodmanCreateSettings.ImageVolume"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.ImageVolume))]
+    public static T SetImageVolume<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.ImageVolume, v));
+    /// <inheritdoc cref="PodmanCreateSettings.ImageVolume"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.ImageVolume))]
+    public static T ResetImageVolume<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.ImageVolume));
+    #endregion
+    #region Init
+    /// <inheritdoc cref="PodmanCreateSettings.Init"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Init))]
+    public static T SetInit<T>(this T o, bool? v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Init, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Init"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Init))]
+    public static T ResetInit<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Init));
+    /// <inheritdoc cref="PodmanCreateSettings.Init"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Init))]
+    public static T EnableInit<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Init, true));
+    /// <inheritdoc cref="PodmanCreateSettings.Init"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Init))]
+    public static T DisableInit<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Init, false));
+    /// <inheritdoc cref="PodmanCreateSettings.Init"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Init))]
+    public static T ToggleInit<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Init, !o.Init));
+    #endregion
+    #region InitCtr
+    /// <inheritdoc cref="PodmanCreateSettings.InitCtr"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.InitCtr))]
+    public static T SetInitCtr<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.InitCtr, v));
+    /// <inheritdoc cref="PodmanCreateSettings.InitCtr"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.InitCtr))]
+    public static T ResetInitCtr<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.InitCtr));
+    #endregion
+    #region InitPath
+    /// <inheritdoc cref="PodmanCreateSettings.InitPath"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.InitPath))]
+    public static T SetInitPath<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.InitPath, v));
+    /// <inheritdoc cref="PodmanCreateSettings.InitPath"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.InitPath))]
+    public static T ResetInitPath<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.InitPath));
+    #endregion
+    #region Interactive
+    /// <inheritdoc cref="PodmanCreateSettings.Interactive"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Interactive))]
+    public static T SetInteractive<T>(this T o, bool? v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Interactive, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Interactive"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Interactive))]
+    public static T ResetInteractive<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Interactive));
+    /// <inheritdoc cref="PodmanCreateSettings.Interactive"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Interactive))]
+    public static T EnableInteractive<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Interactive, true));
+    /// <inheritdoc cref="PodmanCreateSettings.Interactive"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Interactive))]
+    public static T DisableInteractive<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Interactive, false));
+    /// <inheritdoc cref="PodmanCreateSettings.Interactive"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Interactive))]
+    public static T ToggleInteractive<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Interactive, !o.Interactive));
+    #endregion
+    #region Ip
+    /// <inheritdoc cref="PodmanCreateSettings.Ip"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Ip))]
+    public static T SetIp<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Ip, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Ip"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Ip))]
+    public static T ResetIp<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Ip));
+    #endregion
+    #region Ip6
+    /// <inheritdoc cref="PodmanCreateSettings.Ip6"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Ip6))]
+    public static T SetIp6<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Ip6, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Ip6"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Ip6))]
+    public static T ResetIp6<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Ip6));
+    #endregion
+    #region Label
+    /// <inheritdoc cref="PodmanCreateSettings.Label"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Label))]
+    public static T SetLabel<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Label, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Label"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Label))]
+    public static T ResetLabel<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Label));
+    #endregion
+    #region LogDriver
+    /// <inheritdoc cref="PodmanCreateSettings.LogDriver"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.LogDriver))]
+    public static T SetLogDriver<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.LogDriver, v));
+    /// <inheritdoc cref="PodmanCreateSettings.LogDriver"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.LogDriver))]
+    public static T ResetLogDriver<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.LogDriver));
+    #endregion
+    #region LogOpt
+    /// <inheritdoc cref="PodmanCreateSettings.LogOpt"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.LogOpt))]
+    public static T SetLogOpt<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.LogOpt, v));
+    /// <inheritdoc cref="PodmanCreateSettings.LogOpt"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.LogOpt))]
+    public static T ResetLogOpt<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.LogOpt));
+    #endregion
+    #region MacAddress
+    /// <inheritdoc cref="PodmanCreateSettings.MacAddress"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.MacAddress))]
+    public static T SetMacAddress<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.MacAddress, v));
+    /// <inheritdoc cref="PodmanCreateSettings.MacAddress"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.MacAddress))]
+    public static T ResetMacAddress<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.MacAddress));
+    #endregion
+    #region Memory
+    /// <inheritdoc cref="PodmanCreateSettings.Memory"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Memory))]
+    public static T SetMemory<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Memory, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Memory"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Memory))]
+    public static T ResetMemory<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Memory));
+    #endregion
+    #region MemorySwap
+    /// <inheritdoc cref="PodmanCreateSettings.MemorySwap"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.MemorySwap))]
+    public static T SetMemorySwap<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.MemorySwap, v));
+    /// <inheritdoc cref="PodmanCreateSettings.MemorySwap"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.MemorySwap))]
+    public static T ResetMemorySwap<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.MemorySwap));
+    #endregion
+    #region Mount
+    /// <inheritdoc cref="PodmanCreateSettings.Mount"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Mount))]
+    public static T SetMount<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Mount, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Mount"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Mount))]
+    public static T ResetMount<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Mount));
+    #endregion
+    #region Name
+    /// <inheritdoc cref="PodmanCreateSettings.Name"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Name))]
+    public static T SetName<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Name, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Name"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Name))]
+    public static T ResetName<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Name));
+    #endregion
+    #region Network
+    /// <inheritdoc cref="PodmanCreateSettings.Network"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Network))]
+    public static T SetNetwork<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Network, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Network"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Network))]
+    public static T ResetNetwork<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Network));
+    #endregion
+    #region NetworkAlias
+    /// <inheritdoc cref="PodmanCreateSettings.NetworkAlias"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.NetworkAlias))]
+    public static T SetNetworkAlias<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.NetworkAlias, v));
+    /// <inheritdoc cref="PodmanCreateSettings.NetworkAlias"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.NetworkAlias))]
+    public static T ResetNetworkAlias<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.NetworkAlias));
+    #endregion
+    #region NoHosts
+    /// <inheritdoc cref="PodmanCreateSettings.NoHosts"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.NoHosts))]
+    public static T SetNoHosts<T>(this T o, bool? v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.NoHosts, v));
+    /// <inheritdoc cref="PodmanCreateSettings.NoHosts"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.NoHosts))]
+    public static T ResetNoHosts<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.NoHosts));
+    /// <inheritdoc cref="PodmanCreateSettings.NoHosts"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.NoHosts))]
+    public static T EnableNoHosts<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.NoHosts, true));
+    /// <inheritdoc cref="PodmanCreateSettings.NoHosts"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.NoHosts))]
+    public static T DisableNoHosts<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.NoHosts, false));
+    /// <inheritdoc cref="PodmanCreateSettings.NoHosts"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.NoHosts))]
+    public static T ToggleNoHosts<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.NoHosts, !o.NoHosts));
+    #endregion
+    #region OomKillDisable
+    /// <inheritdoc cref="PodmanCreateSettings.OomKillDisable"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.OomKillDisable))]
+    public static T SetOomKillDisable<T>(this T o, bool? v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.OomKillDisable, v));
+    /// <inheritdoc cref="PodmanCreateSettings.OomKillDisable"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.OomKillDisable))]
+    public static T ResetOomKillDisable<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.OomKillDisable));
+    /// <inheritdoc cref="PodmanCreateSettings.OomKillDisable"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.OomKillDisable))]
+    public static T EnableOomKillDisable<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.OomKillDisable, true));
+    /// <inheritdoc cref="PodmanCreateSettings.OomKillDisable"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.OomKillDisable))]
+    public static T DisableOomKillDisable<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.OomKillDisable, false));
+    /// <inheritdoc cref="PodmanCreateSettings.OomKillDisable"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.OomKillDisable))]
+    public static T ToggleOomKillDisable<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.OomKillDisable, !o.OomKillDisable));
+    #endregion
+    #region OomScoreAdj
+    /// <inheritdoc cref="PodmanCreateSettings.OomScoreAdj"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.OomScoreAdj))]
+    public static T SetOomScoreAdj<T>(this T o, int? v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.OomScoreAdj, v));
+    /// <inheritdoc cref="PodmanCreateSettings.OomScoreAdj"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.OomScoreAdj))]
+    public static T ResetOomScoreAdj<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.OomScoreAdj));
+    #endregion
+    #region Pid
+    /// <inheritdoc cref="PodmanCreateSettings.Pid"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Pid))]
+    public static T SetPid<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Pid, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Pid"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Pid))]
+    public static T ResetPid<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Pid));
+    #endregion
+    #region PidsLimit
+    /// <inheritdoc cref="PodmanCreateSettings.PidsLimit"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.PidsLimit))]
+    public static T SetPidsLimit<T>(this T o, int? v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.PidsLimit, v));
+    /// <inheritdoc cref="PodmanCreateSettings.PidsLimit"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.PidsLimit))]
+    public static T ResetPidsLimit<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.PidsLimit));
+    #endregion
+    #region Pod
+    /// <inheritdoc cref="PodmanCreateSettings.Pod"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Pod))]
+    public static T SetPod<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Pod, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Pod"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Pod))]
+    public static T ResetPod<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Pod));
+    #endregion
+    #region PodIdFile
+    /// <inheritdoc cref="PodmanCreateSettings.PodIdFile"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.PodIdFile))]
+    public static T SetPodIdFile<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.PodIdFile, v));
+    /// <inheritdoc cref="PodmanCreateSettings.PodIdFile"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.PodIdFile))]
+    public static T ResetPodIdFile<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.PodIdFile));
+    #endregion
+    #region PreserveFds
+    /// <inheritdoc cref="PodmanCreateSettings.PreserveFds"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.PreserveFds))]
+    public static T SetPreserveFds<T>(this T o, int? v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.PreserveFds, v));
+    /// <inheritdoc cref="PodmanCreateSettings.PreserveFds"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.PreserveFds))]
+    public static T ResetPreserveFds<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.PreserveFds));
+    #endregion
+    #region Privileged
+    /// <inheritdoc cref="PodmanCreateSettings.Privileged"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Privileged))]
+    public static T SetPrivileged<T>(this T o, bool? v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Privileged, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Privileged"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Privileged))]
+    public static T ResetPrivileged<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Privileged));
+    /// <inheritdoc cref="PodmanCreateSettings.Privileged"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Privileged))]
+    public static T EnablePrivileged<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Privileged, true));
+    /// <inheritdoc cref="PodmanCreateSettings.Privileged"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Privileged))]
+    public static T DisablePrivileged<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Privileged, false));
+    /// <inheritdoc cref="PodmanCreateSettings.Privileged"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Privileged))]
+    public static T TogglePrivileged<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Privileged, !o.Privileged));
+    #endregion
+    #region Publish
+    /// <inheritdoc cref="PodmanCreateSettings.Publish"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Publish))]
+    public static T SetPublish<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Publish, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Publish"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Publish))]
+    public static T ResetPublish<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Publish));
+    #endregion
+    #region PublishAll
+    /// <inheritdoc cref="PodmanCreateSettings.PublishAll"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.PublishAll))]
+    public static T SetPublishAll<T>(this T o, bool? v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.PublishAll, v));
+    /// <inheritdoc cref="PodmanCreateSettings.PublishAll"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.PublishAll))]
+    public static T ResetPublishAll<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.PublishAll));
+    /// <inheritdoc cref="PodmanCreateSettings.PublishAll"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.PublishAll))]
+    public static T EnablePublishAll<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.PublishAll, true));
+    /// <inheritdoc cref="PodmanCreateSettings.PublishAll"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.PublishAll))]
+    public static T DisablePublishAll<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.PublishAll, false));
+    /// <inheritdoc cref="PodmanCreateSettings.PublishAll"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.PublishAll))]
+    public static T TogglePublishAll<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.PublishAll, !o.PublishAll));
+    #endregion
+    #region ReadOnly
+    /// <inheritdoc cref="PodmanCreateSettings.ReadOnly"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.ReadOnly))]
+    public static T SetReadOnly<T>(this T o, bool? v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.ReadOnly, v));
+    /// <inheritdoc cref="PodmanCreateSettings.ReadOnly"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.ReadOnly))]
+    public static T ResetReadOnly<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.ReadOnly));
+    /// <inheritdoc cref="PodmanCreateSettings.ReadOnly"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.ReadOnly))]
+    public static T EnableReadOnly<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.ReadOnly, true));
+    /// <inheritdoc cref="PodmanCreateSettings.ReadOnly"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.ReadOnly))]
+    public static T DisableReadOnly<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.ReadOnly, false));
+    /// <inheritdoc cref="PodmanCreateSettings.ReadOnly"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.ReadOnly))]
+    public static T ToggleReadOnly<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.ReadOnly, !o.ReadOnly));
+    #endregion
+    #region ReadOnlyTmpfs
+    /// <inheritdoc cref="PodmanCreateSettings.ReadOnlyTmpfs"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.ReadOnlyTmpfs))]
+    public static T SetReadOnlyTmpfs<T>(this T o, bool? v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.ReadOnlyTmpfs, v));
+    /// <inheritdoc cref="PodmanCreateSettings.ReadOnlyTmpfs"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.ReadOnlyTmpfs))]
+    public static T ResetReadOnlyTmpfs<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.ReadOnlyTmpfs));
+    /// <inheritdoc cref="PodmanCreateSettings.ReadOnlyTmpfs"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.ReadOnlyTmpfs))]
+    public static T EnableReadOnlyTmpfs<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.ReadOnlyTmpfs, true));
+    /// <inheritdoc cref="PodmanCreateSettings.ReadOnlyTmpfs"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.ReadOnlyTmpfs))]
+    public static T DisableReadOnlyTmpfs<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.ReadOnlyTmpfs, false));
+    /// <inheritdoc cref="PodmanCreateSettings.ReadOnlyTmpfs"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.ReadOnlyTmpfs))]
+    public static T ToggleReadOnlyTmpfs<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.ReadOnlyTmpfs, !o.ReadOnlyTmpfs));
+    #endregion
+    #region Replace
+    /// <inheritdoc cref="PodmanCreateSettings.Replace"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Replace))]
+    public static T SetReplace<T>(this T o, bool? v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Replace, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Replace"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Replace))]
+    public static T ResetReplace<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Replace));
+    /// <inheritdoc cref="PodmanCreateSettings.Replace"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Replace))]
+    public static T EnableReplace<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Replace, true));
+    /// <inheritdoc cref="PodmanCreateSettings.Replace"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Replace))]
+    public static T DisableReplace<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Replace, false));
+    /// <inheritdoc cref="PodmanCreateSettings.Replace"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Replace))]
+    public static T ToggleReplace<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Replace, !o.Replace));
+    #endregion
+    #region Restart
+    /// <inheritdoc cref="PodmanCreateSettings.Restart"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Restart))]
+    public static T SetRestart<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Restart, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Restart"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Restart))]
+    public static T ResetRestart<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Restart));
+    #endregion
+    #region Rm
+    /// <inheritdoc cref="PodmanCreateSettings.Rm"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Rm))]
+    public static T SetRm<T>(this T o, bool? v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Rm, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Rm"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Rm))]
+    public static T ResetRm<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Rm));
+    /// <inheritdoc cref="PodmanCreateSettings.Rm"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Rm))]
+    public static T EnableRm<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Rm, true));
+    /// <inheritdoc cref="PodmanCreateSettings.Rm"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Rm))]
+    public static T DisableRm<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Rm, false));
+    /// <inheritdoc cref="PodmanCreateSettings.Rm"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Rm))]
+    public static T ToggleRm<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Rm, !o.Rm));
+    #endregion
+    #region SecurityOpt
+    /// <inheritdoc cref="PodmanCreateSettings.SecurityOpt"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.SecurityOpt))]
+    public static T SetSecurityOpt<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.SecurityOpt, v));
+    /// <inheritdoc cref="PodmanCreateSettings.SecurityOpt"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.SecurityOpt))]
+    public static T ResetSecurityOpt<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.SecurityOpt));
+    #endregion
+    #region ShmSize
+    /// <inheritdoc cref="PodmanCreateSettings.ShmSize"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.ShmSize))]
+    public static T SetShmSize<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.ShmSize, v));
+    /// <inheritdoc cref="PodmanCreateSettings.ShmSize"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.ShmSize))]
+    public static T ResetShmSize<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.ShmSize));
+    #endregion
+    #region SigProxy
+    /// <inheritdoc cref="PodmanCreateSettings.SigProxy"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.SigProxy))]
+    public static T SetSigProxy<T>(this T o, bool? v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.SigProxy, v));
+    /// <inheritdoc cref="PodmanCreateSettings.SigProxy"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.SigProxy))]
+    public static T ResetSigProxy<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.SigProxy));
+    /// <inheritdoc cref="PodmanCreateSettings.SigProxy"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.SigProxy))]
+    public static T EnableSigProxy<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.SigProxy, true));
+    /// <inheritdoc cref="PodmanCreateSettings.SigProxy"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.SigProxy))]
+    public static T DisableSigProxy<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.SigProxy, false));
+    /// <inheritdoc cref="PodmanCreateSettings.SigProxy"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.SigProxy))]
+    public static T ToggleSigProxy<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.SigProxy, !o.SigProxy));
+    #endregion
+    #region StopSignal
+    /// <inheritdoc cref="PodmanCreateSettings.StopSignal"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.StopSignal))]
+    public static T SetStopSignal<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.StopSignal, v));
+    /// <inheritdoc cref="PodmanCreateSettings.StopSignal"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.StopSignal))]
+    public static T ResetStopSignal<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.StopSignal));
+    #endregion
+    #region StopTimeout
+    /// <inheritdoc cref="PodmanCreateSettings.StopTimeout"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.StopTimeout))]
+    public static T SetStopTimeout<T>(this T o, int? v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.StopTimeout, v));
+    /// <inheritdoc cref="PodmanCreateSettings.StopTimeout"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.StopTimeout))]
+    public static T ResetStopTimeout<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.StopTimeout));
+    #endregion
+    #region Subgidname
+    /// <inheritdoc cref="PodmanCreateSettings.Subgidname"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Subgidname))]
+    public static T SetSubgidname<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Subgidname, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Subgidname"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Subgidname))]
+    public static T ResetSubgidname<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Subgidname));
+    #endregion
+    #region Subuidname
+    /// <inheritdoc cref="PodmanCreateSettings.Subuidname"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Subuidname))]
+    public static T SetSubuidname<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Subuidname, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Subuidname"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Subuidname))]
+    public static T ResetSubuidname<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Subuidname));
+    #endregion
+    #region Sysctl
+    /// <inheritdoc cref="PodmanCreateSettings.Sysctl"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Sysctl))]
+    public static T SetSysctl<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Sysctl, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Sysctl"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Sysctl))]
+    public static T ResetSysctl<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Sysctl));
+    #endregion
+    #region Tmpfs
+    /// <inheritdoc cref="PodmanCreateSettings.Tmpfs"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Tmpfs))]
+    public static T SetTmpfs<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Tmpfs, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Tmpfs"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Tmpfs))]
+    public static T ResetTmpfs<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Tmpfs));
+    #endregion
+    #region Tty
+    /// <inheritdoc cref="PodmanCreateSettings.Tty"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Tty))]
+    public static T SetTty<T>(this T o, bool? v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Tty, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Tty"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Tty))]
+    public static T ResetTty<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Tty));
+    /// <inheritdoc cref="PodmanCreateSettings.Tty"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Tty))]
+    public static T EnableTty<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Tty, true));
+    /// <inheritdoc cref="PodmanCreateSettings.Tty"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Tty))]
+    public static T DisableTty<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Tty, false));
+    /// <inheritdoc cref="PodmanCreateSettings.Tty"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Tty))]
+    public static T ToggleTty<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Tty, !o.Tty));
+    #endregion
+    #region Ulimit
+    /// <inheritdoc cref="PodmanCreateSettings.Ulimit"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Ulimit))]
+    public static T SetUlimit<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Ulimit, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Ulimit"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Ulimit))]
+    public static T ResetUlimit<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Ulimit));
+    #endregion
+    #region User
+    /// <inheritdoc cref="PodmanCreateSettings.User"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.User))]
+    public static T SetUser<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.User, v));
+    /// <inheritdoc cref="PodmanCreateSettings.User"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.User))]
+    public static T ResetUser<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.User));
+    #endregion
+    #region Userns
+    /// <inheritdoc cref="PodmanCreateSettings.Userns"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Userns))]
+    public static T SetUserns<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Userns, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Userns"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Userns))]
+    public static T ResetUserns<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Userns));
+    #endregion
+    #region Uts
+    /// <inheritdoc cref="PodmanCreateSettings.Uts"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Uts))]
+    public static T SetUts<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Uts, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Uts"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Uts))]
+    public static T ResetUts<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Uts));
+    #endregion
+    #region Volume
+    /// <inheritdoc cref="PodmanCreateSettings.Volume"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Volume))]
+    public static T SetVolume<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Volume, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Volume"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Volume))]
+    public static T ResetVolume<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Volume));
+    #endregion
+    #region VolumesFrom
+    /// <inheritdoc cref="PodmanCreateSettings.VolumesFrom"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.VolumesFrom))]
+    public static T SetVolumesFrom<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.VolumesFrom, v));
+    /// <inheritdoc cref="PodmanCreateSettings.VolumesFrom"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.VolumesFrom))]
+    public static T ResetVolumesFrom<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.VolumesFrom));
+    #endregion
+    #region Workdir
+    /// <inheritdoc cref="PodmanCreateSettings.Workdir"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Workdir))]
+    public static T SetWorkdir<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Workdir, v));
+    /// <inheritdoc cref="PodmanCreateSettings.Workdir"/>
+    [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Workdir))]
+    public static T ResetWorkdir<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Workdir));
+    #endregion
 }
 #endregion
 #region PodmanPsSettingsExtensions

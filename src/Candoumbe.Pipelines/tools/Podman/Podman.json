@@ -881,7 +881,670 @@
       "help": "<p>Creates a writable container layer over the specified image and prepares it for running the specified command. The container ID is then printed to STDOUT. This is similar to <b>podman run -d</b> except the container is never started. Use the <b>podman start</b> <i>container</i> command to start the container at any point.</p><p>The initial status of the container created with <b>podman create</b> is ‘created’.</p><p>Default settings for flags are defined in containers.conf. Most settings for remote connections use the server’s <c>containers.conf</c>, except when documented in man pages.</p>",
       "postfix": "Create",
       "definiteArgument": "create",
-      "settingsClass": {}
+      "settingsClass": {
+        "properties": [
+          {
+            "name": "AddHost",
+            "type": "IReadOnlyList<string>",
+            "format": "--add-host={value}",
+            "help": "<para>Add a custom host-to-IP mapping to the container’s <c>/etc/hosts</c> file.<para>The option takes one or multiple semicolon-separated hostnames to be mapped to a single IPv4 or IPv6 address, separated by a colon. It can also be used to overwrite the IP addresses of hostnames Podman adds to <c>/etc/hosts</c> by default (also see the <c>--name</c> and <c>--hostname</c> options). This option can be specified multiple times to add additional mappings to <c>/etc/hosts</c>. It conflicts with the <c>--no-hosts</c> option and conflicts with <c>no_hosts=true</c> in <c>containers.conf</c>.</para><para>Instead of an IP address, the special flag <c>host-gateway</c> can be given. This resolves to an IP address the container can use to connect to the host. The IP address chosen depends on your network setup, thus there’s no guarantee that Podman can determine the <c>host-gateway</c> address automatically, which will then cause Podman to fail with an error message. You can overwrite this IP address using the <c>host_containers_internal_ip</c> option in <c>containers.conf</c>.</para></para>"
+          },
+          {
+            "name": "Annotation",
+            "type": "IReadOnlyList<string>",
+            "format": "--annotation={value}",
+            "help": "<para>Add an annotation to the container.<para>This option can be set multiple times.</para></para>"
+          },
+          {
+            "name": "Arch",
+            "type": "string",
+            "format": "--arch={value}",
+            "help": "<para>Override the architecture, defaults to hosts, of the image to be pulled.<para>For example, <c>arm</c>. Unless overridden, subsequent lookups of the same image in the local storage matches this architecture, regardless of the host.</para></para>"
+          },
+          {
+            "name": "Attach",
+            "type": "IReadOnlyList<string>",
+            "format": "--attach={value}",
+            "help": "<para>Attach to STDIN, STDOUT or STDERR.<para>In foreground mode (the default when <c>-d</c> is not specified), <c>podman run</c> can start the process in the container and attach the console to the process’s standard input, output, and error. It can even pretend to be a TTY (this is what most command-line executables expect) and pass along signals. The <c>-a</c> option can be set for each of <c>stdin</c>, <c>stdout</c>, and <c>stderr</c>.</para></para>"
+          },
+          {
+            "name": "AuthFile",
+            "type": "string",
+            "format": "--authfile={value}",
+            "help": "<para>Path of the authentication file.<para>Default is <c>${XDG_RUNTIME_DIR}/containers/auth.json</c> on Linux, and <c>$HOME/.config/containers/auth.json</c> on Windows/macOS. The file is created by <c>podman login</c>. If the authorization state is not found there, <c>$HOME/.docker/config.json</c> is checked, which is set using <c>docker login</c>.</para><para>Note: There is also the option to override the default path of the authentication file by setting the <c>REGISTRY_AUTH_FILE</c> environment variable. This can be done with <c>export REGISTRY_AUTH_FILE=path</c>.</para></para>"
+          },
+          {
+            "name": "BlkioWeight",
+            "type": "int",
+            "format": "--blkio-weight={value}",
+            "help": "<para>Block IO relative weight.<para>The <c>weight</c> is a value between <c>10</c> and <c>1000</c>.</para><para>This option is not supported on cgroups V1 rootless systems.</para></para>"
+          },
+          {
+            "name": "BlkioWeightDevice",
+            "type": "IReadOnlyList<string>",
+            "format": "--blkio-weight-device={value}",
+            "help": "<para>Block IO relative device weight.</para>"
+          },
+          {
+            "name": "CapAdd",
+            "type": "IReadOnlyList<string>",
+            "format": "--cap-add={value}",
+            "help": "<para>Add Linux capabilities.<para>Granting additional capabilities increases the privileges of the processes running inside the container and potentially allow it to break out of confinement. Capabilities like <c>CAP_SYS_ADMIN</c>, <c>CAP_SYS_PTRACE</c>, <c>CAP_MKNOD</c> and <c>CAP_SYS_MODULE</c> are particularly dangerous when they are not used within a user namespace. Please refer to <c>user_namespaces(7)</c> for a more detailed explanation of the interaction between user namespaces and capabilities.</para><para>Before adding any capability, review its security implications and ensure it is really necessary for the container’s functionality. See <c>capabilities(7)</c> for more information.</para></para>"
+          },
+          {
+            "name": "CapDrop",
+            "type": "IReadOnlyList<string>",
+            "format": "--cap-drop={value}",
+            "help": "<para>Drop Linux capabilities.</para>"
+          },
+          {
+            "name": "CgroupConf",
+            "type": "IReadOnlyList<string>",
+            "format": "--cgroup-conf={value}",
+            "help": "<para>When running on cgroup v2, specify the cgroup file to write to and its value.<para>For example <c>--cgroup-conf=memory.high=1073741824</c> sets the memory.high limit to 1GB.</para></para>"
+          },
+          {
+            "name": "CgroupParent",
+            "type": "string",
+            "format": "--cgroup-parent={value}",
+            "help": "<para>Path to cgroups under which the cgroup for the container is created.<para>If the path is not absolute, the path is considered to be relative to the cgroups path of the init process. Cgroups are created if they do not already exist.</para></para>"
+          },
+          {
+            "name": "CgroupNs",
+            "type": "string",
+            "format": "--cgroupns={value}",
+            "help": "<para>Set the cgroup namespace mode for the container.<para>Possible values: <c>host</c> (use the host’s cgroup namespace inside the container), <c>container:id</c> (join the namespace of the specified container), <c>private</c> (create a new cgroup namespace), <c>ns:path</c> (join the namespace at the specified path).</para><para>If the host uses cgroups v1, the default is set to <c>host</c>. On cgroups v2, the default is <c>private</c>.</para></para>"
+          },
+          {
+            "name": "Cgroups",
+            "type": "string",
+            "format": "--cgroups={value}",
+            "help": "<para>Determines whether the container creates cgroups.<para>Default is <c>enabled</c>.</para><para>The <c>enabled</c> option creates a new cgroup under the cgroup-parent. The <c>disabled</c> option forces the container to not create cgroups, and thus conflicts with cgroup options (<c>--cgroupns</c> and <c>--cgroup-parent</c>). The <c>no-conmon</c> option disables a new cgroup only for the <c>conmon</c> process. The <c>split</c> option splits the current cgroup in two sub-cgroups: one for conmon and one for the container payload. It is not possible to set <c>--cgroup-parent</c> with <c>split</c>.</para></para>"
+          },
+          {
+            "name": "ChrootDirs",
+            "type": "IReadOnlyList<string>",
+            "format": "--chrootdirs={value}",
+            "help": "<para>Path to a directory inside the container that is treated as a <c>chroot</c> directory.<para>Any Podman managed file (e.g., <c>/etc/resolv.conf</c>, <c>/etc/hosts</c>, <c>/etc/hostname</c>) that is mounted into the root directory is mounted into that location as well. Multiple directories are separated with a comma.</para></para>"
+          },
+          {
+            "name": "CidFile",
+            "type": "string",
+            "format": "--cidfile={value}",
+            "help": "<para>Write the container ID to value. The file is removed along with the container, except when used with podman --remote run on detached containers.</para>"
+          },
+          {
+            "name": "ConmonPidFile",
+            "type": "string",
+            "format": "--conmon-pidfile={value}",
+            "help": "<para>Write the pid of the <c>conmon</c> process to a file.<para>As <c>conmon</c> runs in a separate process than Podman, this is necessary when using systemd to restart Podman containers.</para><para>This option is not available with the remote Podman client, including Mac and Windows (excluding WSL2) machines.</para></para>"
+          },
+          {
+            "name": "CpuPeriod",
+            "type": "int",
+            "format": "--cpu-period={value}",
+            "help": "<para>Set the CPU period for the Completely Fair Scheduler (CFS), which is a duration in microseconds.<para>Once the container’s CPU quota is used up, it will not be scheduled to run until the current period ends. Defaults to 100000 microseconds.</para><para>On some systems, changing the resource limits may not be allowed for non-root users.</para><para>This option is not supported on cgroups V1 rootless systems.</para></para>"
+          },
+          {
+            "name": "CpuQuota",
+            "type": "int",
+            "format": "--cpu-quota={value}",
+            "help": "<para>Limit the CPU Completely Fair Scheduler (CFS) quota.<para>Limit the container’s CPU usage. By default, containers run with the full CPU resource. The limit is a number in microseconds. If a number is provided, the container is allowed to use that much CPU time until the CPU period ends (controllable via <c>--cpu-period</c>).</para><para>On some systems, changing the resource limits may not be allowed for non-root users.</para><para>This option is not supported on cgroups V1 rootless systems.</para></para>"
+          },
+          {
+            "name": "CpuRtPeriod",
+            "type": "int",
+            "format": "--cpu-rt-period={value}",
+            "help": "<para>Limit the CPU real-time period in microseconds.<para>Limit the container’s Real Time CPU usage. This option tells the kernel to restrict the container’s Real Time CPU usage to the period specified.</para><para>This option is only supported on cgroups V1 rootful systems.</para></para>"
+          },
+          {
+            "name": "CpuRtRuntime",
+            "type": "int",
+            "format": "--cpu-rt-runtime={value}",
+            "help": "<para>Limit the CPU real-time runtime in microseconds.<para>Limit the containers Real Time CPU usage. This option tells the kernel to limit the amount of time in a given CPU period Real Time tasks may consume. Ex: Period of 1,000,000us and Runtime of 950,000us means that this container can consume 95% of available CPU and leave the remaining 5% to normal priority tasks.</para><para>The sum of all runtimes across containers cannot exceed the amount allotted to the parent cgroup.</para><para>This option is only supported on cgroups V1 rootful systems.</para></para>"
+          },
+          {
+            "name": "CpusetCpus",
+            "type": "string",
+            "format": "--cpuset-cpus={value}",
+            "help": "<para>CPUs in which to allow execution.<para>Can be specified as a comma-separated list (e.g. <c>0,1</c>), as a range (e.g. <c>0-3</c>), or any combination thereof (e.g. <c>0-3,7,11-15</c>).</para><para>On some systems, changing the resource limits may not be allowed for non-root users.</para><para>This option is not supported on cgroups V1 rootless systems.</para></para>"
+          },
+          {
+            "name": "CpusetMems",
+            "type": "string",
+            "format": "--cpuset-mems={value}",
+            "help": "<para>Memory nodes (MEMs) in which to allow execution (0-3, 0,1).<para>Only effective on NUMA systems.</para><para>If there are four memory nodes on the system (0-3), use <c>--cpuset-mems=0,1</c> then processes in the container only uses memory from the first two memory nodes.</para><para>On some systems, changing the resource limits may not be allowed for non-root users.</para><para>This option is not supported on cgroups V1 rootless systems.</para></para>"
+          },
+          {
+            "name": "DecryptionKey",
+            "type": "IReadOnlyList<string>",
+            "format": "--decryption-key={value}",
+            "help": "<para>The <c>[key[:passphrase]]</c> to be used for decryption of images.<para>Key can point to keys and/or certificates. Decryption is tried with all keys. If the key is protected by a passphrase, it is required to be passed in the argument and omitted otherwise.</para></para>"
+          },
+          {
+            "name": "Device",
+            "type": "IReadOnlyList<string>",
+            "format": "--device={value}",
+            "help": "<para>Add a host device to the container.<para>Optional value parameter can be used to specify device permissions by combining <c>r</c> for read, <c>w</c> for write, and <c>m</c> for <c>mknod(2)</c>.</para><para>Example: <c>--device=/dev/sdc:/dev/xvdc:rwm</c>.</para><para>Note: if <c>host-device</c> is a symbolic link then it is resolved first. The container only stores the major and minor numbers of the host device.</para><para>Podman may load kernel modules required for using the specified device. The devices that Podman loads modules for when necessary are: <c>/dev/fuse</c>.</para><para>In rootless mode, the new device is bind mounted in the container from the host rather than Podman creating it within the container space. Because the bind mount retains its SELinux label on SELinux systems, the container can get permission denied when accessing the mounted device. Modify SELinux settings to allow containers to use all device labels via the following command: <c>sudo setsebool -P container_use_devices=true</c>.</para><para>Note: if the user only has access rights via a group, accessing the device from inside a rootless container fails. Use the <c>--group-add keep-groups</c> flag to pass the user’s supplementary group access into the container.</para></para>"
+          },
+          {
+            "name": "DeviceCgroupRule",
+            "type": "IReadOnlyList<string>",
+            "format": "--device-cgroup-rule={value}",
+            "help": "<para>Add a rule to the cgroup allowed devices list.<para>The rule is expected to be in the format specified in the Linux kernel documentation: <c>type</c> can be <c>a</c> (all), <c>c</c> (char), or <c>b</c> (block); <c>major</c> and <c>minor</c> can be a number or <c>*</c>; <c>mode</c> is a composition of <c>r</c> (read), <c>w</c> (write), and <c>m</c> (mknod(2)).</para></para>"
+          },
+          {
+            "name": "DeviceReadBps",
+            "type": "IReadOnlyList<string>",
+            "format": "--device-read-bps={value}",
+            "help": "<para>Limit read rate (in bytes per second) from a device.<para>Example: <c>--device-read-bps=/dev/sda:1mb</c>.</para><para>On some systems, changing the resource limits may not be allowed for non-root users.</para><para>This option is not supported on cgroups V1 rootless systems.</para></para>"
+          },
+          {
+            "name": "DeviceReadIops",
+            "type": "IReadOnlyList<string>",
+            "format": "--device-read-iops={value}",
+            "help": "<para>Limit read rate (in IO operations per second) from a device.<para>Example: <c>--device-read-iops=/dev/sda:1000</c>.</para><para>On some systems, changing the resource limits may not be allowed for non-root users.</para><para>This option is not supported on cgroups V1 rootless systems.</para></para>"
+          },
+          {
+            "name": "DeviceWriteBps",
+            "type": "IReadOnlyList<string>",
+            "format": "--device-write-bps={value}",
+            "help": "<para>Limit write rate (in bytes per second) to a device.<para>Example: <c>--device-write-bps=/dev/sda:1mb</c>.</para><para>On some systems, changing the resource limits may not be allowed for non-root users.</para><para>This option is not supported on cgroups V1 rootless systems.</para></para>"
+          },
+          {
+            "name": "DeviceWriteIops",
+            "type": "IReadOnlyList<string>",
+            "format": "--device-write-iops={value}",
+            "help": "<para>Limit write rate (in IO operations per second) to a device.<para>Example: <c>--device-write-iops=/dev/sda:1000</c>.</para><para>On some systems, changing the resource limits may not be allowed for non-root users.</para><para>This option is not supported on cgroups V1 rootless systems.</para></para>"
+          },
+          {
+            "name": "DisableContentTrust",
+            "type": "bool",
+            "format": "--disable-content-trust",
+            "help": "<para>This is a Docker-specific option to disable image verification to a container registry and is not supported by Podman.<para>This option is a NOOP and provided solely for scripting compatibility.</para></para>"
+          },
+          {
+            "name": "Dns",
+            "type": "IReadOnlyList<string>",
+            "format": "--dns={value}",
+            "help": "<para>Set custom DNS servers.<para>This option can be used to override the DNS configuration passed to the container. Typically this is necessary when the host DNS configuration is invalid for the container (e.g., <c>127.0.0.1</c>). When this is the case the <c>--dns</c> flag is necessary for every run.</para><para>The special value <c>none</c> can be specified to disable creation of <c>/etc/resolv.conf</c> in the container by Podman. The <c>/etc/resolv.conf</c> file in the image is then used without changes.</para><para>Note that <c>ipaddr</c> may be added directly to the container’s <c>/etc/resolv.conf</c>. This is not guaranteed though. For example, passing a custom network whose <c>dns_enabled</c> is set to <c>true</c> to <c>--network</c> will result in <c>/etc/resolv.conf</c> only referring to the aardvark-dns server. aardvark-dns then forwards to the supplied <c>ipaddr</c> for all non-container name queries.</para><para>This option cannot be combined with <c>--network</c> that is set to <c>none</c> or <c>container:id</c>.</para></para>"
+          },
+          {
+            "name": "DnsOption",
+            "type": "IReadOnlyList<string>",
+            "format": "--dns-option={value}",
+            "help": "<para>Set custom DNS options.<para>Invalid if using <c>--dns-option</c> with <c>--network</c> that is set to <c>none</c> or <c>container:id</c>.</para></para>"
+          },
+          {
+            "name": "DnsSearch",
+            "type": "IReadOnlyList<string>",
+            "format": "--dns-search={value}",
+            "help": "<para>Set custom DNS search domains.<para>Invalid if using <c>--dns-search</c> with <c>--network</c> that is set to <c>none</c> or <c>container:id</c>. Use <c>--dns-search=.</c> to remove the search domain.</para></para>"
+          },
+          {
+            "name": "EntryPoint",
+            "type": "IReadOnlyList<string>",
+            "format": "--entrypoint={value}",
+            "help": "<para>Override the default ENTRYPOINT from the image.<para>The ENTRYPOINT of an image is similar to a COMMAND because it specifies what executable to run when the container starts, but it is (purposely) more difficult to override. The ENTRYPOINT gives a container its default nature or behavior. When the ENTRYPOINT is set, the container runs as if it were that binary, complete with default options. More options can be passed in via the COMMAND. But, if a user wants to run something else inside the container, the <c>--entrypoint</c> option allows a new ENTRYPOINT to be specified.</para><para>Specify multi option commands in the form of a JSON string.</para></para>"
+          },
+          {
+            "name": "Env",
+            "type": "IReadOnlyList<string>",
+            "format": "--env={value}",
+            "help": "<para>Set environment variables.<para>This option allows arbitrary environment variables that are available for the process to be launched inside of the container. If an environment variable is specified without a value, Podman checks the host environment for a value and set the variable only if it is set on the host. As a special case, if an environment variable ending in <c>*</c> is specified without a value, Podman searches the host environment for variables starting with the prefix and adds those variables to the container.</para></para>"
+          },
+          {
+            "name": "EnvFile",
+            "type": "string",
+            "format": "--env-file={value}",
+            "help": "<para>Read in a line-delimited file of environment variables.</para>"
+          },
+          {
+            "name": "EnvHost",
+            "type": "bool",
+            "format": "--env-host",
+            "help": "<para>Use host environment inside of the container.<para>See Environment note below for precedence. This option is not available with the remote Podman client, including Mac and Windows (excluding WSL2) machines.</para></para>"
+          },
+          {
+            "name": "EnvMerge",
+            "type": "IReadOnlyList<string>",
+            "format": "--env-merge={value}",
+            "help": "<para>Preprocess default environment variables for the containers.<para>For example if image contains environment variable <c>hello=world</c> user can preprocess it using <c>--env-merge hello=${hello}-some</c> so new value is <c>hello=world-some</c>.</para><para>Please note that if the environment variable <c>hello</c> is not present in the image, then it’ll be replaced by an empty string and so using <c>--env-merge hello=${hello}-some</c> would result in the new value of <c>hello=-some</c>, notice the leading <c>-</c> delimiter.</para></para>"
+          },
+          {
+            "name": "Expose",
+            "type": "IReadOnlyList<string>",
+            "format": "--expose={value}",
+            "help": "<para>Expose a port or a range of ports (e.g. <c>--expose=3300-3310</c>).<para>The protocol can be <c>tcp</c>, <c>udp</c> or <c>sctp</c> and if not given <c>tcp</c> is assumed. This option matches the EXPOSE instruction for image builds and has no effect on the actual networking rules unless <c>-P/--publish-all</c> is used to forward to all exposed ports from random host ports. To forward specific ports from the host into the container use the <c>-p/--publish</c> option instead.</para></para>"
+          },
+          {
+            "name": "GidMap",
+            "type": "IReadOnlyList<string>",
+            "format": "--gidmap={value}",
+            "help": "<para>Run the container in a new user namespace using the supplied GID mapping.<para>This option conflicts with the <c>--userns</c> and <c>--subgidname</c> options. This option provides a way to map host GIDs to container GIDs in the same way as <c>--uidmap</c> maps host UIDs to container UIDs. For details see <c>--uidmap</c>.</para><para>Note: the <c>--gidmap</c> option cannot be called in conjunction with the <c>--pod</c> option as a gidmap cannot be set on the container level when in a pod.</para></para>"
+          },
+          {
+            "name": "Gpus",
+            "type": "string",
+            "format": "--gpus={value}",
+            "help": "<para>GPU devices to add to the container (‘all’ to pass all GPUs).<para>Currently only Nvidia devices are supported.</para></para>"
+          },
+          {
+            "name": "GroupAdd",
+            "type": "IReadOnlyList<string>",
+            "format": "--group-add={value}",
+            "help": "<para>Assign additional groups to the primary user running within the container process.<para><c>keep-groups</c> is a special flag that tells Podman to keep the supplementary group access.</para><para>Allows container to use the user’s supplementary group access. If file systems or devices are only accessible by the rootless user’s group, this flag tells the OCI runtime to pass the group access into the container. Currently only available with the <c>crun</c> OCI runtime. Note: <c>keep-groups</c> is exclusive, other groups cannot be specified with this flag. This option is not available for remote commands, including Mac and Windows (excluding WSL2) machines.</para></para>"
+          },
+          {
+            "name": "GroupEntry",
+            "type": "string",
+            "format": "--group-entry={value}",
+            "help": "<para>Customize the entry that is written to the <c>/etc/group</c> file within the container when <c>--user</c> is used.<para>The variables <c>$GROUPNAME</c>, <c>$GID</c>, and <c>$USERLIST</c> are automatically replaced with their value at runtime if present.</para></para>"
+          },
+          {
+            "name": "HealthCmd",
+            "type": "IReadOnlyList<string>",
+            "format": "--health-cmd={value}",
+            "help": "<para>Set or alter a healthcheck command for a container.<para>The command is a command to be executed inside the container that determines the container health. The command is required for other healthcheck options to be applied. A value of <c>none</c> disables existing healthchecks.</para><para>Multiple options can be passed in the form of a JSON array; otherwise, the command is interpreted as an argument to <c>/bin/sh -c</c>.</para></para>"
+          },
+          {
+            "name": "HealthInterval",
+            "type": "string",
+            "format": "--health-interval={value}",
+            "help": "<para>Set an interval for the healthchecks.<para>An <c>interval</c> of <c>disable</c> results in no automatic timer setup. The default is <c>30s</c>.</para></para>"
+          },
+          {
+            "name": "HealthLogDestination",
+            "type": "string",
+            "format": "--health-log-destination={value}",
+            "help": "<para>Set the destination of the HealthCheck log.<para>Possible values: <c>local</c> (HealthCheck logs are stored in overlay containers), <c>directory</c> (creates a log file named <c>&lt;container-ID&gt;-healthcheck.log</c> with HealthCheck logs in the specified directory), <c>events_logger</c> (the log will be written with logging mechanism set by events_logger).</para></para>"
+          },
+          {
+            "name": "HealthMaxLogCount",
+            "type": "int",
+            "format": "--health-max-log-count={value}",
+            "help": "<para>Set maximum number of attempts in the HealthCheck log file.<para>‘0’ value means an infinite number of attempts in the log file. Default: 5 attempts.</para></para>"
+          },
+          {
+            "name": "HealthMaxLogSize",
+            "type": "int",
+            "format": "--health-max-log-size={value}",
+            "help": "<para>Set maximum length in characters of stored HealthCheck log.<para>‘0’ value means an infinite log length. Default: 500 characters.</para></para>"
+          },
+          {
+            "name": "HealthOnFailure",
+            "type": "string",
+            "format": "--health-on-failure={value}",
+            "help": "<para>Action to take once the container transitions to an unhealthy state.<para>Possible values: <c>none</c> (take no action), <c>kill</c> (kill the container), <c>restart</c> (restart the container; do not combine the <c>restart</c> action with the <c>--restart</c> flag), <c>stop</c> (stop the container).</para></para>"
+          },
+          {
+            "name": "HealthRetries",
+            "type": "int",
+            "format": "--health-retries={value}",
+            "help": "<para>The number of retries allowed before a healthcheck is considered to be unhealthy.<para>The default value is <c>3</c>.</para></para>"
+          },
+          {
+            "name": "HealthStartPeriod",
+            "type": "string",
+            "format": "--health-start-period={value}",
+            "help": "<para>The initialization time needed for a container to bootstrap.<para>The value can be expressed in time format like <c>2m3s</c>. The default value is <c>0s</c>.</para><para>Note: The health check command is executed as soon as a container is started, if the health check is successful the container’s health state will be updated to <c>healthy</c>. However, if the health check fails, the health state will stay as <c>starting</c> until either the health check is successful or until the <c>--health-start-period</c> time is over. If the health check command fails after the <c>--health-start-period</c> time is over, the health state will be updated to <c>unhealthy</c>.</para></para>"
+          },
+          {
+            "name": "HealthStartupCmd",
+            "type": "IReadOnlyList<string>",
+            "format": "--health-startup-cmd={value}",
+            "help": "<para>Set a startup healthcheck command for a container.<para>This command is executed inside the container and is used to gate the regular healthcheck. When the startup command succeeds, the regular healthcheck begins and the startup healthcheck ceases. Optionally, if the command fails for a set number of attempts, the container is restarted. A startup healthcheck can be used to ensure that containers with an extended startup period are not marked as unhealthy until they are fully started. Startup healthchecks can only be used when a regular healthcheck (from the container’s image or the <c>--health-cmd</c> option) is also set.</para></para>"
+          },
+          {
+            "name": "HealthStartupInterval",
+            "type": "string",
+            "format": "--health-startup-interval={value}",
+            "help": "<para>Set an interval for the startup healthcheck.<para>An <c>interval</c> of <c>disable</c> results in no automatic timer setup. The default is <c>30s</c>.</para></para>"
+          },
+          {
+            "name": "HealthStartupRetries",
+            "type": "int",
+            "format": "--health-startup-retries={value}",
+            "help": "<para>The number of attempts allowed before the startup healthcheck restarts the container.<para>If set to <c>0</c>, the container is never restarted. The default is <c>0</c>.</para></para>"
+          },
+          {
+            "name": "HealthStartupSuccess",
+            "type": "int",
+            "format": "--health-startup-success={value}",
+            "help": "<para>The number of successful runs required before the startup healthcheck succeeds and the regular healthcheck begins.<para>A value of <c>0</c> means that any success begins the regular healthcheck. The default is <c>0</c>.</para></para>"
+          },
+          {
+            "name": "HealthStartupTimeout",
+            "type": "string",
+            "format": "--health-startup-timeout={value}",
+            "help": "<para>The maximum time a startup healthcheck command has to complete before it is marked as failed.<para>The value can be expressed in a time format like <c>2m3s</c>. The default value is <c>30s</c>.</para></para>"
+          },
+          {
+            "name": "HealthTimeout",
+            "type": "string",
+            "format": "--health-timeout={value}",
+            "help": "<para>The maximum time allowed to complete the healthcheck before an interval is considered failed.<para>Like start-period, the value can be expressed in a time format such as <c>1m22s</c>. The default value is <c>30s</c>.</para></para>"
+          },
+          {
+            "name": "Hostname",
+            "type": "string",
+            "format": "--hostname={value}",
+            "help": "<para>Sets the container host name that is available inside the container.<para>Can only be used with a private UTS namespace <c>--uts=private</c> (default). If <c>--pod</c> is specified and the pod shares the UTS namespace (default) the pod’s hostname is used.</para></para>"
+          },
+          {
+            "name": "HostUser",
+            "type": "string",
+            "format": "--hostuser={value}",
+            "help": "<para>Add a user account to <c>/etc/passwd</c> from the host to the container.<para>The Username or UID must exist on the host system.</para></para>"
+          },
+          {
+            "name": "HttpProxy",
+            "type": "bool",
+            "format": "--http-proxy={value}",
+            "help": "<para>By default proxy environment variables are passed into the container if set for the Podman process.<para>This can be disabled by setting the value to <c>false</c>. The environment variables passed in include <c>http_proxy</c>, <c>https_proxy</c>, <c>ftp_proxy</c>, <c>no_proxy</c>, and also the upper case versions of those. This option is only needed when the host system must use a proxy but the container does not use any proxy. Proxy environment variables specified for the container in any other way overrides the values that have been passed through from the host. When used with the remote client it uses the proxy environment variables that are set on the server process.</para><para>Defaults to <c>true</c>.</para></para>"
+          },
+          {
+            "name": "ImageVolume",
+            "type": "string",
+            "format": "--image-volume={value}",
+            "help": "<para>Tells Podman how to handle the builtin image volumes.<para>Possible values: <c>bind</c> (an anonymous named volume is created and mounted into the container), <c>tmpfs</c> (the volume is mounted onto the container as a tmpfs, which allows the users to create content that disappears when the container is stopped), <c>ignore</c> (all volumes are just ignored and no action is taken).</para></para>"
+          },
+          {
+            "name": "Init",
+            "type": "bool",
+            "format": "--init",
+            "help": "<para>Run an init inside the container that forwards signals and reaps processes.<para>The container-init binary is mounted at <c>/run/podman-init</c>. Mounting over <c>/run</c> breaks container execution.</para></para>"
+          },
+          {
+            "name": "InitCtr",
+            "type": "string",
+            "format": "--init-ctr={value}",
+            "help": "<para>When using pods, create an init style container.<para>Valid values: <c>always</c> (the container runs with each and every <c>pod start</c>), <c>once</c> (the container only runs once when the pod is started and then the container is removed).</para><para>Init containers are only run on pod <c>start</c>. Restarting a pod does not execute any init containers. Furthermore, init containers can only be created in a pod when that pod is not running.</para></para>"
+          },
+          {
+            "name": "InitPath",
+            "type": "string",
+            "format": "--init-path={value}",
+            "help": "<para>Path to the container-init binary.</para>"
+          },
+          {
+            "name": "Interactive",
+            "type": "bool",
+            "format": "--interactive",
+            "help": "<para>When set to <c>true</c>, keep stdin open even if not attached.<para>The default is <c>false</c>.</para></para>"
+          },
+          {
+            "name": "Ip",
+            "type": "string",
+            "format": "--ip={value}",
+            "help": "<para>Specify a static IPv4 address for the container.<para>Example: <c>10.88.64.128</c>. This option can only be used if the container is joined to only a single network - i.e., <c>--network=network-name</c> is used at most once - and if the container is not joining another container’s network namespace via <c>--network=container:id</c>. The address must be within the network’s IP address pool (default <c>10.88.0.0/16</c>).</para><para>To specify multiple static IP addresses per container, set multiple networks using the <c>--network</c> option with a static IP address specified for each using the <c>ip</c> mode for that option.</para></para>"
+          },
+          {
+            "name": "Ip6",
+            "type": "string",
+            "format": "--ip6={value}",
+            "help": "<para>Specify a static IPv6 address for the container.</para>"
+          },
+          {
+            "name": "Label",
+            "type": "IReadOnlyList<string>",
+            "format": "--label={value}",
+            "help": "<para>Add metadata to a container.<para>Example: <c>--label com.example.key=value</c>.</para></para>"
+          },
+          {
+            "name": "LogDriver",
+            "type": "string",
+            "format": "--log-driver={value}",
+            "help": "<para>Logging driver for the container.<para>Possible values: <c>k8s-file</c>, <c>journald</c>, <c>json-file</c>, <c>none</c>.</para></para>"
+          },
+          {
+            "name": "LogOpt",
+            "type": "IReadOnlyList<string>",
+            "format": "--log-opt={value}",
+            "help": "<para>Log driver options.</para>"
+          },
+          {
+            "name": "MacAddress",
+            "type": "string",
+            "format": "--mac-address={value}",
+            "help": "<para>Container MAC address.<para>Example: <c>92:d0:c6:0a:29:33</c>.</para></para>"
+          },
+          {
+            "name": "Memory",
+            "type": "string",
+            "format": "--memory={value}",
+            "help": "<para>Memory limit.<para>Format: <c>&lt;number&gt;[&lt;unit&gt;]</c>, where unit = b (bytes), k (kilobytes), m (megabytes), or g (gigabytes).</para></para>"
+          },
+          {
+            "name": "MemorySwap",
+            "type": "string",
+            "format": "--memory-swap={value}",
+            "help": "<para>Swap limit equal to memory plus swap.<para><c>0</c> to disable swap.</para></para>"
+          },
+          {
+            "name": "Mount",
+            "type": "IReadOnlyList<string>",
+            "format": "--mount={value}",
+            "help": "<para>Attach a filesystem mount to the container.</para>"
+          },
+          {
+            "name": "Name",
+            "type": "string",
+            "format": "--name={value}",
+            "help": "<para>Assign a name to the container.</para>"
+          },
+          {
+            "name": "Network",
+            "type": "IReadOnlyList<string>",
+            "format": "--network={value}",
+            "help": "<para>Connect a container to a network.<para>Possible values: <c>bridge</c>, <c>host</c>, <c>none</c>, <c>container:id</c>.</para></para>"
+          },
+          {
+            "name": "NetworkAlias",
+            "type": "IReadOnlyList<string>",
+            "format": "--network-alias={value}",
+            "help": "<para>Add network-scoped alias for the container.</para>"
+          },
+          {
+            "name": "NoHosts",
+            "type": "bool",
+            "format": "--no-hosts",
+            "help": "<para>Do not create <c>/etc/hosts</c> for the container.</para>"
+          },
+          {
+            "name": "OomKillDisable",
+            "type": "bool",
+            "format": "--oom-kill-disable",
+            "help": "<para>Disable OOM Killer for the container.</para>"
+          },
+          {
+            "name": "OomScoreAdj",
+            "type": "int",
+            "format": "--oom-score-adj={value}",
+            "help": "<para>Tune the host’s OOM preferences for the container.</para>"
+          },
+          {
+            "name": "Pid",
+            "type": "string",
+            "format": "--pid={value}",
+            "help": "<para>Set the PID namespace mode for the container.<para>Possible values: <c>container:id</c> (reuses another container’s PID namespace), <c>host</c> (use the host’s PID namespace inside the container), <c>private</c> (create a new PID namespace).</para></para>"
+          },
+          {
+            "name": "PidsLimit",
+            "type": "int",
+            "format": "--pids-limit={value}",
+            "help": "<para>Tune container pids limit.</para>"
+          },
+          {
+            "name": "Pod",
+            "type": "string",
+            "format": "--pod={value}",
+            "help": "<para>Run container in an existing pod.</para>"
+          },
+          {
+            "name": "PodIdFile",
+            "type": "string",
+            "format": "--pod-id-file={value}",
+            "help": "<para>Write the pod ID to the file.</para>"
+          },
+          {
+            "name": "PreserveFds",
+            "type": "int",
+            "format": "--preserve-fds={value}",
+            "help": "<para>Pass value additional file descriptors to the container.</para>"
+          },
+          {
+            "name": "Privileged",
+            "type": "bool",
+            "format": "--privileged",
+            "help": "<para>Give extended privileges to this container.</para>"
+          },
+          {
+            "name": "Publish",
+            "type": "IReadOnlyList<string>",
+            "format": "--publish={value}",
+            "help": "<para>Publish a container’s port to the host.<para>Format: <c>ip:hostPort:containerPort</c> or <c>hostPort:containerPort</c>.</para></para>"
+          },
+          {
+            "name": "PublishAll",
+            "type": "bool",
+            "format": "--publish-all",
+            "help": "<para>Publish all exposed ports to random ports.</para>"
+          },
+          {
+            "name": "ReadOnly",
+            "type": "bool",
+            "format": "--read-only",
+            "help": "<para>Mount the container’s root filesystem as read only.</para>"
+          },
+          {
+            "name": "ReadOnlyTmpfs",
+            "type": "bool",
+            "format": "--read-only-tmpfs",
+            "help": "<para>Mount a tmpfs on <c>/run</c>, <c>/tmp</c>, and <c>/var/tmp</c>.</para>"
+          },
+          {
+            "name": "Replace",
+            "type": "bool",
+            "format": "--replace",
+            "help": "<para>If a container with the same name exists, replace it.</para>"
+          },
+          {
+            "name": "Restart",
+            "type": "string",
+            "format": "--restart={value}",
+            "help": "<para>Restart policy to apply when a container exits.<para>Possible values: <c>no</c>, <c>always</c>, <c>on-failure</c>, <c>unless-stopped</c>.</para></para>"
+          },
+          {
+            "name": "Rm",
+            "type": "bool",
+            "format": "--rm",
+            "help": "<para>Remove the container and pod if it exists after it exits.</para>"
+          },
+          {
+            "name": "SecurityOpt",
+            "type": "IReadOnlyList<string>",
+            "format": "--security-opt={value}",
+            "help": "<para>Security Options.</para>"
+          },
+          {
+            "name": "ShmSize",
+            "type": "string",
+            "format": "--shm-size={value}",
+            "help": "<para>Size of <c>/dev/shm</c>.</para>"
+          },
+          {
+            "name": "SigProxy",
+            "type": "bool",
+            "format": "--sig-proxy={value}",
+            "help": "<para>Proxy received signals to the process.</para>"
+          },
+          {
+            "name": "StopSignal",
+            "type": "string",
+            "format": "--stop-signal={value}",
+            "help": "<para>Signal to stop a container.</para>"
+          },
+          {
+            "name": "StopTimeout",
+            "type": "int",
+            "format": "--stop-timeout={value}",
+            "help": "<para>Timeout (in seconds) to stop a container.</para>"
+          },
+          {
+            "name": "Subgidname",
+            "type": "string",
+            "format": "--subgidname={value}",
+            "help": "<para>Name of range listed in <c>/etc/subgid</c>.</para>"
+          },
+          {
+            "name": "Subuidname",
+            "type": "string",
+            "format": "--subuidname={value}",
+            "help": "<para>Name of range listed in <c>/etc/subuid</c>.</para>"
+          },
+          {
+            "name": "Sysctl",
+            "type": "IReadOnlyList<string>",
+            "format": "--sysctl={value}",
+            "help": "<para>Sysctl options.</para>"
+          },
+          {
+            "name": "Tmpfs",
+            "type": "IReadOnlyList<string>",
+            "format": "--tmpfs={value}",
+            "help": "<para>Mount a tmpfs.</para>"
+          },
+          {
+            "name": "Tty",
+            "type": "bool",
+            "format": "--tty",
+            "help": "<para>Allocate a pseudo-TTY.</para>"
+          },
+          {
+            "name": "Ulimit",
+            "type": "IReadOnlyList<string>",
+            "format": "--ulimit={value}",
+            "help": "<para>Ulimit options.</para>"
+          },
+          {
+            "name": "User",
+            "type": "string",
+            "format": "--user={value}",
+            "help": "<para>Username or UID.<para>Format: <c>&lt;name|uid&gt;[:&lt;group|gid&gt;]</c>.</para></para>"
+          },
+          {
+            "name": "Userns",
+            "type": "string",
+            "format": "--userns={value}",
+            "help": "<para>Set the user namespace mode for the container.<para>Possible values: <c>host</c> (use the host’s user namespace inside the container), <c>container:id</c> (join the namespace of the specified container), <c>private</c> (create a new user namespace), <c>ns:path</c> (join the namespace at the specified path).</para></para>"
+          },
+          {
+            "name": "Uts",
+            "type": "string",
+            "format": "--uts={value}",
+            "help": "<para>Set the UTS namespace mode for the container.<para>Possible values: <c>host</c> (use the host’s UTS namespace inside the container), <c>container:id</c> (join the namespace of the specified container), <c>private</c> (create a new UTS namespace), <c>ns:path</c> (join the namespace at the specified path).</para></para>"
+          },
+          {
+            "name": "Volume",
+            "type": "IReadOnlyList<string>",
+            "format": "--volume={value}",
+            "help": "<para>Bind mount a volume.</para>"
+          },
+          {
+            "name": "VolumesFrom",
+            "type": "IReadOnlyList<string>",
+            "format": "--volumes-from={value}",
+            "help": "<para>Mount volumes from the specified container(s).</para>"
+          },
+          {
+            "name": "Workdir",
+            "type": "string",
+            "format": "--workdir={value}",
+            "help": "<para>Working directory inside the container.</para>"
+          }
+        ]
+      }
     },
     {
       "postfix": "Ps",
