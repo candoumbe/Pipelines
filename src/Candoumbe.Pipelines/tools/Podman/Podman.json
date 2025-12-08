@@ -862,10 +862,17 @@
       "settingsClass": {
         "properties": [
           {
-            "name": "AllTags",
+            "name": "Archive",
             "type": "bool",
-            "format": "--all-tags",
-            "help": "All tagged images in the repository are pulled."
+            "format": "--archive",
+            "default": "true",
+            "help": "Archive mode (copy all UID/GID information). When set to true, files copied to a container have changed ownership to the primary UID/GID of the container. When set to false, maintain UID/GID from archive sources instead of changing them to the primary UID/GID of the destination container. The default is <see langword='true' />."
+          },
+          {
+            "name": "Overwrite",
+            "type": "bool",
+            "format": "--overwrite",
+            "help": "Allow directories to be overwritten with non-directories and vice versa. By default, <c>podman cp</c> errors out when attempting to overwrite, for instance, a regular file with a directory."
           }
         ]
       }

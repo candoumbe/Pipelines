@@ -53,7 +53,7 @@ public partial class PodmanTasks : ToolTasks
     /// <inheritdoc cref="PodmanTasks.PodmanCommit(Candoumbe.Pipelines.Tools.Podman.PodmanCommitSettings)"/>
     public static IEnumerable<(PodmanCommitSettings Settings, IReadOnlyCollection<Output> Output)> PodmanCommit(CombinatorialConfigure<PodmanCommitSettings> configurator, int degreeOfParallelism = 1, bool completeOnFailure = false) => configurator.Invoke(PodmanCommit, degreeOfParallelism, completeOnFailure);
     /// <summary><p>Copy files/folders between a container and the local filesystem</p> <p><b>podman cp</b> allows copying the contents of <b>src_path</b> to the <b>dest_path</b>. Files can be copied from a container to the local machine and vice versa or between two containers. If <c>-</c> is specified for either the <c> SRC_PATH</c> or <c>DEST_PATH</c>, one can also stream a tar archive from <c>STDIN</c> or to <c>STDOUT</c>.</p> <p>The containers can be either running or stopped and the <i>src_path</i> or <i>dest_path</i> can be a file or directory.</p> <p><i>IMPORTANT: <b>The podman cp</b> command assumes container paths are relative to the container’s root directory ( <c>/</c>), which means supplying the initial forward slash is optional and therefore sees <c> compassionate_darwin:/tmp/foo/myfile.txt</c> and <c>compassionate_darwin:tmp/foo/myfile.txt</c> as identical. </i></p> <p>Local machine paths can be an absolute or relative value. The command interprets a local machine’s relative paths as relative to the current working directory where <b>podman cp</b> is run.</p> <p>Assuming a path separator of <c>/</c>, a first argument of <b>src_path</b> and second argument of <b>dest_path</b>, the behavior is as follows: <p><b>src_path</b> specifies a file: <list type= 'bullet' > <item><b>dest_path</b> does not exist<list type= 'bullet' > <item>the file is saved to a file created at <b>dest_path</b> (note that the parent directory must exist).</item> </list> </item> <item><b>dest_path</b> exists and is a file<list type= 'bullet' > <item>the destination is overriden with source file 's contents.</item></list></item><item><b>dest_path</b> exists and is a directory<list type=' bullet '><item>the file is copied into this directory using the base name from <b>src_path</b></item></list></item></list></p></p><p><b>src_path</b> specifies a directory: <list type='bullet'><item><b>dest_path</b> does not exist <list type=' bullet'><item><b>dest_path</b> is created as a directory and the contents of the source directory are copied into this directory.</item></list></item><item><b>dest_path</b> exists and is a file<list type=' bullet '><item>Error condition: cannot copy a directory to a file</item></list></item><item><b>dest_path</b> exists and is a directory<list type='bullet'><item><b>src_path</b> ends with <c>/</c><list type='bullet'><item>the source directory is copied into this directory.</item></list></item><item><b>src_path</b> ends with <c>/.</c> (i.e. slash followed by dot)<list type='bullet'><item>the content of the source directory is copied into this directory</item></list></item></list></item></list></p><p>The command requires <b>src_path</b> and <b>dest_path</b> to exist according to the above rules.</p><p>If <b>src_path</b> is local and is a symbolic link, the symbolic target, is copied by default.</p><p>A <i>colon</i> ( : ) is used as a delimiter between a container and its path, it can also be used when specifying paths to a <b>src_path</b> or <b>dest_path</b> on a local machine, for example, <c>file:name.txt</c>.</p><p><i>IMPORTANT: while using a colon ( : ) in a local machine path, one must be explicit with a relative or absolute path, for example: <c>/path/to/file:name.txt</c> or <c>./file:name.txt</c>.</i></p><p>Using <c>-</c> as the <b>src_path</b> streams the contents of <c>STDIN</c> as a tar archive. The command extracts the content of the tar to the <c>DEST_PATH</c> in the container. In this case, <b>dest_path</b> must specify a directory. Using <c>-</c> as the <b>dest_path</b> streams the contents of the resource (can be a directory) as a tar archive to <c>STDOUT</c>.</p><p>Note that <c>podman cp</c> ignores permission errors when copying from a running rootless container. The TTY devices inside a rootless container are owned by the host’s root user and hence cannot be read inside the container’s user namespace.</p><p>Further note that <c>podman cp</c> does not support globbing (e.g., <c>cp dir/*.txt</c>). To copy multiple files from the host to the container use xargs(1) or find(1) (or similar tools for chaining commands) in conjunction with podman cp. To copy multiple files from the container to the host, use <c>podman mount CONTAINER</c> and operate on the returned mount point instead (see ALTERNATIVES below).</p><p>For more details, visit the <a href="https://docs.podman.io/en/latest/Commands.html">official website</a>.</p></summary>
-    /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p><ul><li><c>--all-tags</c> via <see cref="PodmanCpSettings.AllTags"/></li></ul></remarks>
+    /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p><ul><li><c>--archive</c> via <see cref="PodmanCpSettings.Archive"/></li><li><c>--overwrite</c> via <see cref="PodmanCpSettings.Overwrite"/></li></ul></remarks>
     public static IReadOnlyCollection<Output> PodmanCp(PodmanCpSettings options = null) => new PodmanTasks().Run<PodmanCpSettings>(options);
     /// <inheritdoc cref="PodmanTasks.PodmanCp(Candoumbe.Pipelines.Tools.Podman.PodmanCpSettings)"/>
     public static IReadOnlyCollection<Output> PodmanCp(Configure<PodmanCpSettings> configurator) => new PodmanTasks().Run<PodmanCpSettings>(configurator.Invoke(new PodmanCpSettings()));
@@ -370,8 +370,10 @@ public partial class PodmanCommitSettings : ToolOptions
 [Command(Type = typeof(PodmanTasks), Command = nameof(PodmanTasks.PodmanCp), Arguments = "cp")]
 public partial class PodmanCpSettings : ToolOptions
 {
-    /// <summary>All tagged images in the repository are pulled.</summary>
-    [Argument(Format = "--all-tags")] public bool? AllTags => Get<bool?>(() => AllTags);
+    /// <summary>Archive mode (copy all UID/GID information). When set to true, files copied to a container have changed ownership to the primary UID/GID of the container. When set to false, maintain UID/GID from archive sources instead of changing them to the primary UID/GID of the destination container. The default is <see langword='true' />.</summary>
+    [Argument(Format = "--archive")] public bool? Archive => Get<bool?>(() => Archive);
+    /// <summary>Allow directories to be overwritten with non-directories and vice versa. By default, <c>podman cp</c> errors out when attempting to overwrite, for instance, a regular file with a directory.</summary>
+    [Argument(Format = "--overwrite")] public bool? Overwrite => Get<bool?>(() => Overwrite);
 }
 #endregion
 #region PodmanPsSettings
@@ -1787,22 +1789,39 @@ public static partial class PodmanCommitSettingsExtensions
 [ExcludeFromCodeCoverage]
 public static partial class PodmanCpSettingsExtensions
 {
-    #region AllTags
-    /// <inheritdoc cref="PodmanCpSettings.AllTags"/>
-    [Pure] [Builder(Type = typeof(PodmanCpSettings), Property = nameof(PodmanCpSettings.AllTags))]
-    public static T SetAllTags<T>(this T o, bool? v) where T : PodmanCpSettings => o.Modify(b => b.Set(() => o.AllTags, v));
-    /// <inheritdoc cref="PodmanCpSettings.AllTags"/>
-    [Pure] [Builder(Type = typeof(PodmanCpSettings), Property = nameof(PodmanCpSettings.AllTags))]
-    public static T ResetAllTags<T>(this T o) where T : PodmanCpSettings => o.Modify(b => b.Remove(() => o.AllTags));
-    /// <inheritdoc cref="PodmanCpSettings.AllTags"/>
-    [Pure] [Builder(Type = typeof(PodmanCpSettings), Property = nameof(PodmanCpSettings.AllTags))]
-    public static T EnableAllTags<T>(this T o) where T : PodmanCpSettings => o.Modify(b => b.Set(() => o.AllTags, true));
-    /// <inheritdoc cref="PodmanCpSettings.AllTags"/>
-    [Pure] [Builder(Type = typeof(PodmanCpSettings), Property = nameof(PodmanCpSettings.AllTags))]
-    public static T DisableAllTags<T>(this T o) where T : PodmanCpSettings => o.Modify(b => b.Set(() => o.AllTags, false));
-    /// <inheritdoc cref="PodmanCpSettings.AllTags"/>
-    [Pure] [Builder(Type = typeof(PodmanCpSettings), Property = nameof(PodmanCpSettings.AllTags))]
-    public static T ToggleAllTags<T>(this T o) where T : PodmanCpSettings => o.Modify(b => b.Set(() => o.AllTags, !o.AllTags));
+    #region Archive
+    /// <inheritdoc cref="PodmanCpSettings.Archive"/>
+    [Pure] [Builder(Type = typeof(PodmanCpSettings), Property = nameof(PodmanCpSettings.Archive))]
+    public static T SetArchive<T>(this T o, bool? v) where T : PodmanCpSettings => o.Modify(b => b.Set(() => o.Archive, v));
+    /// <inheritdoc cref="PodmanCpSettings.Archive"/>
+    [Pure] [Builder(Type = typeof(PodmanCpSettings), Property = nameof(PodmanCpSettings.Archive))]
+    public static T ResetArchive<T>(this T o) where T : PodmanCpSettings => o.Modify(b => b.Remove(() => o.Archive));
+    /// <inheritdoc cref="PodmanCpSettings.Archive"/>
+    [Pure] [Builder(Type = typeof(PodmanCpSettings), Property = nameof(PodmanCpSettings.Archive))]
+    public static T EnableArchive<T>(this T o) where T : PodmanCpSettings => o.Modify(b => b.Set(() => o.Archive, true));
+    /// <inheritdoc cref="PodmanCpSettings.Archive"/>
+    [Pure] [Builder(Type = typeof(PodmanCpSettings), Property = nameof(PodmanCpSettings.Archive))]
+    public static T DisableArchive<T>(this T o) where T : PodmanCpSettings => o.Modify(b => b.Set(() => o.Archive, false));
+    /// <inheritdoc cref="PodmanCpSettings.Archive"/>
+    [Pure] [Builder(Type = typeof(PodmanCpSettings), Property = nameof(PodmanCpSettings.Archive))]
+    public static T ToggleArchive<T>(this T o) where T : PodmanCpSettings => o.Modify(b => b.Set(() => o.Archive, !o.Archive));
+    #endregion
+    #region Overwrite
+    /// <inheritdoc cref="PodmanCpSettings.Overwrite"/>
+    [Pure] [Builder(Type = typeof(PodmanCpSettings), Property = nameof(PodmanCpSettings.Overwrite))]
+    public static T SetOverwrite<T>(this T o, bool? v) where T : PodmanCpSettings => o.Modify(b => b.Set(() => o.Overwrite, v));
+    /// <inheritdoc cref="PodmanCpSettings.Overwrite"/>
+    [Pure] [Builder(Type = typeof(PodmanCpSettings), Property = nameof(PodmanCpSettings.Overwrite))]
+    public static T ResetOverwrite<T>(this T o) where T : PodmanCpSettings => o.Modify(b => b.Remove(() => o.Overwrite));
+    /// <inheritdoc cref="PodmanCpSettings.Overwrite"/>
+    [Pure] [Builder(Type = typeof(PodmanCpSettings), Property = nameof(PodmanCpSettings.Overwrite))]
+    public static T EnableOverwrite<T>(this T o) where T : PodmanCpSettings => o.Modify(b => b.Set(() => o.Overwrite, true));
+    /// <inheritdoc cref="PodmanCpSettings.Overwrite"/>
+    [Pure] [Builder(Type = typeof(PodmanCpSettings), Property = nameof(PodmanCpSettings.Overwrite))]
+    public static T DisableOverwrite<T>(this T o) where T : PodmanCpSettings => o.Modify(b => b.Set(() => o.Overwrite, false));
+    /// <inheritdoc cref="PodmanCpSettings.Overwrite"/>
+    [Pure] [Builder(Type = typeof(PodmanCpSettings), Property = nameof(PodmanCpSettings.Overwrite))]
+    public static T ToggleOverwrite<T>(this T o) where T : PodmanCpSettings => o.Modify(b => b.Set(() => o.Overwrite, !o.Overwrite));
     #endregion
 }
 #endregion
