@@ -59,6 +59,13 @@ public partial class PodmanTasks : ToolTasks
     public static IReadOnlyCollection<Output> PodmanCp(Configure<PodmanCpSettings> configurator) => new PodmanTasks().Run<PodmanCpSettings>(configurator.Invoke(new PodmanCpSettings()));
     /// <inheritdoc cref="PodmanTasks.PodmanCp(Candoumbe.Pipelines.Tools.Podman.PodmanCpSettings)"/>
     public static IEnumerable<(PodmanCpSettings Settings, IReadOnlyCollection<Output> Output)> PodmanCp(CombinatorialConfigure<PodmanCpSettings> configurator, int degreeOfParallelism = 1, bool completeOnFailure = false) => configurator.Invoke(PodmanCp, degreeOfParallelism, completeOnFailure);
+    /// <summary><p>Creates a writable container layer over the specified image and prepares it for running the specified command. The container ID is then printed to STDOUT. This is similar to <b>podman run -d</b> except the container is never started. Use the <b>podman start</b> <i>container</i> command to start the container at any point.</p><p>The initial status of the container created with <b>podman create</b> is ‘created’.</p><p>Default settings for flags are defined in containers.conf. Most settings for remote connections use the server’s <c>containers.conf</c>, except when documented in man pages.</p><p>For more details, visit the <a href="https://docs.podman.io/en/latest/Commands.html">official website</a>.</p></summary>
+    /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p></remarks>
+    public static IReadOnlyCollection<Output> PodmanCreate(PodmanCreateSettings options = null) => new PodmanTasks().Run<PodmanCreateSettings>(options);
+    /// <inheritdoc cref="PodmanTasks.PodmanCreate(Candoumbe.Pipelines.Tools.Podman.PodmanCreateSettings)"/>
+    public static IReadOnlyCollection<Output> PodmanCreate(Configure<PodmanCreateSettings> configurator) => new PodmanTasks().Run<PodmanCreateSettings>(configurator.Invoke(new PodmanCreateSettings()));
+    /// <inheritdoc cref="PodmanTasks.PodmanCreate(Candoumbe.Pipelines.Tools.Podman.PodmanCreateSettings)"/>
+    public static IEnumerable<(PodmanCreateSettings Settings, IReadOnlyCollection<Output> Output)> PodmanCreate(CombinatorialConfigure<PodmanCreateSettings> configurator, int degreeOfParallelism = 1, bool completeOnFailure = false) => configurator.Invoke(PodmanCreate, degreeOfParallelism, completeOnFailure);
     /// <summary><p>Podman is a tool for managing OCI containers and pods. Podman provides a Docker-compatible CLI (Docker command line interface) to manage OCI containers and pods.</p><p>For more details, visit the <a href="https://docs.podman.io/en/latest/Commands.html">official website</a>.</p></summary>
     /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p><ul><li><c>--all-tags</c> via <see cref="PodmanPsSettings.AllTags"/></li></ul></remarks>
     public static IReadOnlyCollection<Output> PodmanPs(PodmanPsSettings options = null) => new PodmanTasks().Run<PodmanPsSettings>(options);
@@ -374,6 +381,15 @@ public partial class PodmanCpSettings : ToolOptions
     [Argument(Format = "--archive")] public bool? Archive => Get<bool?>(() => Archive);
     /// <summary>Allow directories to be overwritten with non-directories and vice versa. By default, <c>podman cp</c> errors out when attempting to overwrite, for instance, a regular file with a directory.</summary>
     [Argument(Format = "--overwrite")] public bool? Overwrite => Get<bool?>(() => Overwrite);
+}
+#endregion
+#region PodmanCreateSettings
+/// <inheritdoc cref="PodmanTasks.PodmanCreate(Candoumbe.Pipelines.Tools.Podman.PodmanCreateSettings)"/>
+[PublicAPI]
+[ExcludeFromCodeCoverage]
+[Command(Type = typeof(PodmanTasks), Command = nameof(PodmanTasks.PodmanCreate), Arguments = "create")]
+public partial class PodmanCreateSettings : ToolOptions
+{
 }
 #endregion
 #region PodmanPsSettings
@@ -1823,6 +1839,14 @@ public static partial class PodmanCpSettingsExtensions
     [Pure] [Builder(Type = typeof(PodmanCpSettings), Property = nameof(PodmanCpSettings.Overwrite))]
     public static T ToggleOverwrite<T>(this T o) where T : PodmanCpSettings => o.Modify(b => b.Set(() => o.Overwrite, !o.Overwrite));
     #endregion
+}
+#endregion
+#region PodmanCreateSettingsExtensions
+/// <inheritdoc cref="PodmanTasks.PodmanCreate(Candoumbe.Pipelines.Tools.Podman.PodmanCreateSettings)"/>
+[PublicAPI]
+[ExcludeFromCodeCoverage]
+public static partial class PodmanCreateSettingsExtensions
+{
 }
 #endregion
 #region PodmanPsSettingsExtensions

@@ -878,6 +878,12 @@
       }
     },
     {
+      "help": "<p>Creates a writable container layer over the specified image and prepares it for running the specified command. The container ID is then printed to STDOUT. This is similar to <b>podman run -d</b> except the container is never started. Use the <b>podman start</b> <i>container</i> command to start the container at any point.</p><p>The initial status of the container created with <b>podman create</b> is ‘created’.</p><p>Default settings for flags are defined in containers.conf. Most settings for remote connections use the server’s <c>containers.conf</c>, except when documented in man pages.</p>",
+      "postfix": "Create",
+      "definiteArgument": "create",
+      "settingsClass": {}
+    },
+    {
       "postfix": "Ps",
       "definiteArgument": "ps",
       "settingsClass": {
