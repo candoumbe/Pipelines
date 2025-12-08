@@ -46,12 +46,19 @@ public partial class PodmanTasks : ToolTasks
     /// <inheritdoc cref="PodmanTasks.PodmanBuild(Candoumbe.Pipelines.Tools.Podman.PodmanBuildSettings)"/>
     public static IEnumerable<(PodmanBuildSettings Settings, IReadOnlyCollection<Output> Output)> PodmanBuild(CombinatorialConfigure<PodmanBuildSettings> configurator, int degreeOfParallelism = 1, bool completeOnFailure = false) => configurator.Invoke(PodmanBuild, degreeOfParallelism, completeOnFailure);
     /// <summary><p>Creates an image based on a changed container. The author of the image can be set using the <b>--author</b> OPTION. Various image instructions can be configured with the <b>--change</b> OPTION and a commit message can be set using the <b>--message</b> OPTION. The container and its processes aren’t paused while the image is committed. If this is not desired, the <b>--pause</b> OPTION can be set to <see langword="true"/>. When the commit is complete, Podman prints out the ID of the new image.</p><p>If <b>image</b> does not begin with a registry name component, <c>localhost</c> is added to the name. If <c>image</c> is not provided, the values for the <c>REPOSITORY</c> and <c>TAG</c> values of the created image is set to <c>&lt;none&gt;</c>.</p><p>For more details, visit the <a href="https://docs.podman.io/en/latest/Commands.html">official website</a>.</p></summary>
-    /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p><ul><li><c>--author</c> via <see cref="PodmanCommitSettings.Author"/></li><li><c>--change</c> via <see cref="PodmanCommitSettings.Change"/></li><li><c>--config</c> via <see cref="PodmanCommitSettings.Config"/></li><li><c>--format</c> via <see cref="PodmanCommitSettings.Format"/></li><li><c>--iidfile</c> via <see cref="PodmanCommitSettings.Iidfile"/></li><li><c>--include-volumes</c> via <see cref="PodmanCommitSettings.IncludeVolumes"/></li></ul></remarks>
+    /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p><ul><li><c>--author</c> via <see cref="PodmanCommitSettings.Author"/></li><li><c>--change</c> via <see cref="PodmanCommitSettings.Change"/></li><li><c>--config</c> via <see cref="PodmanCommitSettings.Config"/></li><li><c>--format</c> via <see cref="PodmanCommitSettings.Format"/></li><li><c>--iidfile</c> via <see cref="PodmanCommitSettings.Iidfile"/></li><li><c>--include-volumes</c> via <see cref="PodmanCommitSettings.IncludeVolumes"/></li><li><c>--message</c> via <see cref="PodmanCommitSettings.Message"/></li><li><c>--pause</c> via <see cref="PodmanCommitSettings.Pause"/></li><li><c>--quiet</c> via <see cref="PodmanCommitSettings.Quiet"/></li><li><c>--squash</c> via <see cref="PodmanCommitSettings.Squash"/></li></ul></remarks>
     public static IReadOnlyCollection<Output> PodmanCommit(PodmanCommitSettings options = null) => new PodmanTasks().Run<PodmanCommitSettings>(options);
     /// <inheritdoc cref="PodmanTasks.PodmanCommit(Candoumbe.Pipelines.Tools.Podman.PodmanCommitSettings)"/>
     public static IReadOnlyCollection<Output> PodmanCommit(Configure<PodmanCommitSettings> configurator) => new PodmanTasks().Run<PodmanCommitSettings>(configurator.Invoke(new PodmanCommitSettings()));
     /// <inheritdoc cref="PodmanTasks.PodmanCommit(Candoumbe.Pipelines.Tools.Podman.PodmanCommitSettings)"/>
     public static IEnumerable<(PodmanCommitSettings Settings, IReadOnlyCollection<Output> Output)> PodmanCommit(CombinatorialConfigure<PodmanCommitSettings> configurator, int degreeOfParallelism = 1, bool completeOnFailure = false) => configurator.Invoke(PodmanCommit, degreeOfParallelism, completeOnFailure);
+    /// <summary><p>Copy files/folders between a container and the local filesystem</p> <p><b>podman cp</b> allows copying the contents of <b>src_path</b> to the <b>dest_path</b>. Files can be copied from a container to the local machine and vice versa or between two containers. If <c>-</c> is specified for either the <c> SRC_PATH</c> or <c>DEST_PATH</c>, one can also stream a tar archive from <c>STDIN</c> or to <c>STDOUT</c>.</p> <p>The containers can be either running or stopped and the <i>src_path</i> or <i>dest_path</i> can be a file or directory.</p> <p><i>IMPORTANT: <b>The podman cp</b> command assumes container paths are relative to the container’s root directory ( <c>/</c>), which means supplying the initial forward slash is optional and therefore sees <c> compassionate_darwin:/tmp/foo/myfile.txt</c> and <c>compassionate_darwin:tmp/foo/myfile.txt</c> as identical. </i></p> <p>Local machine paths can be an absolute or relative value. The command interprets a local machine’s relative paths as relative to the current working directory where <b>podman cp</b> is run.</p> <p>Assuming a path separator of <c>/</c>, a first argument of <b>src_path</b> and second argument of <b>dest_path</b>, the behavior is as follows: <p><b>src_path</b> specifies a file: <list type= 'bullet' > <item><b>dest_path</b> does not exist<list type= 'bullet' > <item>the file is saved to a file created at <b>dest_path</b> (note that the parent directory must exist).</item> </list> </item> <item><b>dest_path</b> exists and is a file<list type= 'bullet' > <item>the destination is overriden with source file 's contents.</item></list></item><item><b>dest_path</b> exists and is a directory<list type=' bullet '><item>the file is copied into this directory using the base name from <b>src_path</b></item></list></item></list></p></p><p><b>src_path</b> specifies a directory: <list type='bullet'><item><b>dest_path</b> does not exist <list type=' bullet'><item><b>dest_path</b> is created as a directory and the contents of the source directory are copied into this directory.</item></list></item><item><b>dest_path</b> exists and is a file<list type=' bullet '><item>Error condition: cannot copy a directory to a file</item></list></item><item><b>dest_path</b> exists and is a directory<list type='bullet'><item><b>src_path</b> ends with <c>/</c><list type='bullet'><item>the source directory is copied into this directory.</item></list></item><item><b>src_path</b> ends with <c>/.</c> (i.e. slash followed by dot)<list type='bullet'><item>the content of the source directory is copied into this directory</item></list></item></list></item></list></p><p>The command requires <b>src_path</b> and <b>dest_path</b> to exist according to the above rules.</p><p>If <b>src_path</b> is local and is a symbolic link, the symbolic target, is copied by default.</p><p>A <i>colon</i> ( : ) is used as a delimiter between a container and its path, it can also be used when specifying paths to a <b>src_path</b> or <b>dest_path</b> on a local machine, for example, <c>file:name.txt</c>.</p><p><i>IMPORTANT: while using a colon ( : ) in a local machine path, one must be explicit with a relative or absolute path, for example: <c>/path/to/file:name.txt</c> or <c>./file:name.txt</c>.</i></p><p>Using <c>-</c> as the <b>src_path</b> streams the contents of <c>STDIN</c> as a tar archive. The command extracts the content of the tar to the <c>DEST_PATH</c> in the container. In this case, <b>dest_path</b> must specify a directory. Using <c>-</c> as the <b>dest_path</b> streams the contents of the resource (can be a directory) as a tar archive to <c>STDOUT</c>.</p><p>Note that <c>podman cp</c> ignores permission errors when copying from a running rootless container. The TTY devices inside a rootless container are owned by the host’s root user and hence cannot be read inside the container’s user namespace.</p><p>Further note that <c>podman cp</c> does not support globbing (e.g., <c>cp dir/*.txt</c>). To copy multiple files from the host to the container use xargs(1) or find(1) (or similar tools for chaining commands) in conjunction with podman cp. To copy multiple files from the container to the host, use <c>podman mount CONTAINER</c> and operate on the returned mount point instead (see ALTERNATIVES below).</p><p>For more details, visit the <a href="https://docs.podman.io/en/latest/Commands.html">official website</a>.</p></summary>
+    /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p><ul><li><c>--all-tags</c> via <see cref="PodmanCpSettings.AllTags"/></li></ul></remarks>
+    public static IReadOnlyCollection<Output> PodmanCp(PodmanCpSettings options = null) => new PodmanTasks().Run<PodmanCpSettings>(options);
+    /// <inheritdoc cref="PodmanTasks.PodmanCp(Candoumbe.Pipelines.Tools.Podman.PodmanCpSettings)"/>
+    public static IReadOnlyCollection<Output> PodmanCp(Configure<PodmanCpSettings> configurator) => new PodmanTasks().Run<PodmanCpSettings>(configurator.Invoke(new PodmanCpSettings()));
+    /// <inheritdoc cref="PodmanTasks.PodmanCp(Candoumbe.Pipelines.Tools.Podman.PodmanCpSettings)"/>
+    public static IEnumerable<(PodmanCpSettings Settings, IReadOnlyCollection<Output> Output)> PodmanCp(CombinatorialConfigure<PodmanCpSettings> configurator, int degreeOfParallelism = 1, bool completeOnFailure = false) => configurator.Invoke(PodmanCp, degreeOfParallelism, completeOnFailure);
     /// <summary><p>Podman is a tool for managing OCI containers and pods. Podman provides a Docker-compatible CLI (Docker command line interface) to manage OCI containers and pods.</p><p>For more details, visit the <a href="https://docs.podman.io/en/latest/Commands.html">official website</a>.</p></summary>
     /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p><ul><li><c>--all-tags</c> via <see cref="PodmanPsSettings.AllTags"/></li></ul></remarks>
     public static IReadOnlyCollection<Output> PodmanPs(PodmanPsSettings options = null) => new PodmanTasks().Run<PodmanPsSettings>(options);
@@ -344,8 +351,27 @@ public partial class PodmanCommitSettings : ToolOptions
     [Argument(Format = "--format={value}")] public FormatType Format => Get<FormatType>(() => Format);
     /// <summary>Write the image ID to the file.</summary>
     [Argument(Format = "--iidfile={value}")] public string Iidfile => Get<string>(() => Iidfile);
-    /// <summary>Include in the committed image any volumes added to the container by the <b>--volume</b> or <b>--mount</b> OPTIONS to the podman create and podman run commands.<br />The default is <see langword='false'/>.</summary>
+    /// <summary>Include in the committed image any volumes added to the container by the <b>--volume</b> or <b>--mount</b> OPTIONS to the <b><see href='https://docs.podman.io/en/latest/markdown/podman-create.1.html'>podman create</see></b> and <b><see href='https://docs.podman.io/en/latest/markdown/podman-run.1.html'>podman run</see></b> commands.<br />The default is <see langword='false'/>.</summary>
     [Argument(Format = "--include-volumes={value}")] public bool? IncludeVolumes => Get<bool?>(() => IncludeVolumes);
+    /// <summary>Set the commit message for the commmitted image.<br /><i>IMPORTANT : The message field is not supported in oc format</i> </summary>
+    [Argument(Format = "--message={value}")] public string Message => Get<string>(() => Message);
+    /// <summary>Pause the container when creating an image.<br /> The default is <see langword='false'/>.</summary>
+    [Argument(Format = "--pause={value}")] public bool? Pause => Get<bool?>(() => Pause);
+    /// <summary>Suppresses output.<br />The default is <see langword='false'/>.</summary>
+    [Argument(Format = "--quiet")] public bool? Quiet => Get<bool?>(() => Quiet);
+    /// <summary>Squash newly built layers into a single new layer.<br />The default is <see langword='false'/>.</summary>
+    [Argument(Format = "--squash")] public bool? Squash => Get<bool?>(() => Squash);
+}
+#endregion
+#region PodmanCpSettings
+/// <inheritdoc cref="PodmanTasks.PodmanCp(Candoumbe.Pipelines.Tools.Podman.PodmanCpSettings)"/>
+[PublicAPI]
+[ExcludeFromCodeCoverage]
+[Command(Type = typeof(PodmanTasks), Command = nameof(PodmanTasks.PodmanCp), Arguments = "cp")]
+public partial class PodmanCpSettings : ToolOptions
+{
+    /// <summary>All tagged images in the repository are pulled.</summary>
+    [Argument(Format = "--all-tags")] public bool? AllTags => Get<bool?>(() => AllTags);
 }
 #endregion
 #region PodmanPsSettings
@@ -1693,6 +1719,90 @@ public static partial class PodmanCommitSettingsExtensions
     /// <inheritdoc cref="PodmanCommitSettings.IncludeVolumes"/>
     [Pure] [Builder(Type = typeof(PodmanCommitSettings), Property = nameof(PodmanCommitSettings.IncludeVolumes))]
     public static T ToggleIncludeVolumes<T>(this T o) where T : PodmanCommitSettings => o.Modify(b => b.Set(() => o.IncludeVolumes, !o.IncludeVolumes));
+    #endregion
+    #region Message
+    /// <inheritdoc cref="PodmanCommitSettings.Message"/>
+    [Pure] [Builder(Type = typeof(PodmanCommitSettings), Property = nameof(PodmanCommitSettings.Message))]
+    public static T SetMessage<T>(this T o, string v) where T : PodmanCommitSettings => o.Modify(b => b.Set(() => o.Message, v));
+    /// <inheritdoc cref="PodmanCommitSettings.Message"/>
+    [Pure] [Builder(Type = typeof(PodmanCommitSettings), Property = nameof(PodmanCommitSettings.Message))]
+    public static T ResetMessage<T>(this T o) where T : PodmanCommitSettings => o.Modify(b => b.Remove(() => o.Message));
+    #endregion
+    #region Pause
+    /// <inheritdoc cref="PodmanCommitSettings.Pause"/>
+    [Pure] [Builder(Type = typeof(PodmanCommitSettings), Property = nameof(PodmanCommitSettings.Pause))]
+    public static T SetPause<T>(this T o, bool? v) where T : PodmanCommitSettings => o.Modify(b => b.Set(() => o.Pause, v));
+    /// <inheritdoc cref="PodmanCommitSettings.Pause"/>
+    [Pure] [Builder(Type = typeof(PodmanCommitSettings), Property = nameof(PodmanCommitSettings.Pause))]
+    public static T ResetPause<T>(this T o) where T : PodmanCommitSettings => o.Modify(b => b.Remove(() => o.Pause));
+    /// <inheritdoc cref="PodmanCommitSettings.Pause"/>
+    [Pure] [Builder(Type = typeof(PodmanCommitSettings), Property = nameof(PodmanCommitSettings.Pause))]
+    public static T EnablePause<T>(this T o) where T : PodmanCommitSettings => o.Modify(b => b.Set(() => o.Pause, true));
+    /// <inheritdoc cref="PodmanCommitSettings.Pause"/>
+    [Pure] [Builder(Type = typeof(PodmanCommitSettings), Property = nameof(PodmanCommitSettings.Pause))]
+    public static T DisablePause<T>(this T o) where T : PodmanCommitSettings => o.Modify(b => b.Set(() => o.Pause, false));
+    /// <inheritdoc cref="PodmanCommitSettings.Pause"/>
+    [Pure] [Builder(Type = typeof(PodmanCommitSettings), Property = nameof(PodmanCommitSettings.Pause))]
+    public static T TogglePause<T>(this T o) where T : PodmanCommitSettings => o.Modify(b => b.Set(() => o.Pause, !o.Pause));
+    #endregion
+    #region Quiet
+    /// <inheritdoc cref="PodmanCommitSettings.Quiet"/>
+    [Pure] [Builder(Type = typeof(PodmanCommitSettings), Property = nameof(PodmanCommitSettings.Quiet))]
+    public static T SetQuiet<T>(this T o, bool? v) where T : PodmanCommitSettings => o.Modify(b => b.Set(() => o.Quiet, v));
+    /// <inheritdoc cref="PodmanCommitSettings.Quiet"/>
+    [Pure] [Builder(Type = typeof(PodmanCommitSettings), Property = nameof(PodmanCommitSettings.Quiet))]
+    public static T ResetQuiet<T>(this T o) where T : PodmanCommitSettings => o.Modify(b => b.Remove(() => o.Quiet));
+    /// <inheritdoc cref="PodmanCommitSettings.Quiet"/>
+    [Pure] [Builder(Type = typeof(PodmanCommitSettings), Property = nameof(PodmanCommitSettings.Quiet))]
+    public static T EnableQuiet<T>(this T o) where T : PodmanCommitSettings => o.Modify(b => b.Set(() => o.Quiet, true));
+    /// <inheritdoc cref="PodmanCommitSettings.Quiet"/>
+    [Pure] [Builder(Type = typeof(PodmanCommitSettings), Property = nameof(PodmanCommitSettings.Quiet))]
+    public static T DisableQuiet<T>(this T o) where T : PodmanCommitSettings => o.Modify(b => b.Set(() => o.Quiet, false));
+    /// <inheritdoc cref="PodmanCommitSettings.Quiet"/>
+    [Pure] [Builder(Type = typeof(PodmanCommitSettings), Property = nameof(PodmanCommitSettings.Quiet))]
+    public static T ToggleQuiet<T>(this T o) where T : PodmanCommitSettings => o.Modify(b => b.Set(() => o.Quiet, !o.Quiet));
+    #endregion
+    #region Squash
+    /// <inheritdoc cref="PodmanCommitSettings.Squash"/>
+    [Pure] [Builder(Type = typeof(PodmanCommitSettings), Property = nameof(PodmanCommitSettings.Squash))]
+    public static T SetSquash<T>(this T o, bool? v) where T : PodmanCommitSettings => o.Modify(b => b.Set(() => o.Squash, v));
+    /// <inheritdoc cref="PodmanCommitSettings.Squash"/>
+    [Pure] [Builder(Type = typeof(PodmanCommitSettings), Property = nameof(PodmanCommitSettings.Squash))]
+    public static T ResetSquash<T>(this T o) where T : PodmanCommitSettings => o.Modify(b => b.Remove(() => o.Squash));
+    /// <inheritdoc cref="PodmanCommitSettings.Squash"/>
+    [Pure] [Builder(Type = typeof(PodmanCommitSettings), Property = nameof(PodmanCommitSettings.Squash))]
+    public static T EnableSquash<T>(this T o) where T : PodmanCommitSettings => o.Modify(b => b.Set(() => o.Squash, true));
+    /// <inheritdoc cref="PodmanCommitSettings.Squash"/>
+    [Pure] [Builder(Type = typeof(PodmanCommitSettings), Property = nameof(PodmanCommitSettings.Squash))]
+    public static T DisableSquash<T>(this T o) where T : PodmanCommitSettings => o.Modify(b => b.Set(() => o.Squash, false));
+    /// <inheritdoc cref="PodmanCommitSettings.Squash"/>
+    [Pure] [Builder(Type = typeof(PodmanCommitSettings), Property = nameof(PodmanCommitSettings.Squash))]
+    public static T ToggleSquash<T>(this T o) where T : PodmanCommitSettings => o.Modify(b => b.Set(() => o.Squash, !o.Squash));
+    #endregion
+}
+#endregion
+#region PodmanCpSettingsExtensions
+/// <inheritdoc cref="PodmanTasks.PodmanCp(Candoumbe.Pipelines.Tools.Podman.PodmanCpSettings)"/>
+[PublicAPI]
+[ExcludeFromCodeCoverage]
+public static partial class PodmanCpSettingsExtensions
+{
+    #region AllTags
+    /// <inheritdoc cref="PodmanCpSettings.AllTags"/>
+    [Pure] [Builder(Type = typeof(PodmanCpSettings), Property = nameof(PodmanCpSettings.AllTags))]
+    public static T SetAllTags<T>(this T o, bool? v) where T : PodmanCpSettings => o.Modify(b => b.Set(() => o.AllTags, v));
+    /// <inheritdoc cref="PodmanCpSettings.AllTags"/>
+    [Pure] [Builder(Type = typeof(PodmanCpSettings), Property = nameof(PodmanCpSettings.AllTags))]
+    public static T ResetAllTags<T>(this T o) where T : PodmanCpSettings => o.Modify(b => b.Remove(() => o.AllTags));
+    /// <inheritdoc cref="PodmanCpSettings.AllTags"/>
+    [Pure] [Builder(Type = typeof(PodmanCpSettings), Property = nameof(PodmanCpSettings.AllTags))]
+    public static T EnableAllTags<T>(this T o) where T : PodmanCpSettings => o.Modify(b => b.Set(() => o.AllTags, true));
+    /// <inheritdoc cref="PodmanCpSettings.AllTags"/>
+    [Pure] [Builder(Type = typeof(PodmanCpSettings), Property = nameof(PodmanCpSettings.AllTags))]
+    public static T DisableAllTags<T>(this T o) where T : PodmanCpSettings => o.Modify(b => b.Set(() => o.AllTags, false));
+    /// <inheritdoc cref="PodmanCpSettings.AllTags"/>
+    [Pure] [Builder(Type = typeof(PodmanCpSettings), Property = nameof(PodmanCpSettings.AllTags))]
+    public static T ToggleAllTags<T>(this T o) where T : PodmanCpSettings => o.Modify(b => b.Set(() => o.AllTags, !o.AllTags));
     #endregion
 }
 #endregion
