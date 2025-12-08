@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved `StrykerTasks` from `Candoumbe.Pipelines.Tools` to `Candoumbe.Pipelines.Tools.Stryker` namespace.
 
 ## [1.3.0] / 2025-11-12
-### 🛠️ Fixes
+### 🚨 Fixes
 - Removed repetitive confirmation prompts when creating new branches ([#161](https://github.com/candoumbe/pipelines/issues/161)).
 
 ### 🚀 New features
@@ -22,9 +22,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added `IGitFlowWithPullRequest` interface for workflows involving pull request creation on Azure DevOps.
   - Added `IGitHubFlowWithPullRequest` interface for workflows involving pull request creation on Azure DevOps.
   - Updated dependencies to include Azure DevOps client library.
+- Added Podman wrapper ([#204](https://github.com/candoumbe/pipelines/issues/204)).
 
 ## [1.2.1] / 2025-09-14
-### 🛠️ Fixes
+### 🚨 Fixes
 - Fixed incorrect source branch name when creating a `chore` branch ([#202](https://github.com/candoumbe/pipelines/issues/202))
 - Fixed the behavior of `chore` command when running from a `chore/*` branch : the command will now properly end the `chore` workflow.
 
@@ -51,15 +52,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `Filter` option to specify which benchmarks to perform
 - Added `NuGetApiKey` parameter to `IPushNugetPackages` component
 
-### 🛠️ Fixes
+### 🚨 Fixes
 - Fixed `--major` parameter not read from command line when creating a release branch.
 
 ## [0.13.4] / 2025-08-18
-### 🛠️ Fixes
+### 🚨 Fixes
 - Fixed incorrect rendering of `IDotNetFormat` command line arguments.
 
 ## [0.13.3] / 2025-07-28
-### 🛠️ Fixes
+### 🚨 Fixes
 - Removed  redundant dependency on `IIntegrationTest` default component which caused circular dependency.
 - Fixed incorrect `--with-baseline` option when running `IMutationTest` component from a `hotfix/*` branch in a GitFlow workflow.
 - Run `IBenchmark.Benchmarks` target in `Configuration.Release` by default
@@ -69,7 +70,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [0.13.2] / 2025-04-13
-### 🛠️ Fixes
+### 🚨 Fixes
 - Fixed artifact names collision for code coverage and code coverage history.
 
 ### 🚨 Breaking changes
@@ -78,7 +79,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - use [`IReportIntegrationTestCoverage`](./src/Candoumbe.Pipelines/Components/IReportIntegrationTestCoverage.cs) component for reporting integration tests coverage
 
 ## [0.13.1] / 2025-04-12
-### 🛠️ Fixes
+### 🚨 Fixes
 
 - Fixed the incorrect version number when creating a hotfix branch ([#96](https://github.com/candoumbe/Pipelines/issues/96))
 - Replaced the commit number with the branch name when submitting versioned mutation test reports ([#183](https://github.com/candoumbe/Pipelines/issues/183))
@@ -98,11 +99,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `IPushNuGetPackages` component no longer add `--skip-duplicate` option by default.
 - Replaced `Configure<DotNetRunSettings> StrykerArgumentSettings` is now `Configure<StrykerSettings>`
 
-### 🛠️ Fixes
+### 🚨 Fixes
 - `IBuildDockerImage` component should run AFTER `IUnitTest`, `IIntegrationTest` and `IMutationTest` components.
 
 ## [0.12.1] / 2024-11-12
-### 🛠️ Fixes
+### 🚨 Fixes
 - Fixed incorrect verbosity of the default implementation of the `IUnitTest` component 
 
 ## [0.11.0] / 2024-09-14
@@ -122,7 +123,7 @@ This can improve usability in non-interactive environments.
 - Introduced [`EnhancedNukeBuild`] that can be used as drop-in replacement of the `NukeBuild`.
 [`EnhancedNukeBuild`] class adds support for some options to the `NukeBuild` such as the new `--skip-confirmation` option.
 
-### 🛠️ Fixes
+### 🚨 Fixes
 
 - Fixed `Nuke.Common` dependency used when targeting `net6.0`
 
@@ -173,7 +174,7 @@ This can improve usability in non-interactive environments.
 this new type allows to specify the path to the configuration file to use during each mutation test run.
 - `IMutationTest` component no longer implements `IUnitTest` but only `IHaveTests`
 
-### 🛠️ Fixes
+### 🚨 Fixes
 
 - Removed `nofetch` option (when calling `gitversion` tool) in order to compute semver version number more accurately ([#96](https://github.com/candoumbe/Pipelines/issues/96)).
 - `IMutationTest.MutationTests` output the value of the `--project` parameter **with** the filename extension ([#109](https://github.com/candoumbe/Pipelines/issues/109))
