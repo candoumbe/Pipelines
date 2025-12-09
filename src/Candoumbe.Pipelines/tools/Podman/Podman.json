@@ -1641,7 +1641,7 @@
           },
           {
             "name": "Format",
-            "type": "string",
+            "type": "ManifestType",
             "format": "--format={value}",
             "help": "<p>Manifest Type (<c>oci</c>, <c>v2s2</c>, or <c>v2s1</c>) to use when pushing an image.</p>"
           },
@@ -1683,7 +1683,7 @@
           },
           {
             "name": "SignBySigstorePrivateKey",
-            "type": "string",
+            "type": "Nuke.Common.IO.AbsolutePath",
             "format": "--sign-by-sigstore-private-key={value}",
             "help": "<p>Add a sigstore signature at the destination using a private key at the specified path.<p>This option is not available with the remote Podman client, including Mac and Windows (excluding WSL2) machines.</p></p>"
           },
@@ -1695,7 +1695,7 @@
           },
           {
             "name": "SignPassphraseFile",
-            "type": "string",
+            "type": "Nuke.Common.IO.AbsolutePath",
             "format": "--sign-passphrase-file={value}",
             "help": "<p>If signing the image (using <c>--sign-by</c>, <c>sign-by-sq-fingerprint</c> or <c>--sign-by-sigstore-private-key</c>), read the passphrase to use from the specified path.</p>"
           },
@@ -1790,6 +1790,14 @@
         "gzip",
         "zstd",
         "zstd:chunked"
+      ]
+    },
+    {
+      "name": "ManifestType",
+      "values": [
+        "oci",
+        "v2s1",
+        "v2s2"
       ]
     }
   ]

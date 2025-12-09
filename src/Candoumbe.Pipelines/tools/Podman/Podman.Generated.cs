@@ -676,7 +676,7 @@ public partial class PodmanImagePullSettings : ToolOptions
     /// <summary><p>If set, push uses the specified compression algorithm even if the destination contains a differently-compressed variant already.<p>Defaults to <c>true</c> if <c>--compression-format</c> is explicitly specified on the command-line, <c>false</c> otherwise.</p></p></summary>
     [Argument(Format = "--force-compression")] public bool? ForceCompression => Get<bool?>(() => ForceCompression);
     /// <summary><p>Manifest Type (<c>oci</c>, <c>v2s2</c>, or <c>v2s1</c>) to use when pushing an image.</p></summary>
-    [Argument(Format = "--format={value}")] public string Format => Get<string>(() => Format);
+    [Argument(Format = "--format={value}")] public ManifestType Format => Get<ManifestType>(() => Format);
     /// <summary><p>When writing the output image, suppress progress output.</p></summary>
     [Argument(Format = "--quiet")] public bool? Quiet => Get<bool?>(() => Quiet);
     /// <summary><p>Discard any pre-existing signatures in the image.</p></summary>
@@ -690,11 +690,11 @@ public partial class PodmanImagePullSettings : ToolOptions
     /// <summary><p>Add a sigstore signature based on further options specified in a container’s sigstore signing parameter file <c>param-file</c>.<p>See <see href="https://github.com/containers/image/blob/main/docs/containers-sigstore-signing-params.yaml.5.md">containers-sigstore-signing-params.yaml(5)</see> for details about the file format.</p></p></summary>
     [Argument(Format = "--sign-by-sigstore={value}")] public string SignBySigstore => Get<string>(() => SignBySigstore);
     /// <summary><p>Add a sigstore signature at the destination using a private key at the specified path.<p>This option is not available with the remote Podman client, including Mac and Windows (excluding WSL2) machines.</p></p></summary>
-    [Argument(Format = "--sign-by-sigstore-private-key={value}")] public string SignBySigstorePrivateKey => Get<string>(() => SignBySigstorePrivateKey);
+    [Argument(Format = "--sign-by-sigstore-private-key={value}")] public Nuke.Common.IO.AbsolutePath SignBySigstorePrivateKey => Get<Nuke.Common.IO.AbsolutePath>(() => SignBySigstorePrivateKey);
     /// <summary><p>Add a “simple signing” signature using a Sequoia-PGP key with the specified fingerprint.<p>This option is not available with the remote Podman client, including Mac and Windows (excluding WSL2) machines.</p></p></summary>
     [Argument(Format = "--sign-by-sq-fingerprint={value}")] public string SignBySqFingerprint => Get<string>(() => SignBySqFingerprint);
     /// <summary><p>If signing the image (using <c>--sign-by</c>, <c>sign-by-sq-fingerprint</c> or <c>--sign-by-sigstore-private-key</c>), read the passphrase to use from the specified path.</p></summary>
-    [Argument(Format = "--sign-passphrase-file={value}")] public string SignPassphraseFile => Get<string>(() => SignPassphraseFile);
+    [Argument(Format = "--sign-passphrase-file={value}")] public Nuke.Common.IO.AbsolutePath SignPassphraseFile => Get<Nuke.Common.IO.AbsolutePath>(() => SignPassphraseFile);
     /// <summary><p>Require HTTPS and verify certificates when contacting registries (default: <c>true</c>).<p>If explicitly set to <c>true</c>, TLS verification is used. If set to <c>false</c>, TLS verification is not used. If not specified, TLS verification is used unless the target registry is listed as an insecure registry in <see href="https://github.com/containers/image/blob/main/docs/containers-registries.d.5.md">containers-registries.conf(5)</see>.</p></p></summary>
     [Argument(Format = "--tls-verify")] public bool? TlsVerify => Get<bool?>(() => TlsVerify);
 }
@@ -3317,7 +3317,7 @@ public static partial class PodmanImagePullSettingsExtensions
     #region Format
     /// <inheritdoc cref="PodmanImagePullSettings.Format"/>
     [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.Format))]
-    public static T SetFormat<T>(this T o, string v) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.Format, v));
+    public static T SetFormat<T>(this T o, ManifestType v) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.Format, v));
     /// <inheritdoc cref="PodmanImagePullSettings.Format"/>
     [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.Format))]
     public static T ResetFormat<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Remove(() => o.Format));
@@ -3391,7 +3391,7 @@ public static partial class PodmanImagePullSettingsExtensions
     #region SignBySigstorePrivateKey
     /// <inheritdoc cref="PodmanImagePullSettings.SignBySigstorePrivateKey"/>
     [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.SignBySigstorePrivateKey))]
-    public static T SetSignBySigstorePrivateKey<T>(this T o, string v) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.SignBySigstorePrivateKey, v));
+    public static T SetSignBySigstorePrivateKey<T>(this T o, Nuke.Common.IO.AbsolutePath v) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.SignBySigstorePrivateKey, v));
     /// <inheritdoc cref="PodmanImagePullSettings.SignBySigstorePrivateKey"/>
     [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.SignBySigstorePrivateKey))]
     public static T ResetSignBySigstorePrivateKey<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Remove(() => o.SignBySigstorePrivateKey));
@@ -3407,7 +3407,7 @@ public static partial class PodmanImagePullSettingsExtensions
     #region SignPassphraseFile
     /// <inheritdoc cref="PodmanImagePullSettings.SignPassphraseFile"/>
     [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.SignPassphraseFile))]
-    public static T SetSignPassphraseFile<T>(this T o, string v) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.SignPassphraseFile, v));
+    public static T SetSignPassphraseFile<T>(this T o, Nuke.Common.IO.AbsolutePath v) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.SignPassphraseFile, v));
     /// <inheritdoc cref="PodmanImagePullSettings.SignPassphraseFile"/>
     [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.SignPassphraseFile))]
     public static T ResetSignPassphraseFile<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Remove(() => o.SignPassphraseFile));
@@ -3582,6 +3582,23 @@ public partial class CompressionFormatType : Enumeration
     public static implicit operator CompressionFormatType(string value)
     {
         return new CompressionFormatType { Value = value };
+    }
+}
+#endregion
+#region ManifestType
+/// <summary>Used within <see cref="PodmanTasks"/>.</summary>
+[PublicAPI]
+[Serializable]
+[ExcludeFromCodeCoverage]
+[TypeConverter(typeof(TypeConverter<ManifestType>))]
+public partial class ManifestType : Enumeration
+{
+    public static ManifestType oci = (ManifestType) "oci";
+    public static ManifestType v2s1 = (ManifestType) "v2s1";
+    public static ManifestType v2s2 = (ManifestType) "v2s2";
+    public static implicit operator ManifestType(string value)
+    {
+        return new ManifestType { Value = value };
     }
 }
 #endregion
