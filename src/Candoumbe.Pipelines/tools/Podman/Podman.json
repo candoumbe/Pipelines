@@ -887,11 +887,12 @@
             "name": "AddHost",
             "type": "IReadOnlyList<string>",
             "format": "--add-host={value}",
+            "separator": ";",
             "help": "<p>Add a custom host-to-IP mapping to the container’s <c>/etc/hosts</c> file.<p>The option takes one or multiple semicolon-separated hostnames to be mapped to a single IPv4 or IPv6 address, separated by a colon. It can also be used to overwrite the IP addresses of hostnames Podman adds to <c>/etc/hosts</c> by default (also see the <c>--name</c> and <c>--hostname</c> options). This option can be specified multiple times to add additional mappings to <c>/etc/hosts</c>. It conflicts with the <c>--no-hosts</c> option and conflicts with <c>no_hosts=true</c> in <c>containers.conf</c>.</p><p>Instead of an IP address, the special flag <c>host-gateway</c> can be given. This resolves to an IP address the container can use to connect to the host. The IP address chosen depends on your network setup, thus there’s no guarantee that Podman can determine the <c>host-gateway</c> address automatically, which will then cause Podman to fail with an error message. You can overwrite this IP address using the <c>host_containers_internal_ip</c> option in <c>containers.conf</c>.</p></p>"
           },
           {
             "name": "Annotation",
-            "type": "IReadOnlyList<string>",
+            "type": "IReadOnlyDictionary<string, string>",
             "format": "--annotation={value}",
             "help": "<p>Add an annotation to the container.<p>This option can be set multiple times.</p></p>"
           },
@@ -903,7 +904,7 @@
           },
           {
             "name": "Attach",
-            "type": "IReadOnlyList<string>",
+            "type": "AttachType",
             "format": "--attach={value}",
             "help": "<p>Attach to STDIN, STDOUT or STDERR.<p>In foreground mode (the default when <c>-d</c> is not specified), <c>podman run</c> can start the process in the container and attach the console to the process’s standard input, output, and error. It can even pretend to be a TTY (this is what most command-line executables expect) and pass along signals. The <c>-a</c> option can be set for each of <c>stdin</c>, <c>stdout</c>, and <c>stderr</c>.</p></p>"
           },
@@ -911,7 +912,7 @@
             "name": "AuthFile",
             "type": "string",
             "format": "--authfile={value}",
-            "help": "<p>Path of the authentication file.<p>Default is <c>${XDG_RUNTIME_DIR}/containers/auth.json</c> on Linux, and <c>$HOME/.config/containers/auth.json</c> on Windows/macOS. The file is created by <c>podman login</c>. If the authorization state is not found there, <c>$HOME/.docker/config.json</c> is checked, which is set using <c>docker login</c>.</p><p>Note: There is also the option to override the default path of the authentication file by setting the <c>REGISTRY_AUTH_FILE</c> environment variable. This can be done with <c>export REGISTRY_AUTH_FILE=path</c>.</p></p>"
+            "help": "<p>Path of the authentication file.<p>Default is <c>${XDG_RUNTIME_DIR}/containers/auth.json</c> on Linux, and <c>$HOME/.config/containers/auth.json</c> on Windows/macOS. The file is created by <see href=\"https://docs.podman.io/en/latest/markdown/podman-login.1.html\">podman login</see>. If the authorization state is not found there, <c>$HOME/.docker/config.json</c> is checked, which is set using <c>docker login</c>.</p><p>Note: There is also the option to override the default path of the authentication file by setting the <c>REGISTRY_AUTH_FILE</c> environment variable. This can be done with <c>export REGISTRY_AUTH_FILE=path</c>.</p></p>"
           },
           {
             "name": "BlkioWeight",
@@ -939,13 +940,13 @@
           },
           {
             "name": "CgroupConf",
-            "type": "IReadOnlyList<string>",
+            "type": "IReadOnlyDictionary<string, string>",
             "format": "--cgroup-conf={value}",
             "help": "<p>When running on cgroup v2, specify the cgroup file to write to and its value.<p>For example <c>--cgroup-conf=memory.high=1073741824</c> sets the memory.high limit to 1GB.</p></p>"
           },
           {
             "name": "CgroupParent",
-            "type": "string",
+            "type": "Nuke.Common.IO.AbsolutePath",
             "format": "--cgroup-parent={value}",
             "help": "<p>Path to cgroups under which the cgroup for the container is created.<p>If the path is not absolute, the path is considered to be relative to the cgroups path of the init process. Cgroups are created if they do not already exist.</p></p>"
           },
@@ -969,8 +970,9 @@
           },
           {
             "name": "CidFile",
-            "type": "string",
+            "type": "IReadOnlyList<Nuke.Common.IO.AbsolutePath>",
             "format": "--cidfile={value}",
+            "separator": ",",
             "help": "<p>Write the container ID to value. The file is removed along with the container, except when used with podman --remote run on detached containers.</p>"
           },
           {
@@ -1632,6 +1634,14 @@
         "USER",
         "VOLUME",
         "WORKDIR"
+      ]
+    },
+    {
+      "name": "AttachType",
+      "values": [
+        "stdin",
+        "stdout",
+        "stderr"
       ]
     }
   ]

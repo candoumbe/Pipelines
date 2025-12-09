@@ -398,14 +398,14 @@ public partial class PodmanCpSettings : ToolOptions
 public partial class PodmanCreateSettings : ToolOptions
 {
     /// <summary><p>Add a custom host-to-IP mapping to the container’s <c>/etc/hosts</c> file.<p>The option takes one or multiple semicolon-separated hostnames to be mapped to a single IPv4 or IPv6 address, separated by a colon. It can also be used to overwrite the IP addresses of hostnames Podman adds to <c>/etc/hosts</c> by default (also see the <c>--name</c> and <c>--hostname</c> options). This option can be specified multiple times to add additional mappings to <c>/etc/hosts</c>. It conflicts with the <c>--no-hosts</c> option and conflicts with <c>no_hosts=true</c> in <c>containers.conf</c>.</p><p>Instead of an IP address, the special flag <c>host-gateway</c> can be given. This resolves to an IP address the container can use to connect to the host. The IP address chosen depends on your network setup, thus there’s no guarantee that Podman can determine the <c>host-gateway</c> address automatically, which will then cause Podman to fail with an error message. You can overwrite this IP address using the <c>host_containers_internal_ip</c> option in <c>containers.conf</c>.</p></p></summary>
-    [Argument(Format = "--add-host={value}")] public IReadOnlyList<string> AddHost => Get<IReadOnlyList<string>>(() => AddHost);
+    [Argument(Format = "--add-host={value}", Separator = ";")] public IReadOnlyList<string> AddHost => Get<IReadOnlyList<string>>(() => AddHost);
     /// <summary><p>Add an annotation to the container.<p>This option can be set multiple times.</p></p></summary>
-    [Argument(Format = "--annotation={value}")] public IReadOnlyList<string> Annotation => Get<IReadOnlyList<string>>(() => Annotation);
+    [Argument(Format = "--annotation={value}")] public IReadOnlyDictionary<string, string> Annotation => Get<IReadOnlyDictionary<string, string>>(() => Annotation);
     /// <summary><p>Override the architecture, defaults to hosts, of the image to be pulled.<p>For example, <c>arm</c>. Unless overridden, subsequent lookups of the same image in the local storage matches this architecture, regardless of the host.</p></p></summary>
     [Argument(Format = "--arch={value}")] public string Arch => Get<string>(() => Arch);
     /// <summary><p>Attach to STDIN, STDOUT or STDERR.<p>In foreground mode (the default when <c>-d</c> is not specified), <c>podman run</c> can start the process in the container and attach the console to the process’s standard input, output, and error. It can even pretend to be a TTY (this is what most command-line executables expect) and pass along signals. The <c>-a</c> option can be set for each of <c>stdin</c>, <c>stdout</c>, and <c>stderr</c>.</p></p></summary>
-    [Argument(Format = "--attach={value}")] public IReadOnlyList<string> Attach => Get<IReadOnlyList<string>>(() => Attach);
-    /// <summary><p>Path of the authentication file.<p>Default is <c>${XDG_RUNTIME_DIR}/containers/auth.json</c> on Linux, and <c>$HOME/.config/containers/auth.json</c> on Windows/macOS. The file is created by <c>podman login</c>. If the authorization state is not found there, <c>$HOME/.docker/config.json</c> is checked, which is set using <c>docker login</c>.</p><p>Note: There is also the option to override the default path of the authentication file by setting the <c>REGISTRY_AUTH_FILE</c> environment variable. This can be done with <c>export REGISTRY_AUTH_FILE=path</c>.</p></p></summary>
+    [Argument(Format = "--attach={value}")] public AttachType Attach => Get<AttachType>(() => Attach);
+    /// <summary><p>Path of the authentication file.<p>Default is <c>${XDG_RUNTIME_DIR}/containers/auth.json</c> on Linux, and <c>$HOME/.config/containers/auth.json</c> on Windows/macOS. The file is created by <see href="https://docs.podman.io/en/latest/markdown/podman-login.1.html">podman login</see>. If the authorization state is not found there, <c>$HOME/.docker/config.json</c> is checked, which is set using <c>docker login</c>.</p><p>Note: There is also the option to override the default path of the authentication file by setting the <c>REGISTRY_AUTH_FILE</c> environment variable. This can be done with <c>export REGISTRY_AUTH_FILE=path</c>.</p></p></summary>
     [Argument(Format = "--authfile={value}")] public string AuthFile => Get<string>(() => AuthFile);
     /// <summary><p>Block IO relative weight.<p>The <c>weight</c> is a value between <c>10</c> and <c>1000</c>.</p><p>This option is not supported on cgroups V1 rootless systems.</p></p></summary>
     [Argument(Format = "--blkio-weight={value}")] public int? BlkioWeight => Get<int?>(() => BlkioWeight);
@@ -416,9 +416,9 @@ public partial class PodmanCreateSettings : ToolOptions
     /// <summary><p>Drop Linux capabilities.</p></summary>
     [Argument(Format = "--cap-drop={value}")] public IReadOnlyList<string> CapDrop => Get<IReadOnlyList<string>>(() => CapDrop);
     /// <summary><p>When running on cgroup v2, specify the cgroup file to write to and its value.<p>For example <c>--cgroup-conf=memory.high=1073741824</c> sets the memory.high limit to 1GB.</p></p></summary>
-    [Argument(Format = "--cgroup-conf={value}")] public IReadOnlyList<string> CgroupConf => Get<IReadOnlyList<string>>(() => CgroupConf);
+    [Argument(Format = "--cgroup-conf={value}")] public IReadOnlyDictionary<string, string> CgroupConf => Get<IReadOnlyDictionary<string, string>>(() => CgroupConf);
     /// <summary><p>Path to cgroups under which the cgroup for the container is created.<p>If the path is not absolute, the path is considered to be relative to the cgroups path of the init process. Cgroups are created if they do not already exist.</p></p></summary>
-    [Argument(Format = "--cgroup-parent={value}")] public string CgroupParent => Get<string>(() => CgroupParent);
+    [Argument(Format = "--cgroup-parent={value}")] public Nuke.Common.IO.AbsolutePath CgroupParent => Get<Nuke.Common.IO.AbsolutePath>(() => CgroupParent);
     /// <summary><p>Set the cgroup namespace mode for the container.<p>Possible values: <c>host</c> (use the host’s cgroup namespace inside the container), <c>container:id</c> (join the namespace of the specified container), <c>private</c> (create a new cgroup namespace), <c>ns:path</c> (join the namespace at the specified path).</p><p>If the host uses cgroups v1, the default is set to <c>host</c>. On cgroups v2, the default is <c>private</c>.</p></p></summary>
     [Argument(Format = "--cgroupns={value}")] public string CgroupNs => Get<string>(() => CgroupNs);
     /// <summary><p>Determines whether the container creates cgroups.<p>Default is <c>enabled</c>.</p><p>The <c>enabled</c> option creates a new cgroup under the cgroup-parent. The <c>disabled</c> option forces the container to not create cgroups, and thus conflicts with cgroup options (<c>--cgroupns</c> and <c>--cgroup-parent</c>). The <c>no-conmon</c> option disables a new cgroup only for the <c>conmon</c> process. The <c>split</c> option splits the current cgroup in two sub-cgroups: one for conmon and one for the container payload. It is not possible to set <c>--cgroup-parent</c> with <c>split</c>.</p></p></summary>
@@ -426,7 +426,7 @@ public partial class PodmanCreateSettings : ToolOptions
     /// <summary><p>Path to a directory inside the container that is treated as a <c>chroot</c> directory.<p>Any Podman managed file (e.g., <c>/etc/resolv.conf</c>, <c>/etc/hosts</c>, <c>/etc/hostname</c>) that is mounted into the root directory is mounted into that location as well. Multiple directories are separated with a comma.</p></p></summary>
     [Argument(Format = "--chrootdirs={value}")] public IReadOnlyList<string> ChrootDirs => Get<IReadOnlyList<string>>(() => ChrootDirs);
     /// <summary><p>Write the container ID to value. The file is removed along with the container, except when used with podman --remote run on detached containers.</p></summary>
-    [Argument(Format = "--cidfile={value}")] public string CidFile => Get<string>(() => CidFile);
+    [Argument(Format = "--cidfile={value}", Separator = ",")] public IReadOnlyList<Nuke.Common.IO.AbsolutePath> CidFile => Get<IReadOnlyList<Nuke.Common.IO.AbsolutePath>>(() => CidFile);
     /// <summary><p>Write the pid of the <c>conmon</c> process to a file.<p>As <c>conmon</c> runs in a separate process than Podman, this is necessary when using systemd to restart Podman containers.</p><p>This option is not available with the remote Podman client, including Mac and Windows (excluding WSL2) machines.</p></p></summary>
     [Argument(Format = "--conmon-pidfile={value}")] public string ConmonPidFile => Get<string>(() => ConmonPidFile);
     /// <summary><p>Set the CPU period for the Completely Fair Scheduler (CFS), which is a duration in microseconds.<p>Once the container’s CPU quota is used up, it will not be scheduled to run until the current period ends. Defaults to 100000 microseconds.</p><p>On some systems, changing the resource limits may not be allowed for non-root users.</p><p>This option is not supported on cgroups V1 rootless systems.</p></p></summary>
@@ -2094,7 +2094,7 @@ public static partial class PodmanCreateSettingsExtensions
     #region Annotation
     /// <inheritdoc cref="PodmanCreateSettings.Annotation"/>
     [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Annotation))]
-    public static T SetAnnotation<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Annotation, v));
+    public static T SetAnnotation<T>(this T o, IReadOnlyDictionary<string, string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Annotation, v));
     /// <inheritdoc cref="PodmanCreateSettings.Annotation"/>
     [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Annotation))]
     public static T ResetAnnotation<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Annotation));
@@ -2110,7 +2110,7 @@ public static partial class PodmanCreateSettingsExtensions
     #region Attach
     /// <inheritdoc cref="PodmanCreateSettings.Attach"/>
     [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Attach))]
-    public static T SetAttach<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Attach, v));
+    public static T SetAttach<T>(this T o, AttachType v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.Attach, v));
     /// <inheritdoc cref="PodmanCreateSettings.Attach"/>
     [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.Attach))]
     public static T ResetAttach<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.Attach));
@@ -2158,7 +2158,7 @@ public static partial class PodmanCreateSettingsExtensions
     #region CgroupConf
     /// <inheritdoc cref="PodmanCreateSettings.CgroupConf"/>
     [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.CgroupConf))]
-    public static T SetCgroupConf<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.CgroupConf, v));
+    public static T SetCgroupConf<T>(this T o, IReadOnlyDictionary<string, string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.CgroupConf, v));
     /// <inheritdoc cref="PodmanCreateSettings.CgroupConf"/>
     [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.CgroupConf))]
     public static T ResetCgroupConf<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.CgroupConf));
@@ -2166,7 +2166,7 @@ public static partial class PodmanCreateSettingsExtensions
     #region CgroupParent
     /// <inheritdoc cref="PodmanCreateSettings.CgroupParent"/>
     [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.CgroupParent))]
-    public static T SetCgroupParent<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.CgroupParent, v));
+    public static T SetCgroupParent<T>(this T o, Nuke.Common.IO.AbsolutePath v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.CgroupParent, v));
     /// <inheritdoc cref="PodmanCreateSettings.CgroupParent"/>
     [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.CgroupParent))]
     public static T ResetCgroupParent<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.CgroupParent));
@@ -2198,7 +2198,7 @@ public static partial class PodmanCreateSettingsExtensions
     #region CidFile
     /// <inheritdoc cref="PodmanCreateSettings.CidFile"/>
     [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.CidFile))]
-    public static T SetCidFile<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.CidFile, v));
+    public static T SetCidFile<T>(this T o, IReadOnlyList<Nuke.Common.IO.AbsolutePath> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.CidFile, v));
     /// <inheritdoc cref="PodmanCreateSettings.CidFile"/>
     [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.CidFile))]
     public static T ResetCidFile<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.CidFile));
@@ -3250,6 +3250,23 @@ public partial class InstructionType : Enumeration
     public static implicit operator InstructionType(string value)
     {
         return new InstructionType { Value = value };
+    }
+}
+#endregion
+#region AttachType
+/// <summary>Used within <see cref="PodmanTasks"/>.</summary>
+[PublicAPI]
+[Serializable]
+[ExcludeFromCodeCoverage]
+[TypeConverter(typeof(TypeConverter<AttachType>))]
+public partial class AttachType : Enumeration
+{
+    public static AttachType stdin = (AttachType) "stdin";
+    public static AttachType stdout = (AttachType) "stdout";
+    public static AttachType stderr = (AttachType) "stderr";
+    public static implicit operator AttachType(string value)
+    {
+        return new AttachType { Value = value };
     }
 }
 #endregion
