@@ -1567,6 +1567,146 @@
           }
         ]
       }
+    },
+    {
+      "postfix": "ImagePull",
+      "definiteArgument": "image pull",
+      "settingsClass": {
+        "properties": [
+          {
+            "name": "Authfile",
+            "type": "Nuke.Common.IO.AbsolutePath",
+            "format": "--authfile={value}",
+            "help": "<p>Path of the authentication file. Default is <c>${XDG_RUNTIME_DIR}/containers/auth.json</c> on Linux, and <c>$HOME/.config/containers/auth.json</c> on Windows/macOS.<p>The file is created by <see href=\"https://docs.podman.io/en/latest/markdown/podman-login.1.html\">podman login</see>. If the authorization state is not found there, <c>$HOME/.docker/config.json</c> is checked, which is set using <c>docker login</c>.</p><p>Note: There is also the option to override the default path of the authentication file by setting the <c>REGISTRY_AUTH_FILE</c> environment variable.</p></p>"
+          },
+          {
+            "name": "CertDir",
+            "type": "string",
+            "format": "--cert-dir={value}",
+            "help": "<p>Use certificates at <i>path</i> (.crt, .cert, .key) to connect to the registry. (Default: <c>/etc/containers/certs.d</c>).<p>For details, see <see href=\"https://github.com/containers/image/blob/main/docs/containers-certs.d.5.md\">containers-certs.d(5)</see>.</p><p>This option is not available with the remote Podman client, including Mac and Windows (excluding WSL2) machines.</p></p>"
+          },
+          {
+            "name": "Compress",
+            "type": "bool",
+            "format": "--compress",
+            "help": "<p>Compress tarball image layers when pushing to a directory using the ‘dir’ transport. (default is same compression type, compressed or uncompressed, as source).<p>Note: This flag can only be set when using the <c>dir</c> transport.</p></p>"
+          },
+          {
+            "name": "CompressionFormat",
+            "type": "CompressionFormatType",
+            "format": "--compression-format={value}",
+            "help": "<p>Specifies the compression format to use. Supported values are: <list type=\"bullet\"><item><c>gzip</c></item><item><c>zstd</c></item><item><c>zstd:chunked</c></item></list>The default is <c>gzip</c> unless overridden in the containers.conf file.<p><c>zstd:chunked</c> is incompatible with encrypting images, and will be treated as <c>zstd</c> with a warning in that case.</p></p>"
+          },
+          {
+            "name": "CompressionLevel",
+            "type": "int",
+            "format": "--compression-level={value}",
+            "help": "<p>Specifies the compression level to use. The value is specific to the compression algorithm used, e.g. for zstd the accepted values are in the range 1-20 (inclusive) with a default of 3, while for gzip it is 1-9 (inclusive) and has a default of 5.</p>"
+          },
+          {
+            "name": "Creds",
+            "type": "string",
+            "format": "--creds={value}",
+            "help": "<p>The <c>[username[:password]]</c> to use to authenticate with the registry, if required.<p>If one or both values are not supplied, a command line prompt appears and the value can be entered. The password is entered without echo.</p><p>Note that the specified credentials are only used to authenticate against target registries. They are not used for mirrors or when the registry gets rewritten; to authenticate against those consider using a <see href=\"https://github.com/containers/image/blob/main/docs/containers-auth.json.5.md\">containers-auth.json(5)</see> file.</p></p>"
+          },
+          {
+            "name": "Digestfile",
+            "type": "string",
+            "format": "--digestfile={value}",
+            "help": "<p>After copying the image, write the digest of the resulting image to the file.</p>"
+          },
+          {
+            "name": "DisableContentTrust",
+            "type": "bool",
+            "format": "--disable-content-trust",
+            "help": "<p>This is a Docker-specific option to disable image verification to a container registry and is not supported by Podman. This option is a NOOP and provided solely for scripting compatibility.</p>"
+          },
+          {
+            "name": "EncryptLayer",
+            "type": "string",
+            "format": "--encrypt-layer={value}",
+            "help": "<p>Layer(s) to encrypt: 0-indexed layer indices with support for negative indexing (e.g. 0 is the first layer, -1 is the last layer). If not defined, encrypts all layers if encryption-key flag is specified.</p>"
+          },
+          {
+            "name": "EncryptionKey",
+            "type": "string",
+            "format": "--encryption-key={value}",
+            "help": "<p>The <c>[protocol:keyfile]</c> specifies the encryption protocol, which can be JWE (RFC7516), PGP (RFC4880), and PKCS7 (RFC2315) and the key material required for image encryption. For instance, <c>jwe:/path/to/key.pem</c> or <c>pgp:admin@example.com</c> or <c>pkcs7:/path/to/x509-file</c>.</p>"
+          },
+          {
+            "name": "ForceCompression",
+            "type": "bool",
+            "format": "--force-compression",
+            "help": "<p>If set, push uses the specified compression algorithm even if the destination contains a differently-compressed variant already.<p>Defaults to <c>true</c> if <c>--compression-format</c> is explicitly specified on the command-line, <c>false</c> otherwise.</p></p>"
+          },
+          {
+            "name": "Format",
+            "type": "string",
+            "format": "--format={value}",
+            "help": "<p>Manifest Type (<c>oci</c>, <c>v2s2</c>, or <c>v2s1</c>) to use when pushing an image.</p>"
+          },
+          {
+            "name": "Quiet",
+            "type": "bool",
+            "format": "--quiet",
+            "help": "<p>When writing the output image, suppress progress output.</p>"
+          },
+          {
+            "name": "RemoveSignatures",
+            "type": "bool",
+            "format": "--remove-signatures",
+            "help": "<p>Discard any pre-existing signatures in the image.</p>"
+          },
+          {
+            "name": "Retry",
+            "type": "int",
+            "format": "--retry={value}",
+            "help": "<p>Number of times to retry pulling or pushing images between the registry and local storage in case of failure. Default is <c>3</c>.</p>"
+          },
+          {
+            "name": "RetryDelay",
+            "type": "string",
+            "format": "--retry-delay={value}",
+            "help": "<p>Duration of delay between retry attempts when pulling or pushing images between the registry and local storage in case of failure. The default is to start at two seconds and then exponentially back off. The delay is used when this value is set, and no exponential back off occurs.</p>"
+          },
+          {
+            "name": "SignBy",
+            "type": "string",
+            "format": "--sign-by={value}",
+            "help": "<p>Add a “simple signing” signature at the destination using the specified key.<p>This option is not available with the remote Podman client, including Mac and Windows (excluding WSL2) machines.</p></p>"
+          },
+          {
+            "name": "SignBySigstore",
+            "type": "string",
+            "format": "--sign-by-sigstore={value}",
+            "help": "<p>Add a sigstore signature based on further options specified in a container’s sigstore signing parameter file <c>param-file</c>.<p>See <see href=\"https://github.com/containers/image/blob/main/docs/containers-sigstore-signing-params.yaml.5.md\">containers-sigstore-signing-params.yaml(5)</see> for details about the file format.</p></p>"
+          },
+          {
+            "name": "SignBySigstorePrivateKey",
+            "type": "string",
+            "format": "--sign-by-sigstore-private-key={value}",
+            "help": "<p>Add a sigstore signature at the destination using a private key at the specified path.<p>This option is not available with the remote Podman client, including Mac and Windows (excluding WSL2) machines.</p></p>"
+          },
+          {
+            "name": "SignBySqFingerprint",
+            "type": "string",
+            "format": "--sign-by-sq-fingerprint={value}",
+            "help": "<p>Add a “simple signing” signature using a Sequoia-PGP key with the specified fingerprint.<p>This option is not available with the remote Podman client, including Mac and Windows (excluding WSL2) machines.</p></p>"
+          },
+          {
+            "name": "SignPassphraseFile",
+            "type": "string",
+            "format": "--sign-passphrase-file={value}",
+            "help": "<p>If signing the image (using <c>--sign-by</c>, <c>sign-by-sq-fingerprint</c> or <c>--sign-by-sigstore-private-key</c>), read the passphrase to use from the specified path.</p>"
+          },
+          {
+            "name": "TlsVerify",
+            "type": "bool",
+            "format": "--tls-verify",
+            "help": "<p>Require HTTPS and verify certificates when contacting registries (default: <c>true</c>).<p>If explicitly set to <c>true</c>, TLS verification is used. If set to <c>false</c>, TLS verification is not used. If not specified, TLS verification is used unless the target registry is listed as an insecure registry in <see href=\"https://github.com/containers/image/blob/main/docs/containers-registries.d.5.md\">containers-registries.conf(5)</see>.</p></p>"
+          }
+        ]
+      }
     }
   ],
   "enumerations": [
@@ -1642,6 +1782,14 @@
         "stdin",
         "stdout",
         "stderr"
+      ]
+    },
+    {
+      "name": "CompressionFormatType",
+      "values": [
+        "gzip",
+        "zstd",
+        "zstd:chunked"
       ]
     }
   ]
