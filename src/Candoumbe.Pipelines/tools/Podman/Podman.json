@@ -1569,8 +1569,9 @@
       }
     },
     {
-      "postfix": "ImagePull",
-      "definiteArgument": "image pull",
+      "help": "Pushes an image, manifest list or image index from local storage to a specified destination.",
+      "postfix": "ImagePush",
+      "definiteArgument": "image push",
       "settingsClass": {
         "properties": [
           {

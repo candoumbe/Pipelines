@@ -80,13 +80,13 @@ public partial class PodmanTasks : ToolTasks
     public static IReadOnlyCollection<Output> PodmanPs(Configure<PodmanPsSettings> configurator) => new PodmanTasks().Run<PodmanPsSettings>(configurator.Invoke(new PodmanPsSettings()));
     /// <inheritdoc cref="PodmanTasks.PodmanPs(Candoumbe.Pipelines.Tools.Podman.PodmanPsSettings)"/>
     public static IEnumerable<(PodmanPsSettings Settings, IReadOnlyCollection<Output> Output)> PodmanPs(CombinatorialConfigure<PodmanPsSettings> configurator, int degreeOfParallelism = 1, bool completeOnFailure = false) => configurator.Invoke(PodmanPs, degreeOfParallelism, completeOnFailure);
-    /// <summary><p>Podman is a tool for managing OCI containers and pods. Podman provides a Docker-compatible CLI (Docker command line interface) to manage OCI containers and pods.</p><p>For more details, visit the <a href="https://docs.podman.io/en/latest/Commands.html">official website</a>.</p></summary>
-    /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p><ul><li><c>--authfile</c> via <see cref="PodmanImagePullSettings.Authfile"/></li><li><c>--cert-dir</c> via <see cref="PodmanImagePullSettings.CertDir"/></li><li><c>--compress</c> via <see cref="PodmanImagePullSettings.Compress"/></li><li><c>--compression-format</c> via <see cref="PodmanImagePullSettings.CompressionFormat"/></li><li><c>--compression-level</c> via <see cref="PodmanImagePullSettings.CompressionLevel"/></li><li><c>--creds</c> via <see cref="PodmanImagePullSettings.Creds"/></li><li><c>--digestfile</c> via <see cref="PodmanImagePullSettings.Digestfile"/></li><li><c>--disable-content-trust</c> via <see cref="PodmanImagePullSettings.DisableContentTrust"/></li><li><c>--encrypt-layer</c> via <see cref="PodmanImagePullSettings.EncryptLayer"/></li><li><c>--encryption-key</c> via <see cref="PodmanImagePullSettings.EncryptionKey"/></li><li><c>--force-compression</c> via <see cref="PodmanImagePullSettings.ForceCompression"/></li><li><c>--format</c> via <see cref="PodmanImagePullSettings.Format"/></li><li><c>--quiet</c> via <see cref="PodmanImagePullSettings.Quiet"/></li><li><c>--remove-signatures</c> via <see cref="PodmanImagePullSettings.RemoveSignatures"/></li><li><c>--retry</c> via <see cref="PodmanImagePullSettings.Retry"/></li><li><c>--retry-delay</c> via <see cref="PodmanImagePullSettings.RetryDelay"/></li><li><c>--sign-by</c> via <see cref="PodmanImagePullSettings.SignBy"/></li><li><c>--sign-by-sigstore</c> via <see cref="PodmanImagePullSettings.SignBySigstore"/></li><li><c>--sign-by-sigstore-private-key</c> via <see cref="PodmanImagePullSettings.SignBySigstorePrivateKey"/></li><li><c>--sign-by-sq-fingerprint</c> via <see cref="PodmanImagePullSettings.SignBySqFingerprint"/></li><li><c>--sign-passphrase-file</c> via <see cref="PodmanImagePullSettings.SignPassphraseFile"/></li><li><c>--tls-verify</c> via <see cref="PodmanImagePullSettings.TlsVerify"/></li></ul></remarks>
-    public static IReadOnlyCollection<Output> PodmanImagePull(PodmanImagePullSettings options = null) => new PodmanTasks().Run<PodmanImagePullSettings>(options);
-    /// <inheritdoc cref="PodmanTasks.PodmanImagePull(Candoumbe.Pipelines.Tools.Podman.PodmanImagePullSettings)"/>
-    public static IReadOnlyCollection<Output> PodmanImagePull(Configure<PodmanImagePullSettings> configurator) => new PodmanTasks().Run<PodmanImagePullSettings>(configurator.Invoke(new PodmanImagePullSettings()));
-    /// <inheritdoc cref="PodmanTasks.PodmanImagePull(Candoumbe.Pipelines.Tools.Podman.PodmanImagePullSettings)"/>
-    public static IEnumerable<(PodmanImagePullSettings Settings, IReadOnlyCollection<Output> Output)> PodmanImagePull(CombinatorialConfigure<PodmanImagePullSettings> configurator, int degreeOfParallelism = 1, bool completeOnFailure = false) => configurator.Invoke(PodmanImagePull, degreeOfParallelism, completeOnFailure);
+    /// <summary><p>Pushes an image, manifest list or image index from local storage to a specified destination.</p><p>For more details, visit the <a href="https://docs.podman.io/en/latest/Commands.html">official website</a>.</p></summary>
+    /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p><ul><li><c>--authfile</c> via <see cref="PodmanImagePushSettings.Authfile"/></li><li><c>--cert-dir</c> via <see cref="PodmanImagePushSettings.CertDir"/></li><li><c>--compress</c> via <see cref="PodmanImagePushSettings.Compress"/></li><li><c>--compression-format</c> via <see cref="PodmanImagePushSettings.CompressionFormat"/></li><li><c>--compression-level</c> via <see cref="PodmanImagePushSettings.CompressionLevel"/></li><li><c>--creds</c> via <see cref="PodmanImagePushSettings.Creds"/></li><li><c>--digestfile</c> via <see cref="PodmanImagePushSettings.Digestfile"/></li><li><c>--disable-content-trust</c> via <see cref="PodmanImagePushSettings.DisableContentTrust"/></li><li><c>--encrypt-layer</c> via <see cref="PodmanImagePushSettings.EncryptLayer"/></li><li><c>--encryption-key</c> via <see cref="PodmanImagePushSettings.EncryptionKey"/></li><li><c>--force-compression</c> via <see cref="PodmanImagePushSettings.ForceCompression"/></li><li><c>--format</c> via <see cref="PodmanImagePushSettings.Format"/></li><li><c>--quiet</c> via <see cref="PodmanImagePushSettings.Quiet"/></li><li><c>--remove-signatures</c> via <see cref="PodmanImagePushSettings.RemoveSignatures"/></li><li><c>--retry</c> via <see cref="PodmanImagePushSettings.Retry"/></li><li><c>--retry-delay</c> via <see cref="PodmanImagePushSettings.RetryDelay"/></li><li><c>--sign-by</c> via <see cref="PodmanImagePushSettings.SignBy"/></li><li><c>--sign-by-sigstore</c> via <see cref="PodmanImagePushSettings.SignBySigstore"/></li><li><c>--sign-by-sigstore-private-key</c> via <see cref="PodmanImagePushSettings.SignBySigstorePrivateKey"/></li><li><c>--sign-by-sq-fingerprint</c> via <see cref="PodmanImagePushSettings.SignBySqFingerprint"/></li><li><c>--sign-passphrase-file</c> via <see cref="PodmanImagePushSettings.SignPassphraseFile"/></li><li><c>--tls-verify</c> via <see cref="PodmanImagePushSettings.TlsVerify"/></li></ul></remarks>
+    public static IReadOnlyCollection<Output> PodmanImagePush(PodmanImagePushSettings options = null) => new PodmanTasks().Run<PodmanImagePushSettings>(options);
+    /// <inheritdoc cref="PodmanTasks.PodmanImagePush(Candoumbe.Pipelines.Tools.Podman.PodmanImagePushSettings)"/>
+    public static IReadOnlyCollection<Output> PodmanImagePush(Configure<PodmanImagePushSettings> configurator) => new PodmanTasks().Run<PodmanImagePushSettings>(configurator.Invoke(new PodmanImagePushSettings()));
+    /// <inheritdoc cref="PodmanTasks.PodmanImagePush(Candoumbe.Pipelines.Tools.Podman.PodmanImagePushSettings)"/>
+    public static IEnumerable<(PodmanImagePushSettings Settings, IReadOnlyCollection<Output> Output)> PodmanImagePush(CombinatorialConfigure<PodmanImagePushSettings> configurator, int degreeOfParallelism = 1, bool completeOnFailure = false) => configurator.Invoke(PodmanImagePush, degreeOfParallelism, completeOnFailure);
 }
 #region PodmanAttachSettings
 /// <inheritdoc cref="PodmanTasks.PodmanAttach(Candoumbe.Pipelines.Tools.Podman.PodmanAttachSettings)"/>
@@ -646,12 +646,12 @@ public partial class PodmanPsSettings : ToolOptions
     [Argument(Format = "--all-tags")] public bool? AllTags => Get<bool?>(() => AllTags);
 }
 #endregion
-#region PodmanImagePullSettings
-/// <inheritdoc cref="PodmanTasks.PodmanImagePull(Candoumbe.Pipelines.Tools.Podman.PodmanImagePullSettings)"/>
+#region PodmanImagePushSettings
+/// <inheritdoc cref="PodmanTasks.PodmanImagePush(Candoumbe.Pipelines.Tools.Podman.PodmanImagePushSettings)"/>
 [PublicAPI]
 [ExcludeFromCodeCoverage]
-[Command(Type = typeof(PodmanTasks), Command = nameof(PodmanTasks.PodmanImagePull), Arguments = "image pull")]
-public partial class PodmanImagePullSettings : ToolOptions
+[Command(Type = typeof(PodmanTasks), Command = nameof(PodmanTasks.PodmanImagePush), Arguments = "image push")]
+public partial class PodmanImagePushSettings : ToolOptions
 {
     /// <summary><p>Path of the authentication file. Default is <c>${XDG_RUNTIME_DIR}/containers/auth.json</c> on Linux, and <c>$HOME/.config/containers/auth.json</c> on Windows/macOS.<p>The file is created by <see href="https://docs.podman.io/en/latest/markdown/podman-login.1.html">podman login</see>. If the authorization state is not found there, <c>$HOME/.docker/config.json</c> is checked, which is set using <c>docker login</c>.</p><p>Note: There is also the option to override the default path of the authentication file by setting the <c>REGISTRY_AUTH_FILE</c> environment variable.</p></p></summary>
     [Argument(Format = "--authfile={value}")] public Nuke.Common.IO.AbsolutePath Authfile => Get<Nuke.Common.IO.AbsolutePath>(() => Authfile);
@@ -3193,241 +3193,241 @@ public static partial class PodmanPsSettingsExtensions
     #endregion
 }
 #endregion
-#region PodmanImagePullSettingsExtensions
-/// <inheritdoc cref="PodmanTasks.PodmanImagePull(Candoumbe.Pipelines.Tools.Podman.PodmanImagePullSettings)"/>
+#region PodmanImagePushSettingsExtensions
+/// <inheritdoc cref="PodmanTasks.PodmanImagePush(Candoumbe.Pipelines.Tools.Podman.PodmanImagePushSettings)"/>
 [PublicAPI]
 [ExcludeFromCodeCoverage]
-public static partial class PodmanImagePullSettingsExtensions
+public static partial class PodmanImagePushSettingsExtensions
 {
     #region Authfile
-    /// <inheritdoc cref="PodmanImagePullSettings.Authfile"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.Authfile))]
-    public static T SetAuthfile<T>(this T o, Nuke.Common.IO.AbsolutePath v) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.Authfile, v));
-    /// <inheritdoc cref="PodmanImagePullSettings.Authfile"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.Authfile))]
-    public static T ResetAuthfile<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Remove(() => o.Authfile));
+    /// <inheritdoc cref="PodmanImagePushSettings.Authfile"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.Authfile))]
+    public static T SetAuthfile<T>(this T o, Nuke.Common.IO.AbsolutePath v) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.Authfile, v));
+    /// <inheritdoc cref="PodmanImagePushSettings.Authfile"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.Authfile))]
+    public static T ResetAuthfile<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Remove(() => o.Authfile));
     #endregion
     #region CertDir
-    /// <inheritdoc cref="PodmanImagePullSettings.CertDir"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.CertDir))]
-    public static T SetCertDir<T>(this T o, string v) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.CertDir, v));
-    /// <inheritdoc cref="PodmanImagePullSettings.CertDir"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.CertDir))]
-    public static T ResetCertDir<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Remove(() => o.CertDir));
+    /// <inheritdoc cref="PodmanImagePushSettings.CertDir"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.CertDir))]
+    public static T SetCertDir<T>(this T o, string v) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.CertDir, v));
+    /// <inheritdoc cref="PodmanImagePushSettings.CertDir"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.CertDir))]
+    public static T ResetCertDir<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Remove(() => o.CertDir));
     #endregion
     #region Compress
-    /// <inheritdoc cref="PodmanImagePullSettings.Compress"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.Compress))]
-    public static T SetCompress<T>(this T o, bool? v) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.Compress, v));
-    /// <inheritdoc cref="PodmanImagePullSettings.Compress"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.Compress))]
-    public static T ResetCompress<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Remove(() => o.Compress));
-    /// <inheritdoc cref="PodmanImagePullSettings.Compress"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.Compress))]
-    public static T EnableCompress<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.Compress, true));
-    /// <inheritdoc cref="PodmanImagePullSettings.Compress"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.Compress))]
-    public static T DisableCompress<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.Compress, false));
-    /// <inheritdoc cref="PodmanImagePullSettings.Compress"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.Compress))]
-    public static T ToggleCompress<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.Compress, !o.Compress));
+    /// <inheritdoc cref="PodmanImagePushSettings.Compress"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.Compress))]
+    public static T SetCompress<T>(this T o, bool? v) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.Compress, v));
+    /// <inheritdoc cref="PodmanImagePushSettings.Compress"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.Compress))]
+    public static T ResetCompress<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Remove(() => o.Compress));
+    /// <inheritdoc cref="PodmanImagePushSettings.Compress"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.Compress))]
+    public static T EnableCompress<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.Compress, true));
+    /// <inheritdoc cref="PodmanImagePushSettings.Compress"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.Compress))]
+    public static T DisableCompress<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.Compress, false));
+    /// <inheritdoc cref="PodmanImagePushSettings.Compress"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.Compress))]
+    public static T ToggleCompress<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.Compress, !o.Compress));
     #endregion
     #region CompressionFormat
-    /// <inheritdoc cref="PodmanImagePullSettings.CompressionFormat"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.CompressionFormat))]
-    public static T SetCompressionFormat<T>(this T o, CompressionFormatType v) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.CompressionFormat, v));
-    /// <inheritdoc cref="PodmanImagePullSettings.CompressionFormat"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.CompressionFormat))]
-    public static T ResetCompressionFormat<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Remove(() => o.CompressionFormat));
+    /// <inheritdoc cref="PodmanImagePushSettings.CompressionFormat"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.CompressionFormat))]
+    public static T SetCompressionFormat<T>(this T o, CompressionFormatType v) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.CompressionFormat, v));
+    /// <inheritdoc cref="PodmanImagePushSettings.CompressionFormat"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.CompressionFormat))]
+    public static T ResetCompressionFormat<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Remove(() => o.CompressionFormat));
     #endregion
     #region CompressionLevel
-    /// <inheritdoc cref="PodmanImagePullSettings.CompressionLevel"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.CompressionLevel))]
-    public static T SetCompressionLevel<T>(this T o, int? v) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.CompressionLevel, v));
-    /// <inheritdoc cref="PodmanImagePullSettings.CompressionLevel"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.CompressionLevel))]
-    public static T ResetCompressionLevel<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Remove(() => o.CompressionLevel));
+    /// <inheritdoc cref="PodmanImagePushSettings.CompressionLevel"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.CompressionLevel))]
+    public static T SetCompressionLevel<T>(this T o, int? v) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.CompressionLevel, v));
+    /// <inheritdoc cref="PodmanImagePushSettings.CompressionLevel"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.CompressionLevel))]
+    public static T ResetCompressionLevel<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Remove(() => o.CompressionLevel));
     #endregion
     #region Creds
-    /// <inheritdoc cref="PodmanImagePullSettings.Creds"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.Creds))]
-    public static T SetCreds<T>(this T o, string v) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.Creds, v));
-    /// <inheritdoc cref="PodmanImagePullSettings.Creds"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.Creds))]
-    public static T ResetCreds<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Remove(() => o.Creds));
+    /// <inheritdoc cref="PodmanImagePushSettings.Creds"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.Creds))]
+    public static T SetCreds<T>(this T o, string v) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.Creds, v));
+    /// <inheritdoc cref="PodmanImagePushSettings.Creds"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.Creds))]
+    public static T ResetCreds<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Remove(() => o.Creds));
     #endregion
     #region Digestfile
-    /// <inheritdoc cref="PodmanImagePullSettings.Digestfile"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.Digestfile))]
-    public static T SetDigestfile<T>(this T o, string v) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.Digestfile, v));
-    /// <inheritdoc cref="PodmanImagePullSettings.Digestfile"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.Digestfile))]
-    public static T ResetDigestfile<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Remove(() => o.Digestfile));
+    /// <inheritdoc cref="PodmanImagePushSettings.Digestfile"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.Digestfile))]
+    public static T SetDigestfile<T>(this T o, string v) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.Digestfile, v));
+    /// <inheritdoc cref="PodmanImagePushSettings.Digestfile"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.Digestfile))]
+    public static T ResetDigestfile<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Remove(() => o.Digestfile));
     #endregion
     #region DisableContentTrust
-    /// <inheritdoc cref="PodmanImagePullSettings.DisableContentTrust"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.DisableContentTrust))]
-    public static T SetDisableContentTrust<T>(this T o, bool? v) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.DisableContentTrust, v));
-    /// <inheritdoc cref="PodmanImagePullSettings.DisableContentTrust"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.DisableContentTrust))]
-    public static T ResetDisableContentTrust<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Remove(() => o.DisableContentTrust));
-    /// <inheritdoc cref="PodmanImagePullSettings.DisableContentTrust"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.DisableContentTrust))]
-    public static T EnableDisableContentTrust<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.DisableContentTrust, true));
-    /// <inheritdoc cref="PodmanImagePullSettings.DisableContentTrust"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.DisableContentTrust))]
-    public static T DisableDisableContentTrust<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.DisableContentTrust, false));
-    /// <inheritdoc cref="PodmanImagePullSettings.DisableContentTrust"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.DisableContentTrust))]
-    public static T ToggleDisableContentTrust<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.DisableContentTrust, !o.DisableContentTrust));
+    /// <inheritdoc cref="PodmanImagePushSettings.DisableContentTrust"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.DisableContentTrust))]
+    public static T SetDisableContentTrust<T>(this T o, bool? v) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.DisableContentTrust, v));
+    /// <inheritdoc cref="PodmanImagePushSettings.DisableContentTrust"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.DisableContentTrust))]
+    public static T ResetDisableContentTrust<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Remove(() => o.DisableContentTrust));
+    /// <inheritdoc cref="PodmanImagePushSettings.DisableContentTrust"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.DisableContentTrust))]
+    public static T EnableDisableContentTrust<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.DisableContentTrust, true));
+    /// <inheritdoc cref="PodmanImagePushSettings.DisableContentTrust"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.DisableContentTrust))]
+    public static T DisableDisableContentTrust<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.DisableContentTrust, false));
+    /// <inheritdoc cref="PodmanImagePushSettings.DisableContentTrust"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.DisableContentTrust))]
+    public static T ToggleDisableContentTrust<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.DisableContentTrust, !o.DisableContentTrust));
     #endregion
     #region EncryptLayer
-    /// <inheritdoc cref="PodmanImagePullSettings.EncryptLayer"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.EncryptLayer))]
-    public static T SetEncryptLayer<T>(this T o, string v) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.EncryptLayer, v));
-    /// <inheritdoc cref="PodmanImagePullSettings.EncryptLayer"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.EncryptLayer))]
-    public static T ResetEncryptLayer<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Remove(() => o.EncryptLayer));
+    /// <inheritdoc cref="PodmanImagePushSettings.EncryptLayer"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.EncryptLayer))]
+    public static T SetEncryptLayer<T>(this T o, string v) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.EncryptLayer, v));
+    /// <inheritdoc cref="PodmanImagePushSettings.EncryptLayer"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.EncryptLayer))]
+    public static T ResetEncryptLayer<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Remove(() => o.EncryptLayer));
     #endregion
     #region EncryptionKey
-    /// <inheritdoc cref="PodmanImagePullSettings.EncryptionKey"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.EncryptionKey))]
-    public static T SetEncryptionKey<T>(this T o, string v) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.EncryptionKey, v));
-    /// <inheritdoc cref="PodmanImagePullSettings.EncryptionKey"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.EncryptionKey))]
-    public static T ResetEncryptionKey<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Remove(() => o.EncryptionKey));
+    /// <inheritdoc cref="PodmanImagePushSettings.EncryptionKey"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.EncryptionKey))]
+    public static T SetEncryptionKey<T>(this T o, string v) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.EncryptionKey, v));
+    /// <inheritdoc cref="PodmanImagePushSettings.EncryptionKey"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.EncryptionKey))]
+    public static T ResetEncryptionKey<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Remove(() => o.EncryptionKey));
     #endregion
     #region ForceCompression
-    /// <inheritdoc cref="PodmanImagePullSettings.ForceCompression"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.ForceCompression))]
-    public static T SetForceCompression<T>(this T o, bool? v) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.ForceCompression, v));
-    /// <inheritdoc cref="PodmanImagePullSettings.ForceCompression"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.ForceCompression))]
-    public static T ResetForceCompression<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Remove(() => o.ForceCompression));
-    /// <inheritdoc cref="PodmanImagePullSettings.ForceCompression"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.ForceCompression))]
-    public static T EnableForceCompression<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.ForceCompression, true));
-    /// <inheritdoc cref="PodmanImagePullSettings.ForceCompression"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.ForceCompression))]
-    public static T DisableForceCompression<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.ForceCompression, false));
-    /// <inheritdoc cref="PodmanImagePullSettings.ForceCompression"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.ForceCompression))]
-    public static T ToggleForceCompression<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.ForceCompression, !o.ForceCompression));
+    /// <inheritdoc cref="PodmanImagePushSettings.ForceCompression"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.ForceCompression))]
+    public static T SetForceCompression<T>(this T o, bool? v) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.ForceCompression, v));
+    /// <inheritdoc cref="PodmanImagePushSettings.ForceCompression"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.ForceCompression))]
+    public static T ResetForceCompression<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Remove(() => o.ForceCompression));
+    /// <inheritdoc cref="PodmanImagePushSettings.ForceCompression"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.ForceCompression))]
+    public static T EnableForceCompression<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.ForceCompression, true));
+    /// <inheritdoc cref="PodmanImagePushSettings.ForceCompression"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.ForceCompression))]
+    public static T DisableForceCompression<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.ForceCompression, false));
+    /// <inheritdoc cref="PodmanImagePushSettings.ForceCompression"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.ForceCompression))]
+    public static T ToggleForceCompression<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.ForceCompression, !o.ForceCompression));
     #endregion
     #region Format
-    /// <inheritdoc cref="PodmanImagePullSettings.Format"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.Format))]
-    public static T SetFormat<T>(this T o, ManifestType v) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.Format, v));
-    /// <inheritdoc cref="PodmanImagePullSettings.Format"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.Format))]
-    public static T ResetFormat<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Remove(() => o.Format));
+    /// <inheritdoc cref="PodmanImagePushSettings.Format"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.Format))]
+    public static T SetFormat<T>(this T o, ManifestType v) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.Format, v));
+    /// <inheritdoc cref="PodmanImagePushSettings.Format"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.Format))]
+    public static T ResetFormat<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Remove(() => o.Format));
     #endregion
     #region Quiet
-    /// <inheritdoc cref="PodmanImagePullSettings.Quiet"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.Quiet))]
-    public static T SetQuiet<T>(this T o, bool? v) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.Quiet, v));
-    /// <inheritdoc cref="PodmanImagePullSettings.Quiet"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.Quiet))]
-    public static T ResetQuiet<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Remove(() => o.Quiet));
-    /// <inheritdoc cref="PodmanImagePullSettings.Quiet"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.Quiet))]
-    public static T EnableQuiet<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.Quiet, true));
-    /// <inheritdoc cref="PodmanImagePullSettings.Quiet"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.Quiet))]
-    public static T DisableQuiet<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.Quiet, false));
-    /// <inheritdoc cref="PodmanImagePullSettings.Quiet"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.Quiet))]
-    public static T ToggleQuiet<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.Quiet, !o.Quiet));
+    /// <inheritdoc cref="PodmanImagePushSettings.Quiet"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.Quiet))]
+    public static T SetQuiet<T>(this T o, bool? v) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.Quiet, v));
+    /// <inheritdoc cref="PodmanImagePushSettings.Quiet"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.Quiet))]
+    public static T ResetQuiet<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Remove(() => o.Quiet));
+    /// <inheritdoc cref="PodmanImagePushSettings.Quiet"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.Quiet))]
+    public static T EnableQuiet<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.Quiet, true));
+    /// <inheritdoc cref="PodmanImagePushSettings.Quiet"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.Quiet))]
+    public static T DisableQuiet<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.Quiet, false));
+    /// <inheritdoc cref="PodmanImagePushSettings.Quiet"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.Quiet))]
+    public static T ToggleQuiet<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.Quiet, !o.Quiet));
     #endregion
     #region RemoveSignatures
-    /// <inheritdoc cref="PodmanImagePullSettings.RemoveSignatures"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.RemoveSignatures))]
-    public static T SetRemoveSignatures<T>(this T o, bool? v) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.RemoveSignatures, v));
-    /// <inheritdoc cref="PodmanImagePullSettings.RemoveSignatures"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.RemoveSignatures))]
-    public static T ResetRemoveSignatures<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Remove(() => o.RemoveSignatures));
-    /// <inheritdoc cref="PodmanImagePullSettings.RemoveSignatures"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.RemoveSignatures))]
-    public static T EnableRemoveSignatures<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.RemoveSignatures, true));
-    /// <inheritdoc cref="PodmanImagePullSettings.RemoveSignatures"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.RemoveSignatures))]
-    public static T DisableRemoveSignatures<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.RemoveSignatures, false));
-    /// <inheritdoc cref="PodmanImagePullSettings.RemoveSignatures"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.RemoveSignatures))]
-    public static T ToggleRemoveSignatures<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.RemoveSignatures, !o.RemoveSignatures));
+    /// <inheritdoc cref="PodmanImagePushSettings.RemoveSignatures"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.RemoveSignatures))]
+    public static T SetRemoveSignatures<T>(this T o, bool? v) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.RemoveSignatures, v));
+    /// <inheritdoc cref="PodmanImagePushSettings.RemoveSignatures"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.RemoveSignatures))]
+    public static T ResetRemoveSignatures<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Remove(() => o.RemoveSignatures));
+    /// <inheritdoc cref="PodmanImagePushSettings.RemoveSignatures"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.RemoveSignatures))]
+    public static T EnableRemoveSignatures<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.RemoveSignatures, true));
+    /// <inheritdoc cref="PodmanImagePushSettings.RemoveSignatures"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.RemoveSignatures))]
+    public static T DisableRemoveSignatures<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.RemoveSignatures, false));
+    /// <inheritdoc cref="PodmanImagePushSettings.RemoveSignatures"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.RemoveSignatures))]
+    public static T ToggleRemoveSignatures<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.RemoveSignatures, !o.RemoveSignatures));
     #endregion
     #region Retry
-    /// <inheritdoc cref="PodmanImagePullSettings.Retry"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.Retry))]
-    public static T SetRetry<T>(this T o, int? v) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.Retry, v));
-    /// <inheritdoc cref="PodmanImagePullSettings.Retry"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.Retry))]
-    public static T ResetRetry<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Remove(() => o.Retry));
+    /// <inheritdoc cref="PodmanImagePushSettings.Retry"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.Retry))]
+    public static T SetRetry<T>(this T o, int? v) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.Retry, v));
+    /// <inheritdoc cref="PodmanImagePushSettings.Retry"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.Retry))]
+    public static T ResetRetry<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Remove(() => o.Retry));
     #endregion
     #region RetryDelay
-    /// <inheritdoc cref="PodmanImagePullSettings.RetryDelay"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.RetryDelay))]
-    public static T SetRetryDelay<T>(this T o, string v) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.RetryDelay, v));
-    /// <inheritdoc cref="PodmanImagePullSettings.RetryDelay"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.RetryDelay))]
-    public static T ResetRetryDelay<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Remove(() => o.RetryDelay));
+    /// <inheritdoc cref="PodmanImagePushSettings.RetryDelay"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.RetryDelay))]
+    public static T SetRetryDelay<T>(this T o, string v) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.RetryDelay, v));
+    /// <inheritdoc cref="PodmanImagePushSettings.RetryDelay"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.RetryDelay))]
+    public static T ResetRetryDelay<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Remove(() => o.RetryDelay));
     #endregion
     #region SignBy
-    /// <inheritdoc cref="PodmanImagePullSettings.SignBy"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.SignBy))]
-    public static T SetSignBy<T>(this T o, string v) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.SignBy, v));
-    /// <inheritdoc cref="PodmanImagePullSettings.SignBy"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.SignBy))]
-    public static T ResetSignBy<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Remove(() => o.SignBy));
+    /// <inheritdoc cref="PodmanImagePushSettings.SignBy"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.SignBy))]
+    public static T SetSignBy<T>(this T o, string v) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.SignBy, v));
+    /// <inheritdoc cref="PodmanImagePushSettings.SignBy"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.SignBy))]
+    public static T ResetSignBy<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Remove(() => o.SignBy));
     #endregion
     #region SignBySigstore
-    /// <inheritdoc cref="PodmanImagePullSettings.SignBySigstore"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.SignBySigstore))]
-    public static T SetSignBySigstore<T>(this T o, string v) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.SignBySigstore, v));
-    /// <inheritdoc cref="PodmanImagePullSettings.SignBySigstore"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.SignBySigstore))]
-    public static T ResetSignBySigstore<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Remove(() => o.SignBySigstore));
+    /// <inheritdoc cref="PodmanImagePushSettings.SignBySigstore"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.SignBySigstore))]
+    public static T SetSignBySigstore<T>(this T o, string v) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.SignBySigstore, v));
+    /// <inheritdoc cref="PodmanImagePushSettings.SignBySigstore"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.SignBySigstore))]
+    public static T ResetSignBySigstore<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Remove(() => o.SignBySigstore));
     #endregion
     #region SignBySigstorePrivateKey
-    /// <inheritdoc cref="PodmanImagePullSettings.SignBySigstorePrivateKey"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.SignBySigstorePrivateKey))]
-    public static T SetSignBySigstorePrivateKey<T>(this T o, Nuke.Common.IO.AbsolutePath v) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.SignBySigstorePrivateKey, v));
-    /// <inheritdoc cref="PodmanImagePullSettings.SignBySigstorePrivateKey"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.SignBySigstorePrivateKey))]
-    public static T ResetSignBySigstorePrivateKey<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Remove(() => o.SignBySigstorePrivateKey));
+    /// <inheritdoc cref="PodmanImagePushSettings.SignBySigstorePrivateKey"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.SignBySigstorePrivateKey))]
+    public static T SetSignBySigstorePrivateKey<T>(this T o, Nuke.Common.IO.AbsolutePath v) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.SignBySigstorePrivateKey, v));
+    /// <inheritdoc cref="PodmanImagePushSettings.SignBySigstorePrivateKey"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.SignBySigstorePrivateKey))]
+    public static T ResetSignBySigstorePrivateKey<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Remove(() => o.SignBySigstorePrivateKey));
     #endregion
     #region SignBySqFingerprint
-    /// <inheritdoc cref="PodmanImagePullSettings.SignBySqFingerprint"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.SignBySqFingerprint))]
-    public static T SetSignBySqFingerprint<T>(this T o, string v) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.SignBySqFingerprint, v));
-    /// <inheritdoc cref="PodmanImagePullSettings.SignBySqFingerprint"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.SignBySqFingerprint))]
-    public static T ResetSignBySqFingerprint<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Remove(() => o.SignBySqFingerprint));
+    /// <inheritdoc cref="PodmanImagePushSettings.SignBySqFingerprint"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.SignBySqFingerprint))]
+    public static T SetSignBySqFingerprint<T>(this T o, string v) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.SignBySqFingerprint, v));
+    /// <inheritdoc cref="PodmanImagePushSettings.SignBySqFingerprint"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.SignBySqFingerprint))]
+    public static T ResetSignBySqFingerprint<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Remove(() => o.SignBySqFingerprint));
     #endregion
     #region SignPassphraseFile
-    /// <inheritdoc cref="PodmanImagePullSettings.SignPassphraseFile"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.SignPassphraseFile))]
-    public static T SetSignPassphraseFile<T>(this T o, Nuke.Common.IO.AbsolutePath v) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.SignPassphraseFile, v));
-    /// <inheritdoc cref="PodmanImagePullSettings.SignPassphraseFile"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.SignPassphraseFile))]
-    public static T ResetSignPassphraseFile<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Remove(() => o.SignPassphraseFile));
+    /// <inheritdoc cref="PodmanImagePushSettings.SignPassphraseFile"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.SignPassphraseFile))]
+    public static T SetSignPassphraseFile<T>(this T o, Nuke.Common.IO.AbsolutePath v) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.SignPassphraseFile, v));
+    /// <inheritdoc cref="PodmanImagePushSettings.SignPassphraseFile"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.SignPassphraseFile))]
+    public static T ResetSignPassphraseFile<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Remove(() => o.SignPassphraseFile));
     #endregion
     #region TlsVerify
-    /// <inheritdoc cref="PodmanImagePullSettings.TlsVerify"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.TlsVerify))]
-    public static T SetTlsVerify<T>(this T o, bool? v) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.TlsVerify, v));
-    /// <inheritdoc cref="PodmanImagePullSettings.TlsVerify"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.TlsVerify))]
-    public static T ResetTlsVerify<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Remove(() => o.TlsVerify));
-    /// <inheritdoc cref="PodmanImagePullSettings.TlsVerify"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.TlsVerify))]
-    public static T EnableTlsVerify<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.TlsVerify, true));
-    /// <inheritdoc cref="PodmanImagePullSettings.TlsVerify"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.TlsVerify))]
-    public static T DisableTlsVerify<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.TlsVerify, false));
-    /// <inheritdoc cref="PodmanImagePullSettings.TlsVerify"/>
-    [Pure] [Builder(Type = typeof(PodmanImagePullSettings), Property = nameof(PodmanImagePullSettings.TlsVerify))]
-    public static T ToggleTlsVerify<T>(this T o) where T : PodmanImagePullSettings => o.Modify(b => b.Set(() => o.TlsVerify, !o.TlsVerify));
+    /// <inheritdoc cref="PodmanImagePushSettings.TlsVerify"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.TlsVerify))]
+    public static T SetTlsVerify<T>(this T o, bool? v) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.TlsVerify, v));
+    /// <inheritdoc cref="PodmanImagePushSettings.TlsVerify"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.TlsVerify))]
+    public static T ResetTlsVerify<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Remove(() => o.TlsVerify));
+    /// <inheritdoc cref="PodmanImagePushSettings.TlsVerify"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.TlsVerify))]
+    public static T EnableTlsVerify<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.TlsVerify, true));
+    /// <inheritdoc cref="PodmanImagePushSettings.TlsVerify"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.TlsVerify))]
+    public static T DisableTlsVerify<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.TlsVerify, false));
+    /// <inheritdoc cref="PodmanImagePushSettings.TlsVerify"/>
+    [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.TlsVerify))]
+    public static T ToggleTlsVerify<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.TlsVerify, !o.TlsVerify));
     #endregion
 }
 #endregion
