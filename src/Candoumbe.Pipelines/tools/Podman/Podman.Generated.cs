@@ -73,6 +73,13 @@ public partial class PodmanTasks : ToolTasks
     public static IReadOnlyCollection<Output> PodmanDiff(Configure<PodmanDiffSettings> configurator) => new PodmanTasks().Run<PodmanDiffSettings>(configurator.Invoke(new PodmanDiffSettings()));
     /// <inheritdoc cref="PodmanTasks.PodmanDiff(Candoumbe.Pipelines.Tools.Podman.PodmanDiffSettings)"/>
     public static IEnumerable<(PodmanDiffSettings Settings, IReadOnlyCollection<Output> Output)> PodmanDiff(CombinatorialConfigure<PodmanDiffSettings> configurator, int degreeOfParallelism = 1, bool completeOnFailure = false) => configurator.Invoke(PodmanDiff, degreeOfParallelism, completeOnFailure);
+    /// <summary><p>podman pull copies an image from a registry onto the local machine. The command can pull one or more images. If the image reference in the command line argument does not contain a registry, it is referred to as a <c>short-name</c> reference. If the image is a ‘short-name’ reference, Podman prompts the user for the specific container registry to pull the image from, if an alias for the short-name has not been specified in the <c>short-name-aliases.conf</c>. If an image tag is not specified, <b>podman pull</b> defaults to the image with the <b>latest</b> tag (if it exists) and pulls it. After the image is pulled, podman prints the full image ID. <b>podman pull</b> can also pull images using a digest <b>podman pull</b> <i>image@digest</i> and can also be used to pull images from archives and local storage using different transports. <i>IMPORTANT: Images are stored in local image storage.</i></p><p>For more details, visit the <a href="https://docs.podman.io/en/latest/Commands.html">official website</a>.</p></summary>
+    /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p><ul><li><c>--all-tags</c> via <see cref="PodmanPullSettings.AllTags"/></li><li><c>--arch</c> via <see cref="PodmanPullSettings.Arch"/></li><li><c>--authfile</c> via <see cref="PodmanPullSettings.Authfile"/></li><li><c>--cert-dir</c> via <see cref="PodmanPullSettings.CertDir"/></li><li><c>--creds</c> via <see cref="PodmanPullSettings.Creds"/></li><li><c>--decryption-key</c> via <see cref="PodmanPullSettings.DecryptionKey"/></li><li><c>--disable-content-trust</c> via <see cref="PodmanPullSettings.DisableContentTrust"/></li><li><c>--help</c> via <see cref="PodmanPullSettings.Help"/></li><li><c>--os</c> via <see cref="PodmanPullSettings.Os"/></li><li><c>--platform</c> via <see cref="PodmanPullSettings.Platform"/></li><li><c>--policy</c> via <see cref="PodmanPullSettings.Policy"/></li><li><c>--quiet</c> via <see cref="PodmanPullSettings.Quiet"/></li><li><c>--retry</c> via <see cref="PodmanPullSettings.Retry"/></li><li><c>--retry-delay</c> via <see cref="PodmanPullSettings.RetryDelay"/></li><li><c>--tls-verify</c> via <see cref="PodmanPullSettings.TlsVerify"/></li><li><c>--variant</c> via <see cref="PodmanPullSettings.Variant"/></li></ul></remarks>
+    public static IReadOnlyCollection<Output> PodmanPull(PodmanPullSettings options = null) => new PodmanTasks().Run<PodmanPullSettings>(options);
+    /// <inheritdoc cref="PodmanTasks.PodmanPull(Candoumbe.Pipelines.Tools.Podman.PodmanPullSettings)"/>
+    public static IReadOnlyCollection<Output> PodmanPull(Configure<PodmanPullSettings> configurator) => new PodmanTasks().Run<PodmanPullSettings>(configurator.Invoke(new PodmanPullSettings()));
+    /// <inheritdoc cref="PodmanTasks.PodmanPull(Candoumbe.Pipelines.Tools.Podman.PodmanPullSettings)"/>
+    public static IEnumerable<(PodmanPullSettings Settings, IReadOnlyCollection<Output> Output)> PodmanPull(CombinatorialConfigure<PodmanPullSettings> configurator, int degreeOfParallelism = 1, bool completeOnFailure = false) => configurator.Invoke(PodmanPull, degreeOfParallelism, completeOnFailure);
     /// <summary><p>Podman is a tool for managing OCI containers and pods. Podman provides a Docker-compatible CLI (Docker command line interface) to manage OCI containers and pods.</p><p>For more details, visit the <a href="https://docs.podman.io/en/latest/Commands.html">official website</a>.</p></summary>
     /// <remarks><p>This is a <a href="https://www.nuke.build/docs/common/cli-tools/#fluent-api">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p><ul><li><c>--all-tags</c> via <see cref="PodmanPsSettings.AllTags"/></li></ul></remarks>
     public static IReadOnlyCollection<Output> PodmanPs(PodmanPsSettings options = null) => new PodmanTasks().Run<PodmanPsSettings>(options);
@@ -413,7 +420,7 @@ public partial class PodmanCreateSettings : ToolOptions
     /// <summary><p>Attach to STDIN, STDOUT or STDERR.<p>In foreground mode (the default when <c>-d</c> is not specified), <c>podman run</c> can start the process in the container and attach the console to the process’s standard input, output, and error. It can even pretend to be a TTY (this is what most command-line executables expect) and pass along signals. The <c>-a</c> option can be set for each of <c>stdin</c>, <c>stdout</c>, and <c>stderr</c>.</p></p></summary>
     [Argument(Format = "--attach={value}")] public AttachType Attach => Get<AttachType>(() => Attach);
     /// <summary><p>Path of the authentication file.<p>Default is <c>${XDG_RUNTIME_DIR}/containers/auth.json</c> on Linux, and <c>$HOME/.config/containers/auth.json</c> on Windows/macOS. The file is created by <see href="https://docs.podman.io/en/latest/markdown/podman-login.1.html">podman login</see>. If the authorization state is not found there, <c>$HOME/.docker/config.json</c> is checked, which is set using <c>docker login</c>.</p><p>Note: There is also the option to override the default path of the authentication file by setting the <c>REGISTRY_AUTH_FILE</c> environment variable. This can be done with <c>export REGISTRY_AUTH_FILE=path</c>.</p></p></summary>
-    [Argument(Format = "--authfile={value}")] public string AuthFile => Get<string>(() => AuthFile);
+    [Argument(Format = "--authfile={value}")] public Nuke.Common.IO.AbsolutePath AuthFile => Get<Nuke.Common.IO.AbsolutePath>(() => AuthFile);
     /// <summary><p>Block IO relative weight.<p>The <c>weight</c> is a value between <c>10</c> and <c>1000</c>.</p><p>This option is not supported on cgroups V1 rootless systems.</p></p></summary>
     [Argument(Format = "--blkio-weight={value}")] public int? BlkioWeight => Get<int?>(() => BlkioWeight);
     /// <summary><p>Block IO relative device weight.</p></summary>
@@ -435,7 +442,7 @@ public partial class PodmanCreateSettings : ToolOptions
     /// <summary><p>Write the container ID to value. The file is removed along with the container, except when used with podman --remote run on detached containers.</p></summary>
     [Argument(Format = "--cidfile={value}", Separator = ",")] public IReadOnlyList<Nuke.Common.IO.AbsolutePath> CidFile => Get<IReadOnlyList<Nuke.Common.IO.AbsolutePath>>(() => CidFile);
     /// <summary><p>Write the pid of the <c>conmon</c> process to a file.<p>As <c>conmon</c> runs in a separate process than Podman, this is necessary when using systemd to restart Podman containers.</p><p>This option is not available with the remote Podman client, including Mac and Windows (excluding WSL2) machines.</p></p></summary>
-    [Argument(Format = "--conmon-pidfile={value}")] public string ConmonPidFile => Get<string>(() => ConmonPidFile);
+    [Argument(Format = "--conmon-pidfile={value}")] public Nuke.Common.IO.AbsolutePath ConmonPidFile => Get<Nuke.Common.IO.AbsolutePath>(() => ConmonPidFile);
     /// <summary><p>Set the CPU period for the Completely Fair Scheduler (CFS), which is a duration in microseconds.<p>Once the container’s CPU quota is used up, it will not be scheduled to run until the current period ends. Defaults to 100000 microseconds.</p><p>On some systems, changing the resource limits may not be allowed for non-root users.</p><p>This option is not supported on cgroups V1 rootless systems.</p></p></summary>
     [Argument(Format = "--cpu-period={value}")] public int? CpuPeriod => Get<int?>(() => CpuPeriod);
     /// <summary><p>Limit the CPU Completely Fair Scheduler (CFS) quota.<p>Limit the container’s CPU usage. By default, containers run with the full CPU resource. The limit is a number in microseconds. If a number is provided, the container is allowed to use that much CPU time until the CPU period ends (controllable via <c>--cpu-period</c>).</p><p>On some systems, changing the resource limits may not be allowed for non-root users.</p><p>This option is not supported on cgroups V1 rootless systems.</p></p></summary>
@@ -449,7 +456,7 @@ public partial class PodmanCreateSettings : ToolOptions
     /// <summary><p>Memory nodes (MEMs) in which to allow execution (0-3, 0,1).<p>Only effective on NUMA systems.</p><p>If there are four memory nodes on the system (0-3), use <c>--cpuset-mems=0,1</c> then processes in the container only uses memory from the first two memory nodes.</p><p>On some systems, changing the resource limits may not be allowed for non-root users.</p><p>This option is not supported on cgroups V1 rootless systems.</p></p></summary>
     [Argument(Format = "--cpuset-mems={value}")] public string CpusetMems => Get<string>(() => CpusetMems);
     /// <summary><p>The <c>[key[:passphrase]]</c> to be used for decryption of images.<p>Key can point to keys and/or certificates. Decryption is tried with all keys. If the key is protected by a passphrase, it is required to be passed in the argument and omitted otherwise.</p></p></summary>
-    [Argument(Format = "--decryption-key={value}")] public IReadOnlyList<string> DecryptionKey => Get<IReadOnlyList<string>>(() => DecryptionKey);
+    [Argument(Format = "--decryption-key={value}", Secret = true)] public string DecryptionKey => Get<string>(() => DecryptionKey);
     /// <summary><p>Add a host device to the container.<p>Optional value parameter can be used to specify device permissions by combining <c>r</c> for read, <c>w</c> for write, and <c>m</c> for <c>mknod(2)</c>.</p><p>Example: <c>--device=/dev/sdc:/dev/xvdc:rwm</c>.</p><p>Note: if <c>host-device</c> is a symbolic link then it is resolved first. The container only stores the major and minor numbers of the host device.</p><p>Podman may load kernel modules required for using the specified device. The devices that Podman loads modules for when necessary are: <c>/dev/fuse</c>.</p><p>In rootless mode, the new device is bind mounted in the container from the host rather than Podman creating it within the container space. Because the bind mount retains its SELinux label on SELinux systems, the container can get permission denied when accessing the mounted device. Modify SELinux settings to allow containers to use all device labels via the following command: <c>sudo setsebool -P container_use_devices=true</c>.</p><p>Note: if the user only has access rights via a group, accessing the device from inside a rootless container fails. Use the <c>--group-add keep-groups</c> flag to pass the user’s supplementary group access into the container.</p></p></summary>
     [Argument(Format = "--device={value}")] public IReadOnlyList<string> Device => Get<IReadOnlyList<string>>(() => Device);
     /// <summary><p>Add a rule to the cgroup allowed devices list.<p>The rule is expected to be in the format specified in the Linux kernel documentation: <c>type</c> can be <c>a</c> (all), <c>c</c> (char), or <c>b</c> (block); <c>major</c> and <c>minor</c> can be a number or <c>*</c>; <c>mode</c> is a composition of <c>r</c> (read), <c>w</c> (write), and <c>m</c> (mknod(2)).</p></p></summary>
@@ -475,7 +482,7 @@ public partial class PodmanCreateSettings : ToolOptions
     /// <summary><p>Set environment variables.<p>This option allows arbitrary environment variables that are available for the process to be launched inside of the container. If an environment variable is specified without a value, Podman checks the host environment for a value and set the variable only if it is set on the host. As a special case, if an environment variable ending in <c>*</c> is specified without a value, Podman searches the host environment for variables starting with the prefix and adds those variables to the container.</p></p></summary>
     [Argument(Format = "--env={value}")] public IReadOnlyList<string> Env => Get<IReadOnlyList<string>>(() => Env);
     /// <summary><p>Read in a line-delimited file of environment variables.</p></summary>
-    [Argument(Format = "--env-file={value}")] public string EnvFile => Get<string>(() => EnvFile);
+    [Argument(Format = "--env-file={value}")] public Nuke.Common.IO.AbsolutePath EnvFile => Get<Nuke.Common.IO.AbsolutePath>(() => EnvFile);
     /// <summary><p>Use host environment inside of the container.<p>See Environment note below for precedence. This option is not available with the remote Podman client, including Mac and Windows (excluding WSL2) machines.</p></p></summary>
     [Argument(Format = "--env-host")] public bool? EnvHost => Get<bool?>(() => EnvHost);
     /// <summary><p>Preprocess default environment variables for the containers.<p>For example if image contains environment variable <c>hello=world</c> user can preprocess it using <c>--env-merge hello=${hello}-some</c> so new value is <c>hello=world-some</c>.</p><p>Please note that if the environment variable <c>hello</c> is not present in the image, then it’ll be replaced by an empty string and so using <c>--env-merge hello=${hello}-some</c> would result in the new value of <c>hello=-some</c>, notice the leading <c>-</c> delimiter.</p></p></summary>
@@ -531,7 +538,7 @@ public partial class PodmanCreateSettings : ToolOptions
     /// <summary><p>When using pods, create an init style container.<p>Valid values: <c>always</c> (the container runs with each and every <c>pod start</c>), <c>once</c> (the container only runs once when the pod is started and then the container is removed).</p><p>Init containers are only run on pod <c>start</c>. Restarting a pod does not execute any init containers. Furthermore, init containers can only be created in a pod when that pod is not running.</p></p></summary>
     [Argument(Format = "--init-ctr={value}")] public string InitCtr => Get<string>(() => InitCtr);
     /// <summary><p>Path to the container-init binary.</p></summary>
-    [Argument(Format = "--init-path={value}")] public string InitPath => Get<string>(() => InitPath);
+    [Argument(Format = "--init-path={value}")] public Nuke.Common.IO.AbsolutePath InitPath => Get<Nuke.Common.IO.AbsolutePath>(() => InitPath);
     /// <summary><p>When set to <c>true</c>, keep stdin open even if not attached.<p>The default is <c>false</c>.</p></p></summary>
     [Argument(Format = "--interactive")] public bool? Interactive => Get<bool?>(() => Interactive);
     /// <summary><p>Specify a static IPv4 address for the container.<p>Example: <c>10.88.64.128</c>. This option can only be used if the container is joined to only a single network - i.e., <c>--network=network-name</c> is used at most once - and if the container is not joining another container’s network namespace via <c>--network=container:id</c>. The address must be within the network’s IP address pool (default <c>10.88.0.0/16</c>).</p><p>To specify multiple static IP addresses per container, set multiple networks using the <c>--network</c> option with a static IP address specified for each using the <c>ip</c> mode for that option.</p></p></summary>
@@ -635,6 +642,47 @@ public partial class PodmanDiffSettings : ToolOptions
 {
 }
 #endregion
+#region PodmanPullSettings
+/// <inheritdoc cref="PodmanTasks.PodmanPull(Candoumbe.Pipelines.Tools.Podman.PodmanPullSettings)"/>
+[PublicAPI]
+[ExcludeFromCodeCoverage]
+[Command(Type = typeof(PodmanTasks), Command = nameof(PodmanTasks.PodmanPull), Arguments = "image pull")]
+public partial class PodmanPullSettings : ToolOptions
+{
+    /// <summary><p>Override the architecture, defaults to hosts, of the image to be pulled. For example, <c>arm</c>.<p>Unless overridden, subsequent lookups of the same image in the local storage matches this architecture, regardless of the host.</p></p></summary>
+    [Argument(Format = "--all-tags")] public bool? AllTags => Get<bool?>(() => AllTags);
+    /// <summary><p>Override the architecture, defaults to hosts, of the image to be pulled. For example, <c>arm</c>.<p>Unless overridden, subsequent lookups of the same image in the local storage matches this architecture, regardless of the host.</p></p></summary>
+    [Argument(Format = "--arch={value}")] public string Arch => Get<string>(() => Arch);
+    /// <summary><p>Path of the authentication file. Default is <c>${XDG_RUNTIME_DIR}/containers/auth.json</c> on Linux, and <c>$HOME/.config/containers/auth.json</c> on Windows/macOS.<p>The file is created by <see cref="podman login"/>. If the authorization state is not found there, <c>$HOME/.docker/config.json</c> is checked, which is set using <c>docker login</c>.</p><p>Note: There is also the option to override the default path of the authentication file by setting the <c>REGISTRY_AUTH_FILE</c> environment variable.</p></p></summary>
+    [Argument(Format = "--authfile={value}")] public Nuke.Common.IO.AbsolutePath Authfile => Get<Nuke.Common.IO.AbsolutePath>(() => Authfile);
+    /// <summary><p>Use certificates at <i>path</i> (.crt, .cert, .key) to connect to the registry. (Default: <c>/etc/containers/certs.d</c>).<p>For details, see <see cref="containers-certs.d(5)"/>.</p><p>This option is not available with the remote Podman client, including Mac and Windows (excluding WSL2) machines.</p></p></summary>
+    [Argument(Format = "--cert-dir={value}")] public Nuke.Common.IO.AbsolutePath CertDir => Get<Nuke.Common.IO.AbsolutePath>(() => CertDir);
+    /// <summary><p>The <c>[username[:password]]</c> to use to authenticate with the registry, if required.<p>If one or both values are not supplied, a command line prompt appears and the value can be entered. The password is entered without echo.</p><p>Note that the specified credentials are only used to authenticate against target registries. They are not used for mirrors or when the registry gets rewritten; to authenticate against those consider using a <see cref="containers-auth.json(5)"/> file.</p></p></summary>
+    [Argument(Format = "--creds={value}", Secret = true)] public string Creds => Get<string>(() => Creds);
+    /// <summary><p>The <c>[key[:passphrase]]</c> to be used for decryption of images. Key can point to keys and/or certificates. Decryption is tried with all keys. If the key is protected by a passphrase, it is required to be passed in the argument and omitted otherwise.</p></summary>
+    [Argument(Format = "--decryption-key={value}", Secret = true)] public string DecryptionKey => Get<string>(() => DecryptionKey);
+    /// <summary><p>This is a Docker-specific option to disable image verification to a container registry and is not supported by Podman. This option is a NOOP and provided solely for scripting compatibility.</p></summary>
+    [Argument(Format = "--disable-content-trust")] public bool? DisableContentTrust => Get<bool?>(() => DisableContentTrust);
+    /// <summary><p>Print the usage statement.</p></summary>
+    [Argument(Format = "--help")] public bool? Help => Get<bool?>(() => Help);
+    /// <summary><p>Override the OS, defaults to hosts, of the image to be pulled. For example, <c>windows</c>.<p>Unless overridden, subsequent lookups of the same image in the local storage matches this OS, regardless of the host.</p></p></summary>
+    [Argument(Format = "--os={value}")] public string Os => Get<string>(() => Os);
+    /// <summary><p>Specify the platform for selecting the image. (Conflicts with --arch and --os)<p>The <c>--platform</c> option can be used to override the current architecture and operating system.</p><p>Unless overridden, subsequent lookups of the same image in the local storage matches this platform, regardless of the host.</p></p></summary>
+    [Argument(Format = "--platform={value}")] public string Platform => Get<string>(() => Platform);
+    /// <summary><p>Pull image policy. The default is <c>always</c>.<list type="bullet"><item><c>always</c>: Always pull the image and throw an error if the pull fails.</item><item><c>missing</c>: Only pull the image if it could not be found in the local containers storage. Throw an error if no image could be found and the pull fails.</item><item><c>never</c>: Never pull the image; only use the local version. Throw an error if the image is not present locally.</item><item><c>newer</c>: Pull if the image on the registry is newer than the one in the local containers storage. An image is considered to be newer when the digests are different. Comparing the time stamps is prone to errors. Pull errors are suppressed if a local image was found.</item></list></p></summary>
+    [Argument(Format = "--policy={value}")] public PullPolicy Policy => Get<PullPolicy>(() => Policy);
+    /// <summary><p>Suppress output information when pulling images.</p></summary>
+    [Argument(Format = "--quiet")] public bool? Quiet => Get<bool?>(() => Quiet);
+    /// <summary><p>Number of times to retry pulling or pushing images between the registry and local storage in case of failure. Default is <c>3</c>.</p></summary>
+    [Argument(Format = "--retry={value}")] public int? Retry => Get<int?>(() => Retry);
+    /// <summary><p>Duration of delay between retry attempts when pulling or pushing images between the registry and local storage in case of failure. The default is to start at two seconds and then exponentially back off. The delay is used when this value is set, and no exponential back off occurs.</p></summary>
+    [Argument(Format = "--retry-delay={value}")] public string RetryDelay => Get<string>(() => RetryDelay);
+    /// <summary><p>Require HTTPS and verify certificates when contacting registries (default: <c>true</c>).<p>If explicitly set to <c>true</c>, TLS verification is used.</p><p>If set to <c>false</c>, TLS verification is not used.</p><p>If not specified, TLS verification is used unless the target registry is listed as an insecure registry in <see href="https://github.com/containers/image/blob/main/docs/containers-registries.conf.5.md">containers-registries.conf(5)</see>.</p></p></summary>
+    [Argument(Format = "--tls-verify")] public bool? TlsVerify => Get<bool?>(() => TlsVerify);
+    /// <summary><p>Use <i>VARIANT</i> instead of the default architecture variant of the container image. Some images can use multiple variants of the arm architectures, such as <c>arm/v5</c> and <c>arm/v7</c>.</p></summary>
+    [Argument(Format = "--variant={value}")] public string Variant => Get<string>(() => Variant);
+}
+#endregion
 #region PodmanPsSettings
 /// <inheritdoc cref="PodmanTasks.PodmanPs(Candoumbe.Pipelines.Tools.Podman.PodmanPsSettings)"/>
 [PublicAPI]
@@ -664,9 +712,9 @@ public partial class PodmanImagePushSettings : ToolOptions
     /// <summary><p>Specifies the compression level to use. The value is specific to the compression algorithm used, e.g. for zstd the accepted values are in the range 1-20 (inclusive) with a default of 3, while for gzip it is 1-9 (inclusive) and has a default of 5.</p></summary>
     [Argument(Format = "--compression-level={value}")] public int? CompressionLevel => Get<int?>(() => CompressionLevel);
     /// <summary><p>The <c>[username[:password]]</c> to use to authenticate with the registry, if required.<p>If one or both values are not supplied, a command line prompt appears and the value can be entered. The password is entered without echo.</p><p>Note that the specified credentials are only used to authenticate against target registries. They are not used for mirrors or when the registry gets rewritten; to authenticate against those consider using a <see href="https://github.com/containers/image/blob/main/docs/containers-auth.json.5.md">containers-auth.json(5)</see> file.</p></p></summary>
-    [Argument(Format = "--creds={value}")] public string Creds => Get<string>(() => Creds);
+    [Argument(Format = "--creds={value}", Secret = true)] public string Creds => Get<string>(() => Creds);
     /// <summary><p>After copying the image, write the digest of the resulting image to the file.</p></summary>
-    [Argument(Format = "--digestfile={value}")] public string Digestfile => Get<string>(() => Digestfile);
+    [Argument(Format = "--digestfile={value}")] public Nuke.Common.IO.AbsolutePath Digestfile => Get<Nuke.Common.IO.AbsolutePath>(() => Digestfile);
     /// <summary><p>This is a Docker-specific option to disable image verification to a container registry and is not supported by Podman. This option is a NOOP and provided solely for scripting compatibility.</p></summary>
     [Argument(Format = "--disable-content-trust")] public bool? DisableContentTrust => Get<bool?>(() => DisableContentTrust);
     /// <summary><p>Layer(s) to encrypt: 0-indexed layer indices with support for negative indexing (e.g. 0 is the first layer, -1 is the last layer). If not defined, encrypts all layers if encryption-key flag is specified.</p></summary>
@@ -2178,7 +2226,7 @@ public static partial class PodmanCreateSettingsExtensions
     #region AuthFile
     /// <inheritdoc cref="PodmanCreateSettings.AuthFile"/>
     [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.AuthFile))]
-    public static T SetAuthFile<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.AuthFile, v));
+    public static T SetAuthFile<T>(this T o, Nuke.Common.IO.AbsolutePath v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.AuthFile, v));
     /// <inheritdoc cref="PodmanCreateSettings.AuthFile"/>
     [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.AuthFile))]
     public static T ResetAuthFile<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.AuthFile));
@@ -2266,7 +2314,7 @@ public static partial class PodmanCreateSettingsExtensions
     #region ConmonPidFile
     /// <inheritdoc cref="PodmanCreateSettings.ConmonPidFile"/>
     [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.ConmonPidFile))]
-    public static T SetConmonPidFile<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.ConmonPidFile, v));
+    public static T SetConmonPidFile<T>(this T o, Nuke.Common.IO.AbsolutePath v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.ConmonPidFile, v));
     /// <inheritdoc cref="PodmanCreateSettings.ConmonPidFile"/>
     [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.ConmonPidFile))]
     public static T ResetConmonPidFile<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.ConmonPidFile));
@@ -2322,7 +2370,7 @@ public static partial class PodmanCreateSettingsExtensions
     #region DecryptionKey
     /// <inheritdoc cref="PodmanCreateSettings.DecryptionKey"/>
     [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.DecryptionKey))]
-    public static T SetDecryptionKey<T>(this T o, IReadOnlyList<string> v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.DecryptionKey, v));
+    public static T SetDecryptionKey<T>(this T o, [Secret] string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.DecryptionKey, v));
     /// <inheritdoc cref="PodmanCreateSettings.DecryptionKey"/>
     [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.DecryptionKey))]
     public static T ResetDecryptionKey<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.DecryptionKey));
@@ -2435,7 +2483,7 @@ public static partial class PodmanCreateSettingsExtensions
     #region EnvFile
     /// <inheritdoc cref="PodmanCreateSettings.EnvFile"/>
     [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.EnvFile))]
-    public static T SetEnvFile<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.EnvFile, v));
+    public static T SetEnvFile<T>(this T o, Nuke.Common.IO.AbsolutePath v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.EnvFile, v));
     /// <inheritdoc cref="PodmanCreateSettings.EnvFile"/>
     [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.EnvFile))]
     public static T ResetEnvFile<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.EnvFile));
@@ -2686,7 +2734,7 @@ public static partial class PodmanCreateSettingsExtensions
     #region InitPath
     /// <inheritdoc cref="PodmanCreateSettings.InitPath"/>
     [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.InitPath))]
-    public static T SetInitPath<T>(this T o, string v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.InitPath, v));
+    public static T SetInitPath<T>(this T o, Nuke.Common.IO.AbsolutePath v) where T : PodmanCreateSettings => o.Modify(b => b.Set(() => o.InitPath, v));
     /// <inheritdoc cref="PodmanCreateSettings.InitPath"/>
     [Pure] [Builder(Type = typeof(PodmanCreateSettings), Property = nameof(PodmanCreateSettings.InitPath))]
     public static T ResetInitPath<T>(this T o) where T : PodmanCreateSettings => o.Modify(b => b.Remove(() => o.InitPath));
@@ -3168,6 +3216,187 @@ public static partial class PodmanDiffSettingsExtensions
 {
 }
 #endregion
+#region PodmanPullSettingsExtensions
+/// <inheritdoc cref="PodmanTasks.PodmanPull(Candoumbe.Pipelines.Tools.Podman.PodmanPullSettings)"/>
+[PublicAPI]
+[ExcludeFromCodeCoverage]
+public static partial class PodmanPullSettingsExtensions
+{
+    #region AllTags
+    /// <inheritdoc cref="PodmanPullSettings.AllTags"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.AllTags))]
+    public static T SetAllTags<T>(this T o, bool? v) where T : PodmanPullSettings => o.Modify(b => b.Set(() => o.AllTags, v));
+    /// <inheritdoc cref="PodmanPullSettings.AllTags"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.AllTags))]
+    public static T ResetAllTags<T>(this T o) where T : PodmanPullSettings => o.Modify(b => b.Remove(() => o.AllTags));
+    /// <inheritdoc cref="PodmanPullSettings.AllTags"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.AllTags))]
+    public static T EnableAllTags<T>(this T o) where T : PodmanPullSettings => o.Modify(b => b.Set(() => o.AllTags, true));
+    /// <inheritdoc cref="PodmanPullSettings.AllTags"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.AllTags))]
+    public static T DisableAllTags<T>(this T o) where T : PodmanPullSettings => o.Modify(b => b.Set(() => o.AllTags, false));
+    /// <inheritdoc cref="PodmanPullSettings.AllTags"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.AllTags))]
+    public static T ToggleAllTags<T>(this T o) where T : PodmanPullSettings => o.Modify(b => b.Set(() => o.AllTags, !o.AllTags));
+    #endregion
+    #region Arch
+    /// <inheritdoc cref="PodmanPullSettings.Arch"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.Arch))]
+    public static T SetArch<T>(this T o, string v) where T : PodmanPullSettings => o.Modify(b => b.Set(() => o.Arch, v));
+    /// <inheritdoc cref="PodmanPullSettings.Arch"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.Arch))]
+    public static T ResetArch<T>(this T o) where T : PodmanPullSettings => o.Modify(b => b.Remove(() => o.Arch));
+    #endregion
+    #region Authfile
+    /// <inheritdoc cref="PodmanPullSettings.Authfile"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.Authfile))]
+    public static T SetAuthfile<T>(this T o, Nuke.Common.IO.AbsolutePath v) where T : PodmanPullSettings => o.Modify(b => b.Set(() => o.Authfile, v));
+    /// <inheritdoc cref="PodmanPullSettings.Authfile"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.Authfile))]
+    public static T ResetAuthfile<T>(this T o) where T : PodmanPullSettings => o.Modify(b => b.Remove(() => o.Authfile));
+    #endregion
+    #region CertDir
+    /// <inheritdoc cref="PodmanPullSettings.CertDir"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.CertDir))]
+    public static T SetCertDir<T>(this T o, Nuke.Common.IO.AbsolutePath v) where T : PodmanPullSettings => o.Modify(b => b.Set(() => o.CertDir, v));
+    /// <inheritdoc cref="PodmanPullSettings.CertDir"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.CertDir))]
+    public static T ResetCertDir<T>(this T o) where T : PodmanPullSettings => o.Modify(b => b.Remove(() => o.CertDir));
+    #endregion
+    #region Creds
+    /// <inheritdoc cref="PodmanPullSettings.Creds"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.Creds))]
+    public static T SetCreds<T>(this T o, [Secret] string v) where T : PodmanPullSettings => o.Modify(b => b.Set(() => o.Creds, v));
+    /// <inheritdoc cref="PodmanPullSettings.Creds"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.Creds))]
+    public static T ResetCreds<T>(this T o) where T : PodmanPullSettings => o.Modify(b => b.Remove(() => o.Creds));
+    #endregion
+    #region DecryptionKey
+    /// <inheritdoc cref="PodmanPullSettings.DecryptionKey"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.DecryptionKey))]
+    public static T SetDecryptionKey<T>(this T o, [Secret] string v) where T : PodmanPullSettings => o.Modify(b => b.Set(() => o.DecryptionKey, v));
+    /// <inheritdoc cref="PodmanPullSettings.DecryptionKey"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.DecryptionKey))]
+    public static T ResetDecryptionKey<T>(this T o) where T : PodmanPullSettings => o.Modify(b => b.Remove(() => o.DecryptionKey));
+    #endregion
+    #region DisableContentTrust
+    /// <inheritdoc cref="PodmanPullSettings.DisableContentTrust"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.DisableContentTrust))]
+    public static T SetDisableContentTrust<T>(this T o, bool? v) where T : PodmanPullSettings => o.Modify(b => b.Set(() => o.DisableContentTrust, v));
+    /// <inheritdoc cref="PodmanPullSettings.DisableContentTrust"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.DisableContentTrust))]
+    public static T ResetDisableContentTrust<T>(this T o) where T : PodmanPullSettings => o.Modify(b => b.Remove(() => o.DisableContentTrust));
+    /// <inheritdoc cref="PodmanPullSettings.DisableContentTrust"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.DisableContentTrust))]
+    public static T EnableDisableContentTrust<T>(this T o) where T : PodmanPullSettings => o.Modify(b => b.Set(() => o.DisableContentTrust, true));
+    /// <inheritdoc cref="PodmanPullSettings.DisableContentTrust"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.DisableContentTrust))]
+    public static T DisableDisableContentTrust<T>(this T o) where T : PodmanPullSettings => o.Modify(b => b.Set(() => o.DisableContentTrust, false));
+    /// <inheritdoc cref="PodmanPullSettings.DisableContentTrust"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.DisableContentTrust))]
+    public static T ToggleDisableContentTrust<T>(this T o) where T : PodmanPullSettings => o.Modify(b => b.Set(() => o.DisableContentTrust, !o.DisableContentTrust));
+    #endregion
+    #region Help
+    /// <inheritdoc cref="PodmanPullSettings.Help"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.Help))]
+    public static T SetHelp<T>(this T o, bool? v) where T : PodmanPullSettings => o.Modify(b => b.Set(() => o.Help, v));
+    /// <inheritdoc cref="PodmanPullSettings.Help"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.Help))]
+    public static T ResetHelp<T>(this T o) where T : PodmanPullSettings => o.Modify(b => b.Remove(() => o.Help));
+    /// <inheritdoc cref="PodmanPullSettings.Help"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.Help))]
+    public static T EnableHelp<T>(this T o) where T : PodmanPullSettings => o.Modify(b => b.Set(() => o.Help, true));
+    /// <inheritdoc cref="PodmanPullSettings.Help"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.Help))]
+    public static T DisableHelp<T>(this T o) where T : PodmanPullSettings => o.Modify(b => b.Set(() => o.Help, false));
+    /// <inheritdoc cref="PodmanPullSettings.Help"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.Help))]
+    public static T ToggleHelp<T>(this T o) where T : PodmanPullSettings => o.Modify(b => b.Set(() => o.Help, !o.Help));
+    #endregion
+    #region Os
+    /// <inheritdoc cref="PodmanPullSettings.Os"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.Os))]
+    public static T SetOs<T>(this T o, string v) where T : PodmanPullSettings => o.Modify(b => b.Set(() => o.Os, v));
+    /// <inheritdoc cref="PodmanPullSettings.Os"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.Os))]
+    public static T ResetOs<T>(this T o) where T : PodmanPullSettings => o.Modify(b => b.Remove(() => o.Os));
+    #endregion
+    #region Platform
+    /// <inheritdoc cref="PodmanPullSettings.Platform"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.Platform))]
+    public static T SetPlatform<T>(this T o, string v) where T : PodmanPullSettings => o.Modify(b => b.Set(() => o.Platform, v));
+    /// <inheritdoc cref="PodmanPullSettings.Platform"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.Platform))]
+    public static T ResetPlatform<T>(this T o) where T : PodmanPullSettings => o.Modify(b => b.Remove(() => o.Platform));
+    #endregion
+    #region Policy
+    /// <inheritdoc cref="PodmanPullSettings.Policy"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.Policy))]
+    public static T SetPolicy<T>(this T o, PullPolicy v) where T : PodmanPullSettings => o.Modify(b => b.Set(() => o.Policy, v));
+    /// <inheritdoc cref="PodmanPullSettings.Policy"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.Policy))]
+    public static T ResetPolicy<T>(this T o) where T : PodmanPullSettings => o.Modify(b => b.Remove(() => o.Policy));
+    #endregion
+    #region Quiet
+    /// <inheritdoc cref="PodmanPullSettings.Quiet"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.Quiet))]
+    public static T SetQuiet<T>(this T o, bool? v) where T : PodmanPullSettings => o.Modify(b => b.Set(() => o.Quiet, v));
+    /// <inheritdoc cref="PodmanPullSettings.Quiet"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.Quiet))]
+    public static T ResetQuiet<T>(this T o) where T : PodmanPullSettings => o.Modify(b => b.Remove(() => o.Quiet));
+    /// <inheritdoc cref="PodmanPullSettings.Quiet"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.Quiet))]
+    public static T EnableQuiet<T>(this T o) where T : PodmanPullSettings => o.Modify(b => b.Set(() => o.Quiet, true));
+    /// <inheritdoc cref="PodmanPullSettings.Quiet"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.Quiet))]
+    public static T DisableQuiet<T>(this T o) where T : PodmanPullSettings => o.Modify(b => b.Set(() => o.Quiet, false));
+    /// <inheritdoc cref="PodmanPullSettings.Quiet"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.Quiet))]
+    public static T ToggleQuiet<T>(this T o) where T : PodmanPullSettings => o.Modify(b => b.Set(() => o.Quiet, !o.Quiet));
+    #endregion
+    #region Retry
+    /// <inheritdoc cref="PodmanPullSettings.Retry"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.Retry))]
+    public static T SetRetry<T>(this T o, int? v) where T : PodmanPullSettings => o.Modify(b => b.Set(() => o.Retry, v));
+    /// <inheritdoc cref="PodmanPullSettings.Retry"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.Retry))]
+    public static T ResetRetry<T>(this T o) where T : PodmanPullSettings => o.Modify(b => b.Remove(() => o.Retry));
+    #endregion
+    #region RetryDelay
+    /// <inheritdoc cref="PodmanPullSettings.RetryDelay"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.RetryDelay))]
+    public static T SetRetryDelay<T>(this T o, string v) where T : PodmanPullSettings => o.Modify(b => b.Set(() => o.RetryDelay, v));
+    /// <inheritdoc cref="PodmanPullSettings.RetryDelay"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.RetryDelay))]
+    public static T ResetRetryDelay<T>(this T o) where T : PodmanPullSettings => o.Modify(b => b.Remove(() => o.RetryDelay));
+    #endregion
+    #region TlsVerify
+    /// <inheritdoc cref="PodmanPullSettings.TlsVerify"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.TlsVerify))]
+    public static T SetTlsVerify<T>(this T o, bool? v) where T : PodmanPullSettings => o.Modify(b => b.Set(() => o.TlsVerify, v));
+    /// <inheritdoc cref="PodmanPullSettings.TlsVerify"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.TlsVerify))]
+    public static T ResetTlsVerify<T>(this T o) where T : PodmanPullSettings => o.Modify(b => b.Remove(() => o.TlsVerify));
+    /// <inheritdoc cref="PodmanPullSettings.TlsVerify"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.TlsVerify))]
+    public static T EnableTlsVerify<T>(this T o) where T : PodmanPullSettings => o.Modify(b => b.Set(() => o.TlsVerify, true));
+    /// <inheritdoc cref="PodmanPullSettings.TlsVerify"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.TlsVerify))]
+    public static T DisableTlsVerify<T>(this T o) where T : PodmanPullSettings => o.Modify(b => b.Set(() => o.TlsVerify, false));
+    /// <inheritdoc cref="PodmanPullSettings.TlsVerify"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.TlsVerify))]
+    public static T ToggleTlsVerify<T>(this T o) where T : PodmanPullSettings => o.Modify(b => b.Set(() => o.TlsVerify, !o.TlsVerify));
+    #endregion
+    #region Variant
+    /// <inheritdoc cref="PodmanPullSettings.Variant"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.Variant))]
+    public static T SetVariant<T>(this T o, string v) where T : PodmanPullSettings => o.Modify(b => b.Set(() => o.Variant, v));
+    /// <inheritdoc cref="PodmanPullSettings.Variant"/>
+    [Pure] [Builder(Type = typeof(PodmanPullSettings), Property = nameof(PodmanPullSettings.Variant))]
+    public static T ResetVariant<T>(this T o) where T : PodmanPullSettings => o.Modify(b => b.Remove(() => o.Variant));
+    #endregion
+}
+#endregion
 #region PodmanPsSettingsExtensions
 /// <inheritdoc cref="PodmanTasks.PodmanPs(Candoumbe.Pipelines.Tools.Podman.PodmanPsSettings)"/>
 [PublicAPI]
@@ -3251,7 +3480,7 @@ public static partial class PodmanImagePushSettingsExtensions
     #region Creds
     /// <inheritdoc cref="PodmanImagePushSettings.Creds"/>
     [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.Creds))]
-    public static T SetCreds<T>(this T o, string v) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.Creds, v));
+    public static T SetCreds<T>(this T o, [Secret] string v) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.Creds, v));
     /// <inheritdoc cref="PodmanImagePushSettings.Creds"/>
     [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.Creds))]
     public static T ResetCreds<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Remove(() => o.Creds));
@@ -3259,7 +3488,7 @@ public static partial class PodmanImagePushSettingsExtensions
     #region Digestfile
     /// <inheritdoc cref="PodmanImagePushSettings.Digestfile"/>
     [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.Digestfile))]
-    public static T SetDigestfile<T>(this T o, string v) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.Digestfile, v));
+    public static T SetDigestfile<T>(this T o, Nuke.Common.IO.AbsolutePath v) where T : PodmanImagePushSettings => o.Modify(b => b.Set(() => o.Digestfile, v));
     /// <inheritdoc cref="PodmanImagePushSettings.Digestfile"/>
     [Pure] [Builder(Type = typeof(PodmanImagePushSettings), Property = nameof(PodmanImagePushSettings.Digestfile))]
     public static T ResetDigestfile<T>(this T o) where T : PodmanImagePushSettings => o.Modify(b => b.Remove(() => o.Digestfile));

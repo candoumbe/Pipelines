@@ -549,7 +549,6 @@
             "name": "RetryDelay",
             "type": "uint",
             "format": "--retry-delay={value}",
-            "default": "",
             "help": "<p>Duration of delay between retry attempts when pulling or pushing images between the registry and local storage in case of failure. The default is to start at two seconds and then exponentially back off. The delay is used when this value is set, and no exponential back off occurs.</p>"
           },
           {
@@ -910,7 +909,7 @@
           },
           {
             "name": "AuthFile",
-            "type": "string",
+            "type": "Nuke.Common.IO.AbsolutePath",
             "format": "--authfile={value}",
             "help": "<p>Path of the authentication file.<p>Default is <c>${XDG_RUNTIME_DIR}/containers/auth.json</c> on Linux, and <c>$HOME/.config/containers/auth.json</c> on Windows/macOS. The file is created by <see href=\"https://docs.podman.io/en/latest/markdown/podman-login.1.html\">podman login</see>. If the authorization state is not found there, <c>$HOME/.docker/config.json</c> is checked, which is set using <c>docker login</c>.</p><p>Note: There is also the option to override the default path of the authentication file by setting the <c>REGISTRY_AUTH_FILE</c> environment variable. This can be done with <c>export REGISTRY_AUTH_FILE=path</c>.</p></p>"
           },
@@ -977,7 +976,7 @@
           },
           {
             "name": "ConmonPidFile",
-            "type": "string",
+            "type": "Nuke.Common.IO.AbsolutePath",
             "format": "--conmon-pidfile={value}",
             "help": "<p>Write the pid of the <c>conmon</c> process to a file.<p>As <c>conmon</c> runs in a separate process than Podman, this is necessary when using systemd to restart Podman containers.</p><p>This option is not available with the remote Podman client, including Mac and Windows (excluding WSL2) machines.</p></p>"
           },
@@ -1019,8 +1018,9 @@
           },
           {
             "name": "DecryptionKey",
-            "type": "IReadOnlyList<string>",
+            "type": "string",
             "format": "--decryption-key={value}",
+            "secret": true,
             "help": "<p>The <c>[key[:passphrase]]</c> to be used for decryption of images.<p>Key can point to keys and/or certificates. Decryption is tried with all keys. If the key is protected by a passphrase, it is required to be passed in the argument and omitted otherwise.</p></p>"
           },
           {
@@ -1097,7 +1097,7 @@
           },
           {
             "name": "EnvFile",
-            "type": "string",
+            "type": "Nuke.Common.IO.AbsolutePath",
             "format": "--env-file={value}",
             "help": "<p>Read in a line-delimited file of environment variables.</p>"
           },
@@ -1265,7 +1265,7 @@
           },
           {
             "name": "InitPath",
-            "type": "string",
+            "type": "Nuke.Common.IO.AbsolutePath",
             "format": "--init-path={value}",
             "help": "<p>Path to the container-init binary.</p>"
           },
@@ -1555,6 +1555,113 @@
       "settingsClass": {}
     },
     {
+      "help": "podman pull copies an image from a registry onto the local machine. The command can pull one or more images. If the image reference in the command line argument does not contain a registry, it is referred to as a <c>short-name</c> reference. If the image is a ‘short-name’ reference, Podman prompts the user for the specific container registry to pull the image from, if an alias for the short-name has not been specified in the <c>short-name-aliases.conf</c>. If an image tag is not specified, <b>podman pull</b> defaults to the image with the <b>latest</b> tag (if it exists) and pulls it. After the image is pulled, podman prints the full image ID. <b>podman pull</b> can also pull images using a digest <b>podman pull</b> <i>image@digest</i> and can also be used to pull images from archives and local storage using different transports. <i>IMPORTANT: Images are stored in local image storage.</i>",
+      "postfix": "Pull",
+      "definiteArgument": "image pull",
+      "settingsClass": {
+        "properties": [
+          {
+            "name": "AllTags",
+            "type": "bool",
+            "format": "--all-tags",
+            "help": "<p>Override the architecture, defaults to hosts, of the image to be pulled. For example, <c>arm</c>.<p>Unless overridden, subsequent lookups of the same image in the local storage matches this architecture, regardless of the host.</p></p>"
+          },
+          {
+            "name": "Arch",
+            "type": "string",
+            "format": "--arch={value}",
+            "help": "<p>Override the architecture, defaults to hosts, of the image to be pulled. For example, <c>arm</c>.<p>Unless overridden, subsequent lookups of the same image in the local storage matches this architecture, regardless of the host.</p></p>"
+          },
+          {
+            "name": "Authfile",
+            "type": "Nuke.Common.IO.AbsolutePath",
+            "format": "--authfile={value}",
+            "help": "<p>Path of the authentication file. Default is <c>${XDG_RUNTIME_DIR}/containers/auth.json</c> on Linux, and <c>$HOME/.config/containers/auth.json</c> on Windows/macOS.<p>The file is created by <see cref=\"podman login\"/>. If the authorization state is not found there, <c>$HOME/.docker/config.json</c> is checked, which is set using <c>docker login</c>.</p><p>Note: There is also the option to override the default path of the authentication file by setting the <c>REGISTRY_AUTH_FILE</c> environment variable.</p></p>"
+          },
+          {
+            "name": "CertDir",
+            "type": "Nuke.Common.IO.AbsolutePath",
+            "format": "--cert-dir={value}",
+            "help": "<p>Use certificates at <i>path</i> (.crt, .cert, .key) to connect to the registry. (Default: <c>/etc/containers/certs.d</c>).<p>For details, see <see cref=\"containers-certs.d(5)\"/>.</p><p>This option is not available with the remote Podman client, including Mac and Windows (excluding WSL2) machines.</p></p>"
+          },
+          {
+            "name": "Creds",
+            "type": "string",
+            "format": "--creds={value}",
+            "secret": true,
+            "help": "<p>The <c>[username[:password]]</c> to use to authenticate with the registry, if required.<p>If one or both values are not supplied, a command line prompt appears and the value can be entered. The password is entered without echo.</p><p>Note that the specified credentials are only used to authenticate against target registries. They are not used for mirrors or when the registry gets rewritten; to authenticate against those consider using a <see cref=\"containers-auth.json(5)\"/> file.</p></p>"
+          },
+          {
+            "name": "DecryptionKey",
+            "type": "string",
+            "format": "--decryption-key={value}",
+            "secret": true,
+            "help": "<p>The <c>[key[:passphrase]]</c> to be used for decryption of images. Key can point to keys and/or certificates. Decryption is tried with all keys. If the key is protected by a passphrase, it is required to be passed in the argument and omitted otherwise.</p>"
+          },
+          {
+            "name": "DisableContentTrust",
+            "type": "bool",
+            "format": "--disable-content-trust",
+            "help": "<p>This is a Docker-specific option to disable image verification to a container registry and is not supported by Podman. This option is a NOOP and provided solely for scripting compatibility.</p>"
+          },
+          {
+            "name": "Help",
+            "type": "bool",
+            "format": "--help",
+            "help": "<p>Print the usage statement.</p>"
+          },
+          {
+            "name": "Os",
+            "type": "string",
+            "format": "--os={value}",
+            "help": "<p>Override the OS, defaults to hosts, of the image to be pulled. For example, <c>windows</c>.<p>Unless overridden, subsequent lookups of the same image in the local storage matches this OS, regardless of the host.</p></p>"
+          },
+          {
+            "name": "Platform",
+            "type": "string",
+            "format": "--platform={value}",
+            "help": "<p>Specify the platform for selecting the image. (Conflicts with --arch and --os)<p>The <c>--platform</c> option can be used to override the current architecture and operating system.</p><p>Unless overridden, subsequent lookups of the same image in the local storage matches this platform, regardless of the host.</p></p>"
+          },
+          {
+            "name": "Policy",
+            "type": "PullPolicy",
+            "format": "--policy={value}",
+            "help": "<p>Pull image policy. The default is <c>always</c>.<list type=\"bullet\"><item><c>always</c>: Always pull the image and throw an error if the pull fails.</item><item><c>missing</c>: Only pull the image if it could not be found in the local containers storage. Throw an error if no image could be found and the pull fails.</item><item><c>never</c>: Never pull the image; only use the local version. Throw an error if the image is not present locally.</item><item><c>newer</c>: Pull if the image on the registry is newer than the one in the local containers storage. An image is considered to be newer when the digests are different. Comparing the time stamps is prone to errors. Pull errors are suppressed if a local image was found.</item></list></p>"
+          },
+          {
+            "name": "Quiet",
+            "type": "bool",
+            "format": "--quiet",
+            "help": "<p>Suppress output information when pulling images.</p>"
+          },
+          {
+            "name": "Retry",
+            "type": "int",
+            "format": "--retry={value}",
+            "help": "<p>Number of times to retry pulling or pushing images between the registry and local storage in case of failure. Default is <c>3</c>.</p>"
+          },
+          {
+            "name": "RetryDelay",
+            "type": "string",
+            "format": "--retry-delay={value}",
+            "help": "<p>Duration of delay between retry attempts when pulling or pushing images between the registry and local storage in case of failure. The default is to start at two seconds and then exponentially back off. The delay is used when this value is set, and no exponential back off occurs.</p>"
+          },
+          {
+            "name": "TlsVerify",
+            "type": "bool",
+            "format": "--tls-verify",
+            "help": "<p>Require HTTPS and verify certificates when contacting registries (default: <c>true</c>).<p>If explicitly set to <c>true</c>, TLS verification is used.</p><p>If set to <c>false</c>, TLS verification is not used.</p><p>If not specified, TLS verification is used unless the target registry is listed as an insecure registry in <see href=\"https://github.com/containers/image/blob/main/docs/containers-registries.conf.5.md\">containers-registries.conf(5)</see>.</p></p>"
+          },
+          {
+            "name": "Variant",
+            "type": "string",
+            "format": "--variant={value}",
+            "help": "<p>Use <i>VARIANT</i> instead of the default architecture variant of the container image. Some images can use multiple variants of the arm architectures, such as <c>arm/v5</c> and <c>arm/v7</c>.</p>"
+          }
+        ]
+      }
+    },
+    {
       "postfix": "Ps",
       "definiteArgument": "ps",
       "settingsClass": {
@@ -1608,11 +1715,12 @@
             "name": "Creds",
             "type": "string",
             "format": "--creds={value}",
+            "secret": true,
             "help": "<p>The <c>[username[:password]]</c> to use to authenticate with the registry, if required.<p>If one or both values are not supplied, a command line prompt appears and the value can be entered. The password is entered without echo.</p><p>Note that the specified credentials are only used to authenticate against target registries. They are not used for mirrors or when the registry gets rewritten; to authenticate against those consider using a <see href=\"https://github.com/containers/image/blob/main/docs/containers-auth.json.5.md\">containers-auth.json(5)</see> file.</p></p>"
           },
           {
             "name": "Digestfile",
-            "type": "string",
+            "type": "Nuke.Common.IO.AbsolutePath",
             "format": "--digestfile={value}",
             "help": "<p>After copying the image, write the digest of the resulting image to the file.</p>"
           },
