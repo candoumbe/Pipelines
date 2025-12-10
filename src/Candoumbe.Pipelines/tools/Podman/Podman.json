@@ -50,7 +50,7 @@
             "name": "AuthFile",
             "type": "Nuke.Common.IO.AbsolutePath",
             "format": "--auth-file={value}",
-            "help": "<p>Path of the authentication file. Default is <c>${XDG_RUNTIME_DIR}/containers/auth.json</c> on Linux, and <c>$HOME/.config/containers/auth.json</c> on Windows/macOS. The file is created by <see href='https://docs.podman.io/en/latest/markdown/podman-login.1.html'>podman login</see>. If the authorization state is not found there, <c>$HOME/.docker/config.json</c> is checked, which is set using docker login.</p><p>Note: There is also the option to override the default path of the authentication file by setting the <c>REGISTRY_AUTH_FILE</c> environment variable. This can be done with export <c>REGISTRY_AUTH_FILE=path</c>.</p><p>Alternatively, the <c>io.containers.autoupdate.authfile</c> container label can be configured. In that case, Podman will use the specified label’s value instead.</p>>"
+            "help": "<p>Path of the authentication file. Default is <c>${XDG_RUNTIME_DIR}/containers/auth.json</c> on Linux, and <c>$HOME/.config/containers/auth.json</c> on Windows/macOS. The file is created by <see href=\"https://docs.podman.io/en/latest/markdown/podman-login.1.html\">podman login</see>. If the authorization state is not found there, <c>$HOME/.docker/config.json</c> is checked, which is set using docker login.</p><p>Note: There is also the option to override the default path of the authentication file by setting the <c>REGISTRY_AUTH_FILE</c> environment variable. This can be done with export <c>REGISTRY_AUTH_FILE=path</c>.</p><p>Alternatively, the <c>io.containers.autoupdate.authfile</c> container label can be configured. In that case, Podman will use the specified label’s value instead.</p>>"
           },
           {
             "name": "DryRun",
@@ -169,7 +169,7 @@
             "name": "CertDir",
             "type": "Nuke.Common.IO.AbsolutePath",
             "format": "--cert-dir={value}",
-            "help": "<p>Use certificates at <i>path</i> (*.crt, *.cert, *.key) to connect to the registry. (Default: /etc/containers/certs.d) For details, see <b><see href='https://github.com/containers/image/blob/main/docs/containers-certs.d.5.md'>containers-certs.d(5)</see></b>. (This option is not available with the remote Podman client, including Mac and Windows (excluding WSL2) machines).</p>"
+            "help": "<p>Use certificates at <i>path</i> (*.crt, *.cert, *.key) to connect to the registry. (Default: /etc/containers/certs.d) For details, see <b><see href=\"https://github.com/containers/image/blob/main/docs/containers-certs.d.5.md\">containers-certs.d(5)</see></b>. (This option is not available with the remote Podman client, including Mac and Windows (excluding WSL2) machines).</p>"
           },
           {
             "name": "CgroupParent",
@@ -245,7 +245,7 @@
             "type": "string",
             "format": "--creds={value}",
             "secret": true,
-            "help": "<p>The [username[:password]] to use to authenticate with the registry, if required. If one or both values are not supplied, a command line prompt appears and the value can be entered. The password is entered without <c>echo</c></p><p>Note that the specified credentials are only used to authenticate against target registries. They are not used for mirrors or when the registry gets rewritten (see containers-registries.conf(5)); to authenticate against those consider using a containers-auth.json(5) file.</p>"
+            "help": "<p>The [username[:password]] to use to authenticate with the registry, if required. If one or both values are not supplied, a command line prompt appears and the value can be entered. The password is entered without <c>echo</c></p><p>Note that the specified credentials are only used to authenticate against target registries. They are not used for mirrors or when the registry gets rewritten (see containers-registries.conf(5)); to authenticate against those consider using a <see href=\"https://github.com/containers/image/blob/main/docs/containers-auth.json.5.md\">containers-auth.json(5)</see> file.</p>"
           },
           {
             "name": "Cw",
@@ -1433,7 +1433,7 @@
           },
           {
             "name": "Restart",
-            "type": "string",
+            "type": "RestartPolicy",
             "format": "--restart={value}",
             "help": "<p>Restart policy to apply when a container exits.<p>Possible values: <c>no</c>, <c>always</c>, <c>on-failure</c>, <c>unless-stopped</c>.</p></p>"
           },
@@ -1576,20 +1576,20 @@
             "name": "Authfile",
             "type": "Nuke.Common.IO.AbsolutePath",
             "format": "--authfile={value}",
-            "help": "<p>Path of the authentication file. Default is <c>${XDG_RUNTIME_DIR}/containers/auth.json</c> on Linux, and <c>$HOME/.config/containers/auth.json</c> on Windows/macOS.<p>The file is created by <see cref=\"podman login\"/>. If the authorization state is not found there, <c>$HOME/.docker/config.json</c> is checked, which is set using <c>docker login</c>.</p><p>Note: There is also the option to override the default path of the authentication file by setting the <c>REGISTRY_AUTH_FILE</c> environment variable.</p></p>"
+            "help": "<p>Path of the authentication file. Default is <c>${XDG_RUNTIME_DIR}/containers/auth.json</c> on Linux, and <c>$HOME/.config/containers/auth.json</c> on Windows/macOS.<p>The file is created by <see href='https://docs.podman.io/en/latest/markdown/podman-login.1.html'>podman login</see>. If the authorization state is not found there, <c>$HOME/.docker/config.json</c> is checked, which is set using <c>docker login</c>.</p><p>Note: There is also the option to override the default path of the authentication file by setting the <c>REGISTRY_AUTH_FILE</c> environment variable.</p></p>"
           },
           {
             "name": "CertDir",
             "type": "Nuke.Common.IO.AbsolutePath",
             "format": "--cert-dir={value}",
-            "help": "<p>Use certificates at <i>path</i> (.crt, .cert, .key) to connect to the registry. (Default: <c>/etc/containers/certs.d</c>).<p>For details, see <see cref=\"containers-certs.d(5)\"/>.</p><p>This option is not available with the remote Podman client, including Mac and Windows (excluding WSL2) machines.</p></p>"
+            "help": "<p>Use certificates at <i>path</i> (.crt, .cert, .key) to connect to the registry. (Default: <c>/etc/containers/certs.d</c>).<p>For details, see <see href=\"https://github.com/containers/image/blob/main/docs/containers-certs.d.5.md\">containers-certs.d(5)</see>.</p><p>This option is not available with the remote Podman client, including Mac and Windows (excluding WSL2) machines.</p></p>"
           },
           {
             "name": "Creds",
             "type": "string",
             "format": "--creds={value}",
             "secret": true,
-            "help": "<p>The <c>[username[:password]]</c> to use to authenticate with the registry, if required.<p>If one or both values are not supplied, a command line prompt appears and the value can be entered. The password is entered without echo.</p><p>Note that the specified credentials are only used to authenticate against target registries. They are not used for mirrors or when the registry gets rewritten; to authenticate against those consider using a <see cref=\"containers-auth.json(5)\"/> file.</p></p>"
+            "help": "<p>The <c>[username[:password]]</c> to use to authenticate with the registry, if required.<p>If one or both values are not supplied, a command line prompt appears and the value can be entered. The password is entered without echo.</p><p>Note that the specified credentials are only used to authenticate against target registries. They are not used for mirrors or when the registry gets rewritten; to authenticate against those consider using a <see href=\"https://github.com/containers/image/blob/main/docs/containers-auth.json.5.md\">containers-auth.json(5)</see> file.</p></p>"
           },
           {
             "name": "DecryptionKey",
@@ -1907,6 +1907,14 @@
         "oci",
         "v2s1",
         "v2s2"
+      ]
+    },
+    {
+      "name": "RestartPolicy",
+      "values": [
+        "always",
+        "unless-stopped",
+        "no"
       ]
     }
   ]
