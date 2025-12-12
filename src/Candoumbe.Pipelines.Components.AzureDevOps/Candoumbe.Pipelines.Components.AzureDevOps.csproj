@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.TeamFoundationServer.Client"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Candoumbe.Pipelines\Candoumbe.Pipelines.csproj"/>
+  </ItemGroup>
+
+</Project>
