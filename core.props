@@ -39,7 +39,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup Condition="'$(IsTestProject)' == 'false' and '$(MSBuildProjectName)' != '_build'">
-      <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <!-- First try to include local README.md if it exists -->
+    <None Include="README.md" Condition="Exists('README.md')" Pack="true" PackagePath="\" />
+    <!-- Fallback to solution-level README.md if local one doesn't exist -->
+    <None Include="..\..\README.md" Condition="!Exists('README.md')" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>

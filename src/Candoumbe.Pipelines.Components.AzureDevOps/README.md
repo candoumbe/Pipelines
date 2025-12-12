@@ -4,3 +4,5 @@
 [![GitHub Workflow Status (develop)](https://img.shields.io/github/actions/workflow/status/candoumbe/pipelines/integration.yml?branch=develop&label=develop)](https://github.com/candoumbe/Pipelines/actions/workflows/integration.yml?query=branch%3Adevelop)
 [![GitHub raw issues](https://img.shields.io/github/issues-raw/candoumbe/pipelines)](https://github.com/candoumbe/pipelines/issues)
 [![Nuget](https://img.shields.io/nuget/vpre/candoumbe.pipelines)](https://nuget.org/packages/candoumbe.pipelines)
+
+This library contains components to interact specifically with Azure DevOps.

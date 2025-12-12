@@ -29,7 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed the behavior of `chore` command when running from a `chore/*` branch : the command will now properly end the `chore` workflow.
 
 ### 🚀 New features
-- Added `IDoChoreWorkflow` to `IGitFlow` and `IGitHubFlow`: this enable the `chore` target on those workflows
+- Added `IDoChoreWorkflow` to `IGitFlow` and `IGitHubFlow`: this enables the `chore` target on those workflows
 
 ## [1.2.0] / 2025-09-09
 ### 🚀 New features
