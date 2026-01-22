@@ -4,12 +4,27 @@
     <CentralPackageTransitivePinningEnabled>false</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="Candoumbe.Miscutilities" Version="0.15.0" />
+    <PackageVersion Include="Candoumbe.Miscutilities" Version="0.15.0"/>
     <PackageVersion Include="Microsoft.TeamFoundationServer.Client" Version="20.261.0-preview"/>
-    <PackageVersion Include="Nuke.Common" Version="9.0.4" />
     <PackageVersion Include="Roslynator.Analyzers" Version="4.15.0" />
   </ItemGroup>
   <ItemGroup Condition="'$(IsTestProject)' == 'false'">
-    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0"/>
   </ItemGroup>
+
+  <Choose>
+    <When Condition="'$(TargetFramework)' == 'net8.0'">
+      <ItemGroup>
+        <PackageVersion Include="Nuke.Common" Version="9.0.4"/>
+        <PackageVersion Include="System.Security.Cryptography.ProtectedData" Version="8.0.0"/>
+        <PackageVersion Include="System.Configuration.ConfigurationManager" Version="8.0.1"/>
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <PackageVersion Include="Nuke.Common" Version="10.1.0"/>
+        <PackageVersion Include="System.Security.Cryptography.ProtectedData" Version="10.0.1"/>
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
 </Project>

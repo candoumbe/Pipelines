@@ -2,7 +2,7 @@
 
   <Import Project="../../core.props"/>
   <PropertyGroup>
-    <TargetFrameworks>net8.0</TargetFrameworks>
+    <TargetFrameworks>net8.0;net10.0</TargetFrameworks>
     <Description>A Stater development kit to script your CI/CD using [Nuke](https://nuke.build).</Description>
     <PackageTags>build, pipeline, ci, workflow</PackageTags>
     <NukeBaseDirectory>$(MsBuildProjectDirectory)\tools\Stryker</NukeBaseDirectory>
