@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### 🚀 New features
+- Added `net10.0` support
 
 ## [2.0.0] / 2025-12-13
 ### 💥 Breaking changes
@@ -13,7 +15,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### 🧹 Housekeeping
 - Updated `GitVersion.Tool` to `6.5.1`
-- Updated `dotnet-sdk` to `8.0.416`
 
 ## [1.3.0] / 2025-11-12
 ### 🚨 Fixes
