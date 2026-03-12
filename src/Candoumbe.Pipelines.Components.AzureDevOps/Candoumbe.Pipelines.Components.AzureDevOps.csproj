@@ -10,9 +10,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.TeamFoundationServer.Client"/>
     <PackageReference Include="System.Security.Cryptography.ProtectedData" />
+    <PackageReference Include="Candoumbe.Pipelines"/>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Candoumbe.Pipelines\Candoumbe.Pipelines.csproj"/>
-  </ItemGroup>
-
 </Project>
