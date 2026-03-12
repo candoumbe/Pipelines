@@ -15,7 +15,8 @@
         "ms-dotnettools.csdevkit",
         "ms-dotnettools.csharp",
         "editorconfig.editorconfig",
-        "GitHub.copilot"
+        "GitHub.copilot",
+        "ms-vscode.vs-keybindings"
       ],
       "settings": {
         "dotnet.defaultSolution": "Candoumbe.Pipelines.sln",
