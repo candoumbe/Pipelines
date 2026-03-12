@@ -221,6 +221,56 @@ Contains classes and components needed to build and push docker images.
 
 You can refer to [Nuke's documentation](https://www.nuke.build/docs/common/cli-tools/) to see how to reference required tools.
 
+## Getting started
+
+### Using the devcontainer (recommended)
+
+The easiest way to get a fully configured development environment is to use the provided [devcontainer](.devcontainer/devcontainer.json).
+
+**Prerequisites :**
+
+- [Visual Studio Code](https://code.visualstudio.com/)
+- [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+- [Podman](https://podman.io/) (recommended) or [Docker](https://www.docker.com/)
+
+**Using Podman (default) :**
+
+The devcontainer is configured to work with Podman out of the box. Make sure your VS Code settings include :
+
+```json
+"dev.containers.dockerPath": "podman"
+```
+
+**Using Docker :**
+
+Override the setting in your VS Code user settings :
+
+```json
+"dev.containers.dockerPath": "docker"
+```
+
+**Steps :**
+
+1. Clone the repository
+2. Open the folder in VS Code
+3. When prompted, click **"Reopen in Container"** (or run `Dev Containers: Reopen in Container` from the command palette)
+4. Wait for the container to build — the .NET SDK, dependencies, and tools (nuke, gitversion, dotnet-format) are automatically restored via `./build.sh restore`
+5. Run `./build.sh compile` to verify the setup
+
+### Without devcontainer
+
+If you prefer to work without a devcontainer, install the following manually :
+
+- [.NET SDK 10.0.101](https://dotnet.microsoft.com/download)
+- [Git](https://git-scm.com/)
+- [Perl](https://www.perl.org/) (used by `build.sh`)
+
+Then run :
+
+```bash
+./build.sh restore
+```
+
 ### Want to contribute ?
 
 You can contribute by opening an [issue](https://github.com/candoumbe/Pipelines/issues/new/choose) or submitting a [feature request](https://github.com/candoumbe/Pipelines/issues/new/choose).

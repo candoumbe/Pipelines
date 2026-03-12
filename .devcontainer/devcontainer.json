@@ -1,0 +1,29 @@
+{
+  "name": "Candoumbe.Pipelines",
+  "image": "mcr.microsoft.com/devcontainers/dotnet:10.0",
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {}
+  },
+  "runArgs": [
+    "--userns=keep-id"
+  ],
+  "containerUser": "vscode",
+  "updateRemoteUserUID": true,
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-dotnettools.csdevkit",
+        "ms-dotnettools.csharp",
+        "editorconfig.editorconfig",
+        "GitHub.copilot",
+        "ms-vscode.vs-keybindings"
+      ],
+      "settings": {
+        "dotnet.defaultSolution": "Candoumbe.Pipelines.sln",
+        "dev.containers.dockerPath": "podman"
+      }
+    }
+  },
+  "postStartCommand": "./build.sh restore",
+  "remoteUser": "vscode"
+}

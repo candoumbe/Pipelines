@@ -1,3 +1,6 @@
 {
-    "dotnet.defaultSolution": "Candoumbe.Pipelines.sln"
+    "dotnet.defaultSolution": "Candoumbe.Pipelines.sln",
+    "chat.tools.terminal.autoApprove": {
+        "./build.sh": true
+    }
 }
