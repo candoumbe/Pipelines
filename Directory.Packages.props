@@ -10,18 +10,18 @@
     <PackageVersion Include="Roslynator.Analyzers" Version="4.15.0" />
   </ItemGroup>
   <ItemGroup Condition="'$(IsTestProject)' == 'false'">
-    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0"/>
+    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="10.0.201"/>
   </ItemGroup>
 
   <Choose>
     <When Condition="'$(TargetFramework)' == 'net8.0'">
       <ItemGroup>
-        <PackageVersion Include="Microsoft.Build" Version="17.14.28"/>
-        <PackageVersion Include="Microsoft.Build.Tasks.Core" Version="17.14.28"/>
-        <PackageVersion Include="Microsoft.Build.Utilities.Core" Version="17.14.28"/>
+        <PackageVersion Include="Microsoft.Build" Version="18.4.0"/>
+        <PackageVersion Include="Microsoft.Build.Tasks.Core" Version="18.4.0"/>
+        <PackageVersion Include="Microsoft.Build.Utilities.Core" Version="18.4.0"/>
         <PackageVersion Include="Nuke.Common" Version="9.0.4"/>
-        <PackageVersion Include="System.Security.Cryptography.ProtectedData" Version="9.0.14"/>
-        <PackageVersion Include="System.Configuration.ConfigurationManager" Version="9.0.14"/>
+        <PackageVersion Include="System.Security.Cryptography.ProtectedData" Version="10.0.5"/>
+        <PackageVersion Include="System.Configuration.ConfigurationManager" Version="10.0.5"/>
       </ItemGroup>
     </When>
     <Otherwise>
