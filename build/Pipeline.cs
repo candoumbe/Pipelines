@@ -65,6 +65,7 @@ public class Pipeline : EnhancedNukeBuild,
     ICompile,
     IPushNugetPackages,
     ICreateGithubRelease,
+    IDoChoreWorkflow,
     IGitFlowWithPullRequest
 {
     ///<inheritdoc/>
