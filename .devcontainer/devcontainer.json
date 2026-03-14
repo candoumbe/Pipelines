@@ -24,6 +24,7 @@
       }
     }
   },
+  "postCreateCommand": ".devcontainer/scripts/post-create.sh",
   "postStartCommand": "./build.sh restore",
   "remoteUser": "vscode"
 }
