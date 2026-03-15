@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🚀 New features
 - Added `net10.0` support
 
+### 🧹 Housekeeping
+- Added devcontainer configuration to facilitate onboarding.
+- Added support for `chore` workflow
+- Updated `gitversion` to 6.6.1
+
 ## [2.0.0] / 2025-12-13
 ### 💥 Breaking changes
 - Moved `Candoumbe.Pipelines.Components.AzureDevOps` into a standalone `Candoumbe.Pipelines.Components.AzureDevOps` package ([#219](https://github.com/candoumbe/pipelines/issues/219))
