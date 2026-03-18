@@ -2,7 +2,8 @@
   "name": "Candoumbe.Pipelines",
   "image": "mcr.microsoft.com/devcontainers/dotnet:10.0",
   "features": {
-    "ghcr.io/devcontainers/features/git:1": {}
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/copilot-cli": {} 
   },
   "runArgs": [
     "--userns=keep-id"
