@@ -11,7 +11,7 @@ public class GitHubPushNugetConfigurationTests
     public void Given_ValidArguments_When_CreatingInstance_Then_NameIsGitHub()
     {
         // Arrange & Act
-        var config = new GitHubPushNugetConfiguration("github-token", new Uri("https://nuget.pkg.github.com/owner/index.json"));
+        GitHubPushNugetConfiguration config = new ("github-token", new Uri("https://nuget.pkg.github.com/owner/index.json"));
 
         // Assert
         config.Name.Should().Be("GitHub");
@@ -21,7 +21,7 @@ public class GitHubPushNugetConfigurationTests
     public void Given_NoCanBeUsedProvided_When_CreatingInstance_Then_CanBeUsedReturnsTrue()
     {
         // Arrange & Act
-        var config = new GitHubPushNugetConfiguration("github-token", new Uri("https://nuget.pkg.github.com/owner/index.json"));
+        GitHubPushNugetConfiguration config = new ("github-token", new Uri("https://nuget.pkg.github.com/owner/index.json"));
 
         // Assert
         config.CanBeUsed().Should().BeTrue();
@@ -31,7 +31,7 @@ public class GitHubPushNugetConfigurationTests
     public void Given_CanBeUsedReturnsFalse_When_CreatingInstance_Then_CanBeUsedReturnsFalse()
     {
         // Arrange & Act
-        var config = new GitHubPushNugetConfiguration("github-token", new Uri("https://nuget.pkg.github.com/owner/index.json"), () => false);
+        GitHubPushNugetConfiguration config = new ("github-token", new Uri("https://nuget.pkg.github.com/owner/index.json"), () => false);
 
         // Assert
         config.CanBeUsed().Should().BeFalse();
@@ -44,7 +44,7 @@ public class GitHubPushNugetConfigurationTests
         Uri uri = new Uri("https://nuget.pkg.github.com/owner/index.json");
 
         // Act
-        var config = new GitHubPushNugetConfiguration("github-token", uri);
+        GitHubPushNugetConfiguration config = new ("github-token", uri);
 
         // Assert
         config.Source.Should().Be(uri.ToString());
@@ -57,7 +57,7 @@ public class GitHubPushNugetConfigurationTests
         string expectedToken = "my-github-token";
 
         // Act
-        var config = new GitHubPushNugetConfiguration(expectedToken, new Uri("https://nuget.pkg.github.com/owner/index.json"));
+        GitHubPushNugetConfiguration config = new (expectedToken, new Uri("https://nuget.pkg.github.com/owner/index.json"));
 
         // Assert
         config.Key.Should().Be(expectedToken);

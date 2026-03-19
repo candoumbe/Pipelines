@@ -11,7 +11,7 @@ public class DockerFileTests
     public void Given_NoTagProvided_When_CreatingDockerFile_Then_TagDefaultsToLatest()
     {
         // Arrange & Act
-        var dockerFile = new DockerFile((AbsolutePath)"/app/Dockerfile", "my-image");
+        DockerFile dockerFile = new ((AbsolutePath)"/app/Dockerfile", "my-image");
 
         // Assert
         dockerFile.Tag.Should().Be("latest");
@@ -24,7 +24,7 @@ public class DockerFileTests
         string expectedTag = "v1.0";
 
         // Act
-        var dockerFile = new DockerFile((AbsolutePath)"/app/Dockerfile", "my-image", expectedTag);
+        DockerFile dockerFile = new ((AbsolutePath)"/app/Dockerfile", "my-image", expectedTag);
 
         // Assert
         dockerFile.Tag.Should().Be(expectedTag);
@@ -37,7 +37,7 @@ public class DockerFileTests
         string expectedName = "my-image";
 
         // Act
-        var dockerFile = new DockerFile((AbsolutePath)"/app/Dockerfile", expectedName);
+        DockerFile dockerFile = new ((AbsolutePath)"/app/Dockerfile", expectedName);
 
         // Assert
         dockerFile.Name.Should().Be(expectedName);
@@ -50,7 +50,7 @@ public class DockerFileTests
         AbsolutePath expectedPath = (AbsolutePath)"/app/Dockerfile";
 
         // Act
-        var dockerFile = new DockerFile(expectedPath, "my-image");
+        DockerFile dockerFile = new (expectedPath, "my-image");
 
         // Assert
         dockerFile.Path.Should().Be(expectedPath);
