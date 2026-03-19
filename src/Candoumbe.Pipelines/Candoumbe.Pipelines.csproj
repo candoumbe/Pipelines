@@ -14,4 +14,7 @@
   <ItemGroup>
     <PackageReference Include="Nuke.Common"/>
   </ItemGroup>
+  <ItemGroup>
+    <NukeSpecificationFiles Include=".\tools\Stryker\Stryker.json"/>
+  </ItemGroup>
 </Project>
