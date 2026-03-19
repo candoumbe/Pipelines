@@ -48,6 +48,7 @@ build/
 - Private fields use `_camelCase` prefix.
 - Interfaces are named `IPascalCase`.
 - Namespace must match folder structure.
+- 1 file per class, 1 class per file
 
 ## Build and Test
 
