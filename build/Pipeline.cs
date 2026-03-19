@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Candoumbe.Pipelines.Components;
 using Candoumbe.Pipelines.Components.Formatting;
@@ -58,6 +59,7 @@ using static Nuke.Common.Tools.Git.GitTasks;
 [DotNetVerbosityMapping]
 public class Pipeline : EnhancedNukeBuild,
     IHaveSourceDirectory,
+    IHaveTestDirectory,
     ICanRegenerateGitHubWorkflows,
     IClean,
     IRestore,
@@ -65,6 +67,7 @@ public class Pipeline : EnhancedNukeBuild,
     ICompile,
     IPushNugetPackages,
     ICreateGithubRelease,
+    IUnitTest,
     IDoChoreWorkflow,
     IGitFlowWithPullRequest
 {
@@ -82,12 +85,11 @@ public class Pipeline : EnhancedNukeBuild,
     [Solution]
     public Solution Solution;
 
-    IEnumerable<Project> _unitTestsProjects;
-    IEnumerable<Project> _integrationTestsProjects;
-    IEnumerable<MutationProjectConfiguration> _mutationTestsProjects;
-
     ///<inheritdoc/>
     Solution IHaveSolution.Solution => Solution;
+
+    ///<inheritdoc/>
+    IEnumerable<Project> IUnitTest.UnitTestsProjects => Solution.AllProjects.Where(project => project.Name.EndsWith(".Tests", StringComparison.OrdinalIgnoreCase));
 
 
     /// Support plugins are available for:

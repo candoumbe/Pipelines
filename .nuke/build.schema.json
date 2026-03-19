@@ -37,7 +37,8 @@
         "Publish",
         "RegenerateWorkflow",
         "Release",
-        "Restore"
+        "Restore",
+        "UnitTests"
       ]
     },
     "Verbosity": {
