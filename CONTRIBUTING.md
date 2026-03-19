@@ -515,8 +515,10 @@ This project uses **Central Package Management**. All package versions are defin
 
 # Run all default targets
 ./build.sh
-```
 
+# Run all unit tests
+./build.sh unit-tests
+```
 ---
 
 ## Summary of Do's and Don'ts
