@@ -11,7 +11,7 @@ public class NugetPushConfigurationTests
     public void Given_StringSourceConstructor_When_CreatingInstance_Then_NameIsNuget()
     {
         // Arrange & Act
-        var config = new NugetPushConfiguration("api-key", "https://api.nuget.org/v3/index.json");
+        NugetPushConfiguration config = new ("api-key", "https://api.nuget.org/v3/index.json");
 
         // Assert
         config.Name.Should().Be("Nuget");
@@ -21,7 +21,7 @@ public class NugetPushConfigurationTests
     public void Given_NoCanBeUsedProvided_When_CreatingInstance_Then_CanBeUsedReturnsTrue()
     {
         // Arrange & Act
-        var config = new NugetPushConfiguration("api-key", "https://api.nuget.org/v3/index.json");
+        NugetPushConfiguration config = new ("api-key", "https://api.nuget.org/v3/index.json");
 
         // Assert
         config.CanBeUsed().Should().BeTrue();
@@ -34,7 +34,7 @@ public class NugetPushConfigurationTests
         Uri uri = new Uri("https://api.nuget.org/v3/index.json");
 
         // Act
-        var config = new NugetPushConfiguration("api-key", uri);
+        NugetPushConfiguration config = new ("api-key", uri);
 
         // Assert
         config.Source.Should().Be(uri.ToString());
@@ -47,7 +47,7 @@ public class NugetPushConfigurationTests
         string source = "https://api.nuget.org/v3/index.json";
 
         // Act
-        var config = new NugetPushConfiguration("api-key", source);
+        NugetPushConfiguration config = new ("api-key", source);
 
         // Assert
         config.Source.Should().Be(source);
@@ -57,7 +57,7 @@ public class NugetPushConfigurationTests
     public void Given_CanBeUsedReturnsFalse_When_CreatingInstance_Then_CanBeUsedReturnsFalse()
     {
         // Arrange & Act
-        var config = new NugetPushConfiguration("api-key", "https://api.nuget.org/v3/index.json", () => false);
+        NugetPushConfiguration config = new ("api-key", "https://api.nuget.org/v3/index.json", () => false);
 
         // Assert
         config.CanBeUsed().Should().BeFalse();
@@ -70,7 +70,7 @@ public class NugetPushConfigurationTests
         string expectedKey = "my-api-key";
 
         // Act
-        var config = new NugetPushConfiguration(expectedKey, "https://api.nuget.org/v3/index.json");
+        NugetPushConfiguration config = new (expectedKey, "https://api.nuget.org/v3/index.json");
 
         // Assert
         config.Key.Should().Be(expectedKey);

@@ -14,7 +14,7 @@ public class PushDockerImageConfigurationTests
         Uri expectedRegistry = new Uri("https://registry.hub.docker.com");
 
         // Act
-        var config = new PushDockerImageConfiguration(expectedRegistry);
+        PushDockerImageConfiguration config = new (expectedRegistry);
 
         // Assert
         config.Registry.Should().Be(expectedRegistry);
@@ -24,7 +24,7 @@ public class PushDockerImageConfigurationTests
     public void Given_NoLoginSettingsProvided_When_CreatingInstance_Then_LoginSettingsIsNull()
     {
         // Arrange & Act
-        var config = new PushDockerImageConfiguration(new Uri("https://registry.hub.docker.com"));
+        PushDockerImageConfiguration config = new (new Uri("https://registry.hub.docker.com"));
 
         // Assert
         config.LoginSettings.Should().BeNull();
