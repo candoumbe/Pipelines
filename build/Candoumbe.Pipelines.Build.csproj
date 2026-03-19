@@ -14,7 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Candoumbe.Pipelines"/>
+    <ProjectReference Include="..\src\Candoumbe.Pipelines\Candoumbe.Pipelines.csproj"/>
   </ItemGroup>
   <ItemGroup>
     <PackageDownload Include="CodeCovUploader" Version="[0.8.0]"/>
