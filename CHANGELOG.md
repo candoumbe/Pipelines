@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🚀 New features
 - Added `net10.0` support
 - Added support for autoclosing issues when finishing a hotfix via the `--issues` parameter ([#177](https://github.com/candoumbe/pipelines/issues/177))
+  - GitHub: Closes issues using GitHub API
+  - Azure DevOps: Closes work items using Azure DevOps Work Item Tracking API
 
 ### 🧹 Housekeeping
 - Added devcontainer configuration to facilitate onboarding.

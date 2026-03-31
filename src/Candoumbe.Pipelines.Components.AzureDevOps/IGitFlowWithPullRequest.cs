@@ -7,8 +7,12 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Candoumbe.Pipelines.Components.Workflows;
 using Microsoft.TeamFoundation.SourceControl.WebApi;
+using Microsoft.TeamFoundation.WorkItemTracking.WebApi;
+using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
 using Microsoft.VisualStudio.Services.Common;
 using Microsoft.VisualStudio.Services.WebApi;
+using Microsoft.VisualStudio.Services.WebApi.Patch;
+using Microsoft.VisualStudio.Services.WebApi.Patch.Json;
 using Nuke.Common.Git;
 using static Nuke.Common.Tools.Git.GitTasks;
 using static Nuke.Common.Utilities.ConsoleUtility;
@@ -198,4 +202,43 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest, IHaveAzureDev
 
     /// <inheritdoc />
     async ValueTask IDoChoreWorkflow.FinishChore() => await FinishFeature();
+
+    /// <inheritdoc />
+    async ValueTask IDoHotfixWorkflow.FinishHotfix()
+    {
+        await ((IGitFlow)this).FinishHotfix();
+
+        if (Issues.AtLeastOnce() && !string.IsNullOrWhiteSpace(AccessToken))
+        {
+            string gitRepositoryHttpsUrl = GitRepository.HttpsUrl!;
+            Match match = AzureDevOpsRegex.Match(gitRepositoryHttpsUrl!);
+
+            if (match.Success)
+            {
+                const string repositoryBaseUrl = "https://dev.azure.com";
+                string organization = match.Groups["organisation"].Value;
+                string organizationUrl = $"{repositoryBaseUrl}/{organization}";
+
+                VssConnection vssConnection = new(new Uri(organizationUrl), new VssBasicCredential(string.Empty, AccessToken));
+                WorkItemTrackingHttpClient workItemClient = await vssConnection.GetClientAsync<WorkItemTrackingHttpClient>();
+
+                foreach (uint workItemId in Issues)
+                {
+                    Information("Closing work item #{WorkItemId}", workItemId);
+
+                    JsonPatchDocument patchDocument = new()
+                    {
+                        new JsonPatchOperation()
+                        {
+                            Operation = Operation.Add,
+                            Path = "/fields/System.State",
+                            Value = "Closed"
+                        }
+                    };
+
+                    await workItemClient.UpdateWorkItemAsync(patchDocument, (int)workItemId);
+                }
+            }
+        }
+    }
 }
