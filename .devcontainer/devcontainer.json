@@ -2,11 +2,26 @@
   "name": "Candoumbe.Pipelines",
   "image": "mcr.microsoft.com/devcontainers/dotnet:10.0",
   "features": {
+    "ghcr.io/devcontainers-extra/features/gh-cli:1": {},
     "ghcr.io/devcontainers/features/git:1": {},
-    "ghcr.io/devcontainers/features/copilot-cli": {} 
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers/features/copilot-cli": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/nils-geistmann/devcontainers-features/zsh": {
+       "plugins": "git npm gh git-prompt"
+    },
+    "ghcr.io/devcontainers/features/dotnet": {
+      "version": "10.0.203",
+      "additionalVersions": "10.0.201"
+    },
+    "ghcr.io/devcontainers/features/node": {
+      "version": "24"
+    }
   },
   "runArgs": [
-    "--userns=keep-id"
+    "--userns=keep-id",
+    "--env-file", "${localWorkspaceFolder}/.devcontainer/.env",
+  
   ],
   "containerUser": "vscode",
   "updateRemoteUserUID": true,
@@ -17,7 +32,8 @@
         "ms-dotnettools.csharp",
         "editorconfig.editorconfig",
         "GitHub.copilot",
-        "ms-vscode.vs-keybindings"
+        "ms-vscode.vs-keybindings",
+        "zaaack.markdown-editor"
       ],
       "settings": {
         "dotnet.defaultSolution": "Candoumbe.Pipelines.sln",
@@ -25,7 +41,7 @@
       }
     }
   },
-  "postCreateCommand": ".devcontainer/scripts/post-create.sh",
-  "postStartCommand": "./build.sh restore",
+  "postCreateCommand": "zsh .devcontainer/scripts/post-create.sh",
+  "postStartCommand": "zsh .devcontainer/scripts/post-start.sh",
   "remoteUser": "vscode"
 }
