@@ -1,0 +1,23 @@
+{
+  "universe_usage_history": [
+    {
+      "universe": "The Usual Suspects",
+      "assignment_id": "pipelines-initial-cast-2026-04-26",
+      "used_at": "2026-04-26"
+    }
+  ],
+  "assignment_cast_snapshots": {
+    "pipelines-initial-cast-2026-04-26": {
+      "universe": "The Usual Suspects",
+      "agents": {
+        "lead": "Keaton",
+        "backend": "Fenster",
+        "tester": "Hockney",
+        "devops-release": "McManus",
+        "docs-dx": "Verbal",
+        "security-compliance": "Kobayashi"
+      },
+      "created_at": "2026-04-26"
+    }
+  }
+}
