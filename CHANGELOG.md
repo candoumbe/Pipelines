@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### 🚨 Fixes
+
+- `IUnitTest` component should detect when `Microsoft.Testing.Platform` and generate the right CLI ([#247](https://github.com/candoumbe/Pipelines/issues/247)) 
 
 ## [2.0.0] / 2025-12-13
 ### 💥 Breaking changes
