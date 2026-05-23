@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.1] / 2026-05-23
+### 🚨 Fixes
+
+- `IUnitTest` component should detect when `Microsoft.Testing.Platform` and generate the right CLI ([#247](https://github.com/candoumbe/Pipelines/issues/247)) 
+
 ## [2.0.0] / 2025-12-13
 ### 💥 Breaking changes
 - Moved `Candoumbe.Pipelines.Components.AzureDevOps` into a standalone `Candoumbe.Pipelines.Components.AzureDevOps` package ([#219](https://github.com/candoumbe/pipelines/issues/219))
@@ -318,7 +323,8 @@ So now `{MutationTestDirectory}/[{framework}]` is now changed to `{MutationTestD
 ## [0.1.0] / 2022-10-23
 - Initial release
 
-[Unreleased]: https://github.com/candoumbe/Pipelines/compare/2.0.0...HEAD
+[Unreleased]: https://github.com/candoumbe/Pipelines/compare/2.0.1...HEAD
+[2.0.1]: https://github.com/candoumbe/Pipelines/compare/2.0.0...2.0.1
 [2.0.0]: https://github.com/candoumbe/Pipelines/compare/1.3.0...2.0.0
 [1.3.0]: https://github.com/candoumbe/Pipelines/compare/1.2.1...1.3.0
 [1.2.1]: https://github.com/candoumbe/Pipelines/compare/1.2.0...1.2.1
