@@ -1,63 +1,63 @@
 using Candoumbe.Pipelines.Components;
-using Nuke.Common;
+using Fallout.Common;
 
 namespace Candoumbe.Pipelines.Tests;
 
 /// <summary>
 /// Build stub that implements all the component interfaces for testing default implementations.
-/// Inherits from <see cref="NukeBuild"/> to get all the internal <see cref="INukeBuild"/> members.
+/// Inherits from <see cref="FalloutBuild"/> to get all the internal <see cref="IFalloutBuild"/> members.
 /// </summary>
-internal class SourceDirectoryBuild : NukeBuild, IHaveSourceDirectory;
+internal class SourceDirectoryBuild : FalloutBuild, IHaveSourceDirectory;
 
-internal class OutputDirectoryBuild : NukeBuild, IHaveOutputDirectory;
+internal class OutputDirectoryBuild : FalloutBuild, IHaveOutputDirectory;
 
-internal class ArtifactsBuild : NukeBuild, IHaveArtifacts;
+internal class ArtifactsBuild : FalloutBuild, IHaveArtifacts;
 
-internal class TestDirectoryBuild : NukeBuild, IHaveTestDirectory;
+internal class TestDirectoryBuild : FalloutBuild, IHaveTestDirectory;
 
-internal class TestResultsBuild : NukeBuild, IHaveTests;
+internal class TestResultsBuild : FalloutBuild, IHaveTests;
 
-internal class ReportBuild : NukeBuild, IHaveReport;
+internal class ReportBuild : FalloutBuild, IHaveReport;
 
-internal class CoverageBuild : NukeBuild, IHaveCoverage;
+internal class CoverageBuild : FalloutBuild, IHaveCoverage;
 
-internal class ChangeLogBuild : NukeBuild, IHaveChangeLog;
+internal class ChangeLogBuild : FalloutBuild, IHaveChangeLog;
 
-internal class CleanBuild : NukeBuild, IClean;
+internal class CleanBuild : FalloutBuild, IClean;
 
-internal class PackBuild : NukeBuild, IPack
+internal class PackBuild : FalloutBuild, IPack
 {
-    public System.Collections.Generic.IEnumerable<Nuke.Common.IO.AbsolutePath> PackableProjects => [];
+    public System.Collections.Generic.IEnumerable<Fallout.Common.IO.AbsolutePath> PackableProjects => [];
 }
 
-internal class UnitTestBuild : NukeBuild, IUnitTest
+internal class UnitTestBuild : FalloutBuild, IUnitTest
 {
-    public System.Collections.Generic.IEnumerable<Nuke.Common.ProjectModel.Project> UnitTestsProjects => [];
+    public System.Collections.Generic.IEnumerable<Fallout.Common.ProjectModel.Project> UnitTestsProjects => [];
 }
 
-internal class IntegrationTestBuild : NukeBuild, IIntegrationTest
+internal class IntegrationTestBuild : FalloutBuild, IIntegrationTest
 {
-    public System.Collections.Generic.IEnumerable<Nuke.Common.ProjectModel.Project> IntegrationTestsProjects => [];
+    public System.Collections.Generic.IEnumerable<Fallout.Common.ProjectModel.Project> IntegrationTestsProjects => [];
 }
 
-internal class MutationTestBuild : NukeBuild, IMutationTest
+internal class MutationTestBuild : FalloutBuild, IMutationTest
 {
     public System.Collections.Generic.IEnumerable<MutationProjectConfiguration> MutationTestsProjects => [];
 }
 
-internal class BenchmarkBuild : NukeBuild, IBenchmark
+internal class BenchmarkBuild : FalloutBuild, IBenchmark
 {
-    public System.Collections.Generic.IEnumerable<Nuke.Common.ProjectModel.Project> BenchmarkProjects => [];
+    public System.Collections.Generic.IEnumerable<Fallout.Common.ProjectModel.Project> BenchmarkProjects => [];
 }
 
-internal class ReportUnitTestCoverageBuild : NukeBuild, IReportUnitTestCoverage
+internal class ReportUnitTestCoverageBuild : FalloutBuild, IReportUnitTestCoverage
 {
     public bool ReportToCodeCov => false;
-    public System.Collections.Generic.IEnumerable<Nuke.Common.ProjectModel.Project> UnitTestsProjects => [];
+    public System.Collections.Generic.IEnumerable<Fallout.Common.ProjectModel.Project> UnitTestsProjects => [];
 }
 
-internal class ReportIntegrationTestCoverageBuild : NukeBuild, IReportIntegrationTestCoverage
+internal class ReportIntegrationTestCoverageBuild : FalloutBuild, IReportIntegrationTestCoverage
 {
     public bool ReportToCodeCov => false;
-    public System.Collections.Generic.IEnumerable<Nuke.Common.ProjectModel.Project> IntegrationTestsProjects => [];
+    public System.Collections.Generic.IEnumerable<Fallout.Common.ProjectModel.Project> IntegrationTestsProjects => [];
 }

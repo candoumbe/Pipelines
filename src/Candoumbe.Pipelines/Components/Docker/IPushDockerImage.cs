@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using Nuke.Common;
-using Nuke.Common.Tooling;
-using Nuke.Common.Tools.Docker;
-using static Nuke.Common.Tools.Docker.DockerTasks;
+using System.Collections.Generic;
+using Fallout.Common;
+using Fallout.Common.Tooling;
+using Fallout.Common.Tools.Docker;
+using static Fallout.Common.Tools.Docker.DockerTasks;
 
 namespace Candoumbe.Pipelines.Components.Docker;
 

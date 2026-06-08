@@ -1,15 +1,15 @@
-﻿using Nuke.Common;
-using Nuke.Common.Tooling;
-using Nuke.Common.Tools.DotNet;
+using Fallout.Common;
+using Fallout.Common.Tooling;
+using Fallout.Common.Tools.DotNet;
 
-using static Nuke.Common.Tools.DotNet.DotNetTasks;
+using static Fallout.Common.Tools.DotNet.DotNetTasks;
 
 namespace Candoumbe.Pipelines.Components;
 
 /// <summary>
 /// Defines restore steps
 /// </summary>
-public interface IRestore : INukeBuild, IHaveSolution
+public interface IRestore : IFalloutBuild, IHaveSolution
 {
     /// <summary>
     /// Restore dotnet project dependency

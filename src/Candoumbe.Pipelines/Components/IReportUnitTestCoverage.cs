@@ -1,13 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Nuke.Common;
-using Nuke.Common.IO;
-using Nuke.Common.Tooling;
-using Nuke.Common.Tools.Codecov;
-using Nuke.Common.Tools.ReportGenerator;
-using static Nuke.Common.Tools.Codecov.CodecovTasks;
-using static Nuke.Common.Tools.ReportGenerator.ReportGeneratorTasks;
+using Fallout.Common;
+using Fallout.Common.IO;
+using Fallout.Common.Tooling;
+using Fallout.Common.Tools.Codecov;
+using Fallout.Common.Tools.ReportGenerator;
+using static Fallout.Common.Tools.Codecov.CodecovTasks;
+using static Fallout.Common.Tools.ReportGenerator.ReportGeneratorTasks;
 
 namespace Candoumbe.Pipelines.Components;
 

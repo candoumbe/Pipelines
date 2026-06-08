@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Candoumbe.Pipelines.Components.Docker;
 using Candoumbe.Pipelines.Components.NuGet;
-using Nuke.Common;
-using Nuke.Common.Git;
-using Nuke.Common.IO;
-using Nuke.Common.Tools.GitHub;
+using Fallout.Common;
+using Fallout.Common.Git;
+using Fallout.Common.IO;
+using Fallout.Common.Tools.GitHub;
 using Octokit;
-using static Nuke.Common.ChangeLog.ChangelogTasks;
+using static Fallout.Common.ChangeLog.ChangelogTasks;
 using static Serilog.Log;
 
 namespace Candoumbe.Pipelines.Components.GitHub;

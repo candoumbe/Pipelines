@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -13,9 +13,9 @@ using Microsoft.VisualStudio.Services.Common;
 using Microsoft.VisualStudio.Services.WebApi;
 using Microsoft.VisualStudio.Services.WebApi.Patch;
 using Microsoft.VisualStudio.Services.WebApi.Patch.Json;
-using Nuke.Common.Git;
-using static Nuke.Common.Tools.Git.GitTasks;
-using static Nuke.Common.Utilities.ConsoleUtility;
+using Fallout.Common.Git;
+using static Fallout.Common.Tools.Git.GitTasks;
+using static Fallout.Common.Utilities.ConsoleUtility;
 using static Serilog.Log;
 using GitRepository = Microsoft.TeamFoundation.SourceControl.WebApi.GitRepository;
 

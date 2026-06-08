@@ -1,6 +1,6 @@
 using Candoumbe.Pipelines.Components;
 using FluentAssertions;
-using Nuke.Common.IO;
+using Fallout.Common.IO;
 using Xunit;
 
 namespace Candoumbe.Pipelines.Tests;

@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### 💥 Breaking changes
+- Migrated from [Nuke](https://github.com/nuke-build/nuke) to [Fallout](https://github.com/ChrisonSimtian/Fallout)
+
 ### 🚀 New features
 - Added `net10.0` support
 - Added support for autoclosing issues when finishing a hotfix via the `--issues` parameter ([#177](https://github.com/candoumbe/pipelines/issues/177))

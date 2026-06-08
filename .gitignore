@@ -452,7 +452,7 @@ $RECYCLE.BIN/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-/.nuke/temp
+/.fallout/temp
 /.qodo/indexes.sqlite
 **/*/.env
 # Squad: ignore runtime state (logs, inbox, sessions)

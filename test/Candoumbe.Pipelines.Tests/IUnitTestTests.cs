@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using Candoumbe.Pipelines.Components;
 using FluentAssertions;
-using Nuke.Common.IO;
-using Nuke.Common.ProjectModel;
+using Fallout.Common.IO;
+using Fallout.Common.ProjectModel;
 using Xunit;
 
 namespace Candoumbe.Pipelines.Tests;

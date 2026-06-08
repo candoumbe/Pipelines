@@ -1,12 +1,12 @@
 using Candoumbe.Pipelines.Components.Workflows;
-using Nuke.Common;
+using Fallout.Common;
 
 namespace Candoumbe.Pipelines.Components;
 
 /// <summary>
-/// Represents an enhanced version of the <see cref="NukeBuild"/> class which adds various options support from components.
+/// Represents an enhanced version of the <see cref="FalloutBuild"/> class which adds various options support from components.
 /// </summary>
-public abstract class EnhancedNukeBuild : NukeBuild, ICanSkipConfirmation, ICanAutoStash
+public abstract class EnhancedNukeBuild : FalloutBuild, ICanSkipConfirmation, ICanAutoStash
 {
     /// <inheritdoc />
     [Parameter("Set to true to not ask any confirmation to the end user (default: false)")]

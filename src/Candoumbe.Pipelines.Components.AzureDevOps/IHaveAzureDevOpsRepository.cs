@@ -1,5 +1,5 @@
-﻿using Nuke.Common;
-using Nuke.Common.CI.AzurePipelines;
+using Fallout.Common;
+using Fallout.Common.CI.AzurePipelines;
 
 namespace Candoumbe.Pipelines.Components.AzureDevOps;
 

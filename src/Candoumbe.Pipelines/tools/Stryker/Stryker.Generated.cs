@@ -1,10 +1,10 @@
 
 using JetBrains.Annotations;
 using Newtonsoft.Json;
-using Nuke.Common;
-using Nuke.Common.Tooling;
-using Nuke.Common.Tools;
-using Nuke.Common.Utilities.Collections;
+using Fallout.Common;
+using Fallout.Common.Tooling;
+using Fallout.Common.Tools;
+using Fallout.Common.Utilities.Collections;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -45,7 +45,7 @@ public partial class StrykerSettings : ToolOptions
     /// <summary>Path / Name of the configuration file. You can specify a custom path to the config file. For example if you want to add the stryker config section to your appsettings file. The section should still be called <c>stryker-config</c>.</summary>
     [Argument(Format = "--config-file {value}")] public string ConfigFile => Get<string>(() => ConfigFile);
     /// <summary>The solution path can be supplied to help with dependency resolution. If stryker is ran from the solution file location the solution file will be analyzed and all projects in the solution will be tested by stryker.</summary>
-    [Argument(Format = "--solution {value}")] public Nuke.Common.IO.AbsolutePath Solution => Get<Nuke.Common.IO.AbsolutePath>(() => Solution);
+    [Argument(Format = "--solution {value}")] public Fallout.Common.IO.AbsolutePath Solution => Get<Fallout.Common.IO.AbsolutePath>(() => Solution);
     /// <summary>The project file name is required when your test project has more than one project reference. Stryker can currently mutate one project under test for 1..N test projects but not 1..N projects under test for one test project.<br /><i>Do not pass a path to this option. Pass the project file <b>name</b> as it appears in your test project's references</i></summary>
     [Argument(Format = "--project {value}")] public string Project => Get<string>(() => Project);
     /// <summary>When you have multiple test projects covering one project under test you may specify all relevant test projects in the config file. You must run stryker from the project under test instead of the test project directory when using multiple test projects.</summary>
@@ -111,7 +111,7 @@ public static partial class StrykerSettingsExtensions
     #region Solution
     /// <inheritdoc cref="StrykerSettings.Solution"/>
     [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Solution))]
-    public static T SetSolution<T>(this T o, Nuke.Common.IO.AbsolutePath v) where T : StrykerSettings => o.Modify(b => b.Set(() => o.Solution, v));
+    public static T SetSolution<T>(this T o, Fallout.Common.IO.AbsolutePath v) where T : StrykerSettings => o.Modify(b => b.Set(() => o.Solution, v));
     /// <inheritdoc cref="StrykerSettings.Solution"/>
     [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Solution))]
     public static T ResetSolution<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Remove(() => o.Solution));

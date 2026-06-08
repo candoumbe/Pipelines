@@ -1,6 +1,6 @@
-﻿using Nuke.Common;
-using Nuke.Common.Tooling;
-using Nuke.Common.Tools.GitVersion;
+using Fallout.Common;
+using Fallout.Common.Tooling;
+using Fallout.Common.Tools.GitVersion;
 
 using Octokit;
 
@@ -9,7 +9,7 @@ namespace Candoumbe.Pipelines.Components;
 /// <summary>
 /// Marks a pipeline that manages a Solution that follow GitVersion
 /// </summary>
-public interface IHaveGitVersion : INukeBuild, IRequireNuGetPackage
+public interface IHaveGitVersion : IFalloutBuild, IRequireNuGetPackage
 {
     /// <summary>
     /// The GitVersion tool that can be used to version the project
