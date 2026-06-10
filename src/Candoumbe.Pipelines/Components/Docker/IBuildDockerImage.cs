@@ -25,7 +25,7 @@ public interface IBuildDockerImage : IFalloutBuild
         .Description("Build docker images")
         .TryAfter<IUnitTest>()
         .TryAfter<IIntegrationTest>()
-        .TryAfter<IMutationTest>()
+//        .TryAfter<IMutationTest>()
         .TryAfter<IBenchmark>()
         .OnlyWhenStatic(() => DockerFiles.AtLeastOnce())
         .Executes(() =>
