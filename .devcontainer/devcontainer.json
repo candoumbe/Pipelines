@@ -39,7 +39,10 @@
       ],
       "settings": {
         "dotnet.defaultSolution": "Candoumbe.Pipelines.sln",
-        "dev.containers.dockerPath": "podman"
+        "dev.containers.dockerPath": "podman",
+        "chat.tools.compressOutput.enabled": true,
+        "chat.tools.riskAssessment.enabled":true,
+        "chat.permissions.default": "autoApprove"
       }
     }
   },
