@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Candoumbe.Pipelines.Components.Workflows;
 using Candoumbe.Pipelines.Tools;
-using JetBrains.Annotations;
 using Fallout.Common;
 using Fallout.Common.IO;
 using Fallout.Common.ProjectModel;
@@ -202,7 +201,6 @@ public interface IMutationTest : IHaveTests
 /// <summary>
 /// Wraps information on mutation tests for a specific project.
 /// </summary>
-[UsedImplicitly]
 public record MutationProjectConfiguration
 {
     /// <summary>
