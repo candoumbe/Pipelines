@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
-using Nuke.Common;
-using Nuke.Common.IO;
+using Fallout.Common;
+using Fallout.Common.IO;
 
 namespace Candoumbe.Pipelines.Components;
 
 /// <summary>
 /// Marks a pipeline that supports cleaning workflow.
 /// </summary>
-public interface IClean : INukeBuild
+public interface IClean : IFalloutBuild
 {
     /// <summary>
     /// Collection of directories that <see cref="Clean"/> target will delete

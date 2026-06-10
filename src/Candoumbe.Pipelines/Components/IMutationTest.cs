@@ -1,13 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Candoumbe.Pipelines.Components.Workflows;
 using Candoumbe.Pipelines.Tools;
-using JetBrains.Annotations;
-using Nuke.Common;
-using Nuke.Common.IO;
-using Nuke.Common.ProjectModel;
-using Nuke.Common.Tooling;
+using Fallout.Common;
+using Fallout.Common.IO;
+using Fallout.Common.ProjectModel;
+using Fallout.Common.Tooling;
 using static Candoumbe.Pipelines.Tools.StrykerTasks;
 using static Serilog.Log;
 
@@ -202,7 +201,6 @@ public interface IMutationTest : IHaveTests
 /// <summary>
 /// Wraps information on mutation tests for a specific project.
 /// </summary>
-[UsedImplicitly]
 public record MutationProjectConfiguration
 {
     /// <summary>

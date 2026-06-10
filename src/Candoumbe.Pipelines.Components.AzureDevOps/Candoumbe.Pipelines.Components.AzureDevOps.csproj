@@ -2,7 +2,7 @@
 
   <Import Project="..\..\core.props"/>
   <PropertyGroup>
-    <TargetFrameworks>net8.0;net10.0</TargetFrameworks>
+    <TargetFramework>net10.0</TargetFramework>
     <Description>Set of [Nuke](https://nuke.build) components that help integrating with [Azure DevOps](https://dev.azure.com/) ecosystem..</Description>
     <PackageTags>build, pipeline, ci, workflow, azure, devops</PackageTags>
   </PropertyGroup>
@@ -10,6 +10,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.TeamFoundationServer.Client"/>
     <PackageReference Include="System.Security.Cryptography.ProtectedData" />
-    <PackageReference Include="Candoumbe.Pipelines"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Candoumbe.Pipelines\Candoumbe.Pipelines.csproj"/>
   </ItemGroup>
 </Project>

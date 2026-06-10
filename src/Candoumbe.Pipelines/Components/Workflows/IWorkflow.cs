@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.IO;
-using Nuke.Common;
-using Nuke.Common.Git;
-using Nuke.Common.IO;
-using static Nuke.Common.ChangeLog.ChangelogTasks;
-using static Nuke.Common.Tools.Git.GitTasks;
+using Fallout.Common;
+using Fallout.Common.Git;
+using Fallout.Common.IO;
+using static Fallout.Common.ChangeLog.ChangelogTasks;
+using static Fallout.Common.Tools.Git.GitTasks;
 using static Serilog.Log;
 
 namespace Candoumbe.Pipelines.Components.Workflows;

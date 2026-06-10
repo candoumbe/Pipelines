@@ -1,17 +1,17 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using Nuke.Common;
-using Nuke.Common.Tooling;
-using Nuke.Common.Tools.Docker;
-using Nuke.Common.Utilities.Collections;
-using static Nuke.Common.Tools.Docker.DockerTasks;
+using Fallout.Common;
+using Fallout.Common.Tooling;
+using Fallout.Common.Tools.Docker;
+using Fallout.Common.Utilities.Collections;
+using static Fallout.Common.Tools.Docker.DockerTasks;
 
 namespace Candoumbe.Pipelines.Components.Docker;
 
 /// <summary>
 /// Marks a pipeline that can compile a <see cref="IHaveSolution.Solution"/>
 /// </summary>
-public interface IBuildDockerImage : INukeBuild
+public interface IBuildDockerImage : IFalloutBuild
 {
     /// <summary>
     /// Gets the docker files to build
@@ -25,7 +25,7 @@ public interface IBuildDockerImage : INukeBuild
         .Description("Build docker images")
         .TryAfter<IUnitTest>()
         .TryAfter<IIntegrationTest>()
-        .TryAfter<IMutationTest>()
+//        .TryAfter<IMutationTest>()
         .TryAfter<IBenchmark>()
         .OnlyWhenStatic(() => DockerFiles.AtLeastOnce())
         .Executes(() =>

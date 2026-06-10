@@ -6,13 +6,15 @@
     "ghcr.io/devcontainers/features/git:1": {},
     "ghcr.io/devcontainers/features/github-cli:1": {},
     "ghcr.io/devcontainers/features/copilot-cli": {},
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:3": {
+      "moby": true,
+      "dockerDashComposeVersion": "v2"
+    },
     "ghcr.io/nils-geistmann/devcontainers-features/zsh": {
-       "plugins": "git npm gh git-prompt"
+       "plugins": "git npm gh"
     },
     "ghcr.io/devcontainers/features/dotnet": {
-      "version": "10.0.203",
-      "additionalVersions": "10.0.201"
+      "version": "10.0.300"
     },
     "ghcr.io/devcontainers/features/node": {
       "version": "24"
@@ -20,7 +22,7 @@
   },
   "runArgs": [
     "--userns=keep-id",
-    "--env-file", "${localWorkspaceFolder}/.devcontainer/.env",
+    "--env-file", "${localWorkspaceFolder}/.devcontainer/.env"
   
   ],
   "containerUser": "vscode",
@@ -37,7 +39,10 @@
       ],
       "settings": {
         "dotnet.defaultSolution": "Candoumbe.Pipelines.sln",
-        "dev.containers.dockerPath": "podman"
+        "dev.containers.dockerPath": "podman",
+        "chat.tools.compressOutput.enabled": true,
+        "chat.tools.riskAssessment.enabled":true,
+        "chat.permissions.default": "autoApprove"
       }
     }
   },

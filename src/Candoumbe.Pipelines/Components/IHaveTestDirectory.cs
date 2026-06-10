@@ -1,12 +1,12 @@
-﻿using Nuke.Common;
-using Nuke.Common.IO;
+using Fallout.Common;
+using Fallout.Common.IO;
 
 namespace Candoumbe.Pipelines.Components;
 
 /// <summary>
 /// Marks a pipeline that can specify a folder for source files
 /// </summary>
-public interface IHaveTestDirectory : INukeBuild
+public interface IHaveTestDirectory : IFalloutBuild
 {
     /// <summary>
     /// Directory of source code projects

@@ -2,16 +2,16 @@
 
   <Import Project="../../core.props"/>
   <PropertyGroup>
-    <TargetFrameworks>net8.0;net10.0</TargetFrameworks>
+    <TargetFramework>net10.0</TargetFramework>
     <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
     <Description>A Stater development kit to script your CI/CD using [Nuke](https://nuke.build).</Description>
     <PackageTags>build, pipeline, ci, workflow</PackageTags>
-    <NukeBaseDirectory>$(MsBuildProjectDirectory)\tools\Stryker</NukeBaseDirectory>
-    <NukeUseNestedNamespaces>false</NukeUseNestedNamespaces>
-    <NukeBaseNamespace>Candoumbe.Pipelines.Tools</NukeBaseNamespace>
+    <FalloutBaseDirectory>$(MsBuildProjectDirectory)\tools\Stryker</FalloutBaseDirectory>
+    <FalloutUseNestedNamespaces>false</FalloutUseNestedNamespaces>
+    <FalloutBaseNamespace>Candoumbe.Pipelines.Tools</FalloutBaseNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Nuke.Common"/>
+    <PackageReference Include="Fallout.Common"/>
   </ItemGroup>
 </Project>

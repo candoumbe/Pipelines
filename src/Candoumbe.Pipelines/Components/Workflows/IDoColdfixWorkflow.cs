@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
-using Nuke.Common;
-using static Nuke.Common.Tools.Git.GitTasks;
+using Fallout.Common;
+using static Fallout.Common.Tools.Git.GitTasks;
 
 namespace Candoumbe.Pipelines.Components.Workflows;
 

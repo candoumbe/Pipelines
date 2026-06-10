@@ -1,0 +1,11 @@
+{
+  "WorkspacePath": "/workspaces/Pipelines",
+  "LastWalkTimeUtc": "0001-01-01T00:00:00+00:00",
+  "FileBasedAppFullPaths": [],
+  "DirectoriesContainingCsproj": [
+    "/workspaces/Pipelines/build",
+    "/workspaces/Pipelines/src/Candoumbe.Pipelines",
+    "/workspaces/Pipelines/src/Candoumbe.Pipelines.Components.AzureDevOps",
+    "/workspaces/Pipelines/test/Candoumbe.Pipelines.Tests"
+  ]
+}

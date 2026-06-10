@@ -1,6 +1,6 @@
-﻿using System;
-using Nuke.Common.Tooling;
-using Nuke.Common.Tools.Docker;
+using System;
+using Fallout.Common.Tooling;
+using Fallout.Common.Tools.Docker;
 
 namespace Candoumbe.Pipelines.Components.Docker;
 

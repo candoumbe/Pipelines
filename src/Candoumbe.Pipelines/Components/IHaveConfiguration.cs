@@ -1,4 +1,4 @@
-﻿using Nuke.Common;
+using Fallout.Common;
 
 namespace Candoumbe.Pipelines.Components;
 
@@ -8,7 +8,7 @@ namespace Candoumbe.Pipelines.Components;
 /// <remarks>
 /// The default implementation offers support for <see cref="Configuration.Debug"/> and <see cref="Configuration.Release"/>
 /// </remarks>
-public interface IHaveConfiguration : INukeBuild
+public interface IHaveConfiguration : IFalloutBuild
 {
     /// <summary>
     /// Configuration currently supported by the pipeline

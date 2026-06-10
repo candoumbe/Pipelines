@@ -1,15 +1,12 @@
-﻿using JetBrains.Annotations;
-
-using Nuke.Common;
-using Nuke.Common.ProjectModel;
+using Fallout.Common;
+using Fallout.Common.ProjectModel;
 
 namespace Candoumbe.Pipelines.Components;
 
 /// <summary>
 /// Marks a pipeline that handle a Solution
 /// </summary>
-[PublicAPI]
-public interface IHaveSolution : INukeBuild
+public interface IHaveSolution : IFalloutBuild
 {
     /// <summary>
     /// The solution to build
