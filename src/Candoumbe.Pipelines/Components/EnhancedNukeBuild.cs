@@ -6,7 +6,7 @@ namespace Candoumbe.Pipelines.Components;
 /// <summary>
 /// Represents an enhanced version of the <see cref="FalloutBuild"/> class which adds various options support from components.
 /// </summary>
-public abstract class EnhancedNukeBuild : FalloutBuild, ICanSkipConfirmation, ICanAutoStash
+public abstract class EnhancedBuild : FalloutBuild, ICanSkipConfirmation, ICanAutoStash
 {
     /// <inheritdoc />
     [Parameter("Set to true to not ask any confirmation to the end user (default: false)")]

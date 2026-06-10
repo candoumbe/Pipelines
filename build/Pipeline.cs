@@ -57,7 +57,7 @@ using static Fallout.Common.Tools.Git.GitTasks;
             "LICENSE"
         ])]
 [DotNetVerbosityMapping]
-public class Pipeline : EnhancedNukeBuild,
+public class Pipeline : EnhancedBuild,
     IHaveSourceDirectory,
     IHaveTestDirectory,
     ICanRegenerateGitHubWorkflows,
