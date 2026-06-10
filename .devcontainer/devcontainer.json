@@ -22,7 +22,7 @@
   },
   "runArgs": [
     "--userns=keep-id",
-    "--env-file", "${localWorkspaceFolder}/.devcontainer/.env",
+    "--env-file", "${localWorkspaceFolder}/.devcontainer/.env"
   
   ],
   "containerUser": "vscode",
