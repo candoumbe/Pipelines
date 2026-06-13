@@ -206,8 +206,6 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest, IHaveAzureDev
     /// <inheritdoc />
     async ValueTask IDoHotfixWorkflow.FinishHotfix()
     {
-        await ((IGitFlow)this).FinishHotfix();
-
         if (Issues.AtLeastOnce() && !string.IsNullOrWhiteSpace(AccessToken))
         {
             string gitRepositoryHttpsUrl = GitRepository.HttpsUrl!;

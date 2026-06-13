@@ -150,7 +150,6 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest
     /// <inheritdoc />
     async ValueTask IDoHotfixWorkflow.FinishHotfix()
     {
-        await ((IGitFlow)this).FinishHotfix();
 
         if (Issues.AtLeastOnce() && !string.IsNullOrWhiteSpace(GitHubToken))
         {
