@@ -465,3 +465,4 @@ $RECYCLE.BIN/
 .squad-workstream
 # Squad: ignore runtime state (logs, inbox, sessions)
 .squad/.cache/
+dotnet/*
