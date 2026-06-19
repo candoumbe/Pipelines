@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.0] / 2026-06-19
+### 💥 Breaking changes
+- Migrated from [Nuke](https://github.com/nuke-build/nuke) to [Fallout](https://github.com/fallout-build/fallout) ([#251](https://github.com/candoumbe/pipelines/issues/251))
+
+### 🚀 New features
+- Added support for [Fallout](https://github.com/Fallout-build/Fallout) as build engine (migration from [Nuke](https://github.com/nuke-build/nuke))
+- Added `net10.0` support
+- Added support for autoclosing issues when finishing a hotfix via the `--issues` parameter ([#177](https://github.com/candoumbe/pipelines/issues/177))
+  - GitHub: Closes issues using GitHub API
+  - Azure DevOps: Closes work items using Azure DevOps Work Item Tracking API
+
+### 🚨 Fixes
+- Hardened merge finalization flows (`IGitFlow`/`IGitHubFlow`) with explicit conflict handling (`merge --abort` / `rebase --abort`), clearer error messages, and safer rollback behavior for hotfix/release finalization.
+- Aligned GitHub and Azure DevOps hotfix completion implementations to run the secured Git finalization before closing remote issues/work items.
+- Added tests to lock default workflow completion implementations in place.
+
+### 🧹 Housekeeping
+- Added devcontainer configuration to facilitate onboarding.
+- Added support for `chore` workflow
+- Updated `gitversion` to 6.6.1
+
 ## [2.0.1] / 2026-05-23
 ### 🚨 Fixes
 
@@ -18,7 +39,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### 🧹 Housekeeping
 - Updated `GitVersion.Tool` to `6.5.1`
-- Updated `dotnet-sdk` to `8.0.416`
 
 ## [1.3.0] / 2025-11-12
 ### 🚨 Fixes
@@ -323,7 +343,8 @@ So now `{MutationTestDirectory}/[{framework}]` is now changed to `{MutationTestD
 ## [0.1.0] / 2022-10-23
 - Initial release
 
-[Unreleased]: https://github.com/candoumbe/Pipelines/compare/2.0.1...HEAD
+[Unreleased]: https://github.com/candoumbe/Pipelines/compare/3.0.0...HEAD
+[3.0.0]: https://github.com/candoumbe/Pipelines/compare/2.0.1...3.0.0
 [2.0.1]: https://github.com/candoumbe/Pipelines/compare/2.0.0...2.0.1
 [2.0.0]: https://github.com/candoumbe/Pipelines/compare/1.3.0...2.0.0
 [1.3.0]: https://github.com/candoumbe/Pipelines/compare/1.2.1...1.3.0

@@ -11,14 +11,6 @@ A starter development kit to script your CI/CD using [Nuke].
 
 ⭐ If you like or are using this project please give it a star. Thanks! ⭐
 
-## Disclaimer
-
-This project adheres to [semantic versioning]. Major version zero (0.y.z) is for initial development.
-
-**Anything MAY change at any time**.
-
-The public **API SHOULD NOT** be considered stable.
-
 ## The problem
 
 Most of the time, to set up a CI/CD for your .NET project, you have two options :
@@ -35,7 +27,7 @@ So even though you can write YAML, knowing how to write an Azure DevOps pipeline
 
 ## The solution
 
-[Nuke] is a library written by [Matthias Koch] that helps to create builds.
+[Fallout] is a library written by [Chrimston] that helps to create builds.
 
 This project offers an opinionated way at writing pipelines by giving a set of components
 (more on that later) with the following benefits :
@@ -50,7 +42,7 @@ codebase.
 
 To get started you'll have to :
 
-1. install [Nuke.GlobalTool] dotnet tool (locally or globally)
+1. install [Fallout.GlobalTool] dotnet tool (locally or globally)
 2. run `dotnet nuke :setup` to set up your pipeline project
 3. replace the `Nuke.Common` nuget dependency with [Candoumbe.Pipelines]
 
@@ -58,7 +50,7 @@ From this point, you should be able to customize your pipeline by adding [compon
 
 ### How does it work ?
 
-This library is built on top of [Nuke], an open source library started by [Matthias Koch].
+This library is built on top of [Fallout], an open source library (inspired by [Nuke] started by [Matthias Koch]).
 It provides a set of components that, when added to a pipeline, bring clever default features.
 
 Components are C# interfaces that come with a default / opinionated implementation.
@@ -221,6 +213,56 @@ Contains classes and components needed to build and push docker images.
 
 You can refer to [Nuke's documentation](https://www.nuke.build/docs/common/cli-tools/) to see how to reference required tools.
 
+## Getting started
+
+### Using the devcontainer (recommended)
+
+The easiest way to get a fully configured development environment is to use the provided [devcontainer](.devcontainer/devcontainer.json).
+
+**Prerequisites :**
+
+- [Visual Studio Code](https://code.visualstudio.com/)
+- [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+- [Podman](https://podman.io/) (recommended) or [Docker](https://www.docker.com/)
+
+**Using Podman (default) :**
+
+The devcontainer is configured to work with Podman out of the box. Make sure your VS Code settings include :
+
+```json
+"dev.containers.dockerPath": "podman"
+```
+
+**Using Docker :**
+
+Override the setting in your VS Code user settings :
+
+```json
+"dev.containers.dockerPath": "docker"
+```
+
+**Steps :**
+
+1. Clone the repository
+2. Open the folder in VS Code
+3. When prompted, click **"Reopen in Container"** (or run `Dev Containers: Reopen in Container` from the command palette)
+4. Wait for the container to build — the .NET SDK, dependencies, and tools (nuke, gitversion, dotnet-format) are automatically restored via `./build.sh restore`
+5. Run `./build.sh compile` to verify the setup
+
+### Without devcontainer
+
+If you prefer to work without a devcontainer, install the following manually :
+
+- [.NET SDK 10.0.101](https://dotnet.microsoft.com/download)
+- [Git](https://git-scm.com/)
+- native CLI depending on your operating system.
+
+Then run :
+
+```bash
+./build.sh restore
+```
+
 ### Want to contribute ?
 
 You can contribute by opening an [issue](https://github.com/candoumbe/Pipelines/issues/new/choose) or submitting a [feature request](https://github.com/candoumbe/Pipelines/issues/new/choose).
@@ -232,7 +274,9 @@ PRs are welcome, check out the [contribution guidelines] if you want to contribu
 - [Matthias Koch] for the marvelous [Nuke] library. This project would never exist without its work.
 
 [Nuke]: https://github.com/nuke-build/nuke
+[Fallout]: https://github.com/fallout-build/fallout
 [Nuke.GlobalTool]: https://nuget.org/packages/Nuke.GlobalTool
+[Fallout.GlobalTool]: https://nuget.org/packages/Fallout.GlobalTool
 [Matthias Koch]: https://github.com/matkoch
 [Candoumbe.Pipelines]: https://nuget.org/packages/Candoumbe.Pipelines
 [contribution guidelines]: CONTRIBUTING.md

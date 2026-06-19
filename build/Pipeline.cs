@@ -1,19 +1,20 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Candoumbe.Pipelines.Components;
 using Candoumbe.Pipelines.Components.Formatting;
 using Candoumbe.Pipelines.Components.GitHub;
 using Candoumbe.Pipelines.Components.NuGet;
 using Candoumbe.Pipelines.Components.Workflows;
-using Nuke.Common;
-using Nuke.Common.CI.GitHubActions;
-using Nuke.Common.IO;
-using Nuke.Common.ProjectModel;
-using Nuke.Common.Tools.DotNet;
-using Nuke.Common.Tools.GitHub;
+using Fallout.Common;
+using Fallout.Common.CI.GitHubActions;
+using Fallout.Common.IO;
+using Fallout.Common.ProjectModel;
+using Fallout.Common.Tools.DotNet;
+using Fallout.Common.Tools.GitHub;
 
-using static Nuke.Common.Tools.Git.GitTasks;
+using static Fallout.Common.Tools.Git.GitTasks;
 
 [GitHubActions("integration",
     GitHubActionsImage.UbuntuLatest,
@@ -56,8 +57,9 @@ using static Nuke.Common.Tools.Git.GitTasks;
             "LICENSE"
         ])]
 [DotNetVerbosityMapping]
-public class Pipeline : EnhancedNukeBuild,
+public class Pipeline : EnhancedBuild,
     IHaveSourceDirectory,
+    IHaveTestDirectory,
     ICanRegenerateGitHubWorkflows,
     IClean,
     IRestore,
@@ -65,6 +67,8 @@ public class Pipeline : EnhancedNukeBuild,
     ICompile,
     IPushNugetPackages,
     ICreateGithubRelease,
+    IUnitTest,
+    IDoChoreWorkflow,
     IGitFlowWithPullRequest
 {
     ///<inheritdoc/>
@@ -81,12 +85,11 @@ public class Pipeline : EnhancedNukeBuild,
     [Solution]
     public Solution Solution;
 
-    IEnumerable<Project> _unitTestsProjects;
-    IEnumerable<Project> _integrationTestsProjects;
-    IEnumerable<MutationProjectConfiguration> _mutationTestsProjects;
-
     ///<inheritdoc/>
     Solution IHaveSolution.Solution => Solution;
+
+    ///<inheritdoc/>
+    IEnumerable<Project> IUnitTest.UnitTestsProjects => Solution.AllProjects.Where(project => project.Name.EndsWith(".Tests", StringComparison.OrdinalIgnoreCase));
 
 
     /// Support plugins are available for:

@@ -1,4 +1,4 @@
-using Nuke.Common;
+using Fallout.Common;
 
 namespace Candoumbe.Pipelines.Components.Formatting;
 
@@ -8,7 +8,7 @@ namespace Candoumbe.Pipelines.Components.Formatting;
 /// <remarks>
 /// The format target will run <strong>AFTER</strong> <see cref="IRestore"/> component and <strong>BEFORE</strong> <see cref="ICompile"/> component.
 /// </remarks>
-public interface IFormat : INukeBuild
+public interface IFormat : IFalloutBuild
 {
     /// <summary>
     /// The default target of the format component.

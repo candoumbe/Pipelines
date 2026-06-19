@@ -1,10 +1,10 @@
 
 using JetBrains.Annotations;
 using Newtonsoft.Json;
-using Nuke.Common;
-using Nuke.Common.Tooling;
-using Nuke.Common.Tools;
-using Nuke.Common.Utilities.Collections;
+using Fallout.Common;
+using Fallout.Common.Tooling;
+using Fallout.Common.Tools;
+using Fallout.Common.Utilities.Collections;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,7 +17,6 @@ using System.Text;
 namespace Candoumbe.Pipelines.Tools;
 
 /// <summary><p>Stryker.NET offers you mutation testing for your .NET Core and .NET Framework projects. It allows you to test your tests by temporarily inserting bugs. Stryker.NET is installed using NuGet.  New to Stryker.NET? Begin with our guide on <see href='https://stryker-mutator.io/docs/stryker-net/Getting-started'>getting started</see></p><p>For more details, visit the <a href="https://stryker-mutator.io/docs/stryker-net/configuration">official website</a>.</p></summary>
-[PublicAPI]
 [ExcludeFromCodeCoverage]
 [NuGetTool(Id = PackageId, Executable = PackageExecutable)]
 public partial class StrykerTasks : ToolTasks, IRequireNuGetPackage
@@ -37,7 +36,6 @@ public partial class StrykerTasks : ToolTasks, IRequireNuGetPackage
 }
 #region StrykerSettings
 /// <inheritdoc cref="StrykerTasks.Stryker(Candoumbe.Pipelines.Tools.StrykerSettings)"/>
-[PublicAPI]
 [ExcludeFromCodeCoverage]
 [Command(Type = typeof(StrykerTasks), Command = nameof(StrykerTasks.Stryker))]
 public partial class StrykerSettings : ToolOptions
@@ -45,7 +43,7 @@ public partial class StrykerSettings : ToolOptions
     /// <summary>Path / Name of the configuration file. You can specify a custom path to the config file. For example if you want to add the stryker config section to your appsettings file. The section should still be called <c>stryker-config</c>.</summary>
     [Argument(Format = "--config-file {value}")] public string ConfigFile => Get<string>(() => ConfigFile);
     /// <summary>The solution path can be supplied to help with dependency resolution. If stryker is ran from the solution file location the solution file will be analyzed and all projects in the solution will be tested by stryker.</summary>
-    [Argument(Format = "--solution {value}")] public Nuke.Common.IO.AbsolutePath Solution => Get<Nuke.Common.IO.AbsolutePath>(() => Solution);
+    [Argument(Format = "--solution {value}")] public Fallout.Common.IO.AbsolutePath Solution => Get<Fallout.Common.IO.AbsolutePath>(() => Solution);
     /// <summary>The project file name is required when your test project has more than one project reference. Stryker can currently mutate one project under test for 1..N test projects but not 1..N projects under test for one test project.<br /><i>Do not pass a path to this option. Pass the project file <b>name</b> as it appears in your test project's references</i></summary>
     [Argument(Format = "--project {value}")] public string Project => Get<string>(() => Project);
     /// <summary>When you have multiple test projects covering one project under test you may specify all relevant test projects in the config file. You must run stryker from the project under test instead of the test project directory when using multiple test projects.</summary>
@@ -96,296 +94,294 @@ public partial class StrykerSettings : ToolOptions
 #endregion
 #region StrykerSettingsExtensions
 /// <inheritdoc cref="StrykerTasks.Stryker(Candoumbe.Pipelines.Tools.StrykerSettings)"/>
-[PublicAPI]
 [ExcludeFromCodeCoverage]
 public static partial class StrykerSettingsExtensions
 {
     #region ConfigFile
     /// <inheritdoc cref="StrykerSettings.ConfigFile"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.ConfigFile))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.ConfigFile))]
     public static T SetConfigFile<T>(this T o, string v) where T : StrykerSettings => o.Modify(b => b.Set(() => o.ConfigFile, v));
     /// <inheritdoc cref="StrykerSettings.ConfigFile"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.ConfigFile))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.ConfigFile))]
     public static T ResetConfigFile<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Remove(() => o.ConfigFile));
     #endregion
     #region Solution
     /// <inheritdoc cref="StrykerSettings.Solution"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Solution))]
-    public static T SetSolution<T>(this T o, Nuke.Common.IO.AbsolutePath v) where T : StrykerSettings => o.Modify(b => b.Set(() => o.Solution, v));
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Solution))]
+    public static T SetSolution<T>(this T o, Fallout.Common.IO.AbsolutePath v) where T : StrykerSettings => o.Modify(b => b.Set(() => o.Solution, v));
     /// <inheritdoc cref="StrykerSettings.Solution"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Solution))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Solution))]
     public static T ResetSolution<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Remove(() => o.Solution));
     #endregion
     #region Project
     /// <inheritdoc cref="StrykerSettings.Project"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Project))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Project))]
     public static T SetProject<T>(this T o, string v) where T : StrykerSettings => o.Modify(b => b.Set(() => o.Project, v));
     /// <inheritdoc cref="StrykerSettings.Project"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Project))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Project))]
     public static T ResetProject<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Remove(() => o.Project));
     #endregion
     #region TestProjects
     /// <inheritdoc cref="StrykerSettings.TestProjects"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.TestProjects))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.TestProjects))]
     public static T SetTestProjects<T>(this T o, params string[] v) where T : StrykerSettings => o.Modify(b => b.Set(() => o.TestProjects, v));
     /// <inheritdoc cref="StrykerSettings.TestProjects"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.TestProjects))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.TestProjects))]
     public static T SetTestProjects<T>(this T o, IEnumerable<string> v) where T : StrykerSettings => o.Modify(b => b.Set(() => o.TestProjects, v));
     /// <inheritdoc cref="StrykerSettings.TestProjects"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.TestProjects))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.TestProjects))]
     public static T AddTestProjects<T>(this T o, params string[] v) where T : StrykerSettings => o.Modify(b => b.AddCollection(() => o.TestProjects, v));
     /// <inheritdoc cref="StrykerSettings.TestProjects"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.TestProjects))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.TestProjects))]
     public static T AddTestProjects<T>(this T o, IEnumerable<string> v) where T : StrykerSettings => o.Modify(b => b.AddCollection(() => o.TestProjects, v));
     /// <inheritdoc cref="StrykerSettings.TestProjects"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.TestProjects))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.TestProjects))]
     public static T RemoveTestProjects<T>(this T o, params string[] v) where T : StrykerSettings => o.Modify(b => b.RemoveCollection(() => o.TestProjects, v));
     /// <inheritdoc cref="StrykerSettings.TestProjects"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.TestProjects))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.TestProjects))]
     public static T RemoveTestProjects<T>(this T o, IEnumerable<string> v) where T : StrykerSettings => o.Modify(b => b.RemoveCollection(() => o.TestProjects, v));
     /// <inheritdoc cref="StrykerSettings.TestProjects"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.TestProjects))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.TestProjects))]
     public static T ClearTestProjects<T>(this T o) where T : StrykerSettings => o.Modify(b => b.ClearCollection(() => o.TestProjects));
     #endregion
     #region Mutate
     /// <inheritdoc cref="StrykerSettings.Mutate"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Mutate))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Mutate))]
     public static T SetMutate<T>(this T o, params string[] v) where T : StrykerSettings => o.Modify(b => b.Set(() => o.Mutate, v));
     /// <inheritdoc cref="StrykerSettings.Mutate"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Mutate))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Mutate))]
     public static T SetMutate<T>(this T o, IEnumerable<string> v) where T : StrykerSettings => o.Modify(b => b.Set(() => o.Mutate, v));
     /// <inheritdoc cref="StrykerSettings.Mutate"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Mutate))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Mutate))]
     public static T AddMutate<T>(this T o, params string[] v) where T : StrykerSettings => o.Modify(b => b.AddCollection(() => o.Mutate, v));
     /// <inheritdoc cref="StrykerSettings.Mutate"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Mutate))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Mutate))]
     public static T AddMutate<T>(this T o, IEnumerable<string> v) where T : StrykerSettings => o.Modify(b => b.AddCollection(() => o.Mutate, v));
     /// <inheritdoc cref="StrykerSettings.Mutate"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Mutate))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Mutate))]
     public static T RemoveMutate<T>(this T o, params string[] v) where T : StrykerSettings => o.Modify(b => b.RemoveCollection(() => o.Mutate, v));
     /// <inheritdoc cref="StrykerSettings.Mutate"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Mutate))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Mutate))]
     public static T RemoveMutate<T>(this T o, IEnumerable<string> v) where T : StrykerSettings => o.Modify(b => b.RemoveCollection(() => o.Mutate, v));
     /// <inheritdoc cref="StrykerSettings.Mutate"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Mutate))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Mutate))]
     public static T ClearMutate<T>(this T o) where T : StrykerSettings => o.Modify(b => b.ClearCollection(() => o.Mutate));
     #endregion
     #region Configuration
     /// <inheritdoc cref="StrykerSettings.Configuration"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Configuration))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Configuration))]
     public static T SetConfiguration<T>(this T o, string v) where T : StrykerSettings => o.Modify(b => b.Set(() => o.Configuration, v));
     /// <inheritdoc cref="StrykerSettings.Configuration"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Configuration))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Configuration))]
     public static T ResetConfiguration<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Remove(() => o.Configuration));
     #endregion
     #region TargetFramework
     /// <inheritdoc cref="StrykerSettings.TargetFramework"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.TargetFramework))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.TargetFramework))]
     public static T SetTargetFramework<T>(this T o, string v) where T : StrykerSettings => o.Modify(b => b.Set(() => o.TargetFramework, v));
     /// <inheritdoc cref="StrykerSettings.TargetFramework"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.TargetFramework))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.TargetFramework))]
     public static T ResetTargetFramework<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Remove(() => o.TargetFramework));
     #endregion
     #region ProjectInfoVersion
     /// <inheritdoc cref="StrykerSettings.ProjectInfoVersion"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.ProjectInfoVersion))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.ProjectInfoVersion))]
     public static T SetProjectInfoVersion<T>(this T o, string v) where T : StrykerSettings => o.Modify(b => b.Set(() => o.ProjectInfoVersion, v));
     /// <inheritdoc cref="StrykerSettings.ProjectInfoVersion"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.ProjectInfoVersion))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.ProjectInfoVersion))]
     public static T ResetProjectInfoVersion<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Remove(() => o.ProjectInfoVersion));
     #endregion
     #region MutationLevel
     /// <inheritdoc cref="StrykerSettings.MutationLevel"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.MutationLevel))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.MutationLevel))]
     public static T SetMutationLevel<T>(this T o, StrykerMutationLevel v) where T : StrykerSettings => o.Modify(b => b.Set(() => o.MutationLevel, v));
     /// <inheritdoc cref="StrykerSettings.MutationLevel"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.MutationLevel))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.MutationLevel))]
     public static T ResetMutationLevel<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Remove(() => o.MutationLevel));
     #endregion
     #region Reporters
     /// <inheritdoc cref="StrykerSettings.Reporters"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Reporters))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Reporters))]
     public static T SetReporters<T>(this T o, params StrykerReporter[] v) where T : StrykerSettings => o.Modify(b => b.Set(() => o.Reporters, v));
     /// <inheritdoc cref="StrykerSettings.Reporters"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Reporters))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Reporters))]
     public static T SetReporters<T>(this T o, IEnumerable<StrykerReporter> v) where T : StrykerSettings => o.Modify(b => b.Set(() => o.Reporters, v));
     /// <inheritdoc cref="StrykerSettings.Reporters"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Reporters))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Reporters))]
     public static T AddReporters<T>(this T o, params StrykerReporter[] v) where T : StrykerSettings => o.Modify(b => b.AddCollection(() => o.Reporters, v));
     /// <inheritdoc cref="StrykerSettings.Reporters"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Reporters))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Reporters))]
     public static T AddReporters<T>(this T o, IEnumerable<StrykerReporter> v) where T : StrykerSettings => o.Modify(b => b.AddCollection(() => o.Reporters, v));
     /// <inheritdoc cref="StrykerSettings.Reporters"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Reporters))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Reporters))]
     public static T RemoveReporters<T>(this T o, params StrykerReporter[] v) where T : StrykerSettings => o.Modify(b => b.RemoveCollection(() => o.Reporters, v));
     /// <inheritdoc cref="StrykerSettings.Reporters"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Reporters))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Reporters))]
     public static T RemoveReporters<T>(this T o, IEnumerable<StrykerReporter> v) where T : StrykerSettings => o.Modify(b => b.RemoveCollection(() => o.Reporters, v));
     /// <inheritdoc cref="StrykerSettings.Reporters"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Reporters))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Reporters))]
     public static T ClearReporters<T>(this T o) where T : StrykerSettings => o.Modify(b => b.ClearCollection(() => o.Reporters));
     #endregion
     #region OpenReport
     /// <inheritdoc cref="StrykerSettings.OpenReport"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.OpenReport))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.OpenReport))]
     public static T SetOpenReport<T>(this T o, StrykerOpenReport v) where T : StrykerSettings => o.Modify(b => b.Set(() => o.OpenReport, v));
     /// <inheritdoc cref="StrykerSettings.OpenReport"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.OpenReport))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.OpenReport))]
     public static T ResetOpenReport<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Remove(() => o.OpenReport));
     #endregion
     #region Concurrency
     /// <inheritdoc cref="StrykerSettings.Concurrency"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Concurrency))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Concurrency))]
     public static T SetConcurrency<T>(this T o, uint? v) where T : StrykerSettings => o.Modify(b => b.Set(() => o.Concurrency, v));
     /// <inheritdoc cref="StrykerSettings.Concurrency"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Concurrency))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Concurrency))]
     public static T ResetConcurrency<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Remove(() => o.Concurrency));
     #endregion
     #region BreakAt
     /// <inheritdoc cref="StrykerSettings.BreakAt"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.BreakAt))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.BreakAt))]
     public static T SetBreakAt<T>(this T o, uint? v) where T : StrykerSettings => o.Modify(b => b.Set(() => o.BreakAt, v));
     /// <inheritdoc cref="StrykerSettings.BreakAt"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.BreakAt))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.BreakAt))]
     public static T ResetBreakAt<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Remove(() => o.BreakAt));
     #endregion
     #region ThresholdHigh
     /// <inheritdoc cref="StrykerSettings.ThresholdHigh"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.ThresholdHigh))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.ThresholdHigh))]
     public static T SetThresholdHigh<T>(this T o, short? v) where T : StrykerSettings => o.Modify(b => b.Set(() => o.ThresholdHigh, v));
     /// <inheritdoc cref="StrykerSettings.ThresholdHigh"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.ThresholdHigh))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.ThresholdHigh))]
     public static T ResetThresholdHigh<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Remove(() => o.ThresholdHigh));
     #endregion
     #region ThresholdLow
     /// <inheritdoc cref="StrykerSettings.ThresholdLow"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.ThresholdLow))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.ThresholdLow))]
     public static T SetThresholdLow<T>(this T o, short? v) where T : StrykerSettings => o.Modify(b => b.Set(() => o.ThresholdLow, v));
     /// <inheritdoc cref="StrykerSettings.ThresholdLow"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.ThresholdLow))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.ThresholdLow))]
     public static T ResetThresholdLow<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Remove(() => o.ThresholdLow));
     #endregion
     #region Output
     /// <inheritdoc cref="StrykerSettings.Output"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Output))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Output))]
     public static T SetOutput<T>(this T o, string v) where T : StrykerSettings => o.Modify(b => b.Set(() => o.Output, v));
     /// <inheritdoc cref="StrykerSettings.Output"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Output))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Output))]
     public static T ResetOutput<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Remove(() => o.Output));
     #endregion
     #region DisableBail
     /// <inheritdoc cref="StrykerSettings.DisableBail"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.DisableBail))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.DisableBail))]
     public static T SetDisableBail<T>(this T o, bool? v) where T : StrykerSettings => o.Modify(b => b.Set(() => o.DisableBail, v));
     /// <inheritdoc cref="StrykerSettings.DisableBail"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.DisableBail))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.DisableBail))]
     public static T ResetDisableBail<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Remove(() => o.DisableBail));
     /// <inheritdoc cref="StrykerSettings.DisableBail"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.DisableBail))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.DisableBail))]
     public static T EnableDisableBail<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Set(() => o.DisableBail, true));
     /// <inheritdoc cref="StrykerSettings.DisableBail"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.DisableBail))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.DisableBail))]
     public static T DisableDisableBail<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Set(() => o.DisableBail, false));
     /// <inheritdoc cref="StrykerSettings.DisableBail"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.DisableBail))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.DisableBail))]
     public static T ToggleDisableBail<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Set(() => o.DisableBail, !o.DisableBail));
     #endregion
     #region Since
     /// <inheritdoc cref="StrykerSettings.Since"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Since))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Since))]
     public static T SetSince<T>(this T o, string v) where T : StrykerSettings => o.Modify(b => b.Set(() => o.Since, v));
     /// <inheritdoc cref="StrykerSettings.Since"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Since))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Since))]
     public static T ResetSince<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Remove(() => o.Since));
     #endregion
     #region Verbosity
     /// <inheritdoc cref="StrykerSettings.Verbosity"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Verbosity))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Verbosity))]
     public static T SetVerbosity<T>(this T o, StrykerVerbosity v) where T : StrykerSettings => o.Modify(b => b.Set(() => o.Verbosity, v));
     /// <inheritdoc cref="StrykerSettings.Verbosity"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Verbosity))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.Verbosity))]
     public static T ResetVerbosity<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Remove(() => o.Verbosity));
     #endregion
     #region LogToFile
     /// <inheritdoc cref="StrykerSettings.LogToFile"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.LogToFile))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.LogToFile))]
     public static T SetLogToFile<T>(this T o, bool? v) where T : StrykerSettings => o.Modify(b => b.Set(() => o.LogToFile, v));
     /// <inheritdoc cref="StrykerSettings.LogToFile"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.LogToFile))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.LogToFile))]
     public static T ResetLogToFile<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Remove(() => o.LogToFile));
     /// <inheritdoc cref="StrykerSettings.LogToFile"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.LogToFile))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.LogToFile))]
     public static T EnableLogToFile<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Set(() => o.LogToFile, true));
     /// <inheritdoc cref="StrykerSettings.LogToFile"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.LogToFile))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.LogToFile))]
     public static T DisableLogToFile<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Set(() => o.LogToFile, false));
     /// <inheritdoc cref="StrykerSettings.LogToFile"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.LogToFile))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.LogToFile))]
     public static T ToggleLogToFile<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Set(() => o.LogToFile, !o.LogToFile));
     #endregion
     #region DevMode
     /// <inheritdoc cref="StrykerSettings.DevMode"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.DevMode))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.DevMode))]
     public static T SetDevMode<T>(this T o, bool? v) where T : StrykerSettings => o.Modify(b => b.Set(() => o.DevMode, v));
     /// <inheritdoc cref="StrykerSettings.DevMode"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.DevMode))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.DevMode))]
     public static T ResetDevMode<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Remove(() => o.DevMode));
     /// <inheritdoc cref="StrykerSettings.DevMode"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.DevMode))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.DevMode))]
     public static T EnableDevMode<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Set(() => o.DevMode, true));
     /// <inheritdoc cref="StrykerSettings.DevMode"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.DevMode))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.DevMode))]
     public static T DisableDevMode<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Set(() => o.DevMode, false));
     /// <inheritdoc cref="StrykerSettings.DevMode"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.DevMode))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.DevMode))]
     public static T ToggleDevMode<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Set(() => o.DevMode, !o.DevMode));
     #endregion
     #region DashboardApiKey
     /// <inheritdoc cref="StrykerSettings.DashboardApiKey"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.DashboardApiKey))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.DashboardApiKey))]
     public static T SetDashboardApiKey<T>(this T o, [Secret] string v) where T : StrykerSettings => o.Modify(b => b.Set(() => o.DashboardApiKey, v));
     /// <inheritdoc cref="StrykerSettings.DashboardApiKey"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.DashboardApiKey))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.DashboardApiKey))]
     public static T ResetDashboardApiKey<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Remove(() => o.DashboardApiKey));
     #endregion
     #region MsBuildPath
     /// <inheritdoc cref="StrykerSettings.MsBuildPath"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.MsBuildPath))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.MsBuildPath))]
     public static T SetMsBuildPath<T>(this T o, string v) where T : StrykerSettings => o.Modify(b => b.Set(() => o.MsBuildPath, v));
     /// <inheritdoc cref="StrykerSettings.MsBuildPath"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.MsBuildPath))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.MsBuildPath))]
     public static T ResetMsBuildPath<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Remove(() => o.MsBuildPath));
     #endregion
     #region BreakOnInitialTestFailure
     /// <inheritdoc cref="StrykerSettings.BreakOnInitialTestFailure"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.BreakOnInitialTestFailure))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.BreakOnInitialTestFailure))]
     public static T SetBreakOnInitialTestFailure<T>(this T o, bool? v) where T : StrykerSettings => o.Modify(b => b.Set(() => o.BreakOnInitialTestFailure, v));
     /// <inheritdoc cref="StrykerSettings.BreakOnInitialTestFailure"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.BreakOnInitialTestFailure))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.BreakOnInitialTestFailure))]
     public static T ResetBreakOnInitialTestFailure<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Remove(() => o.BreakOnInitialTestFailure));
     /// <inheritdoc cref="StrykerSettings.BreakOnInitialTestFailure"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.BreakOnInitialTestFailure))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.BreakOnInitialTestFailure))]
     public static T EnableBreakOnInitialTestFailure<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Set(() => o.BreakOnInitialTestFailure, true));
     /// <inheritdoc cref="StrykerSettings.BreakOnInitialTestFailure"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.BreakOnInitialTestFailure))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.BreakOnInitialTestFailure))]
     public static T DisableBreakOnInitialTestFailure<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Set(() => o.BreakOnInitialTestFailure, false));
     /// <inheritdoc cref="StrykerSettings.BreakOnInitialTestFailure"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.BreakOnInitialTestFailure))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.BreakOnInitialTestFailure))]
     public static T ToggleBreakOnInitialTestFailure<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Set(() => o.BreakOnInitialTestFailure, !o.BreakOnInitialTestFailure));
     #endregion
     #region WithBaseline
     /// <inheritdoc cref="StrykerSettings.WithBaseline"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.WithBaseline))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.WithBaseline))]
     public static T SetWithBaseline<T>(this T o, string v) where T : StrykerSettings => o.Modify(b => b.Set(() => o.WithBaseline, v));
     /// <inheritdoc cref="StrykerSettings.WithBaseline"/>
-    [Pure] [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.WithBaseline))]
+    [Builder(Type = typeof(StrykerSettings), Property = nameof(StrykerSettings.WithBaseline))]
     public static T ResetWithBaseline<T>(this T o) where T : StrykerSettings => o.Modify(b => b.Remove(() => o.WithBaseline));
     #endregion
 }
 #endregion
 #region StrykerMutationLevel
 /// <summary>Used within <see cref="StrykerTasks"/>.</summary>
-[PublicAPI]
 [Serializable]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<StrykerMutationLevel>))]
@@ -403,7 +399,6 @@ public partial class StrykerMutationLevel : Enumeration
 #endregion
 #region StrykerReporter
 /// <summary>Used within <see cref="StrykerTasks"/>.</summary>
-[PublicAPI]
 [Serializable]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<StrykerReporter>))]
@@ -425,7 +420,6 @@ public partial class StrykerReporter : Enumeration
 #endregion
 #region StrykerOpenReport
 /// <summary>Used within <see cref="StrykerTasks"/>.</summary>
-[PublicAPI]
 [Serializable]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<StrykerOpenReport>))]
@@ -441,7 +435,7 @@ public partial class StrykerOpenReport : Enumeration
 #endregion
 #region StrykerVerbosity
 /// <summary>Used within <see cref="StrykerTasks"/>.</summary>
-[PublicAPI]
+
 [Serializable]
 [ExcludeFromCodeCoverage]
 [TypeConverter(typeof(TypeConverter<StrykerVerbosity>))]

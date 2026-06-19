@@ -1,5 +1,5 @@
-﻿using Nuke.Common;
-using Nuke.Common.CI.GitHubActions;
+using Fallout.Common;
+using Fallout.Common.CI.GitHubActions;
 
 namespace Candoumbe.Pipelines.Components.GitHub;
 

@@ -1,24 +1,24 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <RootNamespace></RootNamespace>
     <NoWarn>CS0649;CS0169</NoWarn>
-    <NukeRootDirectory>..</NukeRootDirectory>
-    <NukeScriptDirectory>..</NukeScriptDirectory>
-    <NukeTelemetryVersion>1</NukeTelemetryVersion>
+    <FalloutRootDirectory>..</FalloutRootDirectory>
+    <FalloutScriptDirectory>..</FalloutScriptDirectory>
+    <FalloutTelemetryVersion>1</FalloutTelemetryVersion>
     <!-- TODO Leave until https://github.com/nuke-build/nuke/issues/818 is resolved -->
     <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\src\Candoumbe.Pipelines\Candoumbe.Pipelines.csproj"/>
+  </ItemGroup>
+  <ItemGroup>
     <PackageDownload Include="CodeCovUploader" Version="[0.8.0]"/>
     <PackageDownload Include="GitVersion.Tool" Version="[6.0.2]"/>
     <PackageDownload Include="ReportGenerator" Version="[5.4.12]"/>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\src\Candoumbe.Pipelines\Candoumbe.Pipelines.csproj"/>
   </ItemGroup>
 </Project>

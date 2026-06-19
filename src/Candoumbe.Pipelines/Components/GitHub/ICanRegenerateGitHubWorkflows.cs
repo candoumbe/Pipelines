@@ -1,6 +1,6 @@
-using Nuke.Common;
-using Nuke.Common.IO;
-using Nuke.Common.Tools.DotNet;
+using Fallout.Common;
+using Fallout.Common.IO;
+using Fallout.Common.Tools.DotNet;
 
 namespace Candoumbe.Pipelines.Components.GitHub;
 

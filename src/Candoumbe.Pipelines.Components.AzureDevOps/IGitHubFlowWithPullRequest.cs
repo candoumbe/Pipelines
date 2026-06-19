@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -9,9 +9,9 @@ using Candoumbe.Pipelines.Components.Workflows;
 using Microsoft.TeamFoundation.SourceControl.WebApi;
 using Microsoft.VisualStudio.Services.Common;
 using Microsoft.VisualStudio.Services.WebApi;
-using Nuke.Common.Git;
-using static Nuke.Common.Tools.Git.GitTasks;
-using static Nuke.Common.Utilities.ConsoleUtility;
+using Fallout.Common.Git;
+using static Fallout.Common.Tools.Git.GitTasks;
+using static Fallout.Common.Utilities.ConsoleUtility;
 using static Serilog.Log;
 using GitRepository = Microsoft.TeamFoundation.SourceControl.WebApi.GitRepository;
 

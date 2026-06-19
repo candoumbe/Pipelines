@@ -1,15 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Candoumbe.Pipelines.Components.Workflows;
-using Nuke.Common.Git;
-using Nuke.Common.Tools.GitHub;
+using Fallout.Common.Git;
+using Fallout.Common.Tools.GitHub;
 using Octokit;
-using static Nuke.Common.Tools.Git.GitTasks;
-using static Nuke.Common.Utilities.ConsoleUtility;
+using static Fallout.Common.Tools.Git.GitTasks;
+using static Fallout.Common.Utilities.ConsoleUtility;
 using static Serilog.Log;
 
 namespace Candoumbe.Pipelines.Components.GitHub;
@@ -146,4 +146,39 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest
 
     /// <inheritdoc />
     async ValueTask IDoChoreWorkflow.FinishChore() => await FinishFeature();
+
+    /// <inheritdoc />
+    async ValueTask IDoHotfixWorkflow.FinishHotfix()
+    {
+        await ((IGitFlow)this).FinishHotfix().ConfigureAwait(false);
+
+        if (Issues.AtLeastOnce() && !string.IsNullOrWhiteSpace(GitHubToken))
+        {
+            string repositoryName = GitRepository.GetGitHubName();
+            string owner = GitRepository.GetGitHubOwner();
+
+            GitHubClient gitHubClient = new(new ProductHeaderValue(repositoryName))
+            {
+                Credentials = new Credentials(GitHubToken)
+            };
+
+            foreach (uint issueNumber in Issues)
+            {
+                Information("Closing issue #{IssueNumber}", issueNumber);
+                IssueUpdate issueUpdate = new()
+                {
+                    State = ItemState.Closed
+                };
+
+                try
+                {
+                    await gitHubClient.Issue.Update(owner, repositoryName, (int)issueNumber, issueUpdate).ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidOperationException($"Hotfix/release merge succeeded, but closing issue #{issueNumber} failed.", ex);
+                }
+            }
+        }
+    }
 }

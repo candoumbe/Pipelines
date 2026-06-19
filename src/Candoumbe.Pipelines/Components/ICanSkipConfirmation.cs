@@ -1,4 +1,4 @@
-using Nuke.Common;
+using Fallout.Common;
 
 namespace Candoumbe.Pipelines.Components;
 /// <summary>
@@ -6,7 +6,7 @@ namespace Candoumbe.Pipelines.Components;
 /// </summary>/// <summary>
 /// Interface for components that allow skipping confirmation to end user
 /// </summary>
-public interface ICanSkipConfirmation : INukeBuild
+public interface ICanSkipConfirmation : IFalloutBuild
 {
     /// <summary>
     /// Allow to skip asking confirmation to end user

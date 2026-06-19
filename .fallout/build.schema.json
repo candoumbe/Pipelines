@@ -37,7 +37,8 @@
         "Publish",
         "RegenerateWorkflow",
         "Release",
-        "Restore"
+        "Restore",
+        "UnitTests"
       ]
     },
     "Verbosity": {
@@ -50,7 +51,7 @@
         "Quiet"
       ]
     },
-    "NukeBuild": {
+    "FalloutBuild": {
       "properties": {
         "Continue": {
           "type": "boolean",
@@ -199,7 +200,7 @@
       }
     },
     {
-      "$ref": "#/definitions/NukeBuild"
+      "$ref": "#/definitions/FalloutBuild"
     }
   ]
 }

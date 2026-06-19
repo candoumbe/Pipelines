@@ -1,8 +1,10 @@
-﻿using System.Threading.Tasks;
+using System;
+using System.Threading.Tasks;
 using Candoumbe.Pipelines.Components.Workflows;
-using Nuke.Common;
-using Nuke.Common.Git;
-using static Nuke.Common.Tools.Git.GitTasks;
+using Fallout.Common;
+using Fallout.Common.Git;
+using static Fallout.Common.Tools.Git.GitTasks;
+using static Serilog.Log;
 
 namespace Candoumbe.Pipelines.Components;
 
@@ -73,18 +75,42 @@ public interface IGitFlow : IDoHotfixWorkflow, IDoColdfixWorkflow, IDoChoreWorkf
     /// </summary>
     ValueTask IDoHotfixWorkflow.FinishHotfix()
     {
-        Git($"checkout {MainBranchName}");
-        Git("pull");
-        Git($"merge --no-ff --no-edit {GitRepository.Branch}");
-        Git($"tag {MajorMinorPatchVersion}");
+        string sourceBranch = GitRepository.Branch;
+        if (!GitRepository.IsOnHotfixBranch() && !GitRepository.IsOnReleaseBranch())
+        {
+            throw new InvalidOperationException($"Cannot finalize branch '{sourceBranch}'. Expected a '{HotfixBranchPrefix}/*' or '{ReleaseBranchPrefix}/*' branch.");
+        }
 
-        Git($"checkout {DevelopBranchName}");
-        Git("pull");
-        Git($"merge --no-ff --no-edit {GitRepository.Branch}");
+        bool mergedMain = false;
+        bool tagged = false;
 
-        Git($"branch -D {GitRepository.Branch}");
+        try
+        {
+            CheckoutAndUpdate(MainBranchName);
+            MergeNoFastForward(sourceBranch, MainBranchName);
+            mergedMain = true;
 
-        Git($"push origin --follow-tags {MainBranchName} {DevelopBranchName} {MajorMinorPatchVersion}");
+            ExecuteGit($"tag {MajorMinorPatchVersion}", $"Unable to tag '{MainBranchName}' with '{MajorMinorPatchVersion}'.");
+            tagged = true;
+
+            CheckoutAndUpdate(DevelopBranchName);
+            MergeNoFastForward(sourceBranch, DevelopBranchName);
+
+            ExecuteGit($"branch -D {sourceBranch}", $"Unable to delete local branch '{sourceBranch}'.");
+            ExecuteGit($"push origin --follow-tags {MainBranchName} {DevelopBranchName} {MajorMinorPatchVersion}",
+                $"Unable to push branches '{MainBranchName}', '{DevelopBranchName}' and tag '{MajorMinorPatchVersion}' to origin.");
+        }
+        catch (Exception ex)
+        {
+            if (mergedMain)
+            {
+                TryRollbackMainBranch(MajorMinorPatchVersion, tagged);
+            }
+
+            throw new InvalidOperationException(
+                $"Failed to finalize '{sourceBranch}'. Resolve merge conflicts and retry once the repository is clean.",
+                ex);
+        }
 
         return ValueTask.CompletedTask;
     }
@@ -100,13 +126,18 @@ public interface IGitFlow : IDoHotfixWorkflow, IDoColdfixWorkflow, IDoChoreWorkf
     /// </summary>
     ValueTask IDoFeatureWorkflow.FinishFeature()
     {
-        Git($"rebase {DevelopBranchName}");
-        Git($"checkout {DevelopBranchName}");
-        Git("pull");
-        Git($"merge --no-ff --no-edit {GitRepository.Branch}");
+        string sourceBranch = GitRepository.Branch;
+        if (!GitRepository.IsOnFeatureBranch() && !sourceBranch.Like($"{ColdfixBranchPrefix}/*", true) && !sourceBranch.Like($"{ChoreBranchPrefix}/*", true))
+        {
+            throw new InvalidOperationException($"Cannot finalize branch '{sourceBranch}'. Expected '{FeatureBranchPrefix}/*', '{ColdfixBranchPrefix}/*' or '{ChoreBranchPrefix}/*'.");
+        }
 
-        Git($"branch -D {GitRepository.Branch}");
-        Git($"push origin {DevelopBranchName}");
+        RebaseOntoDevelop(sourceBranch);
+        CheckoutAndUpdate(DevelopBranchName);
+        MergeNoFastForward(sourceBranch, DevelopBranchName);
+
+        ExecuteGit($"branch -D {sourceBranch}", $"Unable to delete local branch '{sourceBranch}'.");
+        ExecuteGit($"push origin {DevelopBranchName}", $"Unable to push branch '{DevelopBranchName}' to origin.");
 
         return ValueTask.CompletedTask;
     }
@@ -115,4 +146,107 @@ public interface IGitFlow : IDoHotfixWorkflow, IDoColdfixWorkflow, IDoChoreWorkf
     /// Merges the current feature branch back to <see cref="IHaveDevelopBranch.DevelopBranchName"/>.
     /// </summary>
     ValueTask IDoChoreWorkflow.FinishChore() => FinishFeature();
+
+    private static void ExecuteGit(string command, string errorMessage)
+    {
+        try
+        {
+            Git(command);
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"{errorMessage} (git {command})", ex);
+        }
+    }
+
+    private void CheckoutAndUpdate(string branchName)
+    {
+        ExecuteGit($"checkout {branchName}", $"Unable to checkout branch '{branchName}'.");
+        ExecuteGit("pull", $"Unable to update branch '{branchName}' from remote.");
+    }
+
+    private static void MergeNoFastForward(string sourceBranch, string targetBranch)
+    {
+        try
+        {
+            Git($"merge --no-ff --no-edit {sourceBranch}");
+        }
+        catch (Exception ex)
+        {
+            TryMergeAbort();
+            throw new InvalidOperationException(
+                $"Merge conflict while merging '{sourceBranch}' into '{targetBranch}'. Resolve conflicts and retry.",
+                ex);
+        }
+    }
+
+    private void RebaseOntoDevelop(string sourceBranch)
+    {
+        try
+        {
+            Git($"rebase {DevelopBranchName}");
+        }
+        catch (Exception ex)
+        {
+            TryRebaseAbort();
+            throw new InvalidOperationException(
+                $"Rebase conflict while rebasing '{sourceBranch}' onto '{DevelopBranchName}'. Resolve conflicts and retry.",
+                ex);
+        }
+    }
+
+    private void TryRollbackMainBranch(string releaseTag, bool tagExists)
+    {
+        Warning("Rolling back merge on '{BranchName}' after finalization failure.", MainBranchName);
+        TryMergeAbort();
+        TryRebaseAbort();
+
+        try
+        {
+            Git($"checkout {MainBranchName}");
+            Git("reset --hard ORIG_HEAD");
+        }
+        catch (Exception rollbackException)
+        {
+            Warning(rollbackException,
+                "Unable to rollback branch '{BranchName}' automatically. Manual cleanup may be required.",
+                MainBranchName);
+        }
+
+        if (tagExists)
+        {
+            try
+            {
+                Git($"tag -d {releaseTag}");
+            }
+            catch (Exception deleteTagException)
+            {
+                Warning(deleteTagException, "Unable to delete local tag '{TagName}' during rollback.", releaseTag);
+            }
+        }
+    }
+
+    private static void TryMergeAbort()
+    {
+        try
+        {
+            Git("merge --abort");
+        }
+        catch
+        {
+            // Nothing to abort.
+        }
+    }
+
+    private static void TryRebaseAbort()
+    {
+        try
+        {
+            Git("rebase --abort");
+        }
+        catch
+        {
+            // Nothing to abort.
+        }
+    }
 }

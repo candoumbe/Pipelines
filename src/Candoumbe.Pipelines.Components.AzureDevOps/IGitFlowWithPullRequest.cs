@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -7,11 +7,14 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Candoumbe.Pipelines.Components.Workflows;
 using Microsoft.TeamFoundation.SourceControl.WebApi;
+using Microsoft.TeamFoundation.WorkItemTracking.WebApi;
 using Microsoft.VisualStudio.Services.Common;
 using Microsoft.VisualStudio.Services.WebApi;
-using Nuke.Common.Git;
-using static Nuke.Common.Tools.Git.GitTasks;
-using static Nuke.Common.Utilities.ConsoleUtility;
+using Microsoft.VisualStudio.Services.WebApi.Patch;
+using Microsoft.VisualStudio.Services.WebApi.Patch.Json;
+using Fallout.Common.Git;
+using static Fallout.Common.Tools.Git.GitTasks;
+using static Fallout.Common.Utilities.ConsoleUtility;
 using static Serilog.Log;
 using GitRepository = Microsoft.TeamFoundation.SourceControl.WebApi.GitRepository;
 
@@ -198,4 +201,54 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest, IHaveAzureDev
 
     /// <inheritdoc />
     async ValueTask IDoChoreWorkflow.FinishChore() => await FinishFeature();
+
+    /// <inheritdoc />
+    async ValueTask IDoHotfixWorkflow.FinishHotfix()
+    {
+        await ((IGitFlow)this).FinishHotfix().ConfigureAwait(false);
+
+        if (Issues.AtLeastOnce() && !string.IsNullOrWhiteSpace(AccessToken))
+        {
+            string gitRepositoryHttpsUrl = GitRepository.HttpsUrl!;
+            Match match = AzureDevOpsRegex.Match(gitRepositoryHttpsUrl!);
+
+            if (match.Success)
+            {
+                const string repositoryBaseUrl = "https://dev.azure.com";
+                string organization = match.Groups["organisation"].Value;
+                string organizationUrl = $"{repositoryBaseUrl}/{organization}";
+
+                VssConnection vssConnection = new(new Uri(organizationUrl), new VssBasicCredential(string.Empty, AccessToken));
+                WorkItemTrackingHttpClient workItemClient = await vssConnection.GetClientAsync<WorkItemTrackingHttpClient>().ConfigureAwait(false);
+
+                foreach (uint workItemId in Issues)
+                {
+                    Information("Closing work item #{WorkItemId}", workItemId);
+
+                    JsonPatchDocument patchDocument = new()
+                    {
+                        new JsonPatchOperation()
+                        {
+                            Operation = Operation.Add,
+                            Path = "/fields/System.State",
+                            Value = "Closed"
+                        }
+                    };
+
+                    try
+                    {
+                        await workItemClient.UpdateWorkItemAsync(patchDocument, (int)workItemId).ConfigureAwait(false);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new InvalidOperationException($"Hotfix/release merge succeeded, but closing Azure DevOps work item #{workItemId} failed.", ex);
+                    }
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException($"Hotfix/release merge succeeded, but '{gitRepositoryHttpsUrl}' is not a valid Azure DevOps repository URL.");
+            }
+        }
+    }
 }

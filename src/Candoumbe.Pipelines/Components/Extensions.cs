@@ -1,6 +1,6 @@
-﻿using System;
-using Nuke.Common;
-using Nuke.Common.ProjectModel;
+using System;
+using Fallout.Common;
+using Fallout.Common.ProjectModel;
 
 namespace Candoumbe.Pipelines.Components;
 
@@ -29,7 +29,7 @@ public static class Extensions
     /// </summary>
     /// <typeparam name="T">the type that the current instance should be casted into.</typeparam>
     /// <exception cref="InvalidCastException">if <paramref name="nukeBuild"/> is not convertible to <typeparamref name="T"/>.</exception>
-    public static T Get<T>(this INukeBuild nukeBuild) where T : INukeBuild
+    public static T Get<T>(this IFalloutBuild nukeBuild) where T : IFalloutBuild
         => (T)(object)nukeBuild;
 
     /// <summary>

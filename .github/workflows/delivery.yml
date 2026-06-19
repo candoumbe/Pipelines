@@ -42,13 +42,17 @@ jobs:
             .nuke/temp
             ~/.nuget/packages
           key: ${{ runner.os }}-${{ hashFiles('global.json', 'src/**/*.csproj') }}
+      - name: setup-dotnet
+        uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
       - name: 'Run: Compile, Pack, Publish'
         run: ./build.cmd Compile Pack Publish
         env:
           NuGetApiKey: ${{ secrets.NUGET_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: 'Publish: packages'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: packages
           path: output/artifacts/packages
