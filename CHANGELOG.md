@@ -16,6 +16,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - GitHub: Closes issues using GitHub API
   - Azure DevOps: Closes work items using Azure DevOps Work Item Tracking API
 
+### 🚨 Fixes
+- Hardened merge finalization flows (`IGitFlow`/`IGitHubFlow`) with explicit conflict handling (`merge --abort` / `rebase --abort`), clearer error messages, and safer rollback behavior for hotfix/release finalization.
+- Aligned GitHub and Azure DevOps hotfix completion implementations to run the secured Git finalization before closing remote issues/work items.
+- Added tests to lock default workflow completion implementations in place.
+
 ### 🧹 Housekeeping
 - Added devcontainer configuration to facilitate onboarding.
 - Added support for `chore` workflow
