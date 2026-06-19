@@ -150,7 +150,7 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest
     /// <inheritdoc />
     async ValueTask IDoHotfixWorkflow.FinishHotfix()
     {
-        await ((IGitFlow)this).FinishHotfix();
+        await ((IGitFlow)this).FinishHotfix().ConfigureAwait(false);
 
         if (Issues.AtLeastOnce() && !string.IsNullOrWhiteSpace(GitHubToken))
         {
@@ -170,7 +170,14 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest
                     State = ItemState.Closed
                 };
 
-                await gitHubClient.Issue.Update(owner, repositoryName, (int)issueNumber, issueUpdate);
+                try
+                {
+                    await gitHubClient.Issue.Update(owner, repositoryName, (int)issueNumber, issueUpdate).ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidOperationException($"Hotfix/release merge succeeded, but closing issue #{issueNumber} failed.", ex);
+                }
             }
         }
     }
