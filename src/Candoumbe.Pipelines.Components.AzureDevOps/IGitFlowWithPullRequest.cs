@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Candoumbe.Pipelines.Components.Workflows;
 using Microsoft.TeamFoundation.SourceControl.WebApi;
 using Microsoft.TeamFoundation.WorkItemTracking.WebApi;
-using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
 using Microsoft.VisualStudio.Services.Common;
 using Microsoft.VisualStudio.Services.WebApi;
 using Microsoft.VisualStudio.Services.WebApi.Patch;
@@ -206,6 +205,8 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest, IHaveAzureDev
     /// <inheritdoc />
     async ValueTask IDoHotfixWorkflow.FinishHotfix()
     {
+        await ((IGitFlow)this).FinishHotfix().ConfigureAwait(false);
+
         if (Issues.AtLeastOnce() && !string.IsNullOrWhiteSpace(AccessToken))
         {
             string gitRepositoryHttpsUrl = GitRepository.HttpsUrl!;
@@ -218,7 +219,7 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest, IHaveAzureDev
                 string organizationUrl = $"{repositoryBaseUrl}/{organization}";
 
                 VssConnection vssConnection = new(new Uri(organizationUrl), new VssBasicCredential(string.Empty, AccessToken));
-                WorkItemTrackingHttpClient workItemClient = await vssConnection.GetClientAsync<WorkItemTrackingHttpClient>();
+                WorkItemTrackingHttpClient workItemClient = await vssConnection.GetClientAsync<WorkItemTrackingHttpClient>().ConfigureAwait(false);
 
                 foreach (uint workItemId in Issues)
                 {
@@ -234,8 +235,19 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest, IHaveAzureDev
                         }
                     };
 
-                    await workItemClient.UpdateWorkItemAsync(patchDocument, (int)workItemId);
+                    try
+                    {
+                        await workItemClient.UpdateWorkItemAsync(patchDocument, (int)workItemId).ConfigureAwait(false);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new InvalidOperationException($"Hotfix/release merge succeeded, but closing Azure DevOps work item #{workItemId} failed.", ex);
+                    }
                 }
+            }
+            else
+            {
+                throw new InvalidOperationException($"Hotfix/release merge succeeded, but '{gitRepositoryHttpsUrl}' is not a valid Azure DevOps repository URL.");
             }
         }
     }
