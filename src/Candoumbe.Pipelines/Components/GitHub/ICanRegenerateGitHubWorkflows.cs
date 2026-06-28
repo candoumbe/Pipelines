@@ -22,7 +22,7 @@ public interface ICanRegenerateGitHubWorkflows : IRegenerateWorkflows
             foreach (AbsolutePath workflow in workflowsDirectory.GlobFiles("*.yml"))
             {
                 string workflowName = workflow.NameWithoutExtension;
-                DotNetTasks.DotNet($"nuke --generate-configuration GitHubActions_{workflowName} --host GitHubActions");
+                DotNetTasks.DotNet($"fallout --generate-configuration GitHubActions_{workflowName} --host GitHubActions");
             }
         });
 }
