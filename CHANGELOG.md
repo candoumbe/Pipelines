@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### 🚨 Fixes
 - Update `ICanRegenerateGithubWorkflows` component to use `fallout` tool instead of `nuke`
 
+### 🚀 New features
+- The user can select which GitHub workflow to regenerate.
+
 ## [3.0.0] / 2026-06-19
 ### 💥 Breaking changes
 - Migrated from [Nuke](https://github.com/nuke-build/nuke) to [Fallout](https://github.com/fallout-build/fallout) ([#251](https://github.com/candoumbe/pipelines/issues/251))
