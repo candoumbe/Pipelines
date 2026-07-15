@@ -8,9 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### 🚨 Fixes
 - Update `ICanRegenerateGithubWorkflows` component to use `fallout` tool instead of `nuke`
+- Fix `StackoverflowException` thrown when calling `hotfix` target from a repository that was on a `hotfix/*` branch.
 
 ### 🚀 New features
-- The user can select which GitHub workflow to regenerate.
+- The user can now select which GitHub workflow to regenerate when calling `regenerate-workflow` target.
 
 ## [3.0.0] / 2026-06-19
 ### 💥 Breaking changes
