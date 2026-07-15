@@ -66,7 +66,7 @@ public interface IDoHotfixWorkflow : IWorkflow, IHaveMainBranch
                 await FinishHotfix();
             }
 
-            (int Major, int Minor, int Patch)? ExtractFromText(string text)
+            static(int Major, int Minor, int Patch)? ExtractFromText(string text)
             {
                 const string semVerRegex = @"^(?<major>(0|[1-9]\d*)+)\.(?<minor>(0|[1-9]\d*))+\.(?<patch>(0|[1-9]\d*)+)$";
 

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Candoumbe.Pipelines.Components;
 using Candoumbe.Pipelines.Components.Formatting;
 using Candoumbe.Pipelines.Components.GitHub;
@@ -13,8 +12,6 @@ using Fallout.Common.IO;
 using Fallout.Common.ProjectModel;
 using Fallout.Common.Tools.DotNet;
 using Fallout.Common.Tools.GitHub;
-
-using static Fallout.Common.Tools.Git.GitTasks;
 
 [GitHubActions("integration",
     GitHubActionsImage.UbuntuLatest,
@@ -118,28 +115,6 @@ public class Pipeline : EnhancedBuild,
             source: new Uri($"https://nuget.pkg.github.com/{this.Get<IHaveGitHubRepository>().GitRepository.GetGitHubOwner()}/index.json"),
             canBeUsed: () => this is ICreateGithubRelease { GitHubToken: not null })
     ];
-
-    ///<inheritdoc/>
-    ValueTask IGitFlow.FinishRelease()
-    {
-        Git($"checkout {IHaveMainBranch.MainBranchName}");
-        Git("pull");
-        Git($"merge --no-ff --no-edit {this.Get<IHaveGitRepository>().GitRepository.Branch}");
-
-        string majorMinorPatchVersion = this.Get<IHaveGitVersion>().MajorMinorPatchVersion;
-
-        Git($"tag {majorMinorPatchVersion}");
-
-        Git($"checkout {IHaveDevelopBranch.DevelopBranchName}");
-        Git("pull");
-        Git($"merge --no-ff --no-edit {this.Get<IHaveGitRepository>().GitRepository.Branch}");
-
-        Git($"branch -D {this.Get<IHaveGitRepository>().GitRepository.Branch}");
-
-        Git($"push origin --follow-tags {IHaveMainBranch.MainBranchName} {IHaveDevelopBranch.DevelopBranchName} {majorMinorPatchVersion}");
-
-        return ValueTask.CompletedTask;
-    }
 
     ///<inheritdoc/>
     bool IDotnetFormat.VerifyNoChanges => IsLocalBuild;
