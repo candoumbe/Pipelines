@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.1] / 2026-07-15
+### 🚨 Fixes
+- Update `ICanRegenerateGithubWorkflows` component to use `fallout` tool instead of `nuke`
+- Fix `StackoverflowException` thrown when calling `hotfix` target from a repository that was on a `hotfix/*` branch.
+
+### 🚀 New features
+- The user can now select which GitHub workflow to regenerate when calling `regenerate-workflow` target.
+
 ## [3.0.0] / 2026-06-19
 ### 💥 Breaking changes
 - Migrated from [Nuke](https://github.com/nuke-build/nuke) to [Fallout](https://github.com/fallout-build/fallout) ([#251](https://github.com/candoumbe/pipelines/issues/251))
@@ -343,7 +351,8 @@ So now `{MutationTestDirectory}/[{framework}]` is now changed to `{MutationTestD
 ## [0.1.0] / 2022-10-23
 - Initial release
 
-[Unreleased]: https://github.com/candoumbe/Pipelines/compare/3.0.0...HEAD
+[Unreleased]: https://github.com/candoumbe/Pipelines/compare/3.0.1...HEAD
+[3.0.1]: https://github.com/candoumbe/Pipelines/compare/3.0.0...3.0.1
 [3.0.0]: https://github.com/candoumbe/Pipelines/compare/2.0.1...3.0.0
 [2.0.1]: https://github.com/candoumbe/Pipelines/compare/2.0.0...2.0.1
 [2.0.0]: https://github.com/candoumbe/Pipelines/compare/1.3.0...2.0.0

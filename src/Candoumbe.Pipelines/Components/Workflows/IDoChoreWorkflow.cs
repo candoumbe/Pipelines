@@ -32,7 +32,7 @@ public interface IDoChoreWorkflow : IWorkflow
     /// Merges a chore branch back to <see cref="ChoreBranchSourceName"/>.
     /// </summary>
     /// <returns>A <see cref="ValueTask"/> representing the asynchronous operation.</returns>
-    ValueTask FinishChore() => ValueTask.CompletedTask;
+    ValueTask FinishChore();
 
     /// <summary>
     /// Starts a new chore development by creating the associated branch {FeatureBranchPrefix}/{{feature-name}} from {FeatureBranchSourceName}.

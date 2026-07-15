@@ -35,7 +35,8 @@
         "editorconfig.editorconfig",
         "GitHub.copilot",
         "ms-vscode.vs-keybindings",
-        "zaaack.markdown-editor"
+        "zaaack.markdown-editor",
+        "mhutchie.git-graph"
       ],
       "settings": {
         "dotnet.defaultSolution": "Candoumbe.Pipelines.sln",
