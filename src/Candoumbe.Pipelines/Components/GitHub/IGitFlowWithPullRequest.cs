@@ -150,8 +150,6 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest
     /// <inheritdoc />
     async ValueTask IDoHotfixWorkflow.FinishHotfix()
     {
-        await ((IGitFlow)this).FinishHotfix().ConfigureAwait(false);
-
         if (Issues.AtLeastOnce() && !string.IsNullOrWhiteSpace(GitHubToken))
         {
             string repositoryName = GitRepository.GetGitHubName();
