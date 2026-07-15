@@ -148,35 +148,5 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest
     async ValueTask IDoChoreWorkflow.FinishChore() => await FinishFeature();
 
     /// <inheritdoc />
-    async ValueTask IDoHotfixWorkflow.FinishHotfix()
-    {
-        if (Issues.AtLeastOnce() && !string.IsNullOrWhiteSpace(GitHubToken))
-        {
-            string repositoryName = GitRepository.GetGitHubName();
-            string owner = GitRepository.GetGitHubOwner();
-
-            GitHubClient gitHubClient = new(new ProductHeaderValue(repositoryName))
-            {
-                Credentials = new Credentials(GitHubToken)
-            };
-
-            foreach (uint issueNumber in Issues)
-            {
-                Information("Closing issue #{IssueNumber}", issueNumber);
-                IssueUpdate issueUpdate = new()
-                {
-                    State = ItemState.Closed
-                };
-
-                try
-                {
-                    await gitHubClient.Issue.Update(owner, repositoryName, (int)issueNumber, issueUpdate).ConfigureAwait(false);
-                }
-                catch (Exception ex)
-                {
-                    throw new InvalidOperationException($"Hotfix/release merge succeeded, but closing issue #{issueNumber} failed.", ex);
-                }
-            }
-        }
-    }
+    async ValueTask IDoHotfixWorkflow.FinishHotfix() => await FinishRelease();
 }
