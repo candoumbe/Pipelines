@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [3.0.1] / 2026-07-15
 ### 🚨 Fixes
 - Update `ICanRegenerateGithubWorkflows` component to use `fallout` tool instead of `nuke`
 - Fix `StackoverflowException` thrown when calling `hotfix` target from a repository that was on a `hotfix/*` branch.
@@ -349,7 +351,8 @@ So now `{MutationTestDirectory}/[{framework}]` is now changed to `{MutationTestD
 ## [0.1.0] / 2022-10-23
 - Initial release
 
-[Unreleased]: https://github.com/candoumbe/Pipelines/compare/3.0.0...HEAD
+[Unreleased]: https://github.com/candoumbe/Pipelines/compare/3.0.1...HEAD
+[3.0.1]: https://github.com/candoumbe/Pipelines/compare/3.0.0...3.0.1
 [3.0.0]: https://github.com/candoumbe/Pipelines/compare/2.0.1...3.0.0
 [2.0.1]: https://github.com/candoumbe/Pipelines/compare/2.0.0...2.0.1
 [2.0.0]: https://github.com/candoumbe/Pipelines/compare/1.3.0...2.0.0
