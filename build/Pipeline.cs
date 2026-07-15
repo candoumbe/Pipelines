@@ -120,27 +120,5 @@ public class Pipeline : EnhancedBuild,
     ];
 
     ///<inheritdoc/>
-    ValueTask IGitFlow.FinishRelease()
-    {
-        Git($"checkout {IHaveMainBranch.MainBranchName}");
-        Git("pull");
-        Git($"merge --no-ff --no-edit {this.Get<IHaveGitRepository>().GitRepository.Branch}");
-
-        string majorMinorPatchVersion = this.Get<IHaveGitVersion>().MajorMinorPatchVersion;
-
-        Git($"tag {majorMinorPatchVersion}");
-
-        Git($"checkout {IHaveDevelopBranch.DevelopBranchName}");
-        Git("pull");
-        Git($"merge --no-ff --no-edit {this.Get<IHaveGitRepository>().GitRepository.Branch}");
-
-        Git($"branch -D {this.Get<IHaveGitRepository>().GitRepository.Branch}");
-
-        Git($"push origin --follow-tags {IHaveMainBranch.MainBranchName} {IHaveDevelopBranch.DevelopBranchName} {majorMinorPatchVersion}");
-
-        return ValueTask.CompletedTask;
-    }
-
-    ///<inheritdoc/>
     bool IDotnetFormat.VerifyNoChanges => IsLocalBuild;
 }
