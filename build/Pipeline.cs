@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Candoumbe.Pipelines.Components;
 using Candoumbe.Pipelines.Components.Formatting;
 using Candoumbe.Pipelines.Components.GitHub;
@@ -13,8 +12,6 @@ using Fallout.Common.IO;
 using Fallout.Common.ProjectModel;
 using Fallout.Common.Tools.DotNet;
 using Fallout.Common.Tools.GitHub;
-
-using static Fallout.Common.Tools.Git.GitTasks;
 
 [GitHubActions("integration",
     GitHubActionsImage.UbuntuLatest,

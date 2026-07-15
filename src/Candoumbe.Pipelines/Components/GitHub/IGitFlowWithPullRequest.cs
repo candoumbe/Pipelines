@@ -146,7 +146,4 @@ public interface IGitFlowWithPullRequest : IGitFlow, IPullRequest
 
     /// <inheritdoc />
     async ValueTask IDoChoreWorkflow.FinishChore() => await FinishFeature();
-
-    /// <inheritdoc />
-    async ValueTask IDoHotfixWorkflow.FinishHotfix() => await FinishRelease();
 }
