@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NuGet.Configuration;
 using Fallout.Common;
 using Fallout.Common.Git;
 using Fallout.Common.IO;
 using Fallout.Common.Tooling;
 using Fallout.Common.Tools.DotNet;
+using NuGet.Configuration;
 using static Fallout.Common.Tools.DotNet.DotNetTasks;
 using static Fallout.Common.Tools.Git.GitTasks;
 using static Serilog.Log;

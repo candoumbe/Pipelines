@@ -1,6 +1,6 @@
 using System.Collections.Generic;
+using AwesomeAssertions;
 using Candoumbe.Pipelines.Components;
-using FluentAssertions;
 using Fallout.Common.IO;
 using Fallout.Common.ProjectModel;
 using Xunit;

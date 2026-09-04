@@ -376,7 +376,7 @@ public interface ICompile : IRestore, IFormat, IClean { ... }  // Too many hard 
 ### Framework
 
 - **xUnit** for test framework
-- **FluentAssertions** for assertions
+- **AwesomeAssertions** for assertions
 - **NSubstitute** for mocking
 
 ### Test naming convention
@@ -463,13 +463,13 @@ This project uses **Central Package Management**. All package versions are defin
 
 ```xml
 <!-- ✅ DO — add version in Directory.Packages.props -->
-<PackageVersion Include="FluentAssertions" Version="8.3.0"/>
+<PackageVersion Include="AwesomeAssertions" Version="8.3.0"/>
 
 <!-- ✅ DO — reference without version in .csproj -->
-<PackageReference Include="FluentAssertions"/>
+<PackageReference Include="AwesomeAssertions"/>
 
 <!-- ❌ DON'T — specify version in .csproj files -->
-<PackageReference Include="FluentAssertions" Version="8.3.0"/>
+<PackageReference Include="AwesomeAssertions" Version="8.3.0"/>
 ```
 
 ---

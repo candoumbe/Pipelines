@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.1.0] / 2026-09-04
+### 🚀 New features
+- Added the `ICanDeleteContainerPackages` component with a `DeleteContainerImages` target to interactively remove matching GitHub Container Registry image versions. ([#276](https://github.com/candoumbe/pipelines/issues/276))
+
+### 🧹 Housekeeping
+- Fix imports ordering
+- Replace `FluentAssertions` with `AwesomeAssertions`
+
 ## [3.0.1] / 2026-07-15
 ### 🚨 Fixes
 - Update `ICanRegenerateGithubWorkflows` component to use `fallout` tool instead of `nuke`
@@ -351,7 +359,8 @@ So now `{MutationTestDirectory}/[{framework}]` is now changed to `{MutationTestD
 ## [0.1.0] / 2022-10-23
 - Initial release
 
-[Unreleased]: https://github.com/candoumbe/Pipelines/compare/3.0.1...HEAD
+[Unreleased]: https://github.com/candoumbe/Pipelines/compare/3.1.0...HEAD
+[3.1.0]: https://github.com/candoumbe/Pipelines/compare/3.0.1...3.1.0
 [3.0.1]: https://github.com/candoumbe/Pipelines/compare/3.0.0...3.0.1
 [3.0.0]: https://github.com/candoumbe/Pipelines/compare/2.0.1...3.0.0
 [2.0.1]: https://github.com/candoumbe/Pipelines/compare/2.0.0...2.0.1

@@ -1,5 +1,5 @@
+using AwesomeAssertions;
 using Candoumbe.Pipelines.Components.Formatting;
-using FluentAssertions;
 using Xunit;
 
 namespace Candoumbe.Pipelines.Tests;

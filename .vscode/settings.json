@@ -2,5 +2,6 @@
     "dotnet.defaultSolution": "Candoumbe.Pipelines.sln",
     "chat.tools.terminal.autoApprove": {
         "./build.sh": true
-    }
+    },
+    "chat.newSession.defaultMode": "Squad"
 }

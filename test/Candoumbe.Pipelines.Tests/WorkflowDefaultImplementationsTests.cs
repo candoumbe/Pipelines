@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using AwesomeAssertions;
 using Candoumbe.Pipelines.Components;
 using Candoumbe.Pipelines.Components.Workflows;
-using FluentAssertions;
 using Xunit;
 
 namespace Candoumbe.Pipelines.Tests;
