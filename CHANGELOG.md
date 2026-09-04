@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### 🚀 New features
+- Added the `ICanDeleteContainerPackages` component with a `DeleteContainerImages` target to interactively remove matching GitHub Container Registry image versions. ([#276](https://github.com/candoumbe/pipelines/issues/276))
+
 ### 🧹 Housekeeping
 - Fix imports ordering
 - Replace `FluentAssertions` with `AwesomeAssertions`
