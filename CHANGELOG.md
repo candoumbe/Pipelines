@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### 🚀 New features
-- Added the `ICanDeleteContainerPackages` component with a `DeleteContainerImages` target to interactively remove matching GitHub Container Registry image versions.
+- Added the `ICanDeleteContainerPackages` component with a `DeleteContainerImages` target to interactively remove matching GitHub Container Registry image versions. ([#276](https://github.com/candoumbe/pipelines/issues/276))
 
 ### 🧹 Housekeeping
 - Fix imports ordering
