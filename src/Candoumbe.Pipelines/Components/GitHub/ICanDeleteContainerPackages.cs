@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Fallout.Common;
 using Fallout.Common.Tools.GitHub;
 using Spectre.Console;
@@ -23,7 +24,7 @@ public interface ICanDeleteContainerPackages : IFalloutBuild, IHaveGitHubReposit
     /// <summary>
     /// Gets the tag pattern used to identify which tags to delete.
     /// </summary>
-    [Parameter("Tag pattern used to identify which tags to delete")]
+    [Parameter("Tag pattern used to identify which tags to delete. The pattern supports '*' and '?' wildcards. For example, 'v1.*' will match all tags starting with 'v1.'.")]
     string TagPattern => TryGetValue(() => TagPattern);
 
     /// <summary>
@@ -49,9 +50,6 @@ public interface ICanDeleteContainerPackages : IFalloutBuild, IHaveGitHubReposit
         .Requires(() => Packages != null && Packages.Length > 0)
         .Executes(async () =>
         {
-            Information("Select repository where you want to clean up images:");
-
-
             (string Name, string Uri) registry = ("GitHub Container Registry", RegistryUri);
 
             if (await AnsiConsole.ConfirmAsync($"You're about to clean up the following images from {registry.Name} ({registry.Uri}) : {string.Join(", ", Packages)}.{Environment.NewLine}Proceed ?",
@@ -140,7 +138,11 @@ public interface ICanDeleteContainerPackages : IFalloutBuild, IHaveGitHubReposit
 
                 IReadOnlyList<int> versionsToDelete = [.. allVersions.Where(v => v.Metadata.Container.Tags.All(tag => tag.Like(tagPatternToDelete))).Select(v => Convert.ToInt32(v.Id))];
 
-                Information("Found {Count} versions to delete for image {ImageName} from {RegistryName} ({RegistryUri})", versionsToDelete.Count, imageToDelete, registry.Name, registry.Uri);
+                Information("Found {Count} versions to delete for image {ImageName} from {RegistryName} ({RegistryUri})",
+                            versionsToDelete.Count,
+                            imageToDelete,
+                            registry.Name,
+                            registry.Uri);
 
                 await AnsiConsole.Progress()
                     .Start(async ctx =>
@@ -151,6 +153,7 @@ public interface ICanDeleteContainerPackages : IFalloutBuild, IHaveGitHubReposit
                             task.Description = $"Deleting version {versionToDelete} for image {imageToDelete} from {registry.Name} ({registry.Uri})";
                             await client.Packages.PackageVersions.DeleteForUser(owner, Octokit.PackageType.Container, imageToDelete, versionToDelete);
                             task.Increment(1);
+                            Thread.Sleep(100); // Small delay to avoid hitting API rate limits
                         }
                     });
 
