@@ -1,5 +1,5 @@
+using AwesomeAssertions;
 using Candoumbe.Pipelines.Components;
-using FluentAssertions;
 using Fallout.Common.IO;
 using Xunit;
 

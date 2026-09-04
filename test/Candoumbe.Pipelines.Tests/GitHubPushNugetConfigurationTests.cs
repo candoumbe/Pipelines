@@ -1,6 +1,6 @@
 using System;
+using AwesomeAssertions;
 using Candoumbe.Pipelines.Components.NuGet;
-using FluentAssertions;
 using Xunit;
 
 namespace Candoumbe.Pipelines.Tests;
