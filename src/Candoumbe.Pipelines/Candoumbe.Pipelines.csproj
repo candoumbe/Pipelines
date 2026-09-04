@@ -13,5 +13,6 @@
 
   <ItemGroup>
     <PackageReference Include="Fallout.Common"/>
+    <PackageReference Include="Spectre.Console"/>
   </ItemGroup>
 </Project>
