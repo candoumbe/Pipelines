@@ -14,11 +14,11 @@
     <PackageVersion Include="NuGet.Frameworks" Version="7.9.0"/>
     <PackageVersion Include="Roslynator.Analyzers" Version="5.0.0" />
     <PackageVersion Include="Spectre.Console" Version="0.57.2" />
-    <PackageVersion Include="System.Security.Cryptography.ProtectedData" Version="10.0.11"/>
-    <PackageVersion Include="System.Configuration.ConfigurationManager" Version="10.0.11"/>
+    <PackageVersion Include="System.Security.Cryptography.ProtectedData" Version="10.0.12"/>
+    <PackageVersion Include="System.Configuration.ConfigurationManager" Version="10.0.12"/>
   </ItemGroup>
   <ItemGroup Condition="'$(IsTestProject)' == 'false'">
-    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="10.0.400"/>
+    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="10.0.401"/>
   </ItemGroup>
   <ItemGroup Condition="'$(IsTestProject)' == 'true'">
     <PackageVersion Include="AwesomeAssertions" Version="9.6.0"/>
